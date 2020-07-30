@@ -1,0 +1,14 @@
+.bottomNavigation {
+	display: none;
+	height: 100px;
+	flex-direction: row;
+}
+.menuItem {
+	flex: 1;
+	text-align: center;
+}
+@media only screen and (max-width: 590px) {
+	.bottomNavigation {
+		display: flex;
+	}
+}

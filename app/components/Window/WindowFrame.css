@@ -1,0 +1,26 @@
+.windowFrame {
+	/*
+	background: rgb(43,32,105);
+	background: linear-gradient(rgb(43, 32, 105) 0%, rgb(51, 64, 135) 35%, rgb(62, 106, 175) 100%);
+	*/
+	/* border: 1px solid rgba(31, 51, 94, 0.3); */
+	border: 1px solid #000000;
+	background-color: #f6f8fa;
+
+	padding: 0px;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	/* padding: 4px; */
+}
+.windowFrameMaximized {
+	border: 0px solid #000000;
+	background-color: #f6f8fa;
+
+	padding: 0px;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}

@@ -1,0 +1,159 @@
+.loginForm {
+	padding: 20px;
+	
+	min-height: 100%;
+	max-height: 100%;
+	
+	flex: 1;
+	
+	overflow: auto;
+}
+.loginForm::-webkit-scrollbar {
+	width: 10px;
+}
+.loginForm::-webkit-scrollbar-thumb {
+  background:rgba(0,0,0,0);
+  height: 20%;
+}
+.loginForm::-webkit-scrollbar-track {
+  background: transparent;
+}
+.loginForm:hover::-webkit-scrollbar-thumb {
+	background: rgba(0,0,0,0.2);
+}
+.loginForm h2 {
+	color: #1f335e;
+	text-align: center;
+}
+.loginForm input[type=submit] {
+	background-color: #0176e5;
+	border: 0px;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 16px;
+	display: inline-block;
+	transition: all .2s;
+	margin-top: 10px;
+	width: 100%;
+}
+.inputField {
+	margin-bottom: 10px;
+}
+h3 {
+	color: #1f335e;
+	font-size: 15px;
+	text-align: center;
+}
+.registeringWithEmail {
+	color: #000000;
+}
+.changeEmailLink {
+	color: #0176e5;
+}
+.usernameIsUsedFor {
+	font-size: 12px;
+	padding: 2px;
+}
+.usernameAvailable:focus {
+	outline: 1px solid #1f9459;
+	border: 1px solid #28bd72 !important;
+}
+.usernameAvailable {
+	background-color: #28bd72;
+	border: 1px solid #1f9459 !important;
+	color: #FFFFFF;
+}
+.socialMediaButton {
+	display: flex;
+
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+.socialMediaButton img {
+	height: 41px;
+	width: 41px;
+}
+.socialMediaButton div {
+	height: 41px;
+	vertical-align: middle;
+	text-align: center;
+	color: #FFFFFF;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	padding-right: 30px;
+}
+.socialMediaButton .facebook {
+	background-color: #3b5998;
+}
+.socialMediaButton .google {
+	background-color: #d34836;
+}
+.error {
+	border: 1px solid #a92334;
+	background-color: #be273a;
+}
+.errorMessage {
+	padding: 10px;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+.errorInInput input {
+	border: 1px solid #ff7700;
+	background-color: #ffeac8;
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+.passwordToolTipHeadline {
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+.checkMark, .checkMarkInactive {
+	width: 24px;
+	height: 24px;
+}
+.passwordToolTipRequirement {
+	display: flex;
+	margin-bottom: 10px;
+}
+.passwordToolTipRequirement span {
+	flex: 1;
+	margin-top: 3px;
+}
+.passwordToolTipRequirement img {
+	max-width: 24px;
+	margin-right: 10px;
+}
+.passwordStrengthContainer {
+	height: 30px;
+	width: 260px;
+	border: 1px solid #d0d0d0;
+}
+.passwordStrength {
+	height: 28px;
+	width: 200px;
+	background-color: #28bd72;
+}
+.passwordStrengthGood {
+	background-color: #28bd72;
+}

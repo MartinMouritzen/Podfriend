@@ -1,0 +1,26 @@
+.searchPane {
+	overflow: auto;
+	width: 100%;
+	
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+h1 {
+	padding-left: 20px;
+}
+.genreSelectArea {
+	padding: 20px;
+	padding-bottom: 10px;
+	padding-top: 0px;
+	position: relative;
+	bottom: 10px;
+
+	display: flex;
+	align-items: center;
+	justify-items: center;
+}
+.genreSelect {
+	margin-left: 20px;
+	max-width: 500px;
+	flex: 1;
+}

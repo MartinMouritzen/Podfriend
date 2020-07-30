@@ -1,0 +1,29 @@
+.category, .selectedCategory {
+	padding-top: 5px;
+	padding-bottom: 9px;
+	padding-left: 14px;
+	padding-right: 14px;
+	margin-bottom: 3px;
+	font-size: 16px;
+	color: #333333;
+	position: relative;
+	left: 1px;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	transition: 0.3s all ease;
+}
+.category svg, .selectedCategory svg {
+	fill: #999999;
+	position: relative;
+	top: 3px;
+	margin-right: 3px;
+	transition: fill 0.3s ease;
+}
+.selectedCategory svg {
+	fill: #666666;
+}
+.selectedCategory {
+	background-color: #f5f9fb;
+	border-top: 1px solid #EEEEEE;
+	border-bottom: 1px solid #EEEEEE;
+}

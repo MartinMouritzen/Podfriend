@@ -1,0 +1,203 @@
+@import 'sass/variables.scss';
+
+.player {
+	width: 100%;
+	border-top: 1px solid #CCCCCC;
+	background-color: $theme-light-player-background-color;
+	height: 90px;
+	max-height: 90px;
+	display: flex;
+	overflow: hidden;
+}
+:global(.themeDark) .player {
+	background-color: $theme-dark-player-background-color;
+}
+.controls {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	flex: 2;
+}
+.playing {
+	height: 90px;
+	display: flex;
+	text-decoration: none;
+}
+.playingText {
+	margin-left: 25px;
+	display: flex;
+	flex: 2;
+	flex-direction: column;
+	justify-content: center;
+	height: 90px;
+}
+.cover {
+	height: 90px;
+	width: 90px;
+}
+.cover img {
+	height: 90px;
+	width: 90px;
+}
+.author {
+	color: #999999;
+	font-size: 12px;
+}
+.title {
+	color: #000000;
+}
+.volumeControls {
+	min-width: 70px;
+	width: 100px;
+	margin-top: 6px;
+	margin-left: 8vw;
+	margin-right: 50px;
+	display: flex;
+}
+.volumeControls svg {
+	margin-right: 10px;
+}
+.progress {
+	margin-top: 6px;
+	margin-bottom: 0px;
+	display: flex;
+}
+.progressText {
+	margin-right: 10px;
+	font-size: 14px;
+}
+.durationText {
+	margin-left: 10px;
+	font-size: 14px;
+}
+.audioButtons {
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.playButton, .pauseButton {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	overflow: hidden;
+	background-color: #0176e5;
+	border-radius: 50%;
+	padding: 20px;
+	
+	transition: all 0.4s;
+}
+.playButton:hover, .pauseButton:hover {
+	background-color: #1180e7;
+	transform: scale(1.1);
+}
+.playButton {
+
+}
+.playButton svg, .pauseButton svg {
+	fill: #FFFFFF;
+    position: relative;
+    bottom: 3px;
+}
+.pauseButton {
+
+}
+.pauseButton svg {
+	right: 3px;
+}
+.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+	display: inline-block;
+	margin-right: 15px;
+	margin-left: 15px;
+	
+	padding: 10px;
+	border-radius: 50%;
+	transition: all 0.1s;
+}
+.backwardButton:hover, .fastBackwardButton:hover, .forwardButton:hover, .fastForwardButton:hover {
+	background-color: #d3d5d6;
+	transform: scale(1.3);
+}
+.backwardButton {
+	margin-right: 20px;
+}
+.forwardButton {
+	margin-left: 20px;
+}
+.backwardButton svg, .fastBackwardButton svg, .forwardButton svg, .fastForwardButton svg {
+	fill: #999999;
+	position: relative;
+	top: 2px;
+}
+.backwardButton svg {
+	right: 1px;
+}
+.forwardButton svg {
+	left: 2px;
+}
+
+
+@media only screen and (max-width: 860px) {
+	.cover {
+		display: none;
+	}
+}
+@media only screen and (max-width: 1200px) {
+	.playing {
+		width: 33vw;
+		margin-right: 8vw;
+		min-width: 33vw;
+	}
+}
+@media only screen and (min-width: 1200px) {
+	.playing {
+		width: 400px;
+		margin-right: 100px;
+	}
+	.cover {
+		position: absolute;
+		bottom: 20px;
+		left: 10px;
+	}
+	.cover img {
+		width: 100px;
+		height: 100px;
+		border: 2px solid #FFFFFF;
+		outline: 1px solid #AAAAAA;
+	}
+	.playingText {
+		margin-left: 130px;
+	}
+}
+@media only screen and (max-width: 480px) {
+	.cover {
+		display: none;
+	}
+	.player {
+		display: block;
+	}
+	.playing {
+		width: 100%;
+		height: 20px;
+		margin-right: 0px;
+	}
+	.playingText {
+		height: 40px;
+		font-size: 12px;
+		display: flex;
+		flex-direction: row;
+	}
+	.volumeControls {
+		display: none;
+	}
+	.playButton {
+		width: 30px;
+		height: 30px;
+	}
+	.playButton svg {
+		width: 16px;
+		bottom: 10px;
+		right: 5px;
+	}
+}

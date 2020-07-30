@@ -1,0 +1,31 @@
+// Audio action types
+export const AUDIO_PLAY = 'AUDIO_PLAY';
+export const AUDIO_PAUSE = 'AUDIO_PAUSE';
+export const AUDIO_REWIND = 'AUDIO_REWIND';
+export const AUDIO_FORWARD = 'AUDIO_FORWARD';
+export const AUDIO_REQUEST_PLAY = 'AUDIO_PLAY';
+
+// User action types
+export const LOGIN_SHOW = 'LOGIN_SHOW';
+export const LOGIN_HIDE = 'LOGIN_HIDE';
+export const FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
+export const USER_NOT_LOGGED_IN = 'USER_NOT_LOGGED_IN';
+
+// Episode action types
+export const PLAY_EPISODE = 'PLAY_EPISODE';
+export const EPISODE_FINISHED = 'EPISODE_FINISHED';
+export const EPISODE_TIME_UPDATED = 'EPISODE_TIME_UPDATED';
+
+// Podcast action types
+export const PODCAST_LOADED = 'PODCAST_LOADED';
+export const PODCAST_LOAD_ERROR = 'PODCAST_LOAD_ERROR';
+export const PODCAST_LOADING = 'PODCAST_LOADING';
+export const PODCAST_SUBSCRIBED = 'PODCAST_SUBSCRIBED';
+export const PODCAST_UNSUBSCRIBED = 'PODCAST_UNSUBSCRIBED';
+export const PODCAST_ARCHIVED = 'PODCAST_ARCHIVED';
+export const PODCAST_UNARCHIVED = 'PODCAST_UNARCHIVED';
+export const PODCAST_VIEW = 'PODCAST_VIEW';
+export const PODCAST_SEARCHING = 'PODCAST_SEARCHING';
+export const PODCAST_SEARCHED = 'PODCAST_SEARCHED';
+export const PODCAST_SEARCH_ERROR = 'PODCAST_SEARCH_ERROR';

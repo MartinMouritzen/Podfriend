@@ -1,0 +1,31 @@
+.subscribeButton {
+	background-color: #0176e5;
+	border: 0px;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 16px;
+	display: inline-block;
+	transition: all .2s;
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+.subscribeButton:hover {
+	background-color: #1180e7;
+	transform: scale(1.1);
+}
+.subscribeButton svg {
+	fill: #FFFFFF;
+	position: relative;
+	top: 2px;
+	margin-right: 10px;
+	transition: all 0.5s;
+}
+.subscribeButton:hover svg {
+	fill: #FF0000;
+}
+@media only screen and (max-width: 770px) {
+	.subscribeButton {
+		width: 100%;
+		text-align: center;
+	}		
+}

@@ -1,0 +1,38 @@
+.TextInputContainer {
+	position: relative;
+}
+.TextInputContainer input {
+	z-Index: 1;
+	
+	border: 1px solid #d0d0d0;
+	padding: 10px;
+	padding-top: 20px;
+	width: 100%;
+}
+.TextInputContainerActive {
+	
+}
+.TextInputContainerInactive {
+	
+}
+.TextInputContainer label {
+	position: absolute;
+	top: 15px;
+	left: 10px;
+	font-size: 16px;
+	
+	z-Index: 2;
+	
+	transition: all 0.5s;
+	
+	color: rgba(0,0,0,0.7);
+}
+.TextInputContainerActive label {
+	position: absolute;
+	font-size: 11px;
+	top: 5px;
+	left: 10px;
+}
+.TextInputContainerInactive label {
+	pointer-events: none;
+}

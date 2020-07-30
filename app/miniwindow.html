@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>PodFriend miniwindow</title>
+<script>
+const { ipcRenderer } = require('electron')
+
+let animationId;
+let mouseX;
+let mouseY;
+
+var windowMoving = false;
+
+ipcRenderer.on('podcastChange',(event,message) => {
+	console.log(event);
+	console.log(message);
+	
+	document.getElementById('coverImage').src = message.artworkUrl60;
+});
+
+function onMouseDown(e) {
+	mouseX = e.clientX;  
+	mouseY = e.clientY;
+	
+	listenToWindowMove = true;
+
+	requestAnimationFrame(moveWindow);
+}
+
+function onMouseUp(e) {
+	if (windowMoving) {
+		cancelAnimationFrame(animationId);
+	}
+	listenToWindowMove = false;
+	windowMoving = false;
+}
+
+function moveWindow() {
+	if (listenToWindowMove) {
+		windowMoving = true;
+		ipcRenderer.send('windowMoving', { mouseX, mouseY });
+		animationId = requestAnimationFrame(moveWindow);
+	}
+}
+function playClick() {
+	ipcRenderer.send('requestPlay', {  });
+}
+function coverClick() {
+	ipcRenderer.send('miniWindowLayoutChange', {  });
+}
+
+document.addEventListener('mousedown',onMouseDown);
+document.addEventListener('mouseup',onMouseUp);
+
+window.onload = () => {
+	document.getElementById('play').addEventListener('mouseup',playClick);
+	document.getElementById('cover').addEventListener('mouseup',coverClick);
+};
+</script>
+<style type="text/css">
+* {
+	box-sizing: border-box;
+	user-select: none;
+}
+html,body {
+	background-color: #ffffff;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+}
+.podcastPreview {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	border: 1px solid #000000;
+	
+	display: flex;
+}
+#cover {
+	
+}
+#coverImage {
+	height: 100%;
+}
+.podcastInformation {
+	width: 100%;
+	height: 100%;
+}
+.podcastText {
+	height: 32px;
+	overflow: hidden;
+}
+.controls {
+	float: left;
+	width: 100%;
+	height: 26px;
+	overflow: hidden;
+	background-color: #eeeeee;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#play {
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+	background-color: #0176e5;
+	border-radius: 50%;
+	
+	transition: all 0.4s;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 12px;
+	padding-left: 2px;
+	
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+</style>
+</head>
+<body>
+<div class="podcastPreview">
+	<div id="cover">
+		<img id="coverImage" src="https://is3-ssl.mzstatic.com/image/thumb/Podcasts123/v4/52/f3/b2/52f3b2a9-4572-212f-e14b-c7c9dece37b9/mza_3524066748549568480.jpg/60x60bb.jpg" draggable="false">
+	</div>
+	<div class="podcastInformation">
+		<div class="podcastText">
+			test
+		</div>
+		<div class="controls">
+			<div id="play">▶</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

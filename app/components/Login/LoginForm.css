@@ -1,0 +1,91 @@
+/*******************
+Todo: animation der gør venstre side mindre når man trykker
+*******************/
+.formOuter {
+	max-width: 740px;
+	display: flex;
+	height: 100%;
+	
+	transition: all 1s;
+}
+.loginExplanation {
+	background-color: #0176e5;
+	
+	padding: 20px;
+	
+	width: 400px;
+	overflow: hidden;
+	
+	transition: all 1s;
+}
+.loginExplanationLoading {
+	width: 100%;
+	transition: all 1s;
+}
+.loginExplanation .loadingArea {
+	text-align: center;
+	animation: fadeIn ease 1s;
+	
+	padding-top: 100px;
+	
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.loginExplanation .loadingText {
+	color: #FFFFFF;
+	font-size: 16px;
+}
+.explanationHeadline {
+	color: #FFFFFF;
+}
+.fadeIn1 {
+	animation: fadeIn ease 1s;
+}
+.fadeIn3 {
+	animation: fadeIn ease 3s;
+}
+.fadeIn5 {
+	animation: fadeIn ease 5s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+.loginFormLoading {
+	padding: 0px;
+	width: 0px;
+	flex: initial;
+}
+.loginExplanation h2 {
+	color: #FFFFFF;
+}
+.loginExplanation .highlight {
+	color: #FFFFFF;
+}
+.loginExplanation ul {
+	padding-left: 20px;
+}
+.loginExplanation li {
+	color: #b5e6ff;
+	margin-bottom: 20px;
+}
+.loginExplanation p {
+	color: #b5e6ff;
+}
+.reason {
+	margin-top: 15px;
+	display: flex;
+}
+.reason div {
+	color: #ffffff;
+	flex: 1;
+}
+.reason .checkmark {
+	max-width: 30px;
+	flex: 2;
+}
