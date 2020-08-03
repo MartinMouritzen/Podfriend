@@ -14,6 +14,8 @@ import {
 	PODCAST_LOADED,
 	PODCAST_SUBSCRIBED,
 	PODCAST_UNSUBSCRIBED,
+	PODCAST_SUBSCRIBED_SUCCESS,
+	PODCAST_SUBSCRIBED_ERROR,
 	PODCAST_ARCHIVED,
 	PODCAST_UNARCHIVED,
 	PODCAST_VIEW,
@@ -40,14 +42,6 @@ const initialState = {
 const podcastReducer = (state = initialState, action) => {
 	if (action.type === PLAY_EPISODE) {
 		// action.payload.episode.currentTime = 0;
-		
-		var episodeIndex = 0;
-		for(var i=0;i<action.payload.podcast.episodes.length;i++) {
-			if (action.payload.podcast.episodes[i].url == action.payload.episode.url) {
-				episodeIndex = i;
-			}
-		}
-		action.payload.episode.episodeIndex = episodeIndex;
 		
 		return Object.assign({}, state, {
 			activePodcast: action.payload.podcast,
@@ -181,7 +175,8 @@ const podcastReducer = (state = initialState, action) => {
 				artworkUrl60: action.payload.artworkUrl60,
 				artworkUrl100: action.payload.artworkUrl100,
 				artworkUrl600: action.payload.artworkUrl600,
-				receivedFromServer: action.payload.receivedFromServer
+				receivedFromServer: action.payload.receivedFromServer,
+				synchronizedWithServer: false
 			};
 			// console.log(subscriptionObject);
 			subscribedPodcasts.push(subscriptionObject);
@@ -205,7 +200,16 @@ const podcastReducer = (state = initialState, action) => {
 			subscribedPodcasts: subscribedPodcasts
 		});
 	}
-	
+	else if (action.type === PODCAST_SUBSCRIBED_SUCCESS) {
+		subscribedPodcasts.forEach((subscribedPodcast,index) => {
+			if (subscribedPodcast.feedUrl == action.payload.feedUrl) {
+				subscribedPodcasts[index].synchronizedWithServer = true;
+			}
+		});
+	}
+	else if (action.type === PODCAST_SUBSCRIBED_ERROR) {
+		// We probably won't do anything here. We'll just try again next time the user opens the app
+	}	
 	
 	else if (action.type === PODCAST_ARCHIVED) {
 		var subscribedPodcasts = [...state.subscribedPodcasts];

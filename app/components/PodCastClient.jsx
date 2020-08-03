@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { fetchUserProfile, abortLogin } from "../redux/actions/index";
+import { authenticateUser, abortLogin } from "../redux/actions/userActions";
 
 const { ipcRenderer } = require('electron')
 
@@ -30,18 +30,15 @@ import Events from './../library/Events.js';
 import Modal from './Window/Modal';
 import LoginForm from './Login/LoginForm';
 
-import AudioController from './../library/AudioController.js';
-
 const mapStateToProps = state => ({
 	showLogin: state.user.showLogin,
-	activeEpisode: state.podcast.activeEpisode
+	activeEpisode: state.podcast.activeEpisode,
+	authToken: state.user.authToken
 })
 const mapDispatchToProps = dispatch => ({
-	fetchUserProfile: () => dispatch(fetchUserProfile()),
+	authenticateUser: () => dispatch(authenticateUser()),
 	abortLogin: () => dispatch(abortLogin())
 })
-
-const audioController = new AudioController();
 
 /**
 *
@@ -68,8 +65,16 @@ class PodcastClient extends Component {
 		this.state = {
 			services: services
 		}
+	}
+	/**
+	*
+	*/
+	componentDidMount() {
+		if (this.props.authToken) {
+			this.props.authenticateUser();
+		}
 		
-		Events.addListener('OnSearch',this.onSearch,this);
+		Events.addListener('OnSearch',this.onSearch,'PodcastClient');
 
 		Events.addListener('OnEpisodePlaying',(data) => {
 			
@@ -86,22 +91,16 @@ class PodcastClient extends Component {
 				episodeList: data.episodeList,
 				currentTime: currentTime
 			};
-		},this);
+		},'PodcastClient');
 		
 		Events.addListener('OnNavigateBackward',() => {
 			console.log(this.props.history);
 			this.props.history.goBack();
-		},this);
+		},'PodcastClient');
 		
 		Events.addListener('OnNavigateForward',() => {
 			this.props.history.goForward();
-		},this);
-	}
-	/**
-	*
-	*/
-	componentDidMount() {
-		this.props.fetchUserProfile();
+		},'PodcastClient');
 	}
 	/**
 	*
@@ -131,6 +130,7 @@ class PodcastClient extends Component {
 						// console.log('nope from player, no scroll');
 					}
 					else {
+						// console.log(this.mainArea.current.scrollTop);
 						this.mainArea.current.scrollTop = 0;
 					}
 				}
@@ -141,8 +141,8 @@ class PodcastClient extends Component {
 	*
 	*/
 	componentWillUnmount() {
-		Events.removeListenersInGroup(this);
-		audioController.destroy();
+		Events.removeListenersInGroup('PodcastClient');
+		// this.props.audioController.destroy();
 	}
 	/**
 	*
@@ -184,7 +184,7 @@ class PodcastClient extends Component {
 						</Switch>
 					</div>
 				</div>
-				<Player audioController={audioController} onEpisodeSelect={this.onEpisodeSelect} UI={PlayerUI} />
+				<Player audioController={this.props.audioController} onEpisodeSelect={this.onEpisodeSelect} UI={PlayerUI} />
 				<BottomNavigation />
 				{ this.props.showLogin &&
 					<Modal onClose={this.props.abortLogin}>

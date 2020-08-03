@@ -6,7 +6,6 @@
 	background-color: #EEEEEE;
 	height: 90px;
 	max-height: 90px;
-	display: flex;
 	overflow: hidden;
 }
 :global(.themeDark) .player {
@@ -38,6 +37,9 @@
 .cover img {
 	height: 90px;
 	width: 90px;
+}
+.cover:hover {
+	transform: scale(1.2);
 }
 .author {
 	color: #999999;

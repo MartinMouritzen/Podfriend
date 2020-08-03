@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 import { connect } from "react-redux";
-import { initiateLogin } from "~/app/redux/actions/index";
+import { initiateLogin } from "~/app/redux/actions/userActions";
 
 import { ContextMenu, ContextMenuItem } from "~/app/components/wwt/ContextMenu/ContextMenu";
 

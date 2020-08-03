@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-
 import { Link, withRouter } from 'react-router-dom';
 
 import { FaPlay, FaPause, FaBackward, FaForward, FaFastBackward, FaFastForward, FaVolumeMute, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
@@ -14,13 +12,6 @@ import TimeUtil from './../../library/TimeUtil.js';
 import styles from './../Player.scss';
 
 import PlayLoading from './../../images/play-button-loading4.gif';
-
-function mapStateToProps(state) {
-	return {
-		activePodcast: state.podcast.activePodcast,
-		activeEpisode: state.podcast.activeEpisode
-	};
-}
 
 /**
 *
@@ -59,7 +50,7 @@ class PlayerUI extends Component {
 	*/
 	render() {
 		return (
-			<div className={styles.player}>
+			<div className={styles.player} style={{ display: this.props.hasEpisode ? 'flex' : 'none' }}>
 				<Link to={{
 					pathname: '/podcast/' + this.props.activePodcast.path,
 					state: {
@@ -110,7 +101,7 @@ class PlayerUI extends Component {
 						<div className={styles.fastBackwardButton} onClick={this.props.onPrevEpisode}><FaFastBackward size='20px' /></div>
 						<div className={styles.backwardButton} onClick={this.props.onBackward}><FaBackward size='20px' /></div>
 						
-						{ !this.props.canPlay &&
+						{ this.props.isBuffering &&
 							<div className={styles.playButton} onClick={this.props.pause}><img src={PlayLoading} style={{ position: 'absolute', bottom: '0px', left: '0px', width: '60px', height: '60px' }}/></div>
 						}
 						{ this.props.canPlay && !this.props.playing &&
@@ -128,6 +119,8 @@ class PlayerUI extends Component {
 							id="player"
 							style={{ display: 'none' }}
 							onCanPlay={this.props.onCanPlay}
+							onLoadStart={this.props.onBuffering}
+							onWaiting={this.props.onBuffering}
 							onLoadedMetadata={this.props.onLoadedMetadata}
 							controls
 							ref={this.onAudioElementChange}
@@ -176,9 +169,4 @@ class PlayerUI extends Component {
 	}
 }
 
-const ConnectedPlayerUI = withRouter(connect(
-	mapStateToProps,
-	null
-)(PlayerUI));
-
-export default ConnectedPlayerUI;
+export default withRouter(PlayerUI);

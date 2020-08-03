@@ -12,7 +12,6 @@ import styles from './PodcastMatrixUI.css';
 class PodcastMatrix extends Component {
 	render() {
 		return (
-			<PodcastMatrixUI />
 			<div>
 			{
 				this.props.podcasts.map((podcast,index) => {

@@ -104,7 +104,7 @@ class WindowFrame extends Component {
 					<Router history={this.props.history}>
 						<div className={this.state.maximized ? styles.windowFrameMaximized : styles.windowFrame }>
 							<TitleBar isElectron={this.state.isElectron} maximized={this.state.maximized} onMinimize={this.onMinimize} onMaximizeOrNormalize={this.onMaximizeOrNormalize} onClose={this.onClose} platform={this.props.platform} />
-							<PodCastClient store={this.props.store} />
+							<PodCastClient store={this.props.store} audioController={this.props.audioController} />
 						</div>
 					</Router>
 				</PersistGate>

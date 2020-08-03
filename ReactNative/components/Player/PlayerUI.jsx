@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { connect } from "react-redux";
-
 import { TouchableHighlight, TouchableOpacity, Animated, View, StyleSheet, Image } from 'react-native';
 
 import { Link, withRouter } from 'react-router-native';
@@ -42,13 +40,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-function mapStateToProps(state) {
-	return {
-		activePodcast: state.podcast.activePodcast,
-		activeEpisode: state.podcast.activeEpisode
-	};
-}
-
 const playerHeightWhenPlaying = 100;
 const playerHeightWhenPaused = 51;
 
@@ -83,6 +74,7 @@ class PlayerUI extends React.Component {
 		this.togglePlaying = this.togglePlaying.bind(this);
 		
 		this.props.audioController.onCanPlay = this.props.onCanPlay;
+		this.props.audioController.onBuffering = this.props.onBuffering;
 		this.props.audioController.onEnded = this.props.onEnded;
 	}
 	/**
@@ -126,8 +118,8 @@ class PlayerUI extends React.Component {
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (prevProps.playing != this.props.playing) {
-			this.togglePlaying(this.props.playing);
+		if (prevProps.shouldPlay != this.props.shouldPlay) {
+			this.togglePlaying(this.props.shouldPlay);
 		}
 	}
 	/**
@@ -235,21 +227,36 @@ class PlayerUI extends React.Component {
 								<TouchableOpacity onPress={this.props.onBackward}>
 									<Icon type="FontAwesome5" name="backward" style={{ color: '#999999', marginRight: 14, fontSize: 22 }}  />
 								</TouchableOpacity>
-									
-								<TouchableOpacity
-									onPress={this.props.pause}
-									style={{
-										alignItems:'center',
-										justifyContent:'center',
-										width: 40,
-										height: 40,
-										backgroundColor: platformTheme.brandPrimary,
-										borderRadius:50,
-										marginRight: 14
-									}}
-								>
-									<Icon type="FontAwesome5" name="pause" style={{ color: '#FFFFFF', fontSize: 14 }}  />
-								</TouchableOpacity>
+								
+								{ this.props.isBuffering &&
+									<TouchableOpacity onPress={this.props.pause} style={{
+											alignItems:'center',
+											justifyContent:'center',
+											width: 40,
+											height: 40,
+											backgroundColor: platformTheme.brandPrimary,
+											borderRadius:50,
+											marginRight: 14
+										}}>
+										<Spinner color="#FFFFFF" size={'small'} />
+									</TouchableOpacity>
+								}
+								{ this.props.canPlay &&
+									<TouchableOpacity
+										onPress={this.props.pause}
+										style={{
+											alignItems:'center',
+											justifyContent:'center',
+											width: 40,
+											height: 40,
+											backgroundColor: platformTheme.brandPrimary,
+											borderRadius:50,
+											marginRight: 14
+										}}
+									>
+										<Icon type="FontAwesome5" name="pause" style={{ color: '#FFFFFF', fontSize: 14 }}  />
+									</TouchableOpacity>
+								}
 									
 								<TouchableOpacity onPress={this.props.onForward}>
 									<Icon type="FontAwesome5" name="forward" style={{ color: '#999999', marginRight: 14, fontSize: 22 }}  />
@@ -268,16 +275,10 @@ class PlayerUI extends React.Component {
 						</Animated.View>
 					</View>
 					<Animated.View style={{ width: this.state.playButtonContainerWidthAnimation, justifyContent: 'center' }}>
-						{ !this.props.canPlay &&
-							<TouchableOpacity onPress={this.props.pause}>
-								<Spinner color="#0176e5" />
-							</TouchableOpacity>
-						}
-						{ this.props.canPlay &&
-							<TouchableOpacity onPress={this.props.play}>
-								<Icon type="FontAwesome" name="play" style={{ color: platformTheme.brandPrimary, fontSize: 24 }} />
-							</TouchableOpacity>
-						}
+
+						<TouchableOpacity onPress={this.props.play}>
+							<Icon type="FontAwesome" name="play" style={{ color: platformTheme.brandPrimary, fontSize: 24 }} />
+						</TouchableOpacity>
 					</Animated.View>
 				</View>
 				<Animated.View style={{height: this.state.progressBarHeightAnimation, overflow: 'hidden' }}>
@@ -288,9 +289,4 @@ class PlayerUI extends React.Component {
 	}
 }
 
-const ConnectedPlayerUI = withRouter(connect(
-	mapStateToProps,
-	null
-)(PlayerUI));
-
-export default ConnectedPlayerUI;
+export default withRouter(PlayerUI);

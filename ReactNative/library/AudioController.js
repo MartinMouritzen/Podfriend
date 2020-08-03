@@ -136,6 +136,9 @@ class AudioController {
 
 					if (state === TrackPlayer.STATE_NONE) {
 						console.log('TrackPlayer.STATE_NONE');
+						if (this.onBuffering) {
+							this.onBuffering();
+						}
 					}
 					else if (state === TrackPlayer.STATE_READY) {
 						console.log('TrackPlayer.STATE_READY');
@@ -163,9 +166,15 @@ class AudioController {
 					}
 					else if (state === TrackPlayer.STATE_BUFFERING) {
 						console.log('TrackPlayer.STATE_BUFFERING');
+						if (this.onBuffering) {
+							this.onBuffering();
+						}
 					}
 					else if (state === TrackPlayer.STATE_CONNECTING) {
 						console.log('TrackPlayer.STATE_CONNECTING');
+						if (this.onBuffering) {
+							this.onBuffering();
+						}
 					}
 				});
 			});

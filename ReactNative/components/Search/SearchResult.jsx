@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { connect } from "react-redux";
-import { subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redux/actions/index";
+import { subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redux/actions/podcastActions";
 
 import { View, Image, StyleSheet } from 'react-native';
 import { Text } from 'native-base';

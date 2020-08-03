@@ -245,6 +245,7 @@ app.on('ready', async () => {
 		minHeight: 480,
 		frame: false,
 		transparent: true,
+		hasShadow: true,
 		webPreferences: {
 			experimentalFeatures: true
 		},
@@ -297,8 +298,11 @@ app.on('ready', async () => {
 		}
 		if (process.env.START_MINIMIZED) {
 			mainWindow.minimize();
-		} else {
+		}
+		else {
 			console.log('Main window showing');
+			
+			// Hack for shadow
 			mainWindow.show();
 			mainWindow.focus();
 			

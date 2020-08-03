@@ -38,11 +38,13 @@ class PasswordForm extends Component {
 	login(event) {
 		event.preventDefault();
 
-		var url = "http://api.podfriend.com/authenticate/";
+		var url = "https://api.podfriend.com/authenticate/";
 		
 		var formData = new FormData();
         formData.append('password', this.state.password);
         formData.append('email', this.props.email);
+        
+        console.log('posting user credentials');
 
 		return fetch(url, {
 			method: 'POST',
@@ -56,6 +58,7 @@ class PasswordForm extends Component {
 		})
 		.then((data) => {
 			if (data.error) {
+				console.log('Error logging in: ' + data.error);
 				this.setState({
 					invalidPassword: true,
 					passwordErrorMessage: 'Sorry, that\'s not the password you typed when you created the account',

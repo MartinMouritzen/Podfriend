@@ -18,6 +18,7 @@ var services = {};
 services['itunes'] = new PodCastService('ITunes',config.proxyPodcastVendorRequests,config.api);
 
 import {
+	AUDIO_REQUEST_PLAY,
 	PLAY_EPISODE,
 	EPISODE_REQUEST_PLAY,
 	EPISODE_FINISHED,
@@ -26,6 +27,8 @@ import {
 	PODCAST_LOAD_ERROR,
 	PODCAST_SUBSCRIBED,
 	PODCAST_UNSUBSCRIBED,
+	PODCAST_SUBSCRIBED_SUCCESS,
+	PODCAST_SUBSCRIBED_ERROR,
 	PODCAST_ARCHIVED,
 	PODCAST_UNARCHIVED,
 	PODCAST_VIEW,
@@ -38,25 +41,55 @@ import {
 *
 */
 export function playEpisode(podcast,episode) {
-	/*
+
 	console.log('playEpisode');
+	/*
 	console.log(podcast);
 	console.log(episode);
 	*/
+	
+	var episodeIndex = 0;
+	for(var i=0;i<podcast.episodes.length;i++) {
+		if (podcast.episodes[i].url == episode.url) {
+			episodeIndex = i;
+		}
+	}
+	episode.episodeIndex = episodeIndex;
+	
+	return (dispatch) => {
+		dispatch({
+			type: PLAY_EPISODE,
+			payload: {
+				podcast: podcast,
+				episode: episode
+			}
+		});
+		dispatch({
+			type: AUDIO_REQUEST_PLAY,
+			payload: {
+				
+			}
+		});
+	};
+	
+	
+	
+	/*
 	return {
 		type: PLAY_EPISODE,
 		payload: {
 			podcast: podcast,
 			episode: episode
-		}/*,
+		},
 		meta: {
 			offline: {
 				effect: { url: 'https://api.podfriend.com/test123', method: 'POST', json: { abc: 'test' } },
 				commit: { type: 'TEST1', meta: { abc: 'test1' } },
 				rollback: { type: 'TEST2', meta: { abc: 'test2' } }
 			}
-		}*/
+		}
 	};
+	*/
 }
 /**
 *
@@ -146,7 +179,7 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 *
 */
 export function viewPodcast(podcastPath) {
-	return (dispatch) => {
+	return (dispatch,getState) => {
 		if (fetchingPodcast) {
 			console.log('was fetching, aborted old request');
 			abortController.abort();
@@ -160,8 +193,7 @@ export function viewPodcast(podcastPath) {
 			payload: {}
 		});
 		
-		// const podfriendToken = localStorage.podfriendToken;
-		const podfriendToken = 'temp_disabled';
+		const { authToken } = getState().user;
 
 		return clientStorage.getItem('podcast_cache_' + podcastPath)
 		.then((podcastCache) => {
@@ -185,7 +217,7 @@ export function viewPodcast(podcastPath) {
 				else {
 					var minutesSinceLastUpdate = Math.floor((Math.abs(new Date() - podcastCache.receivedFromServer)/1000)/60);
 				
-					if (minutesSinceLastUpdate > 5) {
+					if (isNaN(minutesSinceLastUpdate) || minutesSinceLastUpdate > 5) {
 						console.log('More than 5 minutes since last update. Fetching new version of: ' + podcastCache.name);
 						shouldUpdate = true;
 					}
@@ -206,7 +238,7 @@ export function viewPodcast(podcastPath) {
 					headers: {
 						'Content-Type': 'application/json',
 						'Accept': 'application/json',
-						'Authorization': `Bearer ${podfriendToken}`
+						'Authorization': `Bearer ${authToken}`
 					},
 					signal: abortController.signal
 				})
@@ -278,6 +310,44 @@ export function archivePodcast(podcast) {
 export function unarchivePodcast(podcast) {
 	return {
 		type: PODCAST_UNARCHIVED,
+		payload: podcast
+	}
+}
+
+export function subscribeToPodcast(podcast) {
+	return (dispatch, getState) => {
+
+		const { isLoggedIn, authToken } = getState().user;
+		
+		console.log('subscribeToPodcast - user is logged in: ' + isLoggedIn + ':' + authToken);
+		
+		// headers.Authorization = `Bearer ${token}`;
+		
+		dispatch({
+			type: PODCAST_SUBSCRIBED,
+			payload: podcast,
+			meta: {
+				offline: {
+					effect: {
+						url: 'https://api.podfriend.com/subscribe/',
+						method: 'POST',
+						json: {
+							podcastPath: podcast.path
+						},
+						headers: {
+							'Authorization': `Bearer ${authToken}`
+						}
+					},
+					commit: { type: 'PODCAST_SUBSCRIBED_SUCCESS', meta: { podcast: podcast } },
+					rollback: { type: 'PODCAST_SUBSCRIBED_ERROR', meta: { podcast: podcast } }
+				}
+			}
+		});
+	};
+}
+export function unsubscribeToPodcast(podcast) {
+	return {
+		type: PODCAST_UNSUBSCRIBED,
 		payload: podcast
 	}
 }

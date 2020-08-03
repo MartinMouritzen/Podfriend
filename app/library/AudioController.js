@@ -10,6 +10,12 @@ class AudioController {
 	constructor() {
 		this.audioElement = false;
 	}
+	startService() {
+		
+	}
+	init() {
+		
+	}
 	/**
 	*
 	*/

@@ -1,6 +1,13 @@
 .episodeList {
 	flex: 1;
 }
+.episodeList label {
+	display: block;
+	padding: 20px;
+}
+.listenedToAll svg {
+	fill: #FFFFFF;
+}
 .episode, .episodePlaying {
 	min-height: 50px;
 	display: flex;
@@ -24,6 +31,7 @@
 }
 .episodeInfo {
 	padding: 20px;
+	flex: 1;
 }
 .mobileHeader {
 	font-size: 16px;

@@ -24,17 +24,17 @@ export class ContextMenu extends Component {
 	*
 	*/
 	componentDidMount() {
-		// window.addEventListener('click',this.onWindowClick, false);
+		window.addEventListener('click',this.onWindowClick, false);
 		// window.addEventListener('contextmenu',this.onContextMenu, false);
-		// window.addEventListener('blur',this.onWindowBlur, false);
+		window.addEventListener('blur',this.onWindowBlur, false);
 	}
 	/**
 	*
 	*/
 	componentWillUnmount() {
-		// window.removeEventListener('click',this.onWindowClick, false);
+		window.removeEventListener('click',this.onWindowClick, false);
 		// window.removeEventListener('contextmenu',this.onContextMenu, false);
-		// window.removeEventListener('blur',this.onWindowBlur, false);
+		window.removeEventListener('blur',this.onWindowBlur, false);
 	}
 	/**
 	*

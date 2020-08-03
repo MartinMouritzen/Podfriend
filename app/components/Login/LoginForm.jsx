@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { fetchUserProfile } from "~/app/redux/actions/index";
+import { authenticateUser, authTokenReceived } from "~/app/redux/actions/userActions";
 
 import styles from './LoginForm.css';
 
@@ -16,7 +16,8 @@ import GoogleLogo from './../../images/social/google-logo.png';
 
 function mapDispatchToProps(dispatch) {
 	return {
-		fetchUserProfile: () => { dispatch(fetchUserProfile()); }
+		authTokenReceived: (token) => { dispatch(authTokenReceived(token)); },
+		authenticateUser: () => { dispatch(authenticateUser()); }
 	};
 }
 
@@ -68,11 +69,8 @@ class LoginForm extends Component {
 	*
 	*/
 	onUserLogin(token) {
-		localStorage.podfriendToken = token;
-		this.props.onLogin();
-		
-		this.props.fetchUserProfile();		
-		// Use Redux here
+		this.props.authTokenReceived(token);
+		this.props.authenticateUser();
 	}
 	/**
 	*
@@ -85,7 +83,7 @@ class LoginForm extends Component {
 			emailExists: false
 		},
 		() => {
-			var url = "http://api.podfriend.com/user/?email=" + this.state.email;
+			var url = "https://api.podfriend.com/user/?email=" + this.state.email;
 			
 			var startTime = new Date();
 
@@ -103,13 +101,12 @@ class LoginForm extends Component {
 				var endTime = new Date();
 				var timeDifference = endTime - startTime;
 				
-				var minimumTimeToDisplayLoading = 3000;
+				var minimumTimeToDisplayLoading = 2500;
 				var remainingTime = 0;
 				
 				if (timeDifference < minimumTimeToDisplayLoading) {
 					remainingTime = minimumTimeToDisplayLoading - timeDifference;
 				}
-				console.log(remainingTime);
 
 				setTimeout(() => {
 					if (data.exists) {
@@ -142,7 +139,7 @@ class LoginForm extends Component {
 		});
 	}
 	__createUser(username,password,email) {
-		var url = "http://api.podfriend.com/user/";
+		var url = "https://api.podfriend.com/user/";
 		
 		var formData = new FormData();
         formData.append('username', username);

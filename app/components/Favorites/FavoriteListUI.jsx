@@ -35,7 +35,7 @@ class FavoriteListUI extends React.Component {
 						var podcastPath = this.props.location.pathname.substring(9);
 						var isSelected = podcast.path == podcastPath;
 
-						var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';
+						// var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';
 
 						return (
 							<Link to={{

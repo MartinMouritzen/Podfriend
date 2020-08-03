@@ -13,19 +13,23 @@ const mapStateToProps = (state, ownProps) => {
 	var useSelectedPodcast = state.podcast.selectedPodcast;
 	
 	var podcastPath = ownProps.location.pathname.substring(9);
-	
-	if (state.podcast.podcastLoading && ownProps.location && ownProps.location.state && ownProps.location.state.podcast && ownProps.location.state.podcast.name) {
-		if (ownProps.location.state.podcast.path == podcastPath) {
-			useSelectedPodcast = ownProps.location.state.podcast;
+
+	// If the current podcast does not match the path, it most likely means that the user clicked a link
+	// instead of waiting for the podcast to load, we check if they sent a cache with the click, and use that
+	if (state.podcast.selectedPodcast.path != podcastPath) {
+		if (ownProps.location.state && ownProps.location.state.podcast) {
+			if (ownProps.location.state.podcast.path == podcastPath) {
+				useSelectedPodcast = ownProps.location.state.podcast;
+			}
 		}
 	}
 	
-	
-	if (useSelectedPodcast.path != podcastPath) {
-		console.log('using a wrong cache');
-		console.log(useSelectedPodcast.path + ':' + podcastPath);
-		
-		useSelectedPodcast = false;
+	if (!useSelectedPodcast) {
+		console.log('This should not happen I think');
+		console.log(state.podcast.selectedPodcast);
+		console.log(state.podcast.podcastLoading);
+		console.log(ownProps.location.state.podcast);
+		console.log( ownProps.location.state.podcast.path);
 	}
 	
 	return {

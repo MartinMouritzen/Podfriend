@@ -24,6 +24,13 @@ window.podfriend.config = config;
 
 window.Events = Events;
 
+
+import AudioController from './library/AudioController.js';
+
+const audioController = new AudioController();
+audioController.startService();
+audioController.init();
+
 /*
 history.listen((location) => {
 	console.log('Location changed. Hooray!');
@@ -33,7 +40,7 @@ history.listen((location) => {
 */
 
 render(
-	<WindowFrame store={store} persistor={persistor} platform={process.platform} history={history} />,
+	<WindowFrame store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 	document.getElementById('root')
 );
 
@@ -45,23 +52,8 @@ if (module.hot) {
 		// eslint-disable-next-line global-require
 		const NextRoot = require('./components/Window/WindowFrame').default;
 		render(
-			<NextRoot store={store} persistor={persistor} history={history} platform={process.platform} />,
+			<NextRoot store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 			document.getElementById('root')
 		);
 	});
 }
-
-/*
-if (module.hot) {
-  module.hot.accept("./app", () => {
-    render(App);
-  });
-}
-
-if (module.hot) {
-  module.hot.accept('./app', () => {
-    const NextApp = require('./app').default; // Get the updated code
-    render(NextApp);
-  });
-}
-*/

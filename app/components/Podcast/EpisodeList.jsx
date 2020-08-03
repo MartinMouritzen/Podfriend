@@ -132,7 +132,7 @@ class EpisodeList extends Component {
 	/**
 	*
 	*/
-	selectEpisode(podcastInfo,episodeInfo,title,author,cover,url,episodeIndex,episodeList) {
+	selectEpisodeAndPlay(podcastInfo,episodeInfo) {
 		this.props.playEpisode(podcastInfo,episodeInfo);
 	}
 	/**
@@ -158,8 +158,9 @@ class EpisodeList extends Component {
 		
 		return (
 			<div className={styles.episodeList}>
-			
-				<label><input type="checkbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> Hide {episodesListened} already listened episodes</label>
+				{ episodesListened > 0 &&
+					<label><input type="checkbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> Hide {episodesListened} already listened episodes</label>
+				}
 			
 			
 				<MediaQuery maxWidth={590}>
@@ -191,8 +192,15 @@ class EpisodeList extends Component {
 				<ContextMenu target={'.' + styles.episode}>
 					<ContextMenuItem>Mark episode as listened</ContextMenuItem>
 				</ContextMenu>
-				{
-					this.state.episodes &&
+				{ this.state.episodes && this.state.episodes.length == episodesListened &&
+					<div style={{ padding: 60, textAlign: 'center' }} className={styles.listenedToAll}>
+						<div style={{ backgroundColor: '#28bd72', width: 100, height: 100, borderRadius: '50%', display: 'flex', alignItems: 'center',justifyContent: 'center',marginLeft: 'auto',marginRight: 'auto', marginBottom: '20px' }}>
+							<FaCheck size={60} style={{ color: '#FFFFFF !important' }} />
+						</div>
+						You listened to all the episodes in this podcast!
+					</div>
+				}
+				{ this.state.episodes && this.state.episodes.length > 0 &&
 						this.state.episodes.map((episode,index) => {
 							var isactiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
 							var episodeTitle = sanitizeHtml(episode.title,{
@@ -229,9 +237,9 @@ class EpisodeList extends Component {
 							}
 							
 							return (
-								<div id={'episode_' + md5(episode.url)} key={index} className={episodeClass} onDoubleClick={() => { Events.emit('podcastPlayRequested',false); this.selectEpisode(this.props.selectedPodcast,episode,episode.title,this.props.selectedPodcast.author,this.props.selectedPodcast.artworkUrl100,episode.url,index,this.state.episodes); }}>
+								<div id={'episode_' + md5(episode.url)} key={index} className={episodeClass} onDoubleClick={() => { this.selectEpisodeAndPlay(this.props.selectedPodcast,episode); }}>
 									<div className={styles.play}>
-										<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.props.audioPlayRequested(this.props.selectedPodcast,episode); Events.emit('podcastPlayRequested',false); event.stopPropagation(); }}>
+										<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.selectEpisodeAndPlay(this.props.selectedPodcast,episode); event.stopPropagation(); }}>
 											<FaPlay size="13px" />
 										</div>
 										<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>

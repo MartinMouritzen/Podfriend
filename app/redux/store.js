@@ -16,7 +16,8 @@ export default function configureStore(storage,enableDevTools) {
 		key: 'root',
 		storage,
 		stateReconciler: autoMergeLevel2,
-		throttle: 1000
+		throttle: 1000,
+		blacklist: ['audio']
 	};
 	// export const history = createBrowserHistory();
 

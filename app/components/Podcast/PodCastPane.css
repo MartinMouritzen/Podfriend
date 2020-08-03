@@ -1,24 +1,30 @@
 .podcastPane {
 	width: 100%;
+
 	display: flex;
 	flex-direction: column;
 }
-.headline {
-	font-size: 26px;
-	font-weight: bold;
-	color: #1f335e;
-	margin-bottom: 5px;
-	margin-left: 30px;
-}
 .mainInfo {
-	display: flex;
+	background-size: cover;
 	
+	background-position: 30% 20%;
+	
+	background-blend-mode: lighten;
+}
+.mainInfoInner {
+	background-color: rgba(1,118,229,0.2);
+	backdrop-filter: blur(10px) brightness(40%);
+
+	display: flex;
+	flex-direction: row;
 }
 .podcastCover {
 	width: 19vw;
 	height: 19vw;
 	margin-left: 30px;
 	margin-top: 30px;
+	
+	box-shadow: 10px 10px 53px -2px rgba(0,0,0,0.49);
 }
 .starRating {
 	margin-top: 10px;
@@ -31,7 +37,10 @@
 	font-size: 36px;
 	font-weight: bold;
 	color: #1f335e;
+	color: #0176e5;
 	margin-bottom: 5px;
+	
+	text-shadow: 2px 0px 16px rgba(0,0,0,0.46);
 }
 .author {
 	display: flex;
@@ -71,7 +80,14 @@
 	text-align: justify;
 	line-height: 22px;
 	margin-bottom: 20px;
+	color: #FFFFFF;
 }
+
+.episodeDivider {
+	background-color: #FFFFFF;
+}
+
+
 .episodeListLoading {
 	padding: 30px;
 	padding-top: 0px;
@@ -80,9 +96,34 @@
 	display: flex;
 }
 .episodeList {
-
+	background-color: #FFFFFF;
 }
-
+.tabs {
+	border-bottom: 1px solid #EEEEEE;
+	display: flex;
+}
+.tabs .tab, .tabs .selectedTab {
+	padding: 20px;
+	margin-right: 20px;
+	position: relative;
+	top: 1px;
+}
+.tabs .selectedTab {
+	border-bottom: 2px solid #0176e5;
+}
+.tabs .number {
+	padding: 2px;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-weight: bold;
+	font-size: 11px;
+	background-color: #4c749a;
+	border-radius: 3px;
+	color: #FFFFFF;
+	position: relative;
+	bottom: 2px;
+	
+}
 
 
 .archiveButton {

@@ -3,6 +3,8 @@ import {
 	AUDIO_PAUSE,
 	AUDIO_REWIND,
 	AUDIO_FORWARD,
+	AUDIO_CAN_PLAY,
+	AUDIO_BUFFERING,
 	AUDIO_REQUEST_PLAY
 } from "../constants/action-types";
 
@@ -18,12 +20,29 @@ export function audioPaused() {
 		payload: false
 	}
 }
-export function audioPlayRequested(podcast,episode) {
+export function audioCanPlay() {
+	return {
+		type: AUDIO_CAN_PLAY,
+		payload: {
+
+		}
+	};
+}
+export function audioBuffering() {
+	return {
+		type: AUDIO_BUFFERING,
+		payload: {
+
+		}
+	};
+}
+
+export function audioPlayRequested() {
+	console.log('requesting play');
 	return {
 		type: AUDIO_REQUEST_PLAY,
 		payload: {
-			podcast: podcast,
-			episode: episode
+
 		}
 	};
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from "react-redux";
 import { updateEpisodeTime } from "../redux/actions/index";
-import { audioPlaying, audioPaused } from "../redux/actions/audioActions";
+import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../redux/actions/audioActions";
 import { episodeFinished, playEpisode } from "../redux/actions/podcastActions";
 
 import sanitizeHtml from 'sanitize-html';
@@ -12,7 +12,11 @@ import Events from './../library/Events.js';
 function mapStateToProps(state) {
 	return {
 		activePodcast: state.podcast.activePodcast,
-		activeEpisode: state.podcast.activeEpisode
+		activeEpisode: state.podcast.activeEpisode,
+		shouldPlay: state.audio.shouldPlay,
+		isPlaying: state.audio.isPlaying,
+		canPlay: state.audio.canPlay,
+		isBuffering: state.audio.isBuffering
 	};
 }
 function mapDispatchToProps(dispatch) {
@@ -21,7 +25,10 @@ function mapDispatchToProps(dispatch) {
 		updateEpisodeTime: (time) => { dispatch(updateEpisodeTime(time)); },
 		playEpisode: (podcast,episode) => { dispatch(playEpisode(podcast,episode)); },
 		audioPlaying: () => { dispatch(audioPlaying()); },
-		audioPaused: () => { dispatch(audioPaused()); }
+		audioPaused: () => { dispatch(audioPaused()); },
+		audioCanPlay: () => { dispatch(audioCanPlay()); },
+		audioBuffering: () => { dispatch(audioBuffering()); },
+		audioPlayRequested: () => { dispatch(audioPlayRequested()); }
 	};
 }
 
@@ -36,13 +43,14 @@ class Player extends Component {
 		super(props);
 		
 		this.state = {
-			canPlay: false,
 			playing: false,
 			progress: this.props.activeEpisode ? (this.props.activeEpisode.currentTime ? this.props.activeEpisode.currentTime : 0) : 0,
 			duration: this.props.activeEpisode ? (this.props.activeEpisode.duration ? this.props.activeEpisode.duration : 0) : 0,
 			volume: 100
 		};
 		this.onCanPlay = this.onCanPlay.bind(this);
+		this.onBuffering = this.onBuffering.bind(this);
+		
 		this.onProgressSliderChange = this.onProgressSliderChange.bind(this);
 		this.onLoadedMetadata = this.onLoadedMetadata.bind(this);
 		this.onTimeUpdate = this.onTimeUpdate.bind(this);
@@ -58,12 +66,6 @@ class Player extends Component {
 		this.pause = this.pause.bind(this);
 		
 		this.props.audioController.player = this;
-		
-		Events.addListener('podcastPlayRequested',() => { this.play(); },this);
-		Events.addListener('podcastPauseRequested',() => { this.pause(); },this);
-		Events.addListener('MediaPlayPause',() => { this.playOrPause(); },this);
-		Events.addListener('MediaNextTrack',() => { this.onNextEpisode(); },this);
-		Events.addListener('MediaPreviousTrack',() => { this.onPrevEpisode(); },this);
 	}
 	/**
 	*
@@ -75,17 +77,32 @@ class Player extends Component {
 		if (this.props.activeEpisode && this.props.activeEpisode.currentTime) {
 			this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
 		}
+		
+		Events.addListener('podcastPlayRequested',() => { console.log('podcastPlayRequested is deprecated. (player.jsx)'); this.play(); },'Player');
+		Events.addListener('podcastPauseRequested',() => { console.log('podcastPauseRequested is deprecated. (player.jsx)'); this.pause(); },'Player');
+		Events.addListener('MediaPlayPause',() => { console.log('MediaPlayPause'); this.playOrPause(); },'Player');
+		Events.addListener('MediaNextTrack',() => {  this.onNextEpisode(); },'Player');
+		Events.addListener('MediaPreviousTrack',() => { this.onPrevEpisode(); },'Player');
 	}
 	/**
 	*
 	*/
 	componentWillUnmount() {
-		Events.removeListenersInGroup(this);
+		Events.removeListenersInGroup('Player');
 	}
 	/**
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (this.props.shouldPlay !== prevProps.shouldPlay) {
+			if (this.props.shouldPlay) {
+				this.__play();
+			}
+			else if (!this.props.shouldPlay) {
+				this.__pause();
+			}
+		}
+
 		if (this.props.activeEpisode.url !== prevProps.activeEpisode.url) {
 			this.props.audioController.pause()
 			.then(() => {
@@ -105,59 +122,62 @@ class Player extends Component {
 						console.log('setting time: ' + currentTime);
 						this.props.audioController.setCurrentTime(currentTime)
 						.then(() => {
-							this.props.audioController.play();
+							if (this.props.shouldPlay) {
+								this.__play();
+							}
 						});
 					});
 				});
 			});
 			
+			
 			this.setState({
-				playing: true,
-				canPlay: false,
 				progress: this.props.activeEpisode.currentTime,
 				duration: this.props.activeEpisode.duration
 			});
-
+/*
 			Events.emit('OnAudioPlay',{
 				episode: this.props.activeEpisode.episode
 			});
+*/
 		}
-		/*
-		else {
-			if (this.state.playing) {
-				// this.props.audioController.play();
-			}
-		}
-		*/
 	}
 	/**
 	*
 	*/
 	playOrPause() {
-		if (this.state.playing) {
+		if (this.props.shouldPlay || this.props.isPlaying) {
 			this.pause();
 		}
 		else {
 			this.play();
 		}
 	}
-	/**
-	*
-	*/
 	play() {
-		this.props.audioController.play();
-		this.setState({
-			playing: true
-		});
-		Events.emit('OnAudioPlay',{
-			episode: this.props.activeEpisode
-		});
-		this.props.audioPlaying();
+		this.props.audioPlayRequested();
 	}
 	/**
 	*
 	*/
+	__play() {
+		this.props.audioController.play();
+		this.setState({
+			playing: true
+		});
+		/*
+		Events.emit('OnAudioPlay',{
+			episode: this.props.activeEpisode
+		});
+		*/
+		this.props.audioPlaying();
+	}
 	pause() {
+		this.props.audioPaused();
+	}
+	/**
+	*
+	*/
+	__pause() {
 		this.props.audioController.pause();
 		this.setState({
 			playing: false
@@ -177,9 +197,13 @@ class Player extends Component {
 	*
 	*/
 	onCanPlay(event) {
-		this.setState({
-			canPlay: true
-		});
+		this.props.audioCanPlay();
+	}
+	/**
+	*
+	*/
+	onBuffering() {
+		this.props.audioBuffering();
 	}
 	/**
 	*
@@ -221,7 +245,7 @@ class Player extends Component {
 		
 		this.props.audioController.pause();
 		this.props.audioController.setCurrentTime(placeInTrack);
-		if (this.state.playing) {
+		if (this.props.shouldPlay) {
 			this.props.audioController.play();
 		}
 	}
@@ -235,12 +259,12 @@ class Player extends Component {
 		
 		this.props.episodeFinished(this.props.activePodcast,this.props.activeEpisode);
 		
-		this.onNextEpisode();
+		this.onNextEpisode(true);
 	}
 	/**
 	*
 	*/
-	onNextEpisode() {
+	onNextEpisode(startFromBeginning = false) {
 		var percentage = (100 * this.props.audioController.getCurrentTime()) / this.props.audioController.getDuration();
 		
 		if (percentage > 75) {
@@ -249,7 +273,7 @@ class Player extends Component {
 		
 		var nextEpisodeIndex = this.props.activeEpisode.episodeIndex + 1;
 		
-		this.changeEpisode(nextEpisodeIndex);
+		this.changeEpisode(nextEpisodeIndex,startFromBeginning);
 	}
 	/**
 	*
@@ -276,13 +300,17 @@ class Player extends Component {
 	/**
 	*
 	*/
-	changeEpisode(episodeIndex) {
+	changeEpisode(episodeIndex,startFromBeginning = false) {
 		console.log('changeEpisode: ' + episodeIndex);
 		var episode = this.props.activePodcast.episodes[episodeIndex];
-
+		
 		if (episode) {
+			if (startFromBeginning) {
+				console.log(episode);
+			}
 			this.props.playEpisode(this.props.activePodcast,episode);
 			
+			/*
 			Events.emit('OnEpisodePlaying',{
 				playing: this.state.playing,
 				podcast: this.props.activePodcast,
@@ -290,6 +318,7 @@ class Player extends Component {
 				episodeIndex: episodeIndex,
 				episodeList: this.props.activePodcast.episodeList
 			});
+			*/
 		}
 		else {
 			// Empty player?
@@ -349,39 +378,43 @@ class Player extends Component {
 			allowedTags: []
 		});
 
-		if (hasEpisode) {
-			return (
-				<PlayerUI
-					audioController={this.props.audioController}
-					onProgressSliderChange={this.onProgressSliderChange}
-					title={title}
-					progress={this.state.progress}
-					duration={this.state.duration}
-					onCanPlay={this.onCanPlay}
-					onLoadedMetadata={this.onLoadedMetadata}
-					
-					goToPodcast={this.goToPodcast}
-					play={this.play}
-					pause={this.pause}
-					onPlay={this.onPlay}
-					onPause={this.onPause}
-					onSeek={this.onSeek}
-					onPrevEpisode={this.onPrevEpisode}
-					onNextEpisode={this.onNextEpisode}
-					onBackward={this.onBackward}
-					onForward={this.onForward}
-					onEnded={this.onEnded}
+		return (
+			<PlayerUI
+				hasEpisode={hasEpisode}
+				audioController={this.props.audioController}
+				onProgressSliderChange={this.onProgressSliderChange}
+				title={title}
+				progress={this.state.progress}
+				duration={this.state.duration}
+				
+				activePodcast={this.props.activePodcast}
+				activeEpisode={this.props.activeEpisode}
+				shouldPlay={this.props.shouldPlay}
+				
+				onCanPlay={this.onCanPlay}
+				onBuffering={this.onBuffering}
+				onLoadedMetadata={this.onLoadedMetadata}
+				
+				isBuffering={this.props.isBuffering}
+				
+				goToPodcast={this.goToPodcast}
+				play={this.play}
+				pause={this.pause}
+				onPlay={this.onPlay}
+				onPause={this.onPause}
+				onSeek={this.onSeek}
+				onPrevEpisode={this.onPrevEpisode}
+				onNextEpisode={this.onNextEpisode}
+				onBackward={this.onBackward}
+				onForward={this.onForward}
+				onEnded={this.onEnded}
 
-					canPlay={this.state.canPlay}
-					playing={this.state.playing}
-					volume={this.state.volume}
-					onTimeUpdate={this.onTimeUpdate}
-				/>
-			);
-		}
-		else {
-			return false;
-		}
+				canPlay={this.props.canPlay}
+				playing={this.props.isPlaying}
+				volume={this.state.volume}
+				onTimeUpdate={this.onTimeUpdate}
+			/>
+		);
 	}
 }
 
