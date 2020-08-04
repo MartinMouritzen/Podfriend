@@ -250,6 +250,11 @@ export function viewPodcast(podcastPath) {
 					if (data.error) {
 						console.log('Error fetching podcast in Redux::fetchPodcast');
 						console.log(data.error);
+						
+						dispatch({
+							type: PODCAST_LOAD_ERROR,
+							payload: false
+						});
 					}
 					else {
 						console.log('Received new version of: ' + data.name);

@@ -5,7 +5,7 @@
 	*/
 	/* border: 1px solid rgba(31, 51, 94, 0.3); */
 	border: 1px solid #000000;
-	/* background-color: #f6f8fa; */
+	background-color: #0176e5;
 	
 	/* box-shadow: 10px 10px 5px 0px rgba(255,35,170,1); */
 
@@ -20,7 +20,7 @@
 }
 .windowFrameMaximized {
 	border: 0px solid #000000;
-	background-color: #f6f8fa;
+	background-color: #0176e5;
 
 	padding: 0px;
 	height: 100%;

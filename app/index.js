@@ -1,11 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import storage from 'redux-persist/lib/storage'
-
 import configureStore from './redux/store'
 
-var [ store, persistor, history ] = configureStore(storage,true);
+var [ store, persistor, history ] = configureStore(true);
 
 import Events from './library/Events.js';
 

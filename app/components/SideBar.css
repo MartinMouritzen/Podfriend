@@ -1,7 +1,6 @@
 .sideBar {
 	background-color: #ffffff;
-	/* background-color: #0176e5; */
-	border-right: 1px solid #dee6ee;
+	background-color: #0176e5;
 	
 	/* padding: 10px; */
 	
@@ -20,7 +19,7 @@
 }
 .categories {
 	/* border-right: 1px solid #dee6ee; */
-	width: 250px;
+	width: 200px;
 }
 .categoryList {
 	
@@ -42,8 +41,9 @@
 .podcasts {
 	display: flex;
 	flex-direction: column;
-	border-left: 1px solid #EEEEEE;
-	width: 249px;
+	width: 250px;
+	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
+	border-radius: 10px 0px 0px 0px;
 }
 .podcastHeader {
 	padding: 10px;
@@ -52,6 +52,8 @@
 	height: 40px;
 	background-color: #eeeeee;
 	border-bottom: 1px solid #CCCCCC;
+	
+	border-radius: 10px 0px 0px 0px;
 }
 .filter {
 	background-color: #EEEEEE;
@@ -98,8 +100,6 @@
 	padding: 5px;
 	padding-left: 6px;
 	
-	margin-left: 6px;
-	margin-right: 6px;
 	border: 1px solid transparent;
 	
 	transition: all 0.2s;
@@ -173,8 +173,8 @@
 }
 @media only screen and (min-width: 1200px) {
 	.sideBar {
-		min-width: 500px;
-		max-width: 500px;
+		min-width: 450px;
+		max-width: 450px;
 	}
 }
 @media only screen and (max-width: 380px) {

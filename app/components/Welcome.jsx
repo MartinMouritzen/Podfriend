@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { View, Text } from 'react-native';
-
 import { FaHeart } from "react-icons/fa";
 
 import LatestVisitedPodcasts from 'podfriend-approot/components/Lists/LatestVisitedPodcasts.jsx';

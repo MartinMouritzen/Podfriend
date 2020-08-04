@@ -6,7 +6,6 @@
 }
 .mainInfo {
 	background-size: cover;
-	
 	background-position: 30% 20%;
 	
 	background-blend-mode: lighten;
@@ -14,7 +13,7 @@
 .mainInfoInner {
 	background-color: rgba(1,118,229,0.2);
 	backdrop-filter: blur(10px) brightness(40%);
-
+border-radius: 20px 0px 0px 0px;
 	display: flex;
 	flex-direction: row;
 }

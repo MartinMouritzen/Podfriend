@@ -27,6 +27,7 @@ html, body {
 	display: flex;
 	flex: 2;
 	overflow: hidden;
+	background-color: #eeeeee;
 }
 .mainArea {
 	flex: 2;
@@ -34,6 +35,8 @@ html, body {
 	overflow-x: hidden;
 	overflow-y: auto;
 	background-color: #f6f8fa;
+	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
+	border-radius: 20px 0px 0px 0px;
 }
 .mainArea::-webkit-scrollbar {
 	width: 12px;

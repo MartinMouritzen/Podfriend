@@ -30,8 +30,8 @@
 	
 	display: flex;
 	/* background-color: rgba(31, 51, 94, 1); */
-	background-color: rgba(217, 217, 217, 1);
-	border-bottom: 1px solid #c0c0c0;
+	/* background-color: rgba(217, 217, 217, 1); */
+	/* border-bottom: 1px solid #c0c0c0; */
 }
 .logo {
 	width: 24px;
@@ -43,7 +43,7 @@
 .title {
 	flex: 1;
 	/* color: #FFFFFF; */
-	color: #606060;
+	color: #FFFFFF;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -69,11 +69,14 @@
 	transition: all 0.4s;
 	background-color: transparent;
 }
+.navigationButton svg {
+	fill: #FFFFFF;
+}
 .navigationButton:hover {
 	background-color: #CCCCCC;
 }
 .navigationButtonDisabled svg {
-	fill: #AAAAAA;
+	fill: #016ace;
 }
 .search {
 	-webkit-app-region: no-drag;
@@ -88,16 +91,21 @@
 	min-width: 160px;
 	max-width: 160px;
 	
-	display: flex;
+	display: none;
 	
 	align-items: center;
 	justify-content: flex-start;
 	
-	background-color: #CECECE;
+	color: #FFFFFF;
+	
+	/* background-color: #CECECE; */
 }
 .windowControls {
 	display: flex;
 	justify-content: flex-end;
+}
+.windowControls svg {
+	fill: #FFFFFF;
 }
 .macWindowControls {
 	display: flex;

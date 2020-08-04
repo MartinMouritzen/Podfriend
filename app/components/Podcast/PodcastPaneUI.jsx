@@ -90,7 +90,7 @@ class PodCastPaneUI extends Component {
 								</div>
 							}
 							{ this.props.podcastLoadingError &&
-								<div>
+								<div className={styles.description}>
 									Error reading Podcast File
 								</div>
 							}

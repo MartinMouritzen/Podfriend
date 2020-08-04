@@ -247,7 +247,8 @@ app.on('ready', async () => {
 		transparent: true,
 		hasShadow: true,
 		webPreferences: {
-			experimentalFeatures: true
+			experimentalFeatures: true,
+			nodeIntegration: true
 		},
 		icon: podfriendIcon
 	});
@@ -263,7 +264,8 @@ app.on('ready', async () => {
 		skipTaskbar: true,
 		alwaysOnTop: true,
 		webPreferences: {
-			experimentalFeatures: true
+			experimentalFeatures: true,
+			nodeIntegration: true
 		},
 		icon: podfriendIcon
 	});
@@ -302,7 +304,6 @@ app.on('ready', async () => {
 		else {
 			console.log('Main window showing');
 			
-			// Hack for shadow
 			mainWindow.show();
 			mainWindow.focus();
 			

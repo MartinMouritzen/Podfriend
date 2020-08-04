@@ -39,6 +39,7 @@ const mapStateToProps = (state, ownProps) => {
 		selectedPodcastEpisodes: state.podcast.selectedPodcastEpisodes,
 		podcastLoading: state.podcast.podcastLoading,
 		subscribedPodcasts: state.podcast.subscribedPodcasts,
+		podcastLoadingError: state.podcast.podcastLoadingError,
 		scrollToEpisode: (ownProps.location && ownProps.location.state && ownProps.location.state.fromPlayer) ? true : false
 	};
 }
@@ -174,6 +175,8 @@ class PodCastPane extends Component {
 			<PodcastPaneUI
 				description={description}
 				isArchived={isArchived}
+				
+				podcastLoadingError={this.props.podcastLoadingError}
 
 				activePodcast={this.props.activePodcast}
 				activeEpisode={this.props.activeEpisode}

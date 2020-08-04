@@ -79,13 +79,15 @@ class SideBar extends Component {
 			<div className={styles.sideBar} onClick={this.onFocusClick}>
 				<div className={styles.panes}>
 					<div className={styles.categories}>
-						<div className={styles.podcastHeader}>Categories</div>
+					
+					{/*
 						<div className={styles.categoryList}>
 							<CategoryList />
 
 							
 							<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
 						</div>
+					*/}
 					</div>
 					<div className={styles.podcasts}>
 						<div className={styles.podcastHeader}>Podcasts</div>
