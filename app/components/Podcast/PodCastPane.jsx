@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { viewPodcast, archivePodcast, unarchivePodcast } from "podfriend-approot/redux/actions/podcastActions";
+import { viewPodcast, archivePodcast, unarchivePodcast, subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redux/actions/podcastActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
@@ -48,6 +48,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch,ownProps) => {
 	return {
 		viewPodcast: (podcastPath) => { dispatch(viewPodcast(podcastPath)); },
+		subscribeToPodcast: (podcast) => { dispatch(subscribeToPodcast(podcast)); },
+		unsubscribeToPodcast: (podcast) => { dispatch(unsubscribeToPodcast(podcast)); },
 		archivePodcast: (podcast) => { dispatch(archivePodcast(podcast)); },
 		unarchivePodcast: (podcast) => { dispatch(unarchivePodcast(podcast)); }
 	};
@@ -152,7 +154,7 @@ class PodCastPane extends Component {
 		const PodcastPaneUI = this.props.UI;
 		
 		var description = '';
-		
+		console.log(this.props.selectedPodcast.description);
 		// This should probably be done one single time, maybe on the server side and set as a property on the podcast instead?
 		if (this.props.selectedPodcast && this.props.selectedPodcast.description) {
 			description = sanitizeHtml(this.props.selectedPodcast.description,{
@@ -186,6 +188,8 @@ class PodCastPane extends Component {
 				subscribedPodcasts={this.props.subscribedPodcasts}
 				scrollToEpisode={this.props.scrollToEpisode}
 				
+				subscribeToPodcast={this.props.subscribeToPodcast}
+				unsubscribeToPodcast={this.props.unsubscribeToPodcast}
 				archivePodcast={this.props.archivePodcast}
 				unarchivePodcast={this.props.unarchivePodcast}
 			/>

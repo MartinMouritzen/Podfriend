@@ -80,14 +80,14 @@ class SideBar extends Component {
 				<div className={styles.panes}>
 					<div className={styles.categories}>
 					
-					{/*
+					{
 						<div className={styles.categoryList}>
 							<CategoryList />
 
 							
 							<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
 						</div>
-					*/}
+					}
 					</div>
 					<div className={styles.podcasts}>
 						<div className={styles.podcastHeader}>Podcasts</div>

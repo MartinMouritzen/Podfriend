@@ -22,7 +22,7 @@
 	width: 200px;
 }
 .categoryList {
-	
+	margin-top: 30px;
 }
 .addMoreButton {
 	display: inline-block;
@@ -39,6 +39,7 @@
 	top: 1px;
 }
 .podcasts {
+	margin-top: 16px;
 	display: flex;
 	flex-direction: column;
 	width: 250px;

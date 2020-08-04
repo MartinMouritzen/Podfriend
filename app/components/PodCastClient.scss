@@ -27,7 +27,7 @@ html, body {
 	display: flex;
 	flex: 2;
 	overflow: hidden;
-	background-color: #eeeeee;
+	
 }
 .mainArea {
 	flex: 2;
@@ -37,6 +37,8 @@ html, body {
 	background-color: #f6f8fa;
 	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
 	border-radius: 20px 0px 0px 0px;
+	
+	filter: blur(0px); /* hack for chrome to make backdrop-filter and scrolling work on childs */
 }
 .mainArea::-webkit-scrollbar {
 	width: 12px;

@@ -290,6 +290,8 @@ export function viewPodcast(podcastPath) {
 				})
 				.catch((error) => {
 					console.log('Error2 fetching podcast in Redux::fetchPodcast: ' + error);
+					console.log('We should not dispatch a redux error if this is an abort.');
+					console.log(error);
 					
 					dispatch({
 						type: PODCAST_LOAD_ERROR,

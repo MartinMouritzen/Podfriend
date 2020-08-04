@@ -109,7 +109,12 @@ class PodCastPaneUI extends Component {
 							
 							
 							{ !this.props.podcastLoading &&
-								<SubscribeButton />
+								<SubscribeButton
+									selectedPodcast={this.props.selectedPodcast}
+									subscribedPodcasts={this.props.subscribedPodcasts}
+									subscribeToPodcast={this.props.subscribeToPodcast}
+									unsubscribeToPodcast={this.props.unsubscribeToPodcast}
+								/>
 							}
 							
 							{ !this.props.podcastLoading && !this.props.isArchived && 

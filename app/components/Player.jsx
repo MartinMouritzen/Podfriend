@@ -253,11 +253,20 @@ class Player extends Component {
 	*
 	*/
 	onEnded() {
+		console.log('Episode ended');
+		console.log('currentTime: ' + this.props.audioController.getCurrentTime());
+		console.log('duration: ' + this.props.audioController.getDuration());
+		console.log(this.props.activeEpisode);
+		
 		Events.emit('OnEpisodeEnded',{
 			episodeIndex: this.props.activeEpisode.episodeIndex
 		});
 		
-		this.props.episodeFinished(this.props.activePodcast,this.props.activeEpisode);
+		// We have to check this, because sometimes onEnded is called even if it's not done.
+		var percentage = (100 * this.props.audioController.getCurrentTime()) / this.props.audioController.getDuration();
+		if (percentage > 75) {
+			this.props.episodeFinished(this.props.activePodcast,this.props.activeEpisode);
+		}
 		
 		this.onNextEpisode(true);
 	}

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-import { subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redux/actions/podcastActions";
-
 import SubscribeButtonUI from 'podfriend-ui/Podcast/SubscribeButtonUI.jsx';
 
-
+/*
 const mapStateToProps = (state) => ({
 	selectedPodcast: state.podcast.selectedPodcast,
 	subscribedPodcasts: state.podcast.subscribedPodcasts
@@ -18,6 +15,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 		unsubscribeToPodcast: (podcast) => { dispatch(unsubscribeToPodcast(podcast)); }
 	};
 }
+*/
 
 /**
 *
@@ -38,7 +36,7 @@ class SubscribeButton extends Component {
 	render() {
 		let isSubscribed = false;
 		this.props.subscribedPodcasts.forEach((podcast) => {
-			if (podcast.feedUrl === this.props.selectedPodcast.feedUrl) {
+			if (podcast.path === this.props.selectedPodcast.path) {
 				isSubscribed = true;
 			}
 		});
@@ -53,9 +51,4 @@ class SubscribeButton extends Component {
 	}
 }
 
-const ConnectedSubscribeButton = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(SubscribeButton);
-
-export default ConnectedSubscribeButton;
+export default SubscribeButton;

@@ -4,26 +4,23 @@
 	padding-left: 14px;
 	padding-right: 14px;
 	margin-bottom: 3px;
-	font-size: 16px;
-	color: #333333;
-	position: relative;
-	left: 1px;
+	font-size: 14px;
+	color: #FFFFFF;
 	border-top: 1px solid transparent;
 	border-bottom: 1px solid transparent;
 	transition: 0.3s all ease;
 }
 .category svg, .selectedCategory svg {
-	fill: #999999;
+	fill: #FFFFFF;
 	position: relative;
 	top: 3px;
-	margin-right: 3px;
+	margin-right: 5px;
 	transition: fill 0.3s ease;
 }
 .selectedCategory svg {
-	fill: #666666;
+	fill: #FFFFFF;
 }
 .selectedCategory {
-	background-color: #f5f9fb;
-	border-top: 1px solid #EEEEEE;
-	border-bottom: 1px solid #EEEEEE;
+	background-color: rgba(0,0,0,0.2);
+
 }
