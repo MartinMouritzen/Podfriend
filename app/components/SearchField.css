@@ -1,14 +1,18 @@
 .searchFieldOuter {
 	display: block;
 	position: relative;
-	top: 3px;
+	
 	width: 100%;
 	margin-right: 5px;
+	transition: all 0.4s;
+}
+.searchFieldOuter:focus-within {
+	transform: scale(1.1);
 }
 .searchIcon {
 	position: absolute;
 	pointer-events: none;
-	top: 6px;
+	top: 7px;
 	left: 8px;
 }
 .searchIcon svg {
@@ -22,12 +26,23 @@
 	padding-top: 7px;
 	font-size: 14px;
 	background-color: #FFFFFF;
-	border: 1px solid #BBBBBB;
 	padding-left: 40px;
-	margin-bottom: 10px;
+	border-radius: 15px;
+	border-width: 0px;
+	margin-top: 1px;
+	color: #666666;
+}
+.searchField::placeholder {
+	color: #cecece;
+	transition: all 1s;
+}
+.searchFieldOuter:focus-within .searchField::placeholder {
+	color: #666666;
 }
 .searchField:focus {
-	outline: 1px solid #0176e5;
+	border: 1px solid rgba(0,0,0,0.4);
+	outline: 0px solid #0176e5;
+	
 }
 @media only screen and (max-width: 320px) {
 	.searchField {

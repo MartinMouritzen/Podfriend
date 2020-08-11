@@ -1,9 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers  } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { composeWithDevTools } from 'redux-devtools-extension';
-
-import storage from 'redux-persist/lib/storage';
 
 // import { createBrowserHistory } from 'history';
 // import { syncHistoryWithStore } from 'react-router-redux'
@@ -14,9 +11,8 @@ import rootReducer from './reducers/rootReducer';
 import { createOffline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults/index';
 
-export default function configureStore(enableDevTools) {
+export default function configureStore(storage,enableDevTools) {
 	console.log(enableDevTools);
-	console.log(composeWithDevTools);
 	
 	const persistConfig = {
 		key: 'root',
@@ -49,7 +45,7 @@ export default function configureStore(enableDevTools) {
 	let store = createStore(
 		persistedReducer,
 		(process.env.NODE_ENV !== 'production' && enableDevTools) ? 
-			composeWithDevTools(
+			compose(
 				offlineEnhanceStore,
 				applyMiddleware(thunk, offlineMiddleware)
 			)

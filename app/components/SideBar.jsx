@@ -7,7 +7,8 @@ import { Link, withRouter } from 'react-router-alias';
 
 // import * as FontAwesomeIcons from "react-icons/fa";
 
-import {FaPlus} from "react-icons/fa";
+import {FaPlus, FaHome, FaFolder,FaRegClock} from "react-icons/fa";
+
 // import * as GamerIcons from "react-icons/gi";
 
 import Toggle from 'react-toggle';
@@ -67,6 +68,9 @@ class SideBar extends Component {
 		});
 	}
 	setHasArchived(hasArchived) {
+		if (this.state.hasArchivedPodcasts == hasArchived) {
+			return;
+		}
 		this.setState({
 			hasArchivedPodcasts: hasArchived
 		});
@@ -80,14 +84,27 @@ class SideBar extends Component {
 				<div className={styles.panes}>
 					<div className={styles.categories}>
 					
-					{
-						<div className={styles.categoryList}>
-							<CategoryList />
+					
+					<div className={styles.categoryList}>
+
+						<div className={styles.mainNavigationButton}>
+							<FaHome size="20" /> Home
+						</div>
+
+							<CategoryList
+								
+							/>
+
+							<div className={styles.mainNavigationButton}>
+								<FaFolder size="20" /> Uncategorized
+							</div>
+							<div className={styles.mainNavigationButton}>
+								<FaRegClock size="20" /> Recent podcasts
+							</div>
 
 							
 							<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
 						</div>
-					}
 					</div>
 					<div className={styles.podcasts}>
 						<div className={styles.podcastHeader}>Podcasts</div>

@@ -16,6 +16,9 @@ console.log('Starting Podfriend in environment: ' + process.env.NODE_ENV);
 import { app, screen, BrowserWindow, globalShortcut, ipcMain, Tray, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+
+import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+
 // import MenuBuilder from './menu';
 
 const { audio } = require('system-control');
@@ -74,6 +77,7 @@ if (
 	require('electron-debug')();
 }
 
+/*
 const installExtensions = async () => {
 	const installer = require('electron-devtools-installer');
 	const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -83,6 +87,7 @@ const installExtensions = async () => {
 		extensions.map(name => installer.default(installer[name], forceDownload))
 	).catch(console.log);
 };
+*/
 
 /**
 * IPC events
@@ -138,7 +143,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-	
 	globalShortcut.register('VolumeUp', () => {
 		console.log('VolumeUp');
 		// console.log(audio.getVolume());
@@ -234,7 +238,18 @@ app.on('ready', async () => {
 		process.env.NODE_ENV === 'development' ||
 		process.env.DEBUG_PROD === 'true'
 	) {
-		await installExtensions();
+		// await installExtensions();
+	
+		const extensions = [REACT_DEVELOPER_TOOLS,REDUX_DEVTOOLS];
+		
+		installExtension(extensions)
+		.then((name) => {
+			console.log(`Added Extension:  ${name}`)
+		})
+		.catch((err) => {
+			console.log('An error occurred: ', err)
+		});
+		
 	}
 
 	mainWindow = new BrowserWindow({
@@ -285,10 +300,13 @@ app.on('ready', async () => {
 			mainWindow.webContents.executeJavaScript('Events.emit(\'OnNavigateForward\',false)');
 		}
 	});
+	
+	mainWindow.webContents.userAgent = 'Podfriend';
 
 	// console.log('Main window loading file');
 	// console.log(`file://${__dirname}/app.html`);
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
+	// mainWindow.loadURL('https://www.whatismybrowser.com/detect/what-is-my-user-agent');
 	
 	quickViewWindow.loadURL(`file://${__dirname}/miniwindow.html`);
 
@@ -328,7 +346,7 @@ app.on('ready', async () => {
 	// System tray
 	app.whenReady().then(() => {
 		systemTray = new Tray(podfriendIcon);
-		systemTray.setHighlightMode('always');
+		// systemTray.setHighlightMode('on');
 		const trayContextMenu = Menu.buildFromTemplate([
 			{ label: 'Show Podfriend window', click: () => {
 				mainWindow.show();

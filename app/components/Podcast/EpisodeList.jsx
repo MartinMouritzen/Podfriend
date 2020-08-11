@@ -278,12 +278,6 @@ class EpisodeList extends Component {
 							)
 						})
 				}
-				{
-					!this.state.episodes &&
-						<div>
-							Loading episodes
-						</div>
-				}
 			</div>
 		);
 	}

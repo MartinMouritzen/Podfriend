@@ -40,7 +40,8 @@ module.exports = api => {
 						"podfriend-storage": "./app/library/ClientStorage.js",
 						"podfriend-approot": "./app/",
 						"podfriend-ui": "./app/components/UI/",
-						"react-router-alias": "react-router-dom"
+						"react-router-alias": "react-router-dom",
+						"react-native": "react-native-web"
 					}
 				}
 			],

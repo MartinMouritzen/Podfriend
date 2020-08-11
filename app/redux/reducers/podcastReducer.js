@@ -21,7 +21,10 @@ import {
 	PODCAST_VIEW,
 	PODCAST_SEARCHING,
 	PODCAST_SEARCHED,
-	PODCAST_SEARCH_ERROR
+	PODCAST_SEARCH_ERROR,
+	REVIEWS_LOADING,
+	REVIEWS_LOADED,
+	REVIEWS_LOAD_ERROR
 } from "../constants/action-types";
 
 const initialState = {
@@ -36,7 +39,10 @@ const initialState = {
 	searching: false,
 	searchError: false,
 	searchResults: false,
-	searchGenres: false
+	searchGenres: false,
+	reviews: false,
+	reviewsLoading: false,
+	reviewsLoadingError: false
 };
 
 const podcastReducer = (state = initialState, action) => {
@@ -317,6 +323,27 @@ const podcastReducer = (state = initialState, action) => {
 			activePodcast: activePodcast,
 			activeEpisode: activeEpisode,
 			selectedPodcast: selectedPodcast
+		});
+	}
+	else if (action.type === REVIEWS_LOADING) {
+		return Object.assign({}, state, {
+			reviews: false,
+			reviewsLoading: true,
+			reviewsLoadingError: false
+		});
+	}
+	else if (action.type === REVIEWS_LOADED) {
+		return Object.assign({}, state, {
+			reviews: action.payload,
+			reviewsLoading: true,
+			reviewsLoadingError: false
+		});
+	}
+	else if (action.type === REVIEWS_LOAD_ERROR) {
+		return Object.assign({}, state, {
+			reviews: false,
+			reviewsLoading: false,
+			reviewsLoadingError: true
 		});
 	}
 	return state;

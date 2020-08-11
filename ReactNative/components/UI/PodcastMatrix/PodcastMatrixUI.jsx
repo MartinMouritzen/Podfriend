@@ -2,6 +2,8 @@ import React from 'react';
 
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
+import { Link } from 'react-router-alias';
+
 import { Dimensions, ScrollView, View, Image } from 'react-native';
 import { Text } from 'native-base';
 
@@ -22,25 +24,34 @@ class PodcastMatrixUI extends React.Component {
 	}
 	renderList() {
 		return (
-			<ScrollView horizontal={true} style={{ height: 220, marginLeft: 20 }}>
+			<ScrollView horizontal={true} style={{ height: 220, marginLeft: 15 }}>
 				{ this.props.podcasts.map((item,index) => {
 					return (
-						<View
+						<Link
+							to={{ pathname: '/podcast/' + item.path, state: { podcast: item } }}
+							underlayColor="#0176e5"
 							key={item.path}
 							style={{
-								width: 152,
-								height: 210,
-								overflow: 'hidden',
-								marginRight: 10,
-								backgroundColor: '#F6F6F6'
+									marginRight: 5,
+									marginLeft: 5,
+									height: 210
 							}}
 						>
-							<Image style={{ width: 150, height: 150, margin: 1, borderRadius: 3 }} source={{ uri: item.artworkUrl600 }} />
-							<View style={{ padding: 5 }}>
-								<Text header numberOfLines={2} style={{ fontSize: 12 }}>{ item.name }</Text>
-								<Text secondary numberOfLines={1} style={{ fontSize: 11 }}>{ item.author }</Text>
+							<View
+								style={{
+									width: 152,
+									height: 210,
+									overflow: 'hidden',
+									backgroundColor: '#F6F6F6'
+								}}
+							>
+								<Image style={{ width: 150, height: 150, margin: 1, borderRadius: 3 }} source={{ uri: item.artworkUrl600 }} />
+								<View style={{ padding: 5 }}>
+									<Text header numberOfLines={2} style={{ fontSize: 12 }}>{ item.name }</Text>
+									<Text secondary numberOfLines={1} style={{ fontSize: 11 }}>{ item.author }</Text>
+								</View>
 							</View>
-						</View>
+						</Link>
 					);
 				}) }
 			</ScrollView>

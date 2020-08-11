@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { FaHeart } from "react-icons/fa";
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-alias';
 
 import styles from './PodcastMatrixUI.css';
 
@@ -29,8 +29,8 @@ class PodcastMatrix extends Component {
 								<div className={styles.author}>
 									{podcast.author}
 								</div>
-								<div className={styles.podcastTitle}>
-									{podcast.podcastName}
+								<div className={styles.title}>
+									{podcast.name}
 								</div>
 							</div>
 						</Link>

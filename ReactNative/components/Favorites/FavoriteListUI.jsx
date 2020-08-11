@@ -29,15 +29,10 @@ class FavoriteListUI extends React.Component {
 					</View>
 				}
 					{ this.props.subscribedPodcasts && this.props.subscribedPodcasts.map((podcast,index) => {
-						
-						var isArchived = !this.props.showArchived && podcast.archived;
-						if (podcast.archived) {
-							hasArchivedPodcast = true;
-						}
+
 						var isPlaying = this.props.activePodcast && this.props.activePodcast.feedUrl == podcast.feedUrl;
 						
-						var podcastPath = this.props.location.pathname.substring(9);
-						var isSelected = podcast.path == podcastPath;
+						var isSelected = podcast.path == this.props.match.params.podcastName;
 
 						var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';
 

@@ -74,7 +74,12 @@ class PodCastPaneUI extends Component {
 					}
 				</View>
 				<View style={{ flex: 1, margin: 10, flexDirection: 'row' }}>
-					<SubscribeButton />
+					<SubscribeButton
+						selectedPodcast={this.props.selectedPodcast}
+						subscribedPodcasts={this.props.subscribedPodcasts}
+						subscribeToPodcast={this.props.subscribeToPodcast}
+						unsubscribeToPodcast={this.props.unsubscribeToPodcast}
+					/>
 					<View style={{ flex: 1 }} />
 				
 					{ !this.props.isArchived && 

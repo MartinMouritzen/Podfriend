@@ -11,7 +11,8 @@ var categoryComponents = {};
 categoryComponents['FontAwesome'] = FaFolder;
 categoryComponents['FontAwesome2'] = FaRegClock;
 
-import styles from './CategoryListUI.css';
+// import styles from './CategoryListUI.css';
+import styles from './../../SideBar.css';
 
 class CategoryListUI extends React.Component {
 	/**
@@ -39,14 +40,11 @@ class CategoryListUI extends React.Component {
 	render() {
 		return (
 			<>
-				{ this.renderCategory('FontAwesome','FaHome','Home',() => { this.props.history.push('/'); } ) }
 				{
 					this.props.categories.map((category) => {
 						return this.renderCategory(category.iconPack,category.icon,category.name)
 					})
 				}
-				{ this.renderCategory('FontAwesome','FaFolder','Uncategorized') }
-				{ this.renderCategory('FontAwesome','FaRegClock','Recent podcasts') }
 			</>
 		);
 	}

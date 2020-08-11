@@ -33,7 +33,7 @@ html, body {
 	flex: 2;
 	height: 100%;
 	overflow-x: hidden;
-	overflow-y: auto;
+	overflow-y: scroll;
 	background-color: #f6f8fa;
 	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
 	border-radius: 20px 0px 0px 0px;
@@ -47,6 +47,7 @@ html, body {
 .mainArea::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.2);
   height: 20%;
+  border-radius: 15px;
 }
 .mainArea::-webkit-scrollbar-track {
   background: transparent;

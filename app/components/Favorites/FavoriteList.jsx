@@ -121,7 +121,11 @@ class FavoriteList extends React.Component {
 		const FavoriteListUI = this.props.UI;
 
 		return (
-			<FavoriteListUI showArchived={this.props.showArchived} subscribedPodcasts={this.state.subscribedPodcasts} />
+			<FavoriteListUI
+				showArchived={this.props.showArchived}
+				subscribedPodcasts={this.state.subscribedPodcasts}
+				activePodcast={this.props.activePodcast}
+			/>
 		);
 	}
 }

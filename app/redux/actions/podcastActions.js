@@ -12,6 +12,9 @@ var clientStorage = new ClientStorage();
 var abortController = new AbortController();
 var fetchingPodcast = false;
 
+var reviewsAbortController = new AbortController();
+var fetchingReviews = false;
+
 import PodCastService from './../../library/PodCastService.js';
 
 var services = {};
@@ -34,7 +37,10 @@ import {
 	PODCAST_VIEW,
 	PODCAST_SEARCHING,
 	PODCAST_SEARCHED,
-	PODCAST_SEARCH_ERROR
+	PODCAST_SEARCH_ERROR,
+	REVIEWS_LOADING,
+	REVIEWS_LOADED,
+	REVIEWS_LOAD_ERROR
 } from "../constants/action-types";
 
 /**
@@ -336,7 +342,7 @@ export function subscribeToPodcast(podcast) {
 			meta: {
 				offline: {
 					effect: {
-						url: 'https://api.podfriend.com/subscribe/',
+						url: 'https://api.podfriend.com/user/favorites/',
 						method: 'POST',
 						json: {
 							podcastPath: podcast.path
@@ -356,5 +362,105 @@ export function unsubscribeToPodcast(podcast) {
 	return {
 		type: PODCAST_UNSUBSCRIBED,
 		payload: podcast
+	}
+}
+
+/**********************
+* Reviews
+**********************/
+export function loadReviews(podcastGuid) {
+	return (dispatch,getState) => {
+		if (fetchingReviews) {
+			console.log('was fetching reviews, aborted old request');
+			reviewsAbortController.abort();
+			fetchingPodcast = false;
+		}
+
+		dispatch({
+			type: REVIEWS_LOADING,
+			payload: {}
+		});
+		
+		const { authToken } = getState().user;
+
+		return clientStorage.getItem('podcast_reviews_cache_' + podcastGuid)
+		.then((podcastCache) => {
+			var shouldUpdate = false;
+			
+			if (podcastCache) {
+				dispatch({
+					type: REVIEWS_LOADED,
+					payload: podcastCache.reviews
+				});
+				
+				if (!podcastCache.receivedFromServer) {
+					console.log('strange, no podcastCache.receivedFromServer. This should not happen.');
+					shouldUpdate = true;
+				}
+				else {
+					var minutesSinceLastUpdate = Math.floor((Math.abs(new Date() - podcastCache.receivedFromServer)/1000)/60);
+				
+					if (isNaN(minutesSinceLastUpdate) || minutesSinceLastUpdate > 5) {
+						console.log('More than 5 minutes since last update. Fetching new version of: ' + podcastCache.name);
+						shouldUpdate = true;
+					}
+				}
+			}
+			else {
+				console.log('Did not have a cached version');
+				shouldUpdate = true;
+			}
+
+			if (shouldUpdate) {
+				var podcastAPIURL = "https://api.podfriend.com/podcast/reviews/?podcastGuid=" + podcastGuid;
+
+				fetchingPodcast = true;
+				reviewsAbortController = new AbortController();
+				return fetch(podcastAPIURL, {
+					method: "GET",
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': 'application/json',
+						'Authorization': `Bearer ${authToken}`
+					},
+					signal: reviewsAbortController.signal
+				})
+				.then((resp) => {
+					return resp.json()
+				})
+				.then((data) => {
+					fetchingPodcast = false;
+					if (data.error) {
+						console.log('Error fetching reviews in Redux::loadReviews');
+						console.log(data.error);
+						
+						dispatch({
+							type: REVIEWS_LOAD_ERROR,
+							payload: false
+						});
+					}
+					else {
+						data.receivedFromServer = new Date();
+						
+						clientStorage.setItem('podcast_reviews_cache_' + podcastGuid,data);
+
+						dispatch({
+							type: REVIEWS_LOADED,
+							payload: data.reviews
+						});
+					}
+				})
+				.catch((error) => {
+					console.log('Error2 fetching podcast in Redux::loadReviews: ' + error);
+					console.log('We should not dispatch a redux error if this is an abort.');
+					console.log(error);
+					
+					dispatch({
+						type: REVIEWS_LOAD_ERROR,
+						payload: false
+					});
+				})
+			}
+		});
 	}
 }

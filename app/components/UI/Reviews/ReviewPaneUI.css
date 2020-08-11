@@ -1,0 +1,16 @@
+.reviewPane {
+	display: flex;
+	flex-direction: row;
+}
+.reviewAggregatedInfo {
+	width: 300px;
+}
+.reviewList {
+	flex: 1;
+}
+.review {
+	
+}
+.reviewContent {
+	color: #303040;
+}

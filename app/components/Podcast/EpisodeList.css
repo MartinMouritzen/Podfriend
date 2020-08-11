@@ -14,7 +14,6 @@
 	flex: 1;
 	background-color: #FFFFFF;
 	transition: all 1s;
-	border: 1px solid transparent;
 	border-bottom: 2px solid #EEEEEE;
 }
 .episode:hover {
@@ -23,7 +22,6 @@
 }
 .episode.listened {
 	background-color: #EFEFEF;
-	border: 1px solid #DDDDDD;
 }
 .episodePlaying, .episodePlaying:hover {
 	/* border: 1px solid #bdd7ef; */

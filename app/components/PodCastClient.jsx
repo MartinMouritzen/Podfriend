@@ -58,7 +58,7 @@ class PodcastClient extends Component {
 		
 		this.scrollTo = this.scrollTo.bind(this);
 		this.onMainAreaScroll = this.onMainAreaScroll.bind(this);
-		
+		this.checkMouseNavigation = this.checkMouseNavigation.bind(this);
 		
 		this.mainArea = React.createRef();
 		
@@ -101,6 +101,19 @@ class PodcastClient extends Component {
 		Events.addListener('OnNavigateForward',() => {
 			this.props.history.goForward();
 		},'PodcastClient');
+		
+		document.addEventListener('mouseup',this.checkMouseNavigation);
+	}
+	checkMouseNavigation(event) {
+		if (event.button === 3) {
+			this.props.history.goBack();
+		}
+		else if (event.button === 4) {
+			this.props.history.goForward();
+		}
+		event.stopPropagation();
+		event.preventDefault();
+		return false;
 	}
 	/**
 	*
@@ -141,6 +154,7 @@ class PodcastClient extends Component {
 	*
 	*/
 	componentWillUnmount() {
+		document.removeEventListener('mouseup',this.checkMouseNavigation);
 		Events.removeListenersInGroup('PodcastClient');
 		// this.props.audioController.destroy();
 	}
@@ -179,7 +193,7 @@ class PodcastClient extends Component {
 							<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
 							<Route path="/search/author/:author/:authorId" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
 							<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
-							<Route path="/podcast/:podcastName" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+							<Route path="/podcast/:podcastName/:subpath?" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
 							<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
 						</Switch>
 					</div>

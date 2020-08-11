@@ -12,7 +12,7 @@ class CategoryList extends React.Component {
 		this.state ={
 			loading: true,
 			categories: [],
-			selectedCategory: 'Home'
+			selectedCategory: false
 		};
 		
 		this.onSelectCategory = this.onSelectCategory.bind(this);
@@ -24,6 +24,14 @@ class CategoryList extends React.Component {
 		this.setState({
 			loading: false,
 			categories: categories
+		});
+	}
+	/**
+	*
+	*/
+	onSelectCategory(categoryName) {
+		this.setState({
+			selectedCategory: categoryName
 		});
 	}
 	/**
@@ -52,14 +60,6 @@ class CategoryList extends React.Component {
 				name: 'Cooking shows'
 			},
 		];
-	}
-	/**
-	*
-	*/
-	onSelectCategory(categoryName) {
-		this.setState({
-			selectedCategory: categoryName
-		});
 	}
 	render() {
 		return (

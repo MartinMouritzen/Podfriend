@@ -1,9 +1,16 @@
 import React from 'react';
 
-import { Link } from 'react-router-native';
+import { Link, withRouter } from 'react-router-native';
 
 import { Header, Left, Body, Right, Text, Icon, Button, Input, Item, Footer, FooterTab, Badge } from 'native-base';
 
+/* WITH BADGE
+					<Link to="/podcasts/" component={Button} vertical badge>
+						<Badge><Text>2</Text></Badge>
+						<Icon type="FontAwesome" name="podcast" />
+						<Text>Podcasts</Text>
+					</Link>
+*/
 class NavigationFooter extends React.Component {
 	/**
 	*
@@ -16,8 +23,7 @@ class NavigationFooter extends React.Component {
 						<Icon type="FontAwesome" active name="home" />
 						<Text>Home</Text>
 					</Link>
-					<Link to="/podcasts/" component={Button} vertical badge>
-						<Badge><Text>2</Text></Badge>
+					<Link to="/podcasts/" component={Button} vertical>
 						<Icon type="FontAwesome" name="podcast" />
 						<Text>Podcasts</Text>
 					</Link>
@@ -40,4 +46,4 @@ class NavigationFooter extends React.Component {
 		);
 	}
 }
-export default NavigationFooter;
+export default withRouter(NavigationFooter);

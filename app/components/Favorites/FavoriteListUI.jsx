@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-alias';
 
 import PodcastUtil from '~/app/library/PodcastUtil.js';
 
@@ -15,8 +15,6 @@ class FavoriteListUI extends React.Component {
 
 	}
 	render() {
-		var hasArchivedPodcast = false;
-		
 		return (
 			<>
 				{ this.props.subscribedPodcasts && this.props.subscribedPodcasts.length === 0 &&
@@ -27,12 +25,16 @@ class FavoriteListUI extends React.Component {
 				}
 				{ this.props.subscribedPodcasts && this.props.subscribedPodcasts.map((podcast,index) => {
 						var isArchived = !this.props.showArchived && podcast.archived;
-						if (podcast.archived) {
-							hasArchivedPodcast = true;
-						}
+
 						var isPlaying = this.props.activePodcast && this.props.activePodcast.feedUrl == podcast.feedUrl;
 						
 						var podcastPath = this.props.location.pathname.substring(9);
+						var subPathIndex = podcastPath.indexOf('/');
+						
+						if (subPathIndex !== -1) {
+							podcastPath = podcastPath.substring(0,subPathIndex);
+						}
+						
 						var isSelected = podcast.path == podcastPath;
 
 						// var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';

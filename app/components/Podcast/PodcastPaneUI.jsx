@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { archivePodcast, unarchivePodcast } from "podfriend-approot/redux/actions/podcastActions";
 
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-alias';
 
 import { FaArchive, FaGlobeAmericas, FaMicrophoneAlt } from "react-icons/fa";
 
@@ -12,9 +12,13 @@ import ToolTip from 'react-power-tooltip';
 
 import EpisodeList from './EpisodeList.jsx';
 
+import ReviewPane from 'podfriend-approot/components/Reviews/ReviewPane.jsx';
+
+import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
+
 import SubscribeButton from './SubscribeButton.jsx';
 
-import StarRating from './Review/StarRating.jsx';
+import { ReviewStarsWithText } from 'podfriend-approot/components/Reviews/StarRating.jsx';
 
 import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
@@ -62,7 +66,7 @@ class PodCastPaneUI extends Component {
 								<div className="loading-line loading-cover">&nbsp;</div>
 							}
 							<div className={styles.starRating}>
-								<StarRating />
+								<ReviewStarsWithText rating={0} reviews={0} />
 							</div>
 						</div>
 						<div className={styles.podcastInfo}>
@@ -110,6 +114,7 @@ class PodCastPaneUI extends Component {
 							
 							{ !this.props.podcastLoading &&
 								<SubscribeButton
+									isSubscribed={this.props.isSubscribed}
 									selectedPodcast={this.props.selectedPodcast}
 									subscribedPodcasts={this.props.subscribedPodcasts}
 									subscribeToPodcast={this.props.subscribeToPodcast}
@@ -117,7 +122,7 @@ class PodCastPaneUI extends Component {
 								/>
 							}
 							
-							{ !this.props.podcastLoading && !this.props.isArchived && 
+							{ !this.props.podcastLoading && !this.props.isArchived && this.props.isSubscribed &&
 								<div className={styles.archiveButton} id="archiveButton" onClick={() => { this.props.archivePodcast(this.props.selectedPodcast); }} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}>
 									<FaArchive /> Archive podcast
 									<ToolTip show={this.state.isArchiveTooltipActive} position="bottom center" static={true} arrowAlign="center" textBoxWidth="400px" moveDown="5px">
@@ -128,7 +133,7 @@ class PodCastPaneUI extends Component {
 									</ToolTip>
 								</div>
 							}
-							{ !this.props.podcastLoading && this.props.isArchived && 
+							{ !this.props.podcastLoading && this.props.isArchived && this.props.isSubscribed &&
 								<div className={styles.archiveButton} id="archiveButton" onClick={() => { this.props.unarchivePodcast(this.props.selectedPodcast); }} onMouseEnter={this.showTooltip.bind(this)} onMouseLeave={this.hideTooltip.bind(this)}><FaArchive /> Unarchive podcast</div>
 							}
 
@@ -143,52 +148,68 @@ class PodCastPaneUI extends Component {
 						</div>
 					</div>
 				</div>
+				<div className={styles.podcastContent}>
+
 					
-				<div className={styles.episodeList}>
-					<div className={styles.tabs}>
-						<div className={styles.selectedTab}>
-							Episodes <span className={styles.number}>21</span>
-						</div>
-						<div className={styles.tab}>
-							Reviews <span className={styles.number}>2</span>
-						</div>
-						<div className={styles.tab}>
-							Community <span className={styles.number}>3</span>
-						</div>
-						<div className={styles.tab}>
-							Creators & Guests <span className={styles.number}>1</span>
-						</div>
-						<div className={styles.tab}>
-							Podcast content
-						</div>
-					</div>
-				
-					{ this.props.podcastLoadingError &&
-						<div>
-							Error reading Podcast File
-						</div>
-					}
-					{ !this.props.podcastLoadingError && this.props.podcastLoading && 
-						<div className={styles.episodeListLoading}>
-							<div className={styles.episodeListLoadingHeaders}>
-								<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-								<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-								<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-								<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
+					<div>
+					<Tabs>
+						<Tab title="Episodes" active link={'/podcast/' + this.props.selectedPodcast.path}>
+							<div className={styles.episodeTab}>
+								<div className={styles.episodeColumn}>
+									<EpisodeList currentPodcastPlaying={this.props.currentPodcastPlaying} onEpisodeSelect={this.props.onEpisodeSelect} podcastInfo={this.props.selectedPodcast} episodes={this.props.selectedPodcastEpisodes} />
+								
+									{ this.props.podcastLoadingError &&
+										<div>
+											Error reading Podcast File
+										</div>
+									}
+									{ !this.props.podcastLoadingError && this.props.podcastLoading && 
+										<div className={styles.episodeListLoading}>
+											{/*
+											<div className={styles.episodeListLoadingHeaders}>
+												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
+												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
+												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
+												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
+											</div>*/}
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+											<div className="loading-line loading-episode">&nbsp;</div>
+										</div>
+									}
+								</div>
+								{/*
+								<div className={styles.knowledgeGraph}>
+									Knowledge stuff
+								</div>
+								*/}
 							</div>
-							<div className="loading-line loading-episode">&nbsp;</div>
-							<div className="loading-line loading-episode">&nbsp;</div>
-							<div className="loading-line loading-episode">&nbsp;</div>
-							<div className="loading-line loading-episode">&nbsp;</div>
-							<div className="loading-line loading-episode">&nbsp;</div>
-						</div>
-					}
-					{ !this.props.podcastLoading && 
-						<EpisodeList currentPodcastPlaying={this.props.currentPodcastPlaying} onEpisodeSelect={this.props.onEpisodeSelect} podcastInfo={this.props.selectedPodcast} episodes={this.props.selectedPodcastEpisodes} />
-					}
+						</Tab>
+						<Tab title="Reviews" link={'/podcast/' + this.props.selectedPodcast.path + '/reviews'} badge={3}>
+							<ReviewPane podcast={this.props.selectedPodcast} />
+						</Tab>
+
+						<Tab title="Community" badge={3} link={'/podcast/' + this.props.selectedPodcast.path + '/community'}>
+							community test content
+						</Tab>
+						<Tab title="Creators & Guests" link={'/podcast/' + this.props.selectedPodcast.path + '/creators-and-guests'}>
+							creator test content
+						</Tab>
+						<Tab title="Podcast content" link={'/podcast/' + this.props.selectedPodcast.path + '/extraContent'}>
+							podcast test content
+						</Tab>
+
+					</Tabs>
 					</div>
-					<div className={styles.headline}>Podcasts like this</div>
-					<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>
+				</div>
+				<div className={styles.headline}>Podcasts like this</div>
+				<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>
 			</div>
 		);
 	}

@@ -12,7 +12,8 @@ const md5 = require('md5');
 const mapStateToProps = (state, ownProps) => {
 	var useSelectedPodcast = state.podcast.selectedPodcast;
 	
-	var podcastPath = ownProps.location.pathname.substring(9);
+	// var podcastPath = ownProps.location.pathname.substring(9);
+	var podcastPath = ownProps.match.params.podcastName;
 
 	// If the current podcast does not match the path, it most likely means that the user clicked a link
 	// instead of waiting for the podcast to load, we check if they sent a cache with the click, and use that
@@ -28,8 +29,10 @@ const mapStateToProps = (state, ownProps) => {
 		console.log('This should not happen I think');
 		console.log(state.podcast.selectedPodcast);
 		console.log(state.podcast.podcastLoading);
-		console.log(ownProps.location.state.podcast);
-		console.log( ownProps.location.state.podcast.path);
+		if (ownProps.location && ownProps.location.state && ownProps.location.state.podcast) {
+			console.log(ownProps.location.state.podcast);
+			console.log( ownProps.location.state.podcast.path);
+		}
 	}
 	
 	return {
@@ -78,7 +81,8 @@ class PodCastPane extends Component {
 	*
 	*/
 	componentDidMount() {
-		var podcastPath = this.props.location.pathname.substring(9);
+		// var podcastPath = this.props.location.pathname.substring(9);
+		var podcastPath = this.props.match.params.podcastName;
 		this.props.viewPodcast(podcastPath);
 		
 		this.adjustScrollOffsetOnLoad();
@@ -87,11 +91,12 @@ class PodCastPane extends Component {
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (this.props.location.pathname !== prevProps.location.pathname) {
+		var podcastPath = this.props.match.params.podcastName;
+				
+		if (podcastPath !== prevProps.match.params.podcastName) {
 			this.setState({
 				podcastLoading: true
 			},() => {
-				var podcastPath = this.props.location.pathname.substring(9);
 				this.props.viewPodcast(podcastPath);
 			});
 		}
@@ -154,7 +159,6 @@ class PodCastPane extends Component {
 		const PodcastPaneUI = this.props.UI;
 		
 		var description = '';
-		console.log(this.props.selectedPodcast.description);
 		// This should probably be done one single time, maybe on the server side and set as a property on the podcast instead?
 		if (this.props.selectedPodcast && this.props.selectedPodcast.description) {
 			description = sanitizeHtml(this.props.selectedPodcast.description,{
@@ -162,10 +166,12 @@ class PodCastPane extends Component {
 			});
 		}
 		
+		let isSubscribed = false;
 		let isArchived = false;
 		if (this.props.subscribedPodcasts.length) {
 			this.props.subscribedPodcasts.forEach((subscribedPodcast) => {
 				if (subscribedPodcast.feedUrl === this.props.selectedPodcast.feedUrl) {
+					isSubscribed = true;
 					if (subscribedPodcast.archived) {
 						isArchived = true;
 					}
@@ -177,6 +183,7 @@ class PodCastPane extends Component {
 			<PodcastPaneUI
 				description={description}
 				isArchived={isArchived}
+				isSubscribed={isSubscribed}
 				
 				podcastLoadingError={this.props.podcastLoadingError}
 

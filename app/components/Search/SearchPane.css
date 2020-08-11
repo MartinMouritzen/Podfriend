@@ -1,9 +1,11 @@
 .searchPane {
-	overflow: auto;
 	width: 100%;
 	
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+.searchResults {
+
 }
 h1 {
 	padding-left: 20px;

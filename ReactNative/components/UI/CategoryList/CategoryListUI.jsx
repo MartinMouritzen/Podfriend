@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { Link, withRouter } from 'react-router-alias';
 
-import { Container, List, ListItem, Thumbnail, Text, Left, Body, Right, Button, Icon } from 'native-base';
+import { Container, List, ListItem, Thumbnail, Text, Left, Body, Right, Segment, Button, Icon } from 'native-base';
 
 class CategoryListUI extends React.Component {
 	/**
@@ -53,7 +53,14 @@ class CategoryListUI extends React.Component {
 	render() {
 		return (
 			<Container>
-				{ this.renderCategory('FontAwesome','home','Home',() => { this.props.history.push('/'); } ) }
+				<Segment>
+					<Button first>
+						<Text>Active</Text>
+					</Button>
+					<Button last active>
+						<Text>Archived</Text>
+					</Button>
+				</Segment>
 				{
 					this.props.categories.map((category) => {
 						return this.renderCategory(category.iconPack,category.icon,category.name)
