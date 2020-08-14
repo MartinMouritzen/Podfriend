@@ -1,16 +1,116 @@
 .reviewPane {
+
+}
+.reviewPane h1 {
+	color: #25333c;
+	font-weight: bold;
+}
+.reviewColumns {
 	display: flex;
 	flex-direction: row;
 }
+/***************************
+* Aggregated info panel
+***************************/
 .reviewAggregatedInfo {
 	width: 300px;
+	padding: 20px;
+	padding-top: 0px;
+	margin-right: 40px;
 }
+.reviewAggregatedInfo .totalScore {
+	font-size: 56px;
+	font-weight: bold;
+	color: #25333c;
+	margin-right: 10px;
+}
+.reviewAggregatedInfo .basedOn {
+	color: #25333c;
+}
+.reviewAggregatedInfo .ratingBreakdownLines {
+	width: 300px;
+	margin-top: 15px;
+}
+.reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdowLineContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 10px;
+	margin-bottom: 15px;
+}
+.reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdowLineLabel {
+	margin-right: 10px;
+	color: #25333c;
+}
+.reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLine {
+	width: 190px;
+	height: 20px;
+	background-color: #EEEEEE;
+
+	border-radius: 10px;
+	overflow: hidden;
+}
+.reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLineInner {
+	background-color: #ffea82;
+	overflow: hidden;
+	height: 20px;
+	border-bottom: 1px solid #e3c5a1;
+	transition: all 0.2s;
+}
+.reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLine:hover .ratingBreakdownLineInner {
+	background-color: gold;
+	overflow: hidden;
+	height: 20px;
+	border-bottom: 1px solid #c68840;
+}
+/***************************
+* Reviews
+***************************/
 .reviewList {
 	flex: 1;
 }
 .review {
-	
+	background-color: #FFFFFF;
+	padding: 15px;
+	margin: 10px;
+	box-shadow: 0 3px 5px -2px rgba(0,0,0,.2);
+	display: flex;
+	flex-direction: row;
+	max-width: 600px;
+}
+.avatarColumn {
+	width: 70px;
+}
+.reviewColumn {
+	flex: 1;
+}
+.review .rating {
+	float: right;
+	position: relative;
+	bottom: 10px;
+}
+.review .avatar {
+	margin-top: 5px;
+	margin-left: 5px;
+}
+.review .reviewerName {
+	color: #25333c;
+	font-weight: 500;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 .reviewContent {
 	color: #303040;
+	margin-top: 10px;
+	border-top: 1px solid #EEEEEE;
+	padding-top: 10px;
+	margin-bottom: 5px;
+	padding-right: 5px;
+}
+.review .reviewDate {
+	float: right;
+}
+.review .agoText {
+	color: #AAAAAA;
+	font-size: 14px;
 }

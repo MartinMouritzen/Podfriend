@@ -191,7 +191,7 @@ class PodcastClient extends Component {
 					<div id="mainArea" onScroll={this.onMainAreaScroll} className={styles.mainArea} ref={this.mainArea}>
 						<Switch>
 							<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
-							<Route path="/search/author/:author/:authorId" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
+							<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
 							<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
 							<Route path="/podcast/:podcastName/:subpath?" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
 							<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />

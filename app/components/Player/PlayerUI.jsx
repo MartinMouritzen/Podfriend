@@ -11,7 +11,7 @@ import TimeUtil from './../../library/TimeUtil.js';
 
 import styles from './../Player.scss';
 
-import PlayLoading from './../../images/play-button-loading4.gif';
+import PlayLoading from './../../images/play-button-loading.png';
 
 /**
 *
@@ -59,7 +59,7 @@ class PlayerUI extends Component {
 					}
 				}} className={styles.playing} onClick={(event) => { event.preventDefault(); this.goToPodcast() } }>
 					<div className={styles.cover}>
-						<img src={this.props.activePodcast.artworkUrl100} />
+						<img src={(this.props.activeEpisode.image ? this.props.activeEpisode.image : this.props.activePodcast.artworkUrl600)} />
 					</div>
 					<div className={styles.playingText}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.props.title}} />
@@ -102,13 +102,13 @@ class PlayerUI extends Component {
 						<div className={styles.backwardButton} onClick={this.props.onBackward}><FaBackward size='20px' /></div>
 						
 						{ this.props.isBuffering &&
-							<div className={styles.playButton} onClick={this.props.pause}><img src={PlayLoading} style={{ position: 'absolute', bottom: '0px', left: '0px', width: '60px', height: '60px' }}/></div>
+							<div key="playButton" className={styles.playButton} onClick={this.props.pause}><img src={PlayLoading} style={{ width: '70px', height: '70px' }}/></div>
 						}
 						{ this.props.canPlay && !this.props.playing &&
-							<div className={styles.playButton} onClick={this.props.play}><FaPlay size='26px' /></div>
+							<div key="playButton" className={styles.playButton} onClick={this.props.play}><FaPlay size='26px' /></div>
 						}
 						{ this.props.canPlay && this.props.playing &&
-							<div className={styles.pauseButton} onClick={this.props.pause}><FaPause size='26px' /></div>
+							<div key="playButton" className={styles.pauseButton} onClick={this.props.pause}><FaPause size='26px' /></div>
 						}
 						
 						<div className={styles.forwardButton} onClick={this.props.onForward}><FaForward size='20px' /></div>
@@ -127,7 +127,7 @@ class PlayerUI extends Component {
 							onPlay={this.props.onPlay}
 							onPause={this.props.onPause}
 							onSeeked={this.props.onSeek}
-							onTimeUpdate={(event) => { this.props.onTimeUpdate(this.props.activePodcast,event) } }
+							onTimeUpdate={this.props.onTimeUpdate}
 							onEnded={this.props.onEnded}
 						>
 							<source src={this.props.activeEpisode.url} type="audio/mpeg" />

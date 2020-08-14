@@ -6,19 +6,13 @@ import { audioPlayRequested } from "podfriend-approot/redux/actions/audioActions
 
 import { ContextMenu, ContextMenuItem } from "~/app/components/wwt/ContextMenu/ContextMenu";
 
-import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
-import { format, distanceInWordsToNow } from 'date-fns';
-import sanitizeHtml from 'sanitize-html';
+import EpisodeListItem from './EpisodeListItem.jsx';
+
 import MediaQuery  from 'react-responsive';
 
 import Events from 'podfriend-approot/library/Events.js';
-import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
-
-import ListenedImage from 'podfriend-approot/images/listened2.png';
 
 import styles from './EpisodeList.css';
-
-const Entities = require('html-entities').XmlEntities;
 
 const md5 = require('md5');
 
@@ -54,10 +48,9 @@ class EpisodeList extends Component {
 			hideListenedEpisodes: true
 		};
 
-		this.entities = new Entities();
-
 		this.sortBy = this.sortBy.bind(this);
 		this.handleHideListenedEpisodesFilter = this.handleHideListenedEpisodesFilter.bind(this);
+		this.selectEpisodeAndPlay = this.selectEpisodeAndPlay.bind(this);
 	}
 	/**
 	*
@@ -132,8 +125,8 @@ class EpisodeList extends Component {
 	/**
 	*
 	*/
-	selectEpisodeAndPlay(podcastInfo,episodeInfo) {
-		this.props.playEpisode(podcastInfo,episodeInfo);
+	selectEpisodeAndPlay(episodeInfo) {
+		this.props.playEpisode(this.props.selectedPodcast,episodeInfo);
 	}
 	/**
 	*
@@ -200,81 +193,28 @@ class EpisodeList extends Component {
 						You listened to all the episodes in this podcast!
 					</div>
 				}
+				
 				{ this.state.episodes && this.state.episodes.length > 0 &&
 						this.state.episodes.map((episode,index) => {
-							var isactiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
-							var episodeTitle = sanitizeHtml(episode.title,{
-								allowedTags: []
-							});
-							
-							// Decode entities, so that text with double encodings (eg. if it contained HTML when served to itunes, and they already encoded it) won't have encoded tags in it, when we parse it
-							var description = this.entities.decode(episode.description);
-							description = sanitizeHtml(description,{
-								allowedTags: ['i','em']
-							});
-							
-							var totalMinutes = Math.round(episode.duration / 60);
-							var minutesLeft = episode.currentTime ? Math.round((episode.duration - episode.currentTime) / 60) : totalMinutes;
-							
-							var progressPercentage = episode.currentTime ? (100 * episode.currentTime) / episode.duration : 0;
-							if (progressPercentage > 100) {
-								progressPercentage = 100;
-							}
-							
-							var episodeClass = styles.episode;
-							if (isactiveEpisode) {
-								episodeClass += ' ' + styles.episodePlaying;
-							}
-							if (this.props.activeEpisode && this.props.isPlaying) {
-								episodeClass += ' ' + styles.isPlaying;
-							}
-							if (episode.listened) {
-								episodeClass += ' ' + styles.listened;
-							}
-							
-							if (!isactiveEpisode && this.state.hideListenedEpisodes && episode.listened) {
-								episodeClass += ' ' + styles.hidden;
-							}
-							
+							var isActiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
+
 							return (
-								<div id={'episode_' + md5(episode.url)} key={index} className={episodeClass} onDoubleClick={() => { this.selectEpisodeAndPlay(this.props.selectedPodcast,episode); }}>
-									<div className={styles.play}>
-										<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.selectEpisodeAndPlay(this.props.selectedPodcast,episode); event.stopPropagation(); }}>
-											<FaPlay size="13px" />
-										</div>
-										<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>
-											<FaPause size="14px" />
-										</div>
-										<div className={[styles.checkIcon,styles.icon].join(' ')}>
-											<FaCheck size="14px"  />
-										</div>
-									</div>
-									<div className={styles.episodeInfo}>
-										<div className={styles.titleAndDescription}>
-											<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
-											<div className={styles.date}>
-												{format(episode.date,'MMM D, YYYY')}
-												<span className={styles.agoText}>({distanceInWordsToNow(episode.date)} ago)</span>
-											</div>
-											<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} />
-										</div>
-										<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(episode.duration))}>
-											<div className={styles.progressBarOuter}>
-												<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
-											</div>
-											
-											<span className={styles.duration}>
-												{ minutesLeft == totalMinutes && 
-													<span>{totalMinutes} minutes</span>
-												}
-												{ minutesLeft != totalMinutes && 
-													<span>{Math.round((episode.duration - episode.currentTime) / 60)} of {totalMinutes} minutes left</span>
-												}
-											</span>
-											
-										</span>
-									</div>
-								</div>
+								<EpisodeListItem
+									key={episode.url}
+									title={episode.title}
+									description={episode.description}
+									date={episode.date}
+									listened={episode.listened}
+									duration={episode.duration}
+									currentTime={episode.currentTime}
+									url={episode.url}
+									episode={episode}
+									isPlaying={this.props.isPlaying}
+									isActiveEpisode={isActiveEpisode}
+									hideListenedEpisodes={this.state.hideListenedEpisodes}
+
+									selectEpisodeAndPlay={this.selectEpisodeAndPlay}
+								/>
 							)
 						})
 				}

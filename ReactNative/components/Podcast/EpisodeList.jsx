@@ -156,7 +156,8 @@ class EpisodeList extends Component {
 				url={item.url}
 				episode={item}
 				isPlaying={this.props.isPlaying}
-				isActiveEpisode={isActiveEpisode} />
+				isActiveEpisode={isActiveEpisode}
+			/>
 		);
 	}
 	__keyExtractor(item) {

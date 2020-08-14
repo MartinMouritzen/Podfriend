@@ -333,8 +333,11 @@ const podcastReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === REVIEWS_LOADED) {
+		console.log(action.payload);
 		return Object.assign({}, state, {
-			reviews: action.payload,
+			reviews: action.payload.reviews,
+			totalCountReviews: action.payload.totalCountReviews,
+			totalScore: action.payload.totalScore,
 			reviewsLoading: true,
 			reviewsLoadingError: false
 		});

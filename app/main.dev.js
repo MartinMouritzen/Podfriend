@@ -23,8 +23,6 @@ import installExtension, { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } from 'electro
 
 const { audio } = require('system-control');
 
-require('electron-debug')();
-
 app.commandLine.appendSwitch('--autoplay-policy','no-user-gesture-required');
 
 let podfriendIcon = __dirname + '/images/logo/podfriend_logo_128x128.png';
@@ -69,25 +67,6 @@ if (process.env.NODE_ENV === 'production') {
 	const sourceMapSupport = require('source-map-support');
 	sourceMapSupport.install();
 }
-
-if (
-	process.env.NODE_ENV === 'development' ||
-	process.env.DEBUG_PROD === 'true'
-) {
-	require('electron-debug')();
-}
-
-/*
-const installExtensions = async () => {
-	const installer = require('electron-devtools-installer');
-	const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-	const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-
-	return Promise.all(
-		extensions.map(name => installer.default(installer[name], forceDownload))
-	).catch(console.log);
-};
-*/
 
 /**
 * IPC events
@@ -238,16 +217,16 @@ app.on('ready', async () => {
 		process.env.NODE_ENV === 'development' ||
 		process.env.DEBUG_PROD === 'true'
 	) {
-		// await installExtensions();
-	
 		const extensions = [REACT_DEVELOPER_TOOLS,REDUX_DEVTOOLS];
 		
-		installExtension(extensions)
-		.then((name) => {
-			console.log(`Added Extension:  ${name}`)
-		})
-		.catch((err) => {
-			console.log('An error occurred: ', err)
+		extensions.forEach(async (extension) => {
+			await installExtension(extension)
+			.then((name) => {
+				console.log(`Added Extension:  ${name}`)
+			})
+			.catch((err) => {
+				console.log('An error occurred: ', err)
+			});
 		});
 		
 	}
@@ -303,15 +282,11 @@ app.on('ready', async () => {
 	
 	mainWindow.webContents.userAgent = 'Podfriend';
 
-	// console.log('Main window loading file');
-	// console.log(`file://${__dirname}/app.html`);
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	// mainWindow.loadURL('https://www.whatismybrowser.com/detect/what-is-my-user-agent');
 	
 	quickViewWindow.loadURL(`file://${__dirname}/miniwindow.html`);
 
-	// @TODO: Use 'ready-to-show' event
-	//				https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
 	mainWindow.webContents.on('did-finish-load', () => {
 		if (!mainWindow) {
 			throw new Error('"mainWindow" is not defined');
@@ -324,6 +299,10 @@ app.on('ready', async () => {
 			
 			mainWindow.show();
 			mainWindow.focus();
+			
+			setTimeout(() => {
+				mainWindow.webContents.openDevTools();
+			},1000);
 			
 			// quickViewWindow.show();
 		}

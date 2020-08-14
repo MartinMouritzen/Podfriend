@@ -45,19 +45,19 @@ class ProgressBar extends ProgressComponent {
 
 const styles = StyleSheet.create({
     bar: {
-        backgroundColor: '#575757',
-        height: 3,
+        backgroundColor: '#FFFFFF',
+        height: 2,
         width: '100%',
         flexDirection: 'row',
         alignItems: 'flex-start'
     },
     played: {
         backgroundColor: '#28bd72',
-        height: 3
+        height: 2
     },
     buffered: {
         backgroundColor: '#797979',
-        height: 3
+        height: 2
     }
 });
 

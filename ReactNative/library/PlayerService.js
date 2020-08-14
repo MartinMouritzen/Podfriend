@@ -88,9 +88,57 @@ module.exports = (audioController) => {
 	    
 	    TrackPlayer.addEventListener('remote-duck', async (paused,permanent) => {
 			/* 
+			A tutorial (not necessarily for duck) here: https://www.youtube.com/watch?v=ws-g10jKE6E&list=PLzQWIQOqeUSPpi4MwvYh1j-KvK_e_yq8W&index=8
+			
+			
+			
 			When the event is triggered with permanent set to true, you should stop the playback.
 			When the event is triggered with paused set to true, you should pause the playback. It will also be set to true when permanent is true.
 			When the event is triggered and none of them are set to true, you should resume the track.
+			
+			Suggestion on how to implement it from https://github.com/react-native-kit/react-native-track-player/issues/505
+			
+				let playingBeforeDuck;
+				  let volumeBeforeDuck;
+				  const DUCKED_VOLUME = 0.2;
+				  TrackPlayer.addEventListener(
+				    'remote-duck',
+				    async ({ paused, permanent, ducking }) => {
+				      if (permanent) {
+				        TrackPlayer.stop();
+				        return;
+				      }
+
+				      if (paused) {
+				        const playerState = await TrackPlayer.getState();
+				        playingBeforeDuck = playerState === TrackPlayer.STATE_PLAYING;
+				        TrackPlayer.pause();
+				        return;
+				      }
+
+				      if (ducking) {
+				        const volume = await TrackPlayer.getVolume();
+				        if (volume > DUCKED_VOLUME) {
+				          volumeBeforeDuck = volume;
+				          TrackPlayer.setVolume(DUCKED_VOLUME);
+				        }
+				        return;
+				      }
+
+				      if (playingBeforeDuck) {
+				        TrackPlayer.play();
+				      }
+
+				      const playerVolume = await TrackPlayer.getVolume();
+				      if (volumeBeforeDuck > playerVolume) {
+				        TrackPlayer.setVolume(volumeBeforeDuck || 1);
+				      }
+
+				      volumeBeforeDuck = playingBeforeDuck = null;
+				    }
+				  );
+			
+			
 			*/
 	    	console.log('remote-duck: NOT SUPPORTED YET');
 	    });

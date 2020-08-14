@@ -5,6 +5,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import configureStore from 'podfriend-redux/store'
 var [ store, persistor, history ] = configureStore(AsyncStorage,false);
 
+import { getUniqueId, getManufacturer } from 'react-native-device-info';
+
+var deviceUniqueId = getUniqueId();
+
+console.log('deviceUniqueId: ' + deviceUniqueId);
+
 import MobileClient from './components/MobileClient';
 
 class App extends React.Component {

@@ -21,15 +21,13 @@
 	align-items: center;
 }
 .starNormal, .starFilled {
-
+  font-size: 30px;
 }
 .starNormal {
   color: #c5c5c5;
-  font-size: 30px;
   text-shadow: 0 1px 0 #a2a2a2;
 } 
 .starFilled {
   color: gold;
-  font-size: 30px;
   text-shadow: 0 1px 0 #ab5414;
 }

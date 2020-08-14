@@ -20,6 +20,8 @@ class ReviewPane extends React.Component {
 			<ReviewPaneUI
 				UI={ReviewPaneUI}
 				reviews={this.props.reviews}
+				totalCountReviews={this.props.totalCountReviews}
+				totalScore={this.props.totalScore}
 			/>
 		);
 	}
@@ -44,7 +46,9 @@ class ReviewPane extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		reviews: state.podcast.reviews,
-		reviewsLoading: state.podcast.reviewsLoading
+		reviewsLoading: state.podcast.reviewsLoading,
+		totalCountReviews: state.podcast.totalCountReviews,
+		totalScore: state.podcast.totalScore
 	};
 }
 

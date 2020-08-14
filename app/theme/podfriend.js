@@ -1,14 +1,8 @@
-import common from './common.js';
+import { createMuiTheme }	from '@material-ui/core/styles'
 
-export default {
-	fonts: {
-	body: 'system-ui, sans-serif',
-		heading: '"Avenir Next", sans-serif',
-		monospace: 'Menlo, monospace',
+const theme = createMuiTheme({
+	palette: {
+		primary: { 500: '#0176e5' },
 	},
-	colors: {
-		text: '#000',
-		background: '#fff',
-		primary: '#33e',
-	},
-}
+})
+export default theme

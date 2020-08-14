@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { connect } from "react-redux";
 import { archivePodcast, unarchivePodcast } from "podfriend-approot/redux/actions/podcastActions";
@@ -27,7 +27,7 @@ import styles from './PodCastPane.css';
 /**
 *
 */
-class PodCastPaneUI extends Component {
+class PodCastPaneUI extends React.PureComponent  {
 	constructor(props) {
 		super(props);
 		
@@ -66,11 +66,11 @@ class PodCastPaneUI extends Component {
 								<div className="loading-line loading-cover">&nbsp;</div>
 							}
 							<div className={styles.starRating}>
-								<ReviewStarsWithText rating={0} reviews={0} />
+								<ReviewStarsWithText rating={4} reviews={0} />
 							</div>
 						</div>
 						<div className={styles.podcastInfo}>
-							<div className={styles.podcastName}>
+							<div className={styles.podcastName} title={this.props.selectedPodcast.name}>
 								{this.props.selectedPodcast.name}
 							</div>
 							{ this.props.selectedPodcast.author &&
@@ -149,9 +149,6 @@ class PodCastPaneUI extends Component {
 					</div>
 				</div>
 				<div className={styles.podcastContent}>
-
-					
-					<div>
 					<Tabs>
 						<Tab title="Episodes" active link={'/podcast/' + this.props.selectedPodcast.path}>
 							<div className={styles.episodeTab}>
@@ -195,8 +192,11 @@ class PodCastPaneUI extends Component {
 							<ReviewPane podcast={this.props.selectedPodcast} />
 						</Tab>
 
-						<Tab title="Community" badge={3} link={'/podcast/' + this.props.selectedPodcast.path + '/community'}>
+						<Tab title="Community" link={'/podcast/' + this.props.selectedPodcast.path + '/community'}>
 							community test content
+						</Tab>
+						<Tab title="Lists" link={'/podcast/' + this.props.selectedPodcast.path + '/lists'}>
+							Lists that feature this podcast
 						</Tab>
 						<Tab title="Creators & Guests" link={'/podcast/' + this.props.selectedPodcast.path + '/creators-and-guests'}>
 							creator test content
@@ -206,7 +206,6 @@ class PodCastPaneUI extends Component {
 						</Tab>
 
 					</Tabs>
-					</div>
 				</div>
 				<div className={styles.headline}>Podcasts like this</div>
 				<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>

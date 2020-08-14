@@ -4,7 +4,6 @@
 	width: 100%;
 	border-top: 1px solid #05253f;
 	background-color: $theme-light-player-background-color;
-	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(12,40,80,1)  100%);
 	height: 90px;
 	max-height: 90px;
 	overflow: hidden;
@@ -83,11 +82,6 @@
 	display: inline-block;
 	width: 60px;
 	height: 60px;
-	
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	
 	overflow: hidden;
 	/* background-color: #0176e5; */
 	background-color: rgba(0,0,0,0.5);
@@ -103,13 +97,10 @@
 .playButton {
 
 }
-.playButton svg {
+.playButton svg, .pauseButton svg {
 	fill: #FFFFFF;
     position: relative;
-    left: 2px;
-}
-.pauseButton svg {
-	fill: #FFFFFF;
+    bottom: 3px;
 }
 .pauseButton {
 

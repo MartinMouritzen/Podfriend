@@ -81,8 +81,8 @@ class Player extends Component {
 		Events.addListener('podcastPlayRequested',() => { console.log('podcastPlayRequested is deprecated. (player.jsx)'); this.play(); },'Player');
 		Events.addListener('podcastPauseRequested',() => { console.log('podcastPauseRequested is deprecated. (player.jsx)'); this.pause(); },'Player');
 		Events.addListener('MediaPlayPause',() => { console.log('MediaPlayPause'); this.playOrPause(); },'Player');
-		Events.addListener('MediaNextTrack',() => {  this.onNextEpisode(); },'Player');
-		Events.addListener('MediaPreviousTrack',() => { this.onPrevEpisode(); },'Player');
+		Events.addListener('MediaNextTrack',() => {  console.log('MediaNextTrack'); this.onNextEpisode(); },'Player');
+		Events.addListener('MediaPreviousTrack',() => { console.log('MediaPreviousTrack'); this.onPrevEpisode(); },'Player');
 	}
 	/**
 	*
@@ -228,12 +228,14 @@ class Player extends Component {
 	/**
 	*
 	*/
-	onTimeUpdate(currentPodcastPlaying,event) {
+	onTimeUpdate() {
 		var currentTime = this.props.audioController.getCurrentTime();
 		
 		this.setState({
 			progress: currentTime
 		});
+		
+		console.log(currentTime);
 		
 		this.props.updateEpisodeTime(currentTime);
 	}

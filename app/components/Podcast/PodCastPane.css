@@ -36,11 +36,25 @@
 .podcastName {
 	font-size: 36px;
 	font-weight: bold;
-	color: #1f335e;
+	/*color: #1f335e;
 	color: #107ce4;
+	color: #188eff;*/
+	color: #000000;
 	margin-bottom: 5px;
 	
+	position: relative;
+
+	z-index: 5;
+	
 	text-shadow: 2px 0px 16px rgba(0,0,0,0.46);
+}
+.podcastName::before {
+	content:attr(title);
+	position: absolute;
+	bottom: 2px;
+
+	color: #FFFFFF;
+	/* color: #188eff;*/
 }
 .author {
 	display: flex;
@@ -91,7 +105,7 @@
 }
 
 .podcastContent {
-	background-color: #FFFFFF;
+	
 }
 
 .episodeListLoading {
@@ -109,6 +123,7 @@
 }
 .episodeColumn {
 	flex: 1;
+	background-color: #FFFFFF;
 }
 .knowledgeGraph {
 	width: 250px;

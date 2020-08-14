@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, Icon, Button } from 'native-base';
@@ -17,7 +17,7 @@ import platformTheme from './../../native-base-theme/variables/platform';
 /**
 *
 */
-class EpisodeListItem extends Component {
+class EpisodeListItem extends React.Component {
 	/**
 	*
 	*/

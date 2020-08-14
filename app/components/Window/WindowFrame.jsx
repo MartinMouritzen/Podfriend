@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 
+import { Provider } from 'react-redux';
+
+/*
+if (process.env.NODE_ENV === 'development') {
+	const whyDidYouRender = require('@welldone-software/why-did-you-render');
+	whyDidYouRender(React, {
+		trackAllPureComponents: true,
+	});
+}
+*/
+
 import { hot } from 'react-hot-loader/root';
 
-import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import isElectron from 'is-electron';

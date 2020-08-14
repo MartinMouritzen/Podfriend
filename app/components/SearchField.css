@@ -22,6 +22,7 @@
 	display: block;
 	width: 100%;
 	min-width: 100px;
+	max-width: 800px;
 	padding: 6px;
 	padding-top: 7px;
 	font-size: 14px;

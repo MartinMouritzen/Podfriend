@@ -67,17 +67,17 @@
 	justify-content: center;
 	-webkit-app-region: no-drag;
 	
-	transition: all 0.4s;
+	transition: all 0.2s;
 	background-color: transparent;
 }
 .navigationButton svg {
 	fill: #FFFFFF;
 }
 .navigationButton:hover {
-	background-color: #CCCCCC;
+	background-color: #f6f6f6;
 }
 .navigationButton:hover svg {
-	fill: #0176e5;
+	fill: #999999;
 }
 .navigationButtonDisabled svg {
 	fill: #016ace;

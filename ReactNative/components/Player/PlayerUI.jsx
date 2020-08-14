@@ -53,7 +53,7 @@ const playButtonContainerWidthWhenPlaying = 0;
 const playButtonContainerWidthWhenPaused = 35;
 
 const progressBarHeightWhenPlaying = 0;
-const progressBarHeightWhenPaused = 3;
+const progressBarHeightWhenPaused = 1;
 
 class PlayerUI extends React.Component {
 	constructor(props) {
@@ -179,8 +179,7 @@ class PlayerUI extends React.Component {
 		}
 		
 		return (
-			<Animated.View style={{ position: 'relative', overflow: 'hidden', height: this.state.heightAnimation, backgroundColor: '#eeeeee' }}>
-				<View style={{height: 2, backgroundColor: '#cccccc' }} />
+			<Animated.View style={{ position: 'relative', overflow: 'hidden', height: this.state.heightAnimation, backgroundColor: '#01417f' }}>
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<TouchableHighlight onPress={this.goToPodcast}>
 						<Animated.Image style={{ width: this.state.heightAnimation, height: this.state.heightAnimation }} source={{ uri: this.props.activePodcast.artworkUrl100 }} />
@@ -188,7 +187,7 @@ class PlayerUI extends React.Component {
 					<View style={{ flex: 1 }}>
 						<View style={{ flex: 1, flexDirection: 'row' }}>
 							<View style={{ flex: 1, marginLeft: 7, marginTop: 3 }}>
-								<Text numberOfLines={1} style={{ fontSize: 16 }}>
+								<Text numberOfLines={1} style={{ fontSize: 16, color: '#FFFfFF' }}>
 									{this.props.title}
 								</Text>
 								<Animated.View style={{ height: this.state.authorHeightAnimation, overflow: 'hidden' }}>
@@ -198,7 +197,7 @@ class PlayerUI extends React.Component {
 								</Animated.View>
 							</View>
 						</View>
-						<Animated.View style={{ height: this.state.extraPlayBarHeightAnimation, overflow: 'hidden' }}>
+						<Animated.View style={{ height: this.state.extraPlayBarHeightAnimation, overflow: this.props.shouldPlay || this.state.animating ? 'visible' : 'hidden' }}>
 							<View style={{ width: '100%', height: 10 }}>
 								<Slider
 									style={{ width: 295, height: 10, marginLeft: 8 }}
@@ -207,7 +206,7 @@ class PlayerUI extends React.Component {
 									minimumValue={0}
 									maximumValue={100}
 									minimumTrackTintColor="#28bd72"
-									maximumTrackTintColor="#575757"
+									maximumTrackTintColor="#05253f"
 									thumbTintColor="#FFFFFF"
 									onValueChange={this.props.onProgressSliderChange}
 									trackStyle={styles.trackSliderStyle}
@@ -216,16 +215,16 @@ class PlayerUI extends React.Component {
 							</View>
 							<View style={{ flexDirection: 'row',  justifyContent: 'center', alignItems: 'center', marginTop: 6 }}>
 								<View style={{ flex: 1, flexDirection: 'row', height: '100%', justifyContent: 'flex-start', alignItems: 'center', marginLeft: 10 }}>
-									<Text secondary style={{ fontSize: 12 }}>
+									<Text secondary style={{ fontSize: 12, color: '#ccd9e5' }}>
 										{TimeUtil.formatPrettyDurationText(this.props.progress)}
 									</Text>
 								</View>
 								<TouchableOpacity onPress={this.props.onPrevEpisode}>
-									<Icon type="FontAwesome5" name="fast-backward" style={{ color: '#999999', marginRight: 14, fontSize: 22 }} />
+									<Icon type="FontAwesome5" name="fast-backward" style={{ color: '#ccd9e5', marginRight: 14, fontSize: 22 }} />
 								</TouchableOpacity>
 							
 								<TouchableOpacity onPress={this.props.onBackward}>
-									<Icon type="FontAwesome5" name="backward" style={{ color: '#999999', marginRight: 14, fontSize: 22 }}  />
+									<Icon type="FontAwesome5" name="backward" style={{ color: '#ccd9e5', marginRight: 14, fontSize: 22 }}  />
 								</TouchableOpacity>
 								
 								{ this.props.isBuffering &&
@@ -259,15 +258,15 @@ class PlayerUI extends React.Component {
 								}
 									
 								<TouchableOpacity onPress={this.props.onForward}>
-									<Icon type="FontAwesome5" name="forward" style={{ color: '#999999', marginRight: 14, fontSize: 22 }}  />
+									<Icon type="FontAwesome5" name="forward" style={{ color: '#ccd9e5', marginRight: 14, fontSize: 22 }}  />
 								</TouchableOpacity>
 								
 								<TouchableOpacity onPress={this.props.onNextEpisode}>
-									<Icon type="FontAwesome5" name="fast-forward" style={{ color: '#999999', fontSize: 22 }}  />
+									<Icon type="FontAwesome5" name="fast-forward" style={{ color: '#ccd9e5', fontSize: 22 }}  />
 								</TouchableOpacity>
 								
 								<View style={{ flex: 1, flexDirection: 'row', height: '100%', justifyContent: 'flex-end', alignItems: 'center', marginRight: 10 }}>
-									<Text secondary style={{ fontSize: 12 }}>
+									<Text secondary style={{ fontSize: 12, color: '#ccd9e5' }}>
 										{TimeUtil.formatPrettyDurationText(this.props.duration)}
 									</Text>
 								</View>
@@ -277,7 +276,7 @@ class PlayerUI extends React.Component {
 					<Animated.View style={{ width: this.state.playButtonContainerWidthAnimation, justifyContent: 'center' }}>
 
 						<TouchableOpacity onPress={this.props.play}>
-							<Icon type="FontAwesome" name="play" style={{ color: platformTheme.brandPrimary, fontSize: 24 }} />
+							<Icon type="FontAwesome" name="play" style={{ color: '#ffffff', fontSize: 24 }} />
 						</TouchableOpacity>
 					</Animated.View>
 				</View>

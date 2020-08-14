@@ -15,7 +15,7 @@ function mapStateToProps(state,ownProps) {
 }
 function mapDispatchToProps(dispatch) {
 	return {
-		searchPodcasts: (query) => { dispatch(searchPodcasts(query)); }
+		searchPodcasts: (query,searchType,authorName,authorId) => { dispatch(searchPodcasts(query,searchType,authorName,authorId)); }
 	};
 }
 
@@ -65,6 +65,10 @@ class SearchPane extends Component {
 	*
 	*/
 	componentDidMount() {
+		console.log(this.props.query);
+		console.log(this.props.searchType);
+		console.log(this.props.authorName);
+		console.log(this.props.authorId);
 		this.props.searchPodcasts(this.props.query,this.props.searchType,this.props.authorName,this.props.authorId);
 	}
 	/**

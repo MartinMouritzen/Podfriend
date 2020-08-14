@@ -17,10 +17,10 @@ class ReviewStars extends Component {
 		var stars = [];
 		for(var i=1;i<=5;i++) {
 			if (Math.round(this.props.rating) >= i) {
-				stars.push(<div key={'StarRating' + i} className={styles.starFilled}>★</div>);
+				stars.push(<div key={'StarRating' + i} className={styles.starFilled} style={{ fontSize: this.props.size ? this.props.size : 30 }}>★</div>);
 			}
 			else {
-				stars.push(<div key={'StarRating' + i} className={styles.starNormal}>★</div>);
+				stars.push(<div key={'StarRating' + i} className={styles.starNormal} style={{ fontSize: this.props.size ? this.props.size : 30 }}>★</div>);
 			}
 		}
 		return stars;
@@ -40,7 +40,7 @@ class ReviewStarsWithText extends Component {
 	render() {
 		return (
 			<div className={styles.starRating} style={this.props.style}>
-				<ReviewStars rating={this.props.rating} />
+				<ReviewStars rating={this.props.rating} size={this.props.size} />
 				<div className={styles.reviewBasedOn}>
 					{ this.props.reviews > 0 && 
 						<>

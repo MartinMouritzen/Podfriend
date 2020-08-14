@@ -185,6 +185,7 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 *
 */
 export function viewPodcast(podcastPath) {
+	console.log('loading episodes');
 	return (dispatch,getState) => {
 		if (fetchingPodcast) {
 			console.log('was fetching, aborted old request');
@@ -369,6 +370,7 @@ export function unsubscribeToPodcast(podcast) {
 * Reviews
 **********************/
 export function loadReviews(podcastGuid) {
+	console.log('loading reviews');
 	return (dispatch,getState) => {
 		if (fetchingReviews) {
 			console.log('was fetching reviews, aborted old request');
@@ -386,11 +388,11 @@ export function loadReviews(podcastGuid) {
 		return clientStorage.getItem('podcast_reviews_cache_' + podcastGuid)
 		.then((podcastCache) => {
 			var shouldUpdate = false;
-			
+
 			if (podcastCache) {
 				dispatch({
 					type: REVIEWS_LOADED,
-					payload: podcastCache.reviews
+					payload: podcastCache
 				});
 				
 				if (!podcastCache.receivedFromServer) {
@@ -401,7 +403,7 @@ export function loadReviews(podcastGuid) {
 					var minutesSinceLastUpdate = Math.floor((Math.abs(new Date() - podcastCache.receivedFromServer)/1000)/60);
 				
 					if (isNaN(minutesSinceLastUpdate) || minutesSinceLastUpdate > 5) {
-						console.log('More than 5 minutes since last update. Fetching new version of: ' + podcastCache.name);
+						console.log('More than 5 minutes since last update. Fetching new version of reviews for podcast with guid: ' + podcastGuid);
 						shouldUpdate = true;
 					}
 				}
@@ -442,11 +444,15 @@ export function loadReviews(podcastGuid) {
 					else {
 						data.receivedFromServer = new Date();
 						
+						for (var i=0;i<data.reviews.length;i++) {
+							data.reviews[i].reviewDate = Date.parse(data.reviews[i].reviewDate);
+						}
+						
 						clientStorage.setItem('podcast_reviews_cache_' + podcastGuid,data);
 
 						dispatch({
 							type: REVIEWS_LOADED,
-							payload: data.reviews
+							payload: data
 						});
 					}
 				})

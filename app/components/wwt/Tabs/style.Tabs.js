@@ -4,7 +4,8 @@ export default {
 	},
 	Tabs: {
 		display: 'flex',
-		flexDirection: 'row'
+		flexDirection: 'row',
+		backgroundColor: '#FFFFFF'
 	},
 	TabOuter: {
 		marginRight: 20

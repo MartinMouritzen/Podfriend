@@ -11,7 +11,7 @@ class AudioController {
 	STATE_PAUSED = 3;
 	
 	constructor() {
-		console.log('AudioController constructor');
+		console.log('AudioController constructor - consider changing to eact-native-music-control');
 	}
 	startService() {
 		var PlayerService = require('./PlayerService.js');
@@ -20,7 +20,7 @@ class AudioController {
 		TrackPlayer.registerPlaybackService(() => PlayerService(this));
 	}
 	init() {
-		console.log('init');
+		console.log('init audiocontroller');
 		this.pressedStop = 0;
 		
 		this.data = {

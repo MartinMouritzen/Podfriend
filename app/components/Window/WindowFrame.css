@@ -1,3 +1,13 @@
+.windowFrame, .windowFrameMaximized {
+	background-color: #0176e5;
+	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(14,71,161,1) 100%);
+	
+	padding: 0px;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
 .windowFrame {
 	/*
 	background: rgb(43,32,105);
@@ -5,26 +15,14 @@
 	*/
 	/* border: 1px solid rgba(31, 51, 94, 0.3); */
 	border: 1px solid #000000;
-	background-color: #0176e5;
 	
 	/* box-shadow: 10px 10px 5px 0px rgba(255,35,170,1); */
 
-	padding: 0px;
-	height: 100%;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
+
 	/* padding: 4px; */
 	
 	border-radius: 10px;
 }
 .windowFrameMaximized {
 	border: 0px solid #000000;
-	background-color: #0176e5;
-
-	padding: 0px;
-	height: 100%;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
 }
