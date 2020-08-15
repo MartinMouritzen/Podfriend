@@ -157,8 +157,28 @@
 .forwardButton svg {
 	left: 2px;
 }
+/************************
+* Playertrack animation
+************************/
+:global {
+	#rrp-fill {
+		/*
+	    background: linear-gradient(269deg, #23a564, #6cf2ae, #23a564) !important;
+	    background-size: 600% 600%;
 
-
+	    animation-fill-mode: forwards;
+	    animation-iteration-count: infinite;
+	    animation-name: playerTrack;
+	    */
+	}
+}
+@keyframes playerTrack {
+    0%{background-position:0% 51%}
+    100%{background-position:100% 50%}
+}
+/************************
+* Responsive
+************************/
 @media only screen and (max-width: 860px) {
 	.cover {
 		display: none;

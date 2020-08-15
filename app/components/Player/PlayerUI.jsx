@@ -116,6 +116,7 @@ class PlayerUI extends Component {
 						<div className={styles.fastForwardButton}><MdMoreHoriz size='20px' /></div>
 
 						<audio
+							key="audioPlayer"
 							id="player"
 							style={{ display: 'none' }}
 							onCanPlay={this.props.onCanPlay}
@@ -130,11 +131,11 @@ class PlayerUI extends Component {
 							onTimeUpdate={this.props.onTimeUpdate}
 							onEnded={this.props.onEnded}
 							
-							onError={(error) => { console.log('Error happened in audio element'); console.log(error); }}
-							onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); }}
-							onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); }}
-							onStalled={(error) => { console.log('onStalled happened in audio element'); console.log(error); }}
-							onSuspend={(error) => { console.log('onSuspend happened in audio element'); console.log(error); }}
+							onError={(error) => { console.log('Error happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+							onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+							onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+							onStalled={(error) => { console.log('onStalled happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+							onSuspend={(error) => { console.log('onSuspend happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
 						>
 							<source src={this.props.activeEpisode.url} type="audio/mpeg" />
 						</audio>

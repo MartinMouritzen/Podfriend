@@ -181,15 +181,17 @@
 	color: #FFFFFF;
 	margin-left: 10px;
 	border-radius: 5px;
+	
+	position: relative;
+	bottom: 1px;
 }
 .episodeType[type="bonus"] {
-	background-color: #a601e5;
+	background-color: #28bd72;
 	color: rgba(255,255,255,1);
-	
 }
 .episodeType[type="trailer"] {
-	background-color: #DDDDDD;
-	color: rgba(0,0,0,0.9);
+	background-color: #4c749a;
+	color: rgba(255,255,255,1);
 }
 /*
 .listenedIcon {
