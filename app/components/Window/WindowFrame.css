@@ -1,6 +1,7 @@
 .windowFrame, .windowFrameMaximized {
 	background-color: #0176e5;
 	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(14,71,161,1) 100%);
+	background: linear-gradient(90deg, rgba(1,98,209,1) 0%, rgba(12,40,80,1) 47%, rgba(14,71,161,1) 100%);
 	
 	padding: 0px;
 	height: 100%;

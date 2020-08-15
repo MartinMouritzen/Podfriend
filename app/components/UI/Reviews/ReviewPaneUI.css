@@ -44,14 +44,17 @@
 }
 .reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLine {
 	width: 190px;
-	height: 20px;
+	height: 14px;
 	background-color: #EEEEEE;
 
 	border-radius: 10px;
 	overflow: hidden;
+	
+	position: relative;
+	top: 1px;
 }
 .reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLineInner {
-	background-color: #ffea82;
+	background-color: #cecece;
 	overflow: hidden;
 	height: 20px;
 	border-bottom: 1px solid #e3c5a1;

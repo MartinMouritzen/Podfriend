@@ -17,9 +17,9 @@ class NavigationFooter extends React.Component {
 	*/
 	render() {
 		return (
-			<Footer>
+			<Footer style={{ backgroundColor: '#0c2850' }}>
 				<FooterTab>
-					<Link to="/" component={Button} vertical>
+					<Link to="/" component={Button} vertical active>
 						<Icon type="FontAwesome" active name="home" />
 						<Text>Home</Text>
 					</Link>

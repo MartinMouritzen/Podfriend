@@ -41,6 +41,8 @@ class EpisodeList extends Component {
 	constructor(props) {
 		super(props);
 		
+		console.log('Look into using react-window (or react-virtualized) for the episodelist');
+		
 		this.state = {
 			episodes: this.__sort(props.selectedPodcast.episodes,'date','asc'),
 			orderBy: 'date',
@@ -141,8 +143,14 @@ class EpisodeList extends Component {
 	*/
 	render() {
 		var episodesListened = 0;
+		
+		var seasons = [];
+		
 		if (this.state.episodes) {
 			for(var i=0;i<this.state.episodes.length;i++) {
+				if (this.state.episodes[i].season) {
+					seasons[this.state.episodes[i].season] = this.state.episodes[i].season;
+				}
 				if (this.state.episodes[i].listened) {
 					episodesListened++;
 				}
@@ -151,40 +159,46 @@ class EpisodeList extends Component {
 		
 		return (
 			<div className={styles.episodeList}>
-				{ episodesListened > 0 &&
-					<label><input type="checkbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> Hide {episodesListened} already listened episodes</label>
-				}
-			
-			
-				<MediaQuery maxWidth={590}>
-					<div className={styles.mobileHeader}>
-						All episodes
+				<div className={styles.filterBar}>
+					<div className={styles.filterItem}>
+						<label for="sortDropDown">Sort by</label>
+						<select id="sortDropDown">
+							{ seasons.length > 0 &&
+								<option value="season" selected>Season</option>
+							}
+							<option value="dateold">Oldest first</option>
+							<option value="datenew">Newest first</option>
+							<option value="durationlong">Longest first</option>
+							<option value="durationshort">Shortest first</option>
+						</select>
 					</div>
-				</MediaQuery>
-				<MediaQuery minWidth={591}>
-					<div key="header" className={styles.header}>
-						<span className={styles.playHeader}>
-							&nbsp;
-						</span>
-						<span className={styles.titleAndDescriptionHeader} onClick={() => { this.sortBy('title'); }}>
-							<div className={styles.title}>
-								Title
-							</div>
-						</span>
-						<span className={styles.progressHeader}  onClick={() => { this.sortBy('progress'); }}>
-							Progress
-						</span>
-						<span className={styles.dateHeader} onClick={() => { this.sortBy('date'); }}>
-							Date
-						</span>
-						<span className={styles.durationHeader} onClick={() => { this.sortBy('duration'); }}>
-							Duration
-						</span>
-					</div>
-				</MediaQuery>
+					{ seasons.length > 0 &&
+						<div className={styles.filterItem}>
+							<label for="filterDropDown">Show</label>
+							<select id="filterDropDown">
+								<option>All seasons</option>
+							{
+								seasons.map((season,index) => {
+									return (
+										<option>Season {season}</option>
+									)	
+								})
+							}
+							</select>
+						</div>
+					}
+					{ episodesListened > 0 &&
+						<div className={styles.filterItem}>
+							<label><input type="checkbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> Hide {episodesListened} already listened episodes</label>
+						</div>
+					}
+				</div>
+			
+				{/*
 				<ContextMenu target={'.' + styles.episode}>
 					<ContextMenuItem>Mark episode as listened</ContextMenuItem>
 				</ContextMenu>
+				*/}
 				{ this.state.episodes && this.state.episodes.length == episodesListened &&
 					<div style={{ padding: 60, textAlign: 'center' }} className={styles.listenedToAll}>
 						<div style={{ backgroundColor: '#28bd72', width: 100, height: 100, borderRadius: '50%', display: 'flex', alignItems: 'center',justifyContent: 'center',marginLeft: 'auto',marginRight: 'auto', marginBottom: '20px' }}>
@@ -203,6 +217,7 @@ class EpisodeList extends Component {
 									key={episode.url}
 									title={episode.title}
 									description={episode.description}
+									episodeType={episode.episodeType}
 									date={episode.date}
 									listened={episode.listened}
 									duration={episode.duration}

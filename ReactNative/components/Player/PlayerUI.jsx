@@ -179,7 +179,7 @@ class PlayerUI extends React.Component {
 		}
 		
 		return (
-			<Animated.View style={{ position: 'relative', overflow: 'hidden', height: this.state.heightAnimation, backgroundColor: '#01417f' }}>
+			<Animated.View style={{ position: 'relative', overflow: 'hidden', height: this.state.heightAnimation, backgroundColor: '#0c2850', position: 'absolute', bottom: 55, width: '100%', borderTopRightRadius: 20 }}>
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<TouchableHighlight onPress={this.goToPodcast}>
 						<Animated.Image style={{ width: this.state.heightAnimation, height: this.state.heightAnimation }} source={{ uri: this.props.activePodcast.artworkUrl100 }} />
@@ -187,11 +187,11 @@ class PlayerUI extends React.Component {
 					<View style={{ flex: 1 }}>
 						<View style={{ flex: 1, flexDirection: 'row' }}>
 							<View style={{ flex: 1, marginLeft: 7, marginTop: 3 }}>
-								<Text numberOfLines={1} style={{ fontSize: 16, color: '#FFFfFF' }}>
+								<Text numberOfLines={1} style={{ fontSize: 14, color: '#FFFFFF' }}>
 									{this.props.title}
 								</Text>
 								<Animated.View style={{ height: this.state.authorHeightAnimation, overflow: 'hidden' }}>
-									<Text numberOfLines={1} secondary style={{ fontSize: 14 }}>
+									<Text numberOfLines={1} secondary style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
 										{this.props.activePodcast.author}
 									</Text>
 								</Animated.View>
@@ -206,7 +206,7 @@ class PlayerUI extends React.Component {
 									minimumValue={0}
 									maximumValue={100}
 									minimumTrackTintColor="#28bd72"
-									maximumTrackTintColor="#05253f"
+									maximumTrackTintColor="#0b1928"
 									thumbTintColor="#FFFFFF"
 									onValueChange={this.props.onProgressSliderChange}
 									trackStyle={styles.trackSliderStyle}
@@ -273,7 +273,7 @@ class PlayerUI extends React.Component {
 							</View>
 						</Animated.View>
 					</View>
-					<Animated.View style={{ width: this.state.playButtonContainerWidthAnimation, justifyContent: 'center' }}>
+					<Animated.View style={{ width: this.state.playButtonContainerWidthAnimation, justifyContent: 'center', marginLeft: 8 }}>
 
 						<TouchableOpacity onPress={this.props.play}>
 							<Icon type="FontAwesome" name="play" style={{ color: '#ffffff', fontSize: 24 }} />

@@ -129,6 +129,12 @@ class PlayerUI extends Component {
 							onSeeked={this.props.onSeek}
 							onTimeUpdate={this.props.onTimeUpdate}
 							onEnded={this.props.onEnded}
+							
+							onError={(error) => { console.log('Error happened in audio element'); console.log(error); }}
+							onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); }}
+							onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); }}
+							onStalled={(error) => { console.log('onStalled happened in audio element'); console.log(error); }}
+							onSuspend={(error) => { console.log('onSuspend happened in audio element'); console.log(error); }}
 						>
 							<source src={this.props.activeEpisode.url} type="audio/mpeg" />
 						</audio>

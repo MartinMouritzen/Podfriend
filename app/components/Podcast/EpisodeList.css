@@ -1,3 +1,28 @@
+.filterBar {
+	display: flex;
+	align-items: center;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #eeeeee;
+}
+.filterItem {
+	padding-left: 10px;
+	padding-right: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.filterItem select {
+	height: 30px;
+	font-size: 14px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.filterItem option {
+	font-size: 14px;
+}
+.filterItem label {
+	font-size: 14px;
+}
 .episodeList {
 	flex: 1;
 }
@@ -144,6 +169,27 @@
 	font-weight: bold;
 	margin-bottom: 10px;
 	display: inline-block;
+}
+.episodeType {
+	display: inline-block;
+	background-color: #a601e5;
+	padding: 4px;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-size: 10px;
+	text-transform: uppercase;
+	color: #FFFFFF;
+	margin-left: 10px;
+	border-radius: 5px;
+}
+.episodeType[type="bonus"] {
+	background-color: #a601e5;
+	color: rgba(255,255,255,1);
+	
+}
+.episodeType[type="trailer"] {
+	background-color: #DDDDDD;
+	color: rgba(0,0,0,0.9);
 }
 /*
 .listenedIcon {

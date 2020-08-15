@@ -235,8 +235,6 @@ class Player extends Component {
 			progress: currentTime
 		});
 		
-		console.log(currentTime);
-		
 		this.props.updateEpisodeTime(currentTime);
 	}
 	/**

@@ -12,6 +12,8 @@ class AudioController {
 	
 	constructor() {
 		console.log('AudioController constructor - consider changing to eact-native-music-control');
+		console.log('Read https://medium.com/@emmettharper/the-state-of-audio-libraries-in-react-native-7e542f57b3b4');
+		console.log('and google some more');
 	}
 	startService() {
 		var PlayerService = require('./PlayerService.js');

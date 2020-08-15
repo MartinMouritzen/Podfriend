@@ -88,6 +88,9 @@ class EpisodeListItem extends React.Component {
 				<div className={styles.episodeInfo}>
 					<div className={styles.titleAndDescription}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.state.episodeTitle}} />
+						{ this.props.episodeType != 'full' &&
+							<span type={this.props.episodeType} className={styles.episodeType}>{this.props.episodeType}</span>
+						}
 						<div className={styles.date}>
 							{format(this.props.date,'MMM D, YYYY')}
 							<span className={styles.agoText}>({distanceInWordsToNow(this.props.date)} ago)</span>
