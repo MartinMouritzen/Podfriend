@@ -44,8 +44,8 @@ class EpisodeList extends Component {
 		console.log('Look into using react-window (or react-virtualized) for the episodelist');
 		
 		this.state = {
-			episodes: this.__sort(props.selectedPodcast.episodes,'date','asc'),
-			orderBy: 'date',
+			episodes: this.__sort(props.selectedPodcast.episodes,'season','asc'),
+			orderBy: 'season',
 			orderType: 'asc',
 			hideListenedEpisodes: true
 		};
@@ -60,8 +60,8 @@ class EpisodeList extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (this.props.selectedPodcast.episodes !== prevProps.selectedPodcast.episodes) {
 			this.setState({
-				episodes: this.__sort(this.props.selectedPodcast.episodes,'date','asc'),
-				orderBy: 'date',
+				episodes: this.__sort(this.props.selectedPodcast.episodes,'season','asc'),
+				orderBy: 'season',
 				orderType: 'asc'
 			});
 		}
@@ -73,7 +73,36 @@ class EpisodeList extends Component {
 		if (!episodes) { return false; }
 		
 		episodes.sort((a,b) => {
-			if (orderBy === 'title') {
+			if (orderBy === 'season') {
+				var seasonA = a.season;
+				var seasonB = b.season;
+				
+				if (seasonA == seasonB) {
+					if (orderType === 'asc') {
+						var sortValue = Date.parse(a.date) - Date.parse(b.date);
+						if (sortValue === 0) {
+							return a.title.localeCompare(b.title,{numeric: true, sensitivity: 'base'})
+						}
+						return sortValue;
+					}
+					else {
+						var sortValue = Date.parse(b.date) - Date.parse(a.date);
+						if (sortValue === 0) {
+							return b.title.localeCompare(a.title,{numeric: true, sensitivity: 'base'})
+						}
+						return sortValue;
+					}
+				}
+				else {
+					if (orderType === 'asc') {
+						return seasonA - seasonB;
+					}
+					else {
+						return seasonB - seasonA;
+					}
+				}
+			}
+			else if (orderBy === 'title') {
 				if (orderType === 'asc') {
 					return a.title.localeCompare(b.title,undefined,{numeric: true, sensitivity: 'base'});
 				}
@@ -144,15 +173,34 @@ class EpisodeList extends Component {
 	render() {
 		var episodesListened = 0;
 		
+		var activeSeason = false;
 		var seasons = [];
 		
+		// Let's not do this every render, but once when we mount?
 		if (this.state.episodes) {
 			for(var i=0;i<this.state.episodes.length;i++) {
 				if (this.state.episodes[i].season) {
-					seasons[this.state.episodes[i].season] = this.state.episodes[i].season;
+					if (!seasons[this.state.episodes[i].season]) {
+						seasons[this.state.episodes[i].season] = {
+							seasonNumber: this.state.episodes[i].season,
+							episodes: 0,
+							unlistenedEpisodes: 0,
+							listenedEpisodes: 0
+						};
+					}
 				}
 				if (this.state.episodes[i].listened) {
 					episodesListened++;
+					if (seasons[this.state.episodes[i].season]) {
+						seasons[this.state.episodes[i].season].listenedEpisodes++;
+						seasons[this.state.episodes[i].season].episodes++;
+					}
+				}
+				else {
+					if (seasons[this.state.episodes[i].season]) {
+						seasons[this.state.episodes[i].season].unlistenedEpisodes++;
+						seasons[this.state.episodes[i].season].episodes++;
+					}
 				}
 			}
 		}
@@ -180,7 +228,7 @@ class EpisodeList extends Component {
 							{
 								seasons.map((season,index) => {
 									return (
-										<option>Season {season}</option>
+										<option>Season {season.seasonNumber}</option>
 									)	
 								})
 							}
@@ -209,29 +257,54 @@ class EpisodeList extends Component {
 				}
 				
 				{ this.state.episodes && this.state.episodes.length > 0 &&
-						this.state.episodes.map((episode,index) => {
-							var isActiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
+					this.state.episodes.map((episode,index) => {
+						var isActiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
+						var episodeHTMLElements = [];
+						
+						if (episode.season && episode.season !== activeSeason) {
+							activeSeason = episode.season;
+							
+							if (seasons[episode.season].unlistenedEpisodes > 0) {
+								episodeHTMLElements.push((
+									<div className={styles.seasonHeader} key={'seasonheader' + activeSeason}>
+										{ (seasons[episode.season].unlistenedEpisodes === seasons[episode.season].episodes) &&
+											<>
+												Season {activeSeason} ({seasons[episode.season].unlistenedEpisodes} episodes)
+											</>
+										}
+										{ (seasons[episode.season].unlistenedEpisodes !== seasons[episode.season].episodes) &&
+											<>
+												Season {activeSeason} ({seasons[episode.season].unlistenedEpisodes} of {seasons[episode.season].episodes} episodes left)
+											</>
+										}
+									</div>
+								));
+							}
+							
+							
+						}
 
-							return (
-								<EpisodeListItem
-									key={episode.url}
-									title={episode.title}
-									description={episode.description}
-									episodeType={episode.episodeType}
-									date={episode.date}
-									listened={episode.listened}
-									duration={episode.duration}
-									currentTime={episode.currentTime}
-									url={episode.url}
-									episode={episode}
-									isPlaying={this.props.isPlaying}
-									isActiveEpisode={isActiveEpisode}
-									hideListenedEpisodes={this.state.hideListenedEpisodes}
+						episodeHTMLElements.push((
+							<EpisodeListItem
+								key={episode.url}
+								title={episode.title}
+								description={episode.description}
+								episodeType={episode.episodeType}
+								date={episode.date}
+								listened={episode.listened}
+								duration={episode.duration}
+								currentTime={episode.currentTime}
+								url={episode.url}
+								episode={episode}
+								isPlaying={this.props.isPlaying}
+								isActiveEpisode={isActiveEpisode}
+								hideListenedEpisodes={this.state.hideListenedEpisodes}
 
-									selectEpisodeAndPlay={this.selectEpisodeAndPlay}
-								/>
-							)
-						})
+								selectEpisodeAndPlay={this.selectEpisodeAndPlay}
+							/>
+						));
+						return episodeHTMLElements;
+					})
 				}
 			</div>
 		);

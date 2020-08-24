@@ -33,6 +33,11 @@
 .listenedToAll svg {
 	fill: #FFFFFF;
 }
+.seasonHeader {
+	background-color: #0c2850;
+	color: #FFFFFF;
+	padding: 20px;
+}
 .episode, .episodePlaying {
 	min-height: 50px;
 	display: flex;

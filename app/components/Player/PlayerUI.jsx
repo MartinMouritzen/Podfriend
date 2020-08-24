@@ -131,6 +131,8 @@ class PlayerUI extends Component {
 							onTimeUpdate={this.props.onTimeUpdate}
 							onEnded={this.props.onEnded}
 							
+							preload="auto"
+							
 							onError={(error) => { console.log('Error happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
 							onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
 							onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}

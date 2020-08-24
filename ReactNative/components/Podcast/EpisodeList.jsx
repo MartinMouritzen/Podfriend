@@ -36,8 +36,6 @@ class EpisodeList extends Component {
 	constructor(props) {
 		super(props);
 		
-		console.log('EpisodeList constructor');
-		
 		this.state = {
 			episodes: props.selectedPodcast.episodes,
 			orderBy: 'date',
