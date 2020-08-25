@@ -123,6 +123,8 @@
 	font-size: 12px;
 	display: flex;
 	
+	height: 70px;
+	
 	overflow: hidden;
 	
 	margin-left: 8px;
@@ -158,8 +160,6 @@
 	overflow: hidden;
 }
 .cover {
-	min-width: 60px;
-	min-height: 60px;
 	max-width: 60px;
 	max-height: 60px;
 	border-radius: 5px;	

@@ -10,6 +10,7 @@ function mapStateToProps(state,ownProps) {
 		searchResults: state.podcast.searchResults,
 		searchError: state.podcast.searchError,
 		query: ownProps.searchType == 'podcast' ? ownProps.match.params.query : ownProps.match.params.author,
+		authorName: ownProps.match.params.author,
 		authorId: ownProps.match.params.authorId
 	};
 }

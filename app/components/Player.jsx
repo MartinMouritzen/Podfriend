@@ -252,10 +252,12 @@ class Player extends Component {
 	/**
 	*
 	*/
-	onEnded() {
+	onEnded(event) {
 		console.log('Episode ended');
 		console.log('currentTime: ' + this.props.audioController.getCurrentTime());
 		console.log('duration: ' + this.props.audioController.getDuration());
+		console.log(event);
+		console.log(event.nativeEvent);
 		console.log(this.props.activeEpisode);
 		
 		Events.emit('OnEpisodeEnded',{
