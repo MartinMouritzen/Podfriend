@@ -37,7 +37,7 @@ class PlayerUI extends Component {
 	*/
 	goToPodcast() {
 		this.props.history.push({
-			pathname: '/podcast/' + this.props.activePodcast.path,
+			pathname: '/podcast/' + this.props.activePodcast.path + '/' + this.props.activeEpisode.id,
 			search: '?clickTime=' + new Date().getMilliseconds(),
 			state: {
 				podcast: this.props.activePodcast,
@@ -52,7 +52,7 @@ class PlayerUI extends Component {
 		return (
 			<div className={styles.player} style={{ display: this.props.hasEpisode ? 'flex' : 'none' }}>
 				<Link to={{
-					pathname: '/podcast/' + this.props.activePodcast.path,
+					pathname: '/podcast/' + this.props.activePodcast.path + '#episode-' + this.props.activeEpisode.id,
 					state: {
 						podcast: this.props.activePodcast,
 						fromPlayer: true
@@ -64,7 +64,7 @@ class PlayerUI extends Component {
 					<div className={styles.playingText}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.props.title}} />
 						<div className={styles.author}>
-							{this.props.activePodcast.author}
+							{this.props.activePodcast.name}
 						</div>
 					</div>
 				</Link>
@@ -73,31 +73,33 @@ class PlayerUI extends Component {
 						<div className={styles.progressText}>
 							{TimeUtil.formatPrettyDurationText(this.props.progress)}
 						</div>
-						<Range
-							value={(100 * this.props.progress) / this.props.duration}
-							thumbSize={16}
-							height={6}
-							width="100%"
-							fillColor={{
-								r: 40,
-								g: 189,
-								b: 114,
-								a: 1,
-							}}
-							trackColor={{
-								r: 10,
-								g: 10,
-								b: 0,
-								a: 0.5,
-							}}
-							onChange={this.props.onProgressSliderChange}
-						/>
+						<div className={styles.progressBarOuter}>
+							<Range
+								value={(100 * this.props.progress) / this.props.duration}
+								thumbSize={16}
+								height={6}
+								width="100%"
+								fillColor={{
+									r: 40,
+									g: 189,
+									b: 114,
+									a: 1,
+								}}
+								trackColor={{
+									r: 10,
+									g: 10,
+									b: 0,
+									a: 0.5,
+								}}
+								onChange={this.props.onProgressSliderChange}
+							/>
+						</div>
 						<div className={styles.durationText} title={TimeUtil.formatPrettyDurationText(this.props.duration - this.props.progress) + ' left.'}>
 							{TimeUtil.formatPrettyDurationText(this.props.duration)}
 						</div>
 					</div>
 					<div className={styles.audioButtons}>
-					<div className={styles.fastBackwardButton}>&nbsp;</div>
+					{/*<div className={styles.fastBackwardButton}>&nbsp;</div>*/}
 						<div className={styles.fastBackwardButton} onClick={this.props.onPrevEpisode}><FaFastBackward size='20px' /></div>
 						<div className={styles.backwardButton} onClick={this.props.onBackward}><FaBackward size='20px' /></div>
 						
@@ -113,37 +115,11 @@ class PlayerUI extends Component {
 						
 						<div className={styles.forwardButton} onClick={this.props.onForward}><FaForward size='20px' /></div>
 						<div className={styles.fastForwardButton} onClick={this.props.onNextEpisode}><FaFastForward size='20px' /></div>
-						<div className={styles.fastForwardButton}><MdMoreHoriz size='20px' /></div>
-
-						<audio
-							key="audioPlayer"
-							id="player"
-							style={{ display: 'none' }}
-							onCanPlay={this.props.onCanPlay}
-							onLoadStart={this.props.onBuffering}
-							onWaiting={this.props.onBuffering}
-							onLoadedMetadata={this.props.onLoadedMetadata}
-							controls
-							ref={this.onAudioElementChange}
-							onPlay={this.props.onPlay}
-							onPause={this.props.onPause}
-							onSeeked={this.props.onSeek}
-							onTimeUpdate={this.props.onTimeUpdate}
-							onEnded={this.props.onEnded}
-							
-							preload="auto"
-							
-							onError={(error) => { console.log('Error happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
-							onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
-							onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
-							onStalled={(error) => { console.log('onStalled happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
-							onSuspend={(error) => { console.log('onSuspend happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
-						>
-							<source src={this.props.activeEpisode.url} type="audio/mpeg" />
-						</audio>
+						{/*<div className={styles.moreControlsButton}><MdMoreHoriz size='20px' /></div>*/}
 					</div>
 				</div>
 				<div className={styles.volumeControls}>
+					{ /*
 					{ this.props.volume === 0 &&
 						<FaVolumeMute size='20px' />
 					}
@@ -172,7 +148,34 @@ class PlayerUI extends Component {
 					  }}
 					  onChange={this.onVolumeSliderChange}
 					/>
+					*/ }
 				</div>
+				<audio
+					key="audioPlayer"
+					id="player"
+					style={{ display: 'none' }}
+					onCanPlay={this.props.onCanPlay}
+					onLoadStart={this.props.onBuffering}
+					onWaiting={this.props.onBuffering}
+					onLoadedMetadata={this.props.onLoadedMetadata}
+					controls
+					ref={this.onAudioElementChange}
+					onPlay={this.props.onPlay}
+					onPause={this.props.onPause}
+					onSeeked={this.props.onSeek}
+					onTimeUpdate={this.props.onTimeUpdate}
+					onEnded={this.props.onEnded}
+					
+					preload="auto"
+					
+					onError={(error) => { console.log('Error happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+					onAbort={(error) => { console.log('onAbort happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+					onEmptied={(error) => { console.log('onEmptied happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+					onStalled={(error) => { console.log('onStalled happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+					onSuspend={(error) => { console.log('onSuspend happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); }}
+				>
+					<source src={this.props.activeEpisode.url} type="audio/mpeg" />
+				</audio>
 			</div>
 		);
 	}

@@ -1,0 +1,30 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true
+  },
+  "plugins": [
+    "flowtype",
+    "prettier"
+  ],
+  "extends": [
+    "plugin:flowtype/recommended"
+  ],
+  "globals": {
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      { "singleQuote": true,
+        "bracketSpacing": false,
+        "trailingComma": "all",
+      }
+    ],
+    "eqeqeq": [2, "smart"],
+    "semi": 2,
+    "no-unused-vars": ["error", {
+      "varsIgnorePattern": "^_.?.?$",
+      "argsIgnorePattern": "^_.*$",
+    }],
+  }
+}

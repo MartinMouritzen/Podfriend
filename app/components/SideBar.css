@@ -7,6 +7,10 @@
 	flex-basis: auto;
 	/* flex-grow: 1; */
 }
+.sideBar a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
 .favoritesHeadline {
 	display: none;
 	margin-bottom: 3px;
@@ -198,7 +202,7 @@
 .podcastArchived .podcastDetails {
 	height: 0px;
 }
-@media only screen and (max-width: 1199px) {
+@media only screen and (max-width: 899px) {
 	.categories {
 		display: none;
 	}
@@ -212,13 +216,13 @@
 		overflow: hidden;
 	}
 }
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 900px) {
 	.sideBar {
 		min-width: 450px;
 		max-width: 450px;
 	}
 }
-@media only screen and (max-width: 380px) {
+@media only screen and (max-width: 600px) {
 	.sideBar {
 		display: none;
 	}

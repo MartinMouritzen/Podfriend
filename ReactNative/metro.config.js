@@ -12,7 +12,9 @@ const watchFolders = [
 	path.resolve(__dirname + '/../app/components/'),
 	path.resolve(__dirname + '/../app/redux/'),
 	path.resolve(__dirname + '/../app/library/'),
+	path.resolve(__dirname + '/../app/images/'),
 	path.resolve(__dirname + '/native-base-theme/'),
+	path.resolve(__dirname + '/images/'),
 ];
 
 module.exports = {

@@ -20,9 +20,11 @@ import SubscribeButton from './SubscribeButton.jsx';
 
 import { ReviewStarsWithText } from 'podfriend-approot/components/Reviews/StarRating.jsx';
 
-import { FaHeart, FaHeartBroken } from "react-icons/fa";
+import isElectron from 'is-electron';
 
 import styles from './PodCastPane.css';
+
+import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
 /**
 *
@@ -47,8 +49,13 @@ class PodCastPaneUI extends React.PureComponent  {
 	*
 	*/
 	goToWebsite(websiteUrl) {
-		var shell = require('electron').shell;
-		shell.openExternal(websiteUrl);
+		if (isElectron()) {
+			var shell = require('electron').shell;
+			shell.openExternal(websiteUrl);
+		}
+		else {
+			window.open(websiteUrl,"_blank");
+		}
 	}
 	/**
 	*
@@ -56,7 +63,7 @@ class PodCastPaneUI extends React.PureComponent  {
 	render() {
 		return (
 			<div className={styles.podcastPane}>
-				<div className={styles.mainInfo} style={{ backgroundImage: (this.props.selectedPodcast.artworkUrl600 ? 'url(' + this.props.selectedPodcast.artworkUrl600 + ')' : 'none') }}>
+				<div className={styles.mainInfo}>
 					<div className={styles.mainInfoInner}>
 						<div>
 							{ this.props.selectedPodcast.artworkUrl600 && 
@@ -65,9 +72,11 @@ class PodCastPaneUI extends React.PureComponent  {
 							{ !this.props.selectedPodcast.artworkUrl600 &&
 								<div className="loading-line loading-cover">&nbsp;</div>
 							}
+							{ /*
 							<div className={styles.starRating}>
 								<ReviewStarsWithText rating={4} reviews={0} />
 							</div>
+							*/ }
 						</div>
 						<div className={styles.podcastInfo}>
 							<div className={styles.podcastName} title={this.props.selectedPodcast.name}>
@@ -93,11 +102,11 @@ class PodCastPaneUI extends React.PureComponent  {
 									}
 								</div>
 							}
-							{ this.props.podcastLoadingError &&
+							{ /* this.props.podcastLoadingError &&
 								<div className={styles.description}>
 									Error reading Podcast File
 								</div>
-							}
+							*/ }
 							
 							{ !this.props.description && !this.props.podcastLoadingError && this.props.podcastLoading && 
 								<div className={styles.description}>
@@ -148,7 +157,10 @@ class PodCastPaneUI extends React.PureComponent  {
 						</div>
 					</div>
 				</div>
+				<img src={Wave} />
 				<div className={styles.podcastContent}>
+					<EpisodeList currentPodcastPlaying={this.props.currentPodcastPlaying} onEpisodeSelect={this.props.onEpisodeSelect} podcastInfo={this.props.selectedPodcast} episodes={this.props.selectedPodcastEpisodes} />
+					{ /*
 					<Tabs>
 						<Tab title="Episodes" active link={'/podcast/' + this.props.selectedPodcast.path}>
 							<div className={styles.episodeTab}>
@@ -162,13 +174,6 @@ class PodCastPaneUI extends React.PureComponent  {
 									}
 									{ !this.props.podcastLoadingError && this.props.podcastLoading && 
 										<div className={styles.episodeListLoading}>
-											{/*
-											<div className={styles.episodeListLoadingHeaders}>
-												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-												<div className="loading-line loading-line-very-short" style={{ marginRight: '100px' }}>&nbsp;</div>
-											</div>*/}
 											<div className="loading-line loading-episode">&nbsp;</div>
 											<div className="loading-line loading-episode">&nbsp;</div>
 											<div className="loading-line loading-episode">&nbsp;</div>
@@ -181,11 +186,6 @@ class PodCastPaneUI extends React.PureComponent  {
 										</div>
 									}
 								</div>
-								{/*
-								<div className={styles.knowledgeGraph}>
-									Knowledge stuff
-								</div>
-								*/}
 							</div>
 						</Tab>
 						<Tab title="Reviews" link={'/podcast/' + this.props.selectedPodcast.path + '/reviews'} badge={3}>
@@ -204,11 +204,13 @@ class PodCastPaneUI extends React.PureComponent  {
 						<Tab title="Podcast content" link={'/podcast/' + this.props.selectedPodcast.path + '/extraContent'}>
 							podcast test content
 						</Tab>
-
 					</Tabs>
+					*/ }
 				</div>
-				<div className={styles.headline}>Podcasts like this</div>
-				<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>
+				{/*
+					<div className={styles.headline}>Podcasts like this</div>
+					<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>
+				*/}
 			</div>
 		);
 	}

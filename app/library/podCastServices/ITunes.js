@@ -39,7 +39,8 @@ class ITunes {
 		}
 		// console.log('searching: ' + searchUrl);
 		return axios({
-			url: searchUrl
+			url: searchUrl,
+			headers: { 'User-Agent': 'Podfriend Mobile 1.0' }
 		})
 		.then((response) => {
 			if (this.proxyCalls) {

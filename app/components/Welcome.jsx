@@ -33,7 +33,7 @@ class Welcome extends Component {
 					<p>You might also find really annoying bugs. Sorry for that in advance. I do a lot of testing, but I'm just one person. what I can do is promise you that I will fix the bugs as soon as I can.</p>
 					
 					<p>I hope together, we can have great fun, because everyone needs a Podfriend! <FaHeart /></p>
-					<p>Martin.</p>
+					<p>Martin</p>
 				</div>
 				<div className={styles.subHeadline}>Your recent podcasts</div>
 				<div className={styles.podcastLine}>

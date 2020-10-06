@@ -16,6 +16,7 @@ import { hot } from 'react-hot-loader/root';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import isElectron from 'is-electron';
+const { ipcRenderer } = require('electron');
 
 import { MemoryRouter as Router } from 'react-router-dom';
 // import { Router } from 'react-router-dom'; // We need to try more with this. Right now it doesn't work because the path is including D:/ etc. - But maybe we should always use memoryrouter in the SPA and browserrouter on the web?
@@ -49,6 +50,7 @@ class WindowFrame extends Component {
 		this.onMinimize = this.onMinimize.bind(this);
 		this.onMaximizeOrNormalize = this.onMaximizeOrNormalize.bind(this);
 		this.onClose = this.onClose.bind(this);
+		this.onEpisodeChange = this.onEpisodeChange.bind(this);
 	}
 	/**
 	*
@@ -107,6 +109,13 @@ class WindowFrame extends Component {
 			});
 		}
 	}
+	onEpisodeChange(activeEpisode) {
+		console.log('sending PFOnActivePodcastChange event');
+		ipcRenderer.send('PFMessageToMiniWindow',{
+			type: 'podcastChange',
+			content: activeEpisode
+		})
+	}
 	render() {
 		return (
 			<Provider store={this.props.store}>
@@ -114,7 +123,7 @@ class WindowFrame extends Component {
 					<Router history={this.props.history}>
 						<div className={this.state.maximized ? styles.windowFrameMaximized : styles.windowFrame }>
 							<TitleBar isElectron={this.state.isElectron} maximized={this.state.maximized} onMinimize={this.onMinimize} onMaximizeOrNormalize={this.onMaximizeOrNormalize} onClose={this.onClose} platform={this.props.platform} />
-							<PodCastClient store={this.props.store} audioController={this.props.audioController} />
+							<PodCastClient onEpisodeChange={this.onEpisodeChange} store={this.props.store} audioController={this.props.audioController} />
 						</div>
 					</Router>
 				</PersistGate>

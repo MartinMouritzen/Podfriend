@@ -4,7 +4,7 @@
 	background-color: #f6f6f6;
 	border-bottom: 1px solid #eeeeee;
 }
-.filterItem {
+.filterItem, .hideListenedEpisodesFilter {
 	padding-left: 10px;
 	padding-right: 10px;
 	display: flex;
@@ -23,6 +23,9 @@
 .filterItem label {
 	font-size: 14px;
 }
+.episodeListLoading {
+	margin: 10px;
+}
 .episodeList {
 	flex: 1;
 }
@@ -34,9 +37,15 @@
 	fill: #FFFFFF;
 }
 .seasonHeader {
-	background-color: #0c2850;
-	color: #FFFFFF;
+	background-color: #DDDDDD;
+	border-top: 1px solid #D6D6D6;
+	border-bottom: 1px solid #D6D6D6;
+	color: #000000;
 	padding: 20px;
+}
+.seasonHeader .seasonEpisodes {
+	color: #888888;
+	font-size: 14px;
 }
 .episode, .episodePlaying {
 	min-height: 50px;
@@ -290,17 +299,49 @@
 .episodePlaying .duration span {
 	color: #FFFFFF;
 }
-
-@media only screen and (max-width: 590px) {
-	.episodePlaying, .episode {
+@media only screen and (max-width: 600px) {
+	.episode {
+		position: relative;
+	}
+	.episodeType {
+		position: absolute;
 		display: block;
+		height: 21px;
+		top: 6px;
+		right: 6px;
+	}
+}
+@media only screen and (min-width: 1000px) and (max-width: 1250px) {
+	.filterBar .filterItem {
+		flex-direction: column;
+		align-items: stretch;
 		padding: 10px;
 	}
-	.duration {
-		width: 100%;
+	.filterBar label {
+		padding: 0px;
+		margin-bottom: 2px;
 	}
-	.progressBarOuter {
-		width: 100%;
+	.filterBar select {
+		width: 130px;
 	}
-
+	.filterBar label.hideListenedEpisodesLabel {
+		margin-left: 10px;
+	}
+}
+@media only screen and (max-width: 999px) {
+	.filterBar {
+		display: block;
+	}
+	.filterBar label {
+		width: 100px;
+	}
+	.filterBar select {
+		flex: 1;
+	}
+	.hideListenedEpisodesFilter {
+		margin-left: 30px;
+	}
+	.filterBar label.hideListenedEpisodesLabel {
+		width: auto;
+	}
 }

@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 
 import styles from '~/app/components/BottomNavigation.css';
 
+import { Link } from 'react-router-dom';
+
+import {FaHome, FaPodcast } from "react-icons/fa";
+
 /**
 *
 */
@@ -13,15 +17,14 @@ class BottomNavigation extends Component {
 	render() {
 		return (
 			<div className={styles.bottomNavigation}>
-				<div className={styles.menuItem}>
-					Categories
-				</div>
-				<div className={styles.menuItem}>
-					Podcasts
-				</div>
-				<div className={styles.menuItem}>
-					Search
-				</div>
+				<Link to='/' className={styles.menuItem}>
+					<FaHome size="25" /><br />
+					Home
+				</Link>
+				<Link to='/favorites/' className={styles.menuItem}>
+					<FaPodcast size="25" /><br />
+					Favorites
+				</Link>
 			</div>
 			);
 	}

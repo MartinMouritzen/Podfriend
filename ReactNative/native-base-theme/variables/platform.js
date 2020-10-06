@@ -135,7 +135,7 @@ export default {
   // Color
   brandPrimary: platform === PLATFORM.IOS ? '#0176e5' : '#0176e5',
   brandInfo: '#62B1F6',
-  brandSuccess: '#5cb85c',
+  brandSuccess: '#28bd72',
   brandDanger: '#d9534f',
   brandWarning: '#f0ad4e',
   brandDark: '#000',
@@ -175,13 +175,13 @@ export default {
   fontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto',
   fontSizeBase: 15,
   get fontSizeH1() {
-    return this.fontSizeBase * 1.8;
+    return this.fontSizeBase * 2;
   },
   get fontSizeH2() {
-    return this.fontSizeBase * 1.6;
+    return this.fontSizeBase * 1.8;
   },
   get fontSizeH3() {
-    return this.fontSizeBase * 1.4;
+    return this.fontSizeBase * 1.6;
   },
 
   // Footer

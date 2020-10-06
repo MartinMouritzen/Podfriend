@@ -24,7 +24,6 @@ window.podfriend.config = config;
 
 window.Events = Events;
 
-
 import AudioController from './library/AudioController.js';
 
 const audioController = new AudioController();
@@ -43,9 +42,6 @@ render(
 	<WindowFrame store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 	document.getElementById('root')
 );
-
-
-
 
 if (module.hot) {
 	module.hot.accept('./components/Window/WindowFrame',() => {

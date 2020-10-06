@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { playEpisode } from "podfriend-approot/redux/actions/podcastActions";
+import { playEpisode, updatePodcastSettings } from "podfriend-approot/redux/actions/podcastActions";
 import { audioPlayRequested } from "podfriend-approot/redux/actions/audioActions";
 
-import { ContextMenu, ContextMenuItem } from "~/app/components/wwt/ContextMenu/ContextMenu";
+import { FaCheck } from 'react-icons/fa';
 
 import EpisodeListItem from './EpisodeListItem.jsx';
 
-import MediaQuery  from 'react-responsive';
-
-import Events from 'podfriend-approot/library/Events.js';
-
 import styles from './EpisodeList.css';
-
-const md5 = require('md5');
 
 function mapStateToProps(state) {
 	return {
@@ -27,7 +21,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		playEpisode: (podcast,episode) => { dispatch(playEpisode(podcast,episode)); },
-		audioPlayRequested: (podcast,episode) => { dispatch(audioPlayRequested(podcast,episode)); }
+		audioPlayRequested: (podcast,episode) => { dispatch(audioPlayRequested(podcast,episode)); },
+		updatePodcastSettings: (podcastPath,sortBy,sortType,onlySeason,hideListenedEpisodes) => { dispatch(updatePodcastSettings(podcastPath,sortBy,sortType,onlySeason,hideListenedEpisodes)); }
 	};
 }
 
@@ -41,44 +36,124 @@ class EpisodeList extends Component {
 	constructor(props) {
 		super(props);
 		
-		console.log('Look into using react-window (or react-virtualized) for the episodelist');
-		
-		this.state = {
-			episodes: this.__sort(props.selectedPodcast.episodes,'season','asc'),
-			orderBy: 'season',
-			orderType: 'asc',
-			hideListenedEpisodes: true
-		};
+		// console.log('Look into using react-window (or react-virtualized) for the episodelist');
 
-		this.sortBy = this.sortBy.bind(this);
+		console.log('EpisodeList');
+		console.log(this.props.selectedPodcast);
+
 		this.handleHideListenedEpisodesFilter = this.handleHideListenedEpisodesFilter.bind(this);
 		this.selectEpisodeAndPlay = this.selectEpisodeAndPlay.bind(this);
+		this.changeSortBy = this.changeSortBy.bind(this);
+		this.changeOnlySeason = this.changeOnlySeason.bind(this);
+
+
+		this.setEpisodeOrder = this.setEpisodeOrder.bind(this);
+
+		this.state = {
+			episodes: [],
+			sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'season',
+			sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'asc',
+			onlySeason: this.props.selectedPodcast.onlySeason ? this.props.selectedPodcast.onlySeason : 'all',
+			hideListenedEpisodes: this.props.selectedPodcast.hideListenedEpisodes ? this.props.selectedPodcast.hideListenedEpisodes : true
+		};
+	}
+	/**
+	*
+	*/
+	setEpisodeOrder() {
+		var newEpisodeOrder = this.__sort(this.props.episodes,this.state.sortBy,this.state.sortType);
+		this.setState({
+			episodes: newEpisodeOrder
+		});
 	}
 	/**
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (this.props.selectedPodcast.episodes !== prevProps.selectedPodcast.episodes) {
+		if (this.props.selectedPodcast.path !== prevProps.selectedPodcast.path) {
 			this.setState({
-				episodes: this.__sort(this.props.selectedPodcast.episodes,'season','asc'),
-				orderBy: 'season',
-				orderType: 'asc'
+				sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'season',
+				sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'asc',
+				onlySeason: this.props.selectedPodcast.onlySeason ? this.props.selectedPodcast.onlySeason : 'all',
+				hideListenedEpisodes: this.props.selectedPodcast.hideListenedEpisodes ? this.props.selectedPodcast.hideListenedEpisodes : true
+			},() => {
+				this.setEpisodeOrder();
 			});
 		}
 	}
 	/**
 	*
 	*/
-	__sort(episodes,orderBy,orderType) {
+	changeSortBy(event) {
+		var sortRaw = event.target.value;
+
+		var sortBy = 'season_asc';
+		var sortType = 'asc';
+
+		if (sortRaw == 'season_asc') {
+			sortBy = 'season';
+			sortType = 'asc';
+		}
+		else if (sortRaw == 'season_desc') {
+			sortBy = 'season';
+			sortType = 'desc';
+		}
+		else if (sortRaw == 'date_asc') {
+			sortBy = 'date';
+			sortType = 'asc';
+		}
+		else if (sortRaw == 'date_desc') {
+			sortBy = 'date';
+			sortType = 'desc';
+		}
+		else if (sortRaw == 'duration_asc') {
+			sortBy = 'duration';
+			sortType = 'asc';
+		}
+		else if (sortRaw == 'duration_desc') {
+			sortBy = 'duration';
+			sortType = 'desc';
+		}
+		this.setState({
+			sortBy: sortBy,
+			sortType: sortType
+		},() => {
+			this.setEpisodeOrder();
+			this.props.updatePodcastSettings(
+				this.props.selectedPodcast.path,
+				this.state.sortBy,
+				this.state.sortType,
+				this.state.onlySeason,
+				this.state.hideListenedEpisodes
+			);
+		});
+	}
+	changeOnlySeason(event) {
+		this.setState({
+			onlySeason: event.target.value
+		},() => {
+			this.props.updatePodcastSettings(
+				this.props.selectedPodcast.path,
+				this.state.sortBy,
+				this.state.sortType,
+				this.state.onlySeason,
+				this.state.hideListenedEpisodes
+			);
+		});
+	}
+	/**
+	*
+	*/
+	__sort(episodes,sortBy,sortType) {
 		if (!episodes) { return false; }
 		
 		episodes.sort((a,b) => {
-			if (orderBy === 'season') {
+			if (sortBy === 'season') {
 				var seasonA = a.season;
 				var seasonB = b.season;
 				
 				if (seasonA == seasonB) {
-					if (orderType === 'asc') {
+					if (sortType === 'asc') {
 						var sortValue = Date.parse(a.date) - Date.parse(b.date);
 						if (sortValue === 0) {
 							return a.title.localeCompare(b.title,{numeric: true, sensitivity: 'base'})
@@ -94,7 +169,7 @@ class EpisodeList extends Component {
 					}
 				}
 				else {
-					if (orderType === 'asc') {
+					if (sortType === 'asc') {
 						return seasonA - seasonB;
 					}
 					else {
@@ -102,16 +177,16 @@ class EpisodeList extends Component {
 					}
 				}
 			}
-			else if (orderBy === 'title') {
-				if (orderType === 'asc') {
+			else if (sortBy === 'title') {
+				if (sortType === 'asc') {
 					return a.title.localeCompare(b.title,undefined,{numeric: true, sensitivity: 'base'});
 				}
 				else {
 					return b.title.localeCompare(a.title,{numeric: true, sensitivity: 'base'});
 				}
 			}
-			else if (orderBy === 'date') {
-				if (orderType === 'asc') {
+			else if (sortBy === 'date') {
+				if (sortType === 'asc') {
 					var sortValue = Date.parse(a.date) - Date.parse(b.date);
 					if (sortValue === 0) {
 						return a.title.localeCompare(b.title,{numeric: true, sensitivity: 'base'})
@@ -126,8 +201,8 @@ class EpisodeList extends Component {
 					return sortValue;
 				}
 			}
-			else if (orderBy === 'duration') {
-				if (orderType === 'asc') {
+			else if (sortBy === 'duration') {
+				if (sortType === 'asc') {
 					return a.duration - b.duration;
 				}
 				else {
@@ -136,22 +211,6 @@ class EpisodeList extends Component {
 			}
 		});
 		return episodes;
-	}
-	/**
-	*
-	*/
-	sortBy(header) {
-		var sortedEpisodes = this.state.episodes;
-		var newOrderBy = header;
-		var newOrderType = this.state.orderBy !== newOrderBy ? 'asc' : this.state.orderType === 'asc' ? 'desc' : 'asc';
-
-		sortedEpisodes = this.__sort(this.state.episodes,newOrderBy,newOrderType);
-		
-		this.setState({
-			episodes: sortedEpisodes,
-			orderBy: newOrderBy,
-			orderType: newOrderType
-		});
 	}
 	/**
 	*
@@ -171,13 +230,29 @@ class EpisodeList extends Component {
 	*
 	*/
 	render() {
+		if (!this.props.episodes) {
+			return (
+				<div className={styles.episodeListLoading}>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+					<div className="loading-line loading-episode">&nbsp;</div>
+				</div>
+			);
+		}
+
 		var episodesListened = 0;
 		
 		var activeSeason = false;
 		var seasons = [];
 		
 		// Let's not do this every render, but once when we mount?
-		if (this.state.episodes) {
+		if (this.state.episodes && this.state.episodes.length > 0) {
 			for(var i=0;i<this.state.episodes.length;i++) {
 				if (this.state.episodes[i].season) {
 					if (!seasons[this.state.episodes[i].season]) {
@@ -209,44 +284,42 @@ class EpisodeList extends Component {
 			<div className={styles.episodeList}>
 				<div className={styles.filterBar}>
 					<div className={styles.filterItem}>
-						<label for="sortDropDown">Sort by</label>
-						<select id="sortDropDown">
+						<label htmlFor="sortDropDown">Sort by {this.state.sortBy}</label>
+						<select id="sortDropDown" onChange={this.changeSortBy} value={this.state.sortBy + '_' + this.state.sortType}>
 							{ seasons.length > 0 &&
-								<option value="season" selected>Season</option>
+								<>
+									<option value="season_asc">Season</option>
+									<option value="season_desc">Season newest first</option>
+								</>
 							}
-							<option value="dateold">Oldest first</option>
-							<option value="datenew">Newest first</option>
-							<option value="durationlong">Longest first</option>
-							<option value="durationshort">Shortest first</option>
+							<option value="date_asc">Oldest episodes first</option>
+							<option value="date_desc">Newest episodes first</option>
+							<option value="duration_desc">Longest first</option>
+							<option value="duration_asc">Shortest first</option>
 						</select>
 					</div>
 					{ seasons.length > 0 &&
 						<div className={styles.filterItem}>
-							<label for="filterDropDown">Show</label>
-							<select id="filterDropDown">
-								<option>All seasons</option>
+							<label htmlFor="seasonDropDown">Show</label>
+							<select id="seasonDropDown" onChange={this.changeOnlySeason} value={this.state.onlySeason}>
+								<option value={'all'}>All seasons</option>
 							{
 								seasons.map((season,index) => {
 									return (
-										<option>Season {season.seasonNumber}</option>
+										<option value={season.seasonNumber} key={'season_' + season.seasonNumber}>Season {season.seasonNumber}</option>
 									)	
 								})
 							}
+								<option value='bonus'>Only bonus</option>
 							</select>
 						</div>
 					}
 					{ episodesListened > 0 &&
-						<div className={styles.filterItem}>
-							<label><input type="checkbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> Hide {episodesListened} already listened episodes</label>
+						<div className={styles.hideListenedEpisodesFilter}>
+							<input type="checkbox" id="hideListenedCheckbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> <label className={styles.hideListenedEpisodesLabel} htmlFor='hideListenedCheckbox'>Hide {episodesListened} listened episodes</label>
 						</div>
 					}
 				</div>
-			
-				{/*
-				<ContextMenu target={'.' + styles.episode}>
-					<ContextMenuItem>Mark episode as listened</ContextMenuItem>
-				</ContextMenu>
-				*/}
 				{ this.state.episodes && this.state.episodes.length == episodesListened &&
 					<div style={{ padding: 60, textAlign: 'center' }} className={styles.listenedToAll}>
 						<div style={{ backgroundColor: '#28bd72', width: 100, height: 100, borderRadius: '50%', display: 'flex', alignItems: 'center',justifyContent: 'center',marginLeft: 'auto',marginRight: 'auto', marginBottom: '20px' }}>
@@ -255,9 +328,17 @@ class EpisodeList extends Component {
 						You listened to all the episodes in this podcast!
 					</div>
 				}
-				
 				{ this.state.episodes && this.state.episodes.length > 0 &&
 					this.state.episodes.map((episode,index) => {
+						if (seasons.length > 0 && this.state.onlySeason != 'all' && this.state.onlySeason != episode.season) {
+							if (this.state.onlySeason == 'bonus' && episode.episodeType == 'bonus') {
+								
+							}
+							else {
+								return false;
+							}
+						}
+
 						var isActiveEpisode = this.props.activeEpisode && this.props.activeEpisode.url === episode.url;
 						var episodeHTMLElements = [];
 						
@@ -269,24 +350,25 @@ class EpisodeList extends Component {
 									<div className={styles.seasonHeader} key={'seasonheader' + activeSeason}>
 										{ (seasons[episode.season].unlistenedEpisodes === seasons[episode.season].episodes) &&
 											<>
-												Season {activeSeason} ({seasons[episode.season].unlistenedEpisodes} episodes)
+												Season {activeSeason} <span className={styles.seasonEpisodes}>({seasons[episode.season].unlistenedEpisodes} episodes)</span>
 											</>
 										}
 										{ (seasons[episode.season].unlistenedEpisodes !== seasons[episode.season].episodes) &&
 											<>
-												Season {activeSeason} ({seasons[episode.season].unlistenedEpisodes} of {seasons[episode.season].episodes} episodes left)
+												Season {activeSeason} <span className={styles.seasonEpisodes}>({seasons[episode.season].unlistenedEpisodes} of {seasons[episode.season].episodes} episodes left)</span>
 											</>
 										}
 									</div>
 								));
 							}
-							
-							
 						}
 
 						episodeHTMLElements.push((
 							<EpisodeListItem
+								id={episode.id}
 								key={episode.url}
+								podcastPath={this.props.selectedPodcast.path}
+								podcastTitle={this.props.selectedPodcast.name}
 								title={episode.title}
 								description={episode.description}
 								episodeType={episode.episodeType}

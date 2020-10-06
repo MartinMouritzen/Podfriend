@@ -57,6 +57,9 @@
 	margin-right: 10px;
 	fill: rgba(255,255,255,0.7);
 }
+.progressBarOuter {
+	width: 100%;
+}
 .progress {
 	margin-top: 6px;
 	margin-bottom: 0px;
@@ -179,11 +182,7 @@
 /************************
 * Responsive
 ************************/
-@media only screen and (max-width: 860px) {
-	.cover {
-		display: none;
-	}
-}
+/*
 @media only screen and (max-width: 1200px) {
 	.playing {
 		width: 33vw;
@@ -191,7 +190,8 @@
 		min-width: 33vw;
 	}
 }
-@media only screen and (min-width: 1200px) {
+*/
+@media only screen and (min-width: 900px) {
 	.playing {
 		width: 400px;
 		margin-right: 100px;
@@ -219,12 +219,35 @@
 		margin-left: 130px;
 	}
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 740px) {
+	.controls {
+		display: flex;
+		flex-direction: column;
+	}
+	.progress {
+		display: flex;
+		margin-right: 10px;
+	}
+	.progressBarOuter {
+		width: 40vw;
+	}
 	.cover {
-		display: none;
+		width: 60px;
+		height: 60px;
+	}
+	.cover img {
+		width: 60px;
+		height: 60px;
+		margin-left: 5px;
+		margin-top: 5px;
+		border-radius: 5px;
 	}
 	.player {
+		position: relative;
 		display: block;
+		background: none;
+		background-color: #174ea1;
+		height: 90px;
 	}
 	.playing {
 		width: 100%;
@@ -232,21 +255,62 @@
 		margin-right: 0px;
 	}
 	.playingText {
+		width: 100px;
 		height: 40px;
 		font-size: 12px;
 		display: flex;
-		flex-direction: row;
+		margin-right: 5px;
+		margin-left: 20px;
+		display: flex;
+		justify-content: center;
+		height: 60px;
+	}
+	.playingText .author, .playingText .title {
+		white-space: nowrap;
+		overflow: hidden;
+		width: 100px;
+		text-overflow: ellipsis;
 	}
 	.volumeControls {
 		display: none;
 	}
-	.playButton {
-		width: 30px;
-		height: 30px;
+	.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+		width: 20px;
 	}
-	.playButton svg {
-		width: 16px;
-		bottom: 10px;
-		right: 5px;
+	.moreControlsButton {
+		display: none;
+	}
+}
+@media only screen and (max-width: 320px) {
+	.fastBackwardButton, .fastForwardButton {
+		display: none !important;
+	}
+}
+@media only screen and (max-width: 450px) {
+	.cover {
+		width: 50px;
+		height: 50px;
+	}
+	.cover img {
+		width: 50px;
+		height: 50px;
+	}
+	.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+		margin: 0px;
+		margin-right: 12px;
+	}
+	.progress {
+		display: none !important;
+	}
+	.pauseButton, .playButton {
+		width: 55px;
+		height: 55px;
+		margin-right: 12px;
+	}
+	.pauseButton svg, .playButton svg {
+		width: 30px;
+	}
+	.player {
+		height: 60px;
 	}
 }

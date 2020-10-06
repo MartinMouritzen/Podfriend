@@ -278,7 +278,20 @@ export default (variables /* : * */ = variable) => {
         }
       }
     },
-
+    '.short': {
+        height: 30,
+        'NativeBase.Text': {
+          fontSize: 14
+        },
+        'NativeBase.Icon': {
+          fontSize: 20,
+          paddingTop: 0
+        },
+        'NativeBase.IconNB': {
+          fontSize: 20,
+          paddingTop: 0
+        }
+    },
     '.small': {
       height: 30,
       'NativeBase.Text': {
@@ -367,7 +380,7 @@ export default (variables /* : * */ = variable) => {
     },
     paddingVertical: variables.buttonPadding,
     backgroundColor: variables.buttonPrimaryBg,
-    borderRadius: variables.borderRadiusBase,
+    borderRadius: 3,
     borderColor: variables.buttonPrimaryBg,
     borderWidth: null,
     height: 45,

@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { authenticateUser, abortLogin } from "../redux/actions/userActions";
 
-const { ipcRenderer } = require('electron')
-
-import { Route, Link, Switch, withRouter } from 'react-router-dom';
+import { Route, Redirect, Link, Switch, withRouter } from 'react-router-dom';
 
 import styles from './PodCastClient.scss';
 
@@ -29,6 +27,9 @@ import BottomNavigation from './BottomNavigation';
 import Events from './../library/Events.js';
 import Modal from './Window/Modal';
 import LoginForm from './Login/LoginForm';
+
+import FavoriteList from './Favorites/FavoriteList.jsx';
+import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
 
 const mapStateToProps = state => ({
 	showLogin: state.user.showLogin,
@@ -121,11 +122,9 @@ class PodcastClient extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		// Send update to miniwindow with new episode data - Should this be moved to a separate file?
 		if (this.props.activeEpisode.url !== prevProps.activeEpisode.url) {
-			console.log('sending PFOnActivePodcastChange event');
-			ipcRenderer.send('PFMessageToMiniWindow',{
-				type: 'podcastChange',
-				content: this.props.activeEpisode
-			})
+			if (this.props.onEpisodeChange) {
+				this.props.onEpisodeChange(this.props.activeEpisode);
+			}
 		}
 		if (this.props.location.pathname !== prevProps.location.pathname) {
 			if (this.mainArea && this.mainArea.current) {
@@ -193,8 +192,10 @@ class PodcastClient extends Component {
 							<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
 							<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
 							<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
-							<Route path="/podcast/:podcastName/:subpath?" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+							<Route path="/podcast/:podcastName/:episodeId?" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
 							<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
+							<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showArchived={false} setHasArchived={false} /> ); }} />
+							<Redirect to='/' />
 						</Switch>
 					</div>
 				</div>

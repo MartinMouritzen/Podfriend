@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-alias';
 
 // import * as FontAwesomeIcons from "react-icons/fa";
 
-import {FaPlus, FaHome, FaFolder,FaRegClock} from "react-icons/fa";
+import { FaPlus, FaHome, FaFolder,FaRegClock } from "react-icons/fa";
 
 // import * as GamerIcons from "react-icons/gi";
 
@@ -83,46 +83,49 @@ class SideBar extends Component {
 			<div className={styles.sideBar} onClick={this.onFocusClick}>
 				<div className={styles.panes}>
 					<div className={styles.categories}>
-					
-					
 					<div className={styles.categoryList}>
 
 						<div className={styles.mainNavigationButton}>
-							<FaHome size="20" /> Home
+							<Link to="/">
+								<FaHome size="20" /> Home
+							</Link>
 						</div>
+						{ /*
 
-							<CategoryList
-								
-							/>
-
-							<div className={styles.mainNavigationButton}>
-								<FaFolder size="20" /> Uncategorized
-							</div>
-							<div className={styles.mainNavigationButton}>
-								<FaRegClock size="20" /> Recent podcasts
-							</div>
-
+						<CategoryList
 							
-							<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
+						/>
+
+						<div className={styles.mainNavigationButton}>
+							<FaFolder size="20" /> Uncategorized
 						</div>
+						<div className={styles.mainNavigationButton}>
+							<FaRegClock size="20" /> Recent podcasts
+						</div>
+
+						
+						<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
+
+						*/ }
 					</div>
-					<div className={styles.podcasts}>
-						<div className={styles.podcastHeader}>Podcasts</div>
-						<div className={styles.podcastList}>
-							<FavoriteList UI={FavoriteListUI} showArchived={this.state.showArchived} setHasArchived={this.setHasArchived} />
-						</div>
-						{ this.state.hasArchivedPodcasts &&
-							<div className={styles.filter}>
-								<div>
-									<Toggle
-									  id='archived-status'
-									  defaultChecked={this.state.showArchived}
-									  icons={{ checked: null, unchecked: null }}
-									  onChange={this.handleShowArchivedChange} />
-									<label htmlFor='cheese-status'>Show archived podcasts</label>
-								</div>
+				</div>
+				<div className={styles.podcasts}>
+					<div className={styles.podcastHeader}>Podcasts</div>
+					<div className={styles.podcastList}>
+						<FavoriteList UI={FavoriteListUI} showArchived={this.state.showArchived} setHasArchived={this.setHasArchived} />
+					</div>
+					{ this.state.hasArchivedPodcasts &&
+						<div className={styles.filter}>
+							<div>
+								<Toggle
+									id='archived-status'
+									defaultChecked={this.state.showArchived}
+									icons={{ checked: null, unchecked: null }}
+									onChange={this.handleShowArchivedChange} />
+								<label htmlFor='cheese-status'>Show archived podcasts</label>
 							</div>
-						}
+						</div>
+					}
 					</div>
 				</div>
 			</div>

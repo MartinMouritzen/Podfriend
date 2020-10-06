@@ -22,7 +22,7 @@ const productionConfig = merge.smart(baseConfig, {
 		fs: 'empty'
 	},
 	output: {
-		path: path.join(__dirname, '..', 'app/web/dist'),
+		path: path.join(__dirname, '..', 'release/web/'),
 		publicPath: './',
 		filename: 'web.prod.js',
 		libraryTarget: 'umd'
@@ -173,6 +173,7 @@ const productionConfig = merge.smart(baseConfig, {
 	},
 
 	optimization: {
+		usedExports: true,
 		minimizer: process.env.E2E_BUILD
 			? []
 			: [
@@ -194,7 +195,7 @@ const productionConfig = merge.smart(baseConfig, {
 
 	plugins: [
 		new CopyPlugin([
-			{ from: './app/public/', to: './public/' }
+			{ from: './app/web/assets/', to: path.join(__dirname, '..', 'release/web/') }
 		]),
 		/**
 		 * Create global constants which can be configured at compile time.

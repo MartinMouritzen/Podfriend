@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const { getCurrentWindow } = require('electron').remote;
+// const { getCurrentWindow } = require('electron').remote;
 
 import SectionHeader from '~/app/components/Page/SectionHeader';
 
@@ -24,7 +24,7 @@ class SettingsPage extends Component {
 	deleteLocalData() {
 		if (confirm('Are you sure you want to delete all your local data? This cannot be undone.','Delete private data')) {
 			localStorage.clear();
-			getCurrentWindow().reload();
+			// getCurrentWindow().reload();
 		}
 	}
 	/**
@@ -33,7 +33,7 @@ class SettingsPage extends Component {
 	deletePrivateData() {
 		if (confirm('Are you sure you want to delete all your data? This cannot be undone.','Delete private data')) {
 			localStorage.clear();
-			getCurrentWindow().reload();
+			// getCurrentWindow().reload();
 		}
 	}
 	/**

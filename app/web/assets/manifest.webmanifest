@@ -1,0 +1,34 @@
+{
+  "short_name": "Podfriend",
+  "name": "Podfriend Podcast Player",
+  "description": "The worlds friendliest Podfriend Player",
+  "icons": [
+    {
+      "src": "/images/icons/maskable_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icons/maskable_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icons/512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/icons/192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/index.html?source=pwa",
+  "background_color": "#00a4ff",
+  "display": "standalone",
+  "theme_color": "#0176e5",
+  "scope": "/"
+}

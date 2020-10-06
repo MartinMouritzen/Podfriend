@@ -1,0 +1,22 @@
+.shareButtons {
+	margin-top: 20px;
+	display: flex;
+}
+
+.shareButtons .clipBoardButton {
+	padding-left: 10px;
+	padding-right: 10px;
+	line-height: 20px;
+	color: #FFFFFF;
+	display: inline-block;
+	height: 20px;
+	font-size: 12px;
+	background-color: #00192f;
+	text-shadow: 1px 1px #000000;
+	cursor: pointer;
+}
+
+.shareButton img, .clipBoardButton {
+	height: 20px;
+	width: auto;
+}

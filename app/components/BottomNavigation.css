@@ -1,13 +1,22 @@
 .bottomNavigation {
 	display: none;
-	height: 100px;
+	height: 60px;
 	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff;
+	border-top: 1px solid #d4d4d4;
 }
 .menuItem {
 	flex: 1;
 	text-align: center;
+	color: #b2b2b4;
+	text-decoration: none;
 }
-@media only screen and (max-width: 590px) {
+.menuItem svg {
+	fill: #b2b2b4;
+}
+@media only screen and (max-width: 899px) {
 	.bottomNavigation {
 		display: flex;
 	}

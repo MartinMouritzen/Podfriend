@@ -22,6 +22,7 @@ import {
 	PODCAST_SEARCHING,
 	PODCAST_SEARCHED,
 	PODCAST_SEARCH_ERROR,
+	PODCAST_SETTINGS_CHANGED,
 	REVIEWS_LOADING,
 	REVIEWS_LOADED,
 	REVIEWS_LOAD_ERROR
@@ -113,8 +114,9 @@ const podcastReducer = (state = initialState, action) => {
 		
 		var subscribed = false;
 		subscribedPodcasts.forEach((subscribedPodcast,index) => {
-			if (subscribedPodcast.feedUrl == action.payload.feedUrl) {
+			if (subscribedPodcast.path == action.payload.path) {
 				subscribed = true;
+				/*
 				var subscriptionObject = {
 					guid: action.payload.guid,
 					parentguid: action.payload.parentguid,
@@ -131,13 +133,14 @@ const podcastReducer = (state = initialState, action) => {
 					artworkUrl600: action.payload.artworkUrl600,
 					receivedFromServer: action.payload.receivedFromServer
 				};
-				subscribedPodcasts[index] = subscriptionObject;
+				*/
+				subscribedPodcasts[index] = action.payload;
 			}
 		});
 		
 		return Object.assign({}, state, {
 			podcastLoading: false,
-			selectedPodcast: {
+			selectedPodcast: action.payload, /*{
 				guid: action.payload.guid,
 				parentguid: action.payload.parentguid,
 				name: action.payload.name,
@@ -152,7 +155,7 @@ const podcastReducer = (state = initialState, action) => {
 				artworkUrl600: action.payload.artworkUrl600,
 				episodes: action.payload.episodes,
 				receivedFromServer: action.payload.receivedFromServer
-			},
+			},*/
 			selectedPodcastEpisodes: action.payload.episodes,
 			subscribedPodcasts: subscribedPodcasts
 		});
@@ -168,6 +171,7 @@ const podcastReducer = (state = initialState, action) => {
 		});
 		
 		if (!alreadyExist) {
+			/*
 			var subscriptionObject = {
 				guid: action.payload.guid,
 				parentguid: action.payload.parentguid,
@@ -186,6 +190,9 @@ const podcastReducer = (state = initialState, action) => {
 			};
 			// console.log(subscriptionObject);
 			subscribedPodcasts.push(subscriptionObject);
+			*/
+			action.payload.synchronizedWithServer = false;
+			subscribedPodcasts.push(action.payload);
 		}
 		return Object.assign({}, state, {
 			subscribedPodcasts: subscribedPodcasts
@@ -309,7 +316,7 @@ const podcastReducer = (state = initialState, action) => {
 			// if (podcastCache) {
 				// console.log(podcastCache.episodes[state.activeEpisode.episodeIndex]);
 				// activePodcast.episodes[state.activeEpisode.episodeIndex].currentTime = action.payload;
-				localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast)
+				localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
 			// }
 		// });
 		
@@ -347,6 +354,32 @@ const podcastReducer = (state = initialState, action) => {
 			reviews: false,
 			reviewsLoading: false,
 			reviewsLoadingError: true
+		});
+	}
+	else if (action.type === PODCAST_SETTINGS_CHANGED) {
+		var selectedPodcast = state.selectedPodcast;
+		if (state.selectedPodcast.path == action.payload.podcastPath) {
+			selectedPodcast = Object.assign({}, state.selectedPodcast);
+			selectedPodcast.sortBy = action.payload.sortBy;
+			selectedPodcast.sortType = action.payload.sortType;
+			selectedPodcast.onlySeason = action.payload.onlySeason;
+			selectedPodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
+		}
+		var activePodcast = state.activePodcast;
+		if (state.activePodcast.path == action.payload.podcastPath) {
+			activePodcast = Object.assign({}, state.activePodcast);
+			activePodcast.sortBy = action.payload.sortBy;
+			activePodcast.sortType = action.payload.sortType;
+			activePodcast.onlySeason = action.payload.onlySeason;
+			activePodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
+		}
+		
+		// Save updates to the cache
+		localForage.setItem('podcast_cache_' + state.selectedPodcast.path,selectedPodcast);
+
+		return Object.assign({}, state, {
+			selectedPodcast: selectedPodcast,
+			activePodcast: activePodcast
 		});
 	}
 	return state;

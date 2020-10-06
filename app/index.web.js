@@ -1,11 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import store from "./redux/store";
+import configureStore from './redux/store'
+
+import storage from 'redux-persist/lib/storage';
+
+var [ store, persistor, history ] = configureStore(storage,true);
 
 import Events from './library/Events.js';
 
-import WindowFrame from './components/Window/WindowFrame';
+import WebContainer from './components/Window/WebContainer';
 
 import ConfigFile from './podfriend.config.js';
 
@@ -20,17 +24,31 @@ window.podfriend.config = config;
 
 window.Events = Events;
 
+import AudioController from './library/AudioController.js';
+
+const audioController = new AudioController();
+audioController.startService();
+audioController.init();
+
+/*
+history.listen((location) => {
+	console.log('Location changed. Hooray!');
+	console.log(history);
+	console.log(location);
+});
+*/
+
 render(
-	<WindowFrame store={store} />,
+	<WebContainer store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 	document.getElementById('root')
 );
 
 if (module.hot) {
-	module.hot.accept(() => {
+	module.hot.accept('./components/Window/WebContainer',() => {
 		// eslint-disable-next-line global-require
-		const NextRoot = require('./components/Window/WindowFrame').default;
+		const NextRoot = require('./components/Window/WebContainer').default;
 		render(
-			<NextRoot store={store} />,
+			<NextRoot store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 			document.getElementById('root')
 		);
 	});

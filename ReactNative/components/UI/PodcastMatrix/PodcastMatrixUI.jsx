@@ -7,6 +7,8 @@ import { Link } from 'react-router-alias';
 import { Dimensions, ScrollView, View, Image } from 'react-native';
 import { Text } from 'native-base';
 
+import FallbackImage from './../Common/FallbackImage.jsx';
+
 class PodcastMatrixUI extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,8 +25,9 @@ class PodcastMatrixUI extends React.Component {
 		}
 	}
 	renderList() {
+		const thumbNailSize = 160;
 		return (
-			<ScrollView horizontal={true} style={{ height: 220, marginLeft: 15 }}>
+			<ScrollView horizontal={true} style={{ height: 250, paddingLeft: 15 }}>
 				{ this.props.podcasts.map((item,index) => {
 					return (
 						<Link
@@ -32,23 +35,32 @@ class PodcastMatrixUI extends React.Component {
 							underlayColor="#0176e5"
 							key={item.path}
 							style={{
-									marginRight: 5,
-									marginLeft: 5,
-									height: 210
+								paddingRight: 7,
+								paddingLeft: 7,
+								height: 170,
+								borderRadius: 15
 							}}
 						>
 							<View
 								style={{
-									width: 152,
-									height: 210,
-									overflow: 'hidden',
-									backgroundColor: '#F6F6F6'
+									width: thumbNailSize,
+									height: thumbNailSize
 								}}
 							>
-								<Image style={{ width: 150, height: 150, margin: 1, borderRadius: 3 }} source={{ uri: item.artworkUrl600 }} />
-								<View style={{ padding: 5 }}>
-									<Text header numberOfLines={2} style={{ fontSize: 12 }}>{ item.name }</Text>
-									<Text secondary numberOfLines={1} style={{ fontSize: 11 }}>{ item.author }</Text>
+								<View
+									style={{
+										width: thumbNailSize,
+										height: thumbNailSize,
+										overflow: 'hidden',
+										borderRadius: 10,
+										elevation: 5
+									}}
+								>
+									<FallbackImage noImageNote={item.name} key='coverImage' style={{ width: thumbNailSize, height: thumbNailSize }} source={{ uri: item.artworkUrl600 }} />
+								</View>
+								<View style={{ flex: 1, marginTop: 12, marginLeft: 4, marginRight: 4 }}>
+									<Text numberOfLines={2} style={{ fontSize: 16, color: 'rgba(14,70,157,1)',fontFamily: 'Roboto_medium',  lineHeight: 16 }}>{ item.name }</Text>
+									<Text numberOfLines={1} style={{ fontSize: 14, color: 'rgba(14,70,157,0.8)' }}>{ item.author }</Text>
 								</View>
 							</View>
 						</Link>

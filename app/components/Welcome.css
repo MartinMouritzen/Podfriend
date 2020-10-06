@@ -1,5 +1,6 @@
 .homePage {
 	padding: 20px;
+	background-color: #FFFFFF;
 }
 .title {
 	font-size: 36px;
@@ -20,9 +21,6 @@
 	line-height: 22px;
 	max-width: 800px;
 }
-.welcomeMessage p {
-	
-}
 .paragraphHeadline {
 	-webkit-text-stroke: 0.4px #1f335e;
 }
@@ -41,7 +39,12 @@
 		padding: 0px;
 	}
 	.logo {
-
 		width: 25vw;
+	}
+	.title {
+		margin: 20px;
+	}
+	.podcastLine {
+		margin: 10px;
 	}
 }

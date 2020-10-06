@@ -3,19 +3,19 @@
 
 	display: flex;
 	flex-direction: column;
+	background-color: #FFFFFF;
 }
 .mainInfo {
 	background-size: cover;
 	background-position: 30% 20%;
-	
+	background-color: #0176e5;
 	background-blend-mode: lighten;
 }
 .mainInfoInner {
-	background-color: rgba(1,118,229,0.2);
-	backdrop-filter: blur(10px) brightness(40%);
 	border-radius: 20px 0px 0px 0px;
 	display: flex;
 	flex-direction: row;
+	padding-bottom: 20px;
 }
 .podcastCover {
 	width: 19vw;
@@ -23,8 +23,9 @@
 	margin-left: 30px;
 	margin-top: 30px;
 	
-	box-shadow: 10px 10px 53px -2px rgba(0,0,0,0.49);
-	/* border-radius: 15px; */
+	box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
+	border-radius: 15px;
+	border: 5px solid #FFFFFF;
 }
 .starRating {
 	margin-left: 30px;
@@ -36,43 +37,30 @@
 .podcastName {
 	font-size: 36px;
 	font-weight: bold;
-	/*color: #1f335e;
-	color: #107ce4;
-	color: #188eff;*/
-	color: #000000;
+	color: #FFFFFF;
 	margin-bottom: 5px;
 	
 	position: relative;
 
 	z-index: 5;
-	
-	text-shadow: 2px 0px 16px rgba(0,0,0,0.46);
-}
-.podcastName::before {
-	content:attr(title);
-	position: absolute;
-	bottom: 2px;
-
-	color: #FFFFFF;
-	/* color: #188eff;*/
 }
 .author {
 	display: flex;
 }
 .middot {
-	color: #BBBBBB;
+	color: rgba(255,255,255,0.8);
 	font-weight: bold;
 	margin-left: 5px;
 	margin-right: 5px;
 }
 .authorLink {
-	color: #BBBBBB;
+	color:  rgba(255,255,255,0.8);
 	margin-bottom: 20px;
 	text-decoration: none;
 	display: block;
 }
 .author svg {
-	fill: #BBBBBB;
+	fill: rgba(255,255,255,0.8);
 	position: relative;
 	top: 2px;
 }
@@ -83,11 +71,11 @@
 	text-decoration: underline;
 }
 .podcastWebsiteLink {
-	color: #BBBBBB;
+	color:  rgba(255,255,255,0.8);
 	cursor: pointer;
 }
 .podcastWebsiteLink:hover {
-	border-bottom: 1px solid #BBBBBB;
+	border-bottom: 1px solid  rgba(255,255,255,0.8);
 }
 .description {
 	max-width: 600px;
@@ -106,13 +94,6 @@
 
 .podcastContent {
 	
-}
-
-.episodeListLoading {
-	margin: 0px;
-}
-.episodeListLoadingHeaders {
-	display: flex;
 }
 /********************************
 * Tabs
@@ -186,6 +167,7 @@
 		text-align: center;
 	}
 }
+/*
 @media only screen and (max-width: 590px) {
 	.mainInfo {
 		display: block;
@@ -198,11 +180,22 @@
 		margin-left: 20px;
 	}
 }
-@media only screen and (max-width: 380px) {
+*/
+@media only screen and (max-width: 600px) {
+	.podcastPane .mainInfo {
+		background-image: none !important;
+	}
+	.podcastPane .mainInfoInner {
+		flex-direction: column;
+		border-radius: 0px;
+		backdrop-filter: none;
+		background-color: #164c9f;
+	}
 	.podcastCover {
 		width: 100%;
 		height: auto;
 		margin: 0px;
+		box-shadow: none;
 	}
 	.podcastInfo {
 		margin: 20px;
@@ -210,10 +203,20 @@
 	.podcastName {
 		font-size: 20px;
 		font-weight: bold;
-		color: #1f335e;
+		color: #FFFFFF;
 		margin-bottom: 5px;
+		text-shadow: none;
+	}
+	.podcastName:before {
+		content: '';
 	}
 	.episodeList {
 		padding: 0px;
+	}
+}
+@media only screen and (min-width: 900px) and (max-width: 1100px)  {
+	.podcastCover {
+		width: 12vw;
+		height: auto;
 	}
 }

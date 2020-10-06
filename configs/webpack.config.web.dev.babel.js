@@ -5,6 +5,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 CheckNodeEnv('development');
 
 const port = process.env.PORT || 8080;
@@ -167,6 +169,7 @@ const devConfig = merge.smart(baseConfig, {
 	},
 
 	plugins: [
+		new BundleAnalyzerPlugin(),
 		new webpack.HotModuleReplacementPlugin({
 			multiStep: false
 		}),
@@ -207,6 +210,7 @@ const devConfig = merge.smart(baseConfig, {
 	},
 
 	devServer: {
+		disableHostCheck: true,
 		port: 8080,
 		publicPath: '/',
 		compress: true,
@@ -216,7 +220,7 @@ const devConfig = merge.smart(baseConfig, {
 		lazy: false,
 		hot: true,
 		headers: { 'Access-Control-Allow-Origin': '*' },
-		contentBase: path.join(__dirname,'..','app/web/dist'),
+		contentBase: path.join(__dirname,'..','app/web/assets/'),
 		watchOptions: {
 			aggregateTimeout: 300,
 			ignored: /node_modules/,

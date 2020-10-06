@@ -3,11 +3,11 @@ import React from 'react';
 import { format, distanceInWordsToNow } from 'date-fns';
 import sanitizeHtml from 'sanitize-html';
 
-const md5 = require('md5');
-
 import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
+
+import ShareButtons from './ShareButtons.jsx';
 
 import styles from './EpisodeList.css';
 
@@ -27,12 +27,9 @@ class EpisodeListItem extends React.Component {
 			allowedTags: ['i','em']
 		});
 		
-		var urlmd5 = md5(props.url);
-		
 		this.state = {
 			episodeTitle: episodeTitle,
-			description: description,
-			urlmd5: urlmd5
+			description: description
 		};
 	}
 	shouldComponentUpdate(nextProps) {
@@ -73,7 +70,7 @@ class EpisodeListItem extends React.Component {
 		}
 		
 		return (
-			<div id={'episode_' + this.state.urlmd5} key={this.props.episode.url} className={episodeClass} onDoubleClick={() => { this.props.selectEpisodeAndPlay(this.props.episode); }}>
+			<div id={'episode-' + this.props.id} key={this.props.episode.url} className={episodeClass} onDoubleClick={() => { this.props.selectEpisodeAndPlay(this.props.episode); }}>
 				<div className={styles.play}>
 					<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.props.selectEpisodeAndPlay(this.props.episode); event.stopPropagation(); }}>
 						<FaPlay size="13px" />
@@ -88,7 +85,7 @@ class EpisodeListItem extends React.Component {
 				<div className={styles.episodeInfo}>
 					<div className={styles.titleAndDescription}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.state.episodeTitle}} />
-						{ this.props.episodeType != 'full' &&
+						{ this.props.episodeType != 'full' && this.props.episodeType != '' &&
 							<span type={this.props.episodeType} className={styles.episodeType}>{this.props.episodeType}</span>
 						}
 						<div className={styles.date}>
@@ -110,8 +107,8 @@ class EpisodeListItem extends React.Component {
 								<span>{Math.round((this.props.duration - this.props.currentTime) / 60)} of {totalMinutes} minutes left</span>
 							}
 						</span>
-						
 					</span>
+					<ShareButtons podcastTitle={this.props.podcastTitle} episodeTitle={this.props.title} episodeId={this.props.id} podcastPath={this.props.podcastPath} />
 				</div>
 			</div>
 		);

@@ -28,7 +28,7 @@ app.commandLine.appendSwitch('--autoplay-policy','no-user-gesture-required');
 let podfriendIcon = __dirname + '/images/logo/podfriend_logo_128x128.png';
 // let podfriendIcon = __dirname + '/../resources/icon.ico';
 
-var autoUpdatesEnabled = false;
+var autoUpdatesEnabled = process.env.NODE_ENV === 'production' ? true : false;
 
 var systemTray;
 
@@ -52,7 +52,9 @@ export default class AppUpdater {
 	constructor() {
 		if (autoUpdatesEnabled) {
 			log.transports.file.level = 'info';
+			console.log('Checking for Updates');
 			autoUpdater.logger = log;
+			autoUpdater.setFeedURL('https://update.podfriend.com/');
 			autoUpdater.checkForUpdatesAndNotify();
 		}
 	}
@@ -114,14 +116,17 @@ ipcMain.on('PFMessageToMiniWindow',(event,message) => {
  */
 
 app.on('window-all-closed', () => {
+	console.log('All windows closed.');
 	// Respect the OSX convention of having the application in memory even
 	// after all windows have been closed
 	if (process.platform !== 'darwin') {
+		console.log('Quitting app.');
 		app.quit();
 	}
 });
 
 app.on('ready', async () => {
+	app.setAppUserModelId('com.podfriend.win');
 	globalShortcut.register('VolumeUp', () => {
 		console.log('VolumeUp');
 		// console.log(audio.getVolume());
@@ -279,8 +284,7 @@ app.on('ready', async () => {
 			mainWindow.webContents.executeJavaScript('Events.emit(\'OnNavigateForward\',false)');
 		}
 	});
-	
-	mainWindow.webContents.userAgent = 'Podfriend';
+	mainWindow.webContents.userAgent = 'Podfriend/1.0 ' + mainWindow.webContents.userAgent;
 
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	// mainWindow.loadURL('https://www.whatismybrowser.com/detect/what-is-my-user-agent');
@@ -300,22 +304,33 @@ app.on('ready', async () => {
 			mainWindow.show();
 			mainWindow.focus();
 			
-			setTimeout(() => {
-				mainWindow.webContents.openDevTools();
-			},1000);
+			if (process.env.NODE_ENV !== 'production') {
+				setTimeout(() => {
+					mainWindow.webContents.openDevTools();
+				},1000);
+			}
 			
 			// quickViewWindow.show();
 		}
 	});
 	
 	mainWindow.on('close', function (event) {
-		event.preventDefault();
+		console.log('window close');
+		// event.preventDefault();
 		mainWindow.hide();
+		app.quit();
 	});
 
 	mainWindow.on('closed', () => {
+		console.log('window closed');
 		mainWindow = null;
-		quickViewWindow.close();
+		try {
+			quickViewWindow.close();
+		}
+		catch (exception) {
+			console.log('Caught exception while trying to close the quickviewwindow');
+		}
+		app.quit();
 	});
 	
 	quickViewWindow.on('closed', () => {

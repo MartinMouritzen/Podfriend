@@ -1,0 +1,13 @@
+# testing
+coverage
+
+# misc
+.DS_Store
+.env
+npm-debug.log
+
+# files that require their own .flowconfig
+/config
+/flow-typed
+/src
+/test

@@ -1,0 +1,24 @@
+/// <reference types="react" />
+import { LoaderHeightWidthProps, LoaderSizeMarginProps, LoaderSizeProps, LoaderHeightWidthRadiusProps } from "./interfaces";
+export declare const BarLoader: React.ComponentClass<LoaderHeightWidthProps>;
+export declare const BeatLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const BounceLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const CircleLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const ClimbingBoxLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const ClipLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const ClockLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const DotLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const FadeLoader: React.ComponentClass<LoaderHeightWidthRadiusProps>;
+export declare const GridLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const HashLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const MoonLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const PacmanLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const PropagateLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const PulseLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const RingLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const RiseLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const RotateLoader: React.ComponentClass<LoaderSizeMarginProps>;
+export declare const ScaleLoader: React.ComponentClass<LoaderHeightWidthRadiusProps>;
+export declare const SkewLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const SquareLoader: React.ComponentClass<LoaderSizeProps>;
+export declare const SyncLoader: React.ComponentClass<LoaderSizeProps>;

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link, withRouter } from 'react-router-alias';
 
-import PodcastUtil from '~/app/library/PodcastUtil.js';
+// import PodcastUtil from '~/app/library/PodcastUtil.js';
 
 import styles from './../SideBar.css';
 
@@ -46,10 +46,10 @@ class FavoriteListUI extends React.Component {
 										podcast: podcast
 									}
 								}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name} >
-								<img src={podcast.artworkUrl60} className={styles.cover} />
+								<img src={podcast.artworkUrl100} className={styles.cover} />
 								<div className={styles.podcastDetails}>
 									<span className={styles.podcastName}>{podcast.name}</span>
-									<span className={styles.episodesInfo}>12 episodes, 2 new</span>
+									{ /* <span className={styles.episodesInfo}>12 episodes, 2 new</span> */ }
 								</div>
 							</Link>
 							

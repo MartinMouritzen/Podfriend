@@ -10,6 +10,7 @@ class SearchPaneUI extends Component {
 		super(props);
 	}
 	render() {
+		// console.log(this.props.searchResults);
 		return (
 			<div className={styles.searchPane}>
 				{ !this.props.query &&

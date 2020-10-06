@@ -45,7 +45,7 @@ class ProgressBar extends ProgressComponent {
 
 const styles = StyleSheet.create({
     bar: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'rgba(14,70,157,0.96)',
         height: 2,
         width: '100%',
         flexDirection: 'row',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         height: 2
     },
     buffered: {
-        backgroundColor: '#797979',
+        backgroundColor: 'rgba(14,70,157,0.96)',
         height: 2
     }
 });

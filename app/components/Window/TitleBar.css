@@ -170,6 +170,10 @@
 
 
 @media only screen and (max-width: 540px) {
+	.titleBar {
+		height: 60px;
+		padding-left: 10px;
+	}
 	.logo {
 		display: none;
 	}
@@ -178,6 +182,9 @@
 	}
 	.minimize, .maximizeOrNormalize, .close {
 		width: 40px;
+	}
+	.navigationControls {
+		display: none;
 	}
 }
 @media only screen and (max-width: 440px) {

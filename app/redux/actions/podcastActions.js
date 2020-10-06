@@ -24,6 +24,7 @@ import {
 	AUDIO_REQUEST_PLAY,
 	PLAY_EPISODE,
 	EPISODE_REQUEST_PLAY,
+	EPISODE_TIME_UPDATED,
 	EPISODE_FINISHED,
 	PODCAST_LOADING,
 	PODCAST_LOADED,
@@ -32,6 +33,7 @@ import {
 	PODCAST_UNSUBSCRIBED,
 	PODCAST_SUBSCRIBED_SUCCESS,
 	PODCAST_SUBSCRIBED_ERROR,
+	PODCAST_SETTINGS_CHANGED,
 	PODCAST_ARCHIVED,
 	PODCAST_UNARCHIVED,
 	PODCAST_VIEW,
@@ -43,6 +45,15 @@ import {
 	REVIEWS_LOAD_ERROR
 } from "../constants/action-types";
 
+/**
+*
+*/
+export function updateEpisodeTime(time) {
+	return {
+		type: EPISODE_TIME_UPDATED,
+		payload: time
+	}
+}
 /**
 *
 */
@@ -121,15 +132,17 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 		.then((results) => {
 			var genres = [];
 			var genreKeys = {};
-			results.forEach((podcast) => {
-				if (podcast.genres) {
-					podcast.genres.forEach((genre) => {
-						if (!genreKeys[genre]) {
-							genreKeys[genre] = true;
-						}
-					});
-				}
-			});
+			if (results.forEach) {
+				results.forEach((podcast) => {
+					if (podcast.genres) {
+						podcast.genres.forEach((genre) => {
+							if (!genreKeys[genre]) {
+								genreKeys[genre] = true;
+							}
+						});
+					}
+				});
+			}
 			for (var genre in genreKeys) {
 				genres.push(genre);
 			}
@@ -143,7 +156,7 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 			});
 		})
 		.catch((error) => {
-			var errorText = 'Error while searching in itunes service. Error message: ' + error.message;
+			var errorText = 'Error while searching for the podcast. Error message: ' + error.message;
 			if (error.response) {
 				// The request was made and the server responded with a status code
 				// that falls out of the range of 2xx
@@ -165,10 +178,14 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 				
 				errorText += '. Code: 2';
 				errorText += JSON.stringify(error.request);
+				errorText += JSON.stringify(error.config);
+				errorText += JSON.stringify(error.headers);
+				errorText += JSON.stringify(error.status);
+				errorText += JSON.stringify(error.data);
 			}
 			else {
 				// Something happened in setting up the request that triggered an Error
-				console.log('Error in service service: ',error.message);
+				console.log('Error in search service: ',error.message);
 				
 				errorText += ' code: 3';
 			}
@@ -266,7 +283,15 @@ export function viewPodcast(podcastPath) {
 					else {
 						console.log('Received new version of: ' + data.name);
 						data.receivedFromServer = new Date();
-						
+
+						// Make sure we pass the status of the podcast. This should come from the server though.
+						if (podcastCache) {
+							data.sortBy = podcastCache.sortBy;
+							data.sortType = podcastCache.sortType;
+							data.onlySeason = podcastCache.onlySeason;
+							data.hideListenedEpisodes = podcastCache.hideListenedEpisodes;
+						}
+
 						clientStorage.setItem('podcast_cache_' + podcastPath,data);
 						
 						// Recreate listened states THIS SHOULD BE TEMPORARY UNTIL WE CAN GET IT FROM THE SERVER
@@ -325,6 +350,23 @@ export function unarchivePodcast(podcast) {
 	return {
 		type: PODCAST_UNARCHIVED,
 		payload: podcast
+	}
+}
+
+/**
+*
+*/
+export function updatePodcastSettings(podcastPath,sortBy,sortType,onlySeason,hideListenedEpisodes) {
+	console.log('updatePodcastSettings');
+	return {
+		type: PODCAST_SETTINGS_CHANGED,
+		payload: {
+			podcastPath: podcastPath,
+			sortBy: sortBy,
+			sortType: sortType,
+			onlySeason: onlySeason,
+			hideListenedEpisodes: hideListenedEpisodes
+		}
 	}
 }
 

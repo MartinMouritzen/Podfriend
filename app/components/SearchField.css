@@ -32,6 +32,8 @@
 	border-width: 0px;
 	margin-top: 1px;
 	color: #666666;
+
+	user-select: auto;
 }
 .searchField::placeholder {
 	color: #cecece;
@@ -45,11 +47,23 @@
 	outline: 0px solid #0176e5;
 	
 }
-@media only screen and (max-width: 320px) {
+@media only screen and (max-width: 540px) {
 	.searchField {
-		/* width: 130px; */
+		height: 40px;
+		font-size: 18px;
 	}
-	.searchField:focus {
-		width: 240px;
+	.searchIcon {
+		top: 12px;
 	}
 }
+/*
+@media only screen and (max-width: 320px) {
+	.searchField {
+		width: 190px;
+		transition: all 0.4s;
+	}
+	.searchField:focus {
+		width: 230px;
+	}
+}
+*/

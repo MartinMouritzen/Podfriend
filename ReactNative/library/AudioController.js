@@ -11,7 +11,7 @@ class AudioController {
 	STATE_PAUSED = 3;
 	
 	constructor() {
-		console.log('AudioController constructor - consider changing to eact-native-music-control');
+		console.log('AudioController constructor - consider changing to react-native-music-control');
 		console.log('Read https://medium.com/@emmettharper/the-state-of-audio-libraries-in-react-native-7e542f57b3b4');
 		console.log('and google some more');
 	}
@@ -68,9 +68,11 @@ class AudioController {
 		
 		TrackPlayer.setupPlayer()
 		.then(() => {
+			console.log('Setting up player');
 			TrackPlayer.updateOptions({
 				stopWithApp: true,
 				waitForBuffer: true,
+				alwaysPauseOnInterruption: true,
 				ratingType: TrackPlayer.RATING_HEART,
 				capabilities: [
 					TrackPlayer.CAPABILITY_PLAY,
@@ -123,6 +125,16 @@ class AudioController {
 				TrackPlayer.addEventListener('playback-error', ({code,message}) => {
 					console.log('playback-error: ' + code);
 					console.log(message);
+				});
+
+				TrackPlayer.addEventListener('remote-duck', ({paused,permanent}) => {
+					if (paused) {
+						TrackPlayer.pause();
+					}
+					else {
+						TrackPlayer.play();
+					}
+					console.log('remote-duck: ' + paused + ':' + permanent);
 				});
 				
 				TrackPlayer.addEventListener('playback-state', ({state}) => {
@@ -247,7 +259,7 @@ class AudioController {
 		.then(() => {
 			var track = {
 				id: 'unique track id', // Must be a string, required
-				
+				userAgent: 'Podfriend Mobile 1.0',
 				url: episode.url, // Load media from the network
 				title: episode.title,
 				artist: podcast.author,

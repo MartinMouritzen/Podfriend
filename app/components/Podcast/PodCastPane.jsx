@@ -7,8 +7,6 @@ import { Link, withRouter } from 'react-router-alias';
 
 import sanitizeHtml from 'sanitize-html';
 
-const md5 = require('md5');
-
 const mapStateToProps = (state, ownProps) => {
 	var useSelectedPodcast = state.podcast.selectedPodcast;
 	
@@ -100,11 +98,14 @@ class PodCastPane extends Component {
 				this.props.viewPodcast(podcastPath);
 			});
 		}
-		if (this.props.location.search != prevProps.location.search) {
+		if (this.props.location.pathname != prevProps.location.pathname) {
 			this.adjustScrollOffsetOnLoad();
 		}
 	}
 	cumulativeOffset(element) {
+		if (!element) {
+			return { top: 0, left: 0 }
+		}
 	    var top = 0, left = 0;
 	    do {
 	        top += element.offsetTop  || 0;
@@ -140,7 +141,7 @@ class PodCastPane extends Component {
 				for(var i=0;i<this.props.selectedPodcastEpisodes.length;i++) {
 					if (this.props.selectedPodcastEpisodes[i].url == this.props.activeEpisode.url) {
 						
-						var episodeId = 'episode_' + md5(this.props.selectedPodcastEpisodes[i].url);
+						var episodeId = 'episode-' + this.props.selectedPodcastEpisodes[i].id;
 						var episodeElement = window.document.getElementById(episodeId);
 						
 						var clientRect = this.cumulativeOffset(episodeElement);
@@ -162,8 +163,9 @@ class PodCastPane extends Component {
 		// This should probably be done one single time, maybe on the server side and set as a property on the podcast instead?
 		if (this.props.selectedPodcast && this.props.selectedPodcast.description) {
 			description = sanitizeHtml(this.props.selectedPodcast.description,{
-				allowedTags: ['i','em']
-			});
+				allowedTags: [] // we used to allow 'i','em', but it doesn't work on mobile. I'm not sure I can see a good reason to have them.
+			})
+			.trim();
 		}
 		
 		let isSubscribed = false;

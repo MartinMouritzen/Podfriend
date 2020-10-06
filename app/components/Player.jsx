@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { updateEpisodeTime } from "../redux/actions/index";
 import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../redux/actions/audioActions";
-import { episodeFinished, playEpisode } from "../redux/actions/podcastActions";
+import { updateEpisodeTime, episodeFinished, playEpisode } from "../redux/actions/podcastActions";
 
 import sanitizeHtml from 'sanitize-html';
 
@@ -77,12 +76,14 @@ class Player extends Component {
 		if (this.props.activeEpisode && this.props.activeEpisode.currentTime) {
 			this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
 		}
-		
+
 		Events.addListener('podcastPlayRequested',() => { console.log('podcastPlayRequested is deprecated. (player.jsx)'); this.play(); },'Player');
 		Events.addListener('podcastPauseRequested',() => { console.log('podcastPauseRequested is deprecated. (player.jsx)'); this.pause(); },'Player');
 		Events.addListener('MediaPlayPause',() => { console.log('MediaPlayPause'); this.playOrPause(); },'Player');
 		Events.addListener('MediaNextTrack',() => {  console.log('MediaNextTrack'); this.onNextEpisode(); },'Player');
 		Events.addListener('MediaPreviousTrack',() => { console.log('MediaPreviousTrack'); this.onPrevEpisode(); },'Player');
+		Events.addListener('MediaRewindTrack',() => {  console.log('MediaRewingTrack'); this.onBackward(); },'Player');
+		Events.addListener('MediaForwardTrack',() => {  console.log('MediaForwardTrack'); this.onForward(); },'Player');
 	}
 	/**
 	*
@@ -257,7 +258,9 @@ class Player extends Component {
 		console.log('currentTime: ' + this.props.audioController.getCurrentTime());
 		console.log('duration: ' + this.props.audioController.getDuration());
 		console.log(event);
-		console.log(event.nativeEvent);
+		if (event && event.nativeEvent) {
+			console.log(event.nativeEvent);
+		}
 		console.log(this.props.activeEpisode);
 		
 		Events.emit('OnEpisodeEnded',{

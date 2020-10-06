@@ -1,0 +1,87 @@
+{
+  "name": "jsmediatags",
+  "version": "3.9.3",
+  "description": "Media Tags Reader (ID3, MP4)",
+  "author": {
+    "name": "António Afonso",
+    "email": "antonio.afonso@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Jacob Seidelin"
+    },
+    {
+      "name": "Joshua Kifer"
+    },
+    {
+      "name": "Jesse Ditson",
+      "email": "jesse.ditson@gmail.com"
+    }
+  ],
+  "main": "build2/jsmediatags.js",
+  "browser": "dist/jsmediatags.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aadsm/jsmediatags.git"
+  },
+  "keywords": [
+    "ID3",
+    "tags",
+    "mp3",
+    "audio",
+    "mp4"
+  ],
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/aadsm/jsmediatags/issues"
+  },
+  "homepage": "https://github.com/aadsm/jsmediatags#readme",
+  "react-native": {
+    "fs": false,
+    "./NodeFileReader": false
+  },
+  "dependencies": {
+    "xhr2": "^0.1.4"
+  },
+  "optionalPeerDependencies": {
+    "buffer": "^5.0.8",
+    "react-native-fs": "^2.9.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.5.0",
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "babel-jest": "^24.8.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-transform-block-scoping": "^7.4.4",
+    "@babel/plugin-transform-classes": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "babelify": "^10.0.0",
+    "browserify": "^16.3.0",
+    "flow-bin": "~0.53.1",
+    "google-closure-compiler": "20170626.0.0",
+    "jest-cli": "^24.8.0",
+    "react": "^16.2.0",
+    "react-native": "^0.60.0",
+    "watchify": "^3.11.1"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "babel src --ignore __tests__,__mocks,FlowTypes.js --out-dir build2",
+    "watch": "babel --ignore __tests__,__mocks,FlowTypes.js --watch src --out-dir build2",
+    "dist-dev": "mkdir -p dist && browserify src/jsmediatags.js --detect-globals false -i ./src/NodeFileReader.js -i ./src/ReactNativeFileReader.js -o dist/jsmediatags.js -s jsmediatags -t babelify",
+    "dist-watch": "mkdir -p dist && watchify src/jsmediatags.js -v --detect-globals false -i ./src/NodeFileReader.js -i ./src/ReactNativeFileReader.js -o dist/jsmediatags.js -s jsmediatags -t babelify",
+    "dist": "npm run dist-dev && java -jar node_modules/google-closure-compiler/compiler.jar --warning_level QUIET --compilation_level SIMPLE_OPTIMIZATIONS --js dist/jsmediatags.js > dist/jsmediatags.min.js"
+  },
+  "jest": {
+    "rootDir": "./src",
+    "timers": "fake",
+    "transform": {
+      ".js$": "babel-jest"
+    }
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}

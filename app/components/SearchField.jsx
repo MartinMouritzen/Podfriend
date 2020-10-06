@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { FaSearch } from "react-icons/fa";
 
@@ -6,13 +6,33 @@ import Events from './../library/Events.js';
 
 import styles from './SearchField.css';
 
+function SearchField(props) {
+	const searchElement = useRef(null);
+	const [searchText, setSearchText] = useState('');
+
+	const onSearch = (event) => {
+		Events.emit('OnSearch',searchText);
+		event.preventDefault();
+		console.log(searchElement);
+		searchElement.current.blur();
+	};
+
+	const onChangeHandler = (event) => {
+		setSearchText(event.target.value);
+	};
+
+	return (
+		<form className={styles.searchFieldOuter} onSubmit={onSearch}>
+		<div className={styles.searchIcon}><FaSearch size={18} /></div>
+			<input placeholder="Search for a podcast" ref={searchElement} type="search" value={searchText} className={styles.searchField} onChange={onChangeHandler} />
+		</form>
+	);
+}
 /**
 *
 */
+/*
 class SearchField extends Component {
-	/**
-	*
-	*/
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -28,13 +48,11 @@ class SearchField extends Component {
 			</form>
 		);
 	}
-	/**
-	*
-	*/
 	handleChange(event) {
 		this.setState({
 			value: event.target.value
 		});
 	}
 }
+*/
 export default SearchField;
