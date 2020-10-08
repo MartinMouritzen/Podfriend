@@ -1,0 +1,125 @@
+.blueFiller {
+	background-color: #0176e5;
+	height: 200px;
+}
+.waveContainer {
+	background-color: #FFFFFF;
+	overflow: hidden;
+}
+.wave {
+
+}
+.mainInfo {
+	position: absolute;
+	background-size: cover;
+	background-position: 30% 20%;
+	background-blend-mode: lighten;
+}
+.mainInfoInner {
+	border-radius: 20px 0px 0px 0px;
+	display: flex;
+	flex-direction: row;
+	padding-bottom: 20px;
+}
+.podcastCover, .loadingCover {
+	width: 21vw;
+	height: 21vw;
+	margin-left: 30px;
+	margin-top: 30px;
+	
+	box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
+	border-radius: 15px;
+	border: 5px solid #FFFFFF;
+	background-color: #c5d5e5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.loadingCover svg {
+	
+}
+.starRating {
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+.podcastInfo {
+	margin: 30px;
+}
+.podcastName {
+	font-size: 36px;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin-bottom: 5px;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1; /* number of lines to show */
+	-webkit-box-orient: vertical;
+}
+.author {
+	display: flex;
+}
+.middot {
+	color: rgba(255,255,255,0.8);
+	font-weight: bold;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.authorLink {
+	color:  rgba(255,255,255,0.8);
+	margin-bottom: 20px;
+	text-decoration: none;
+	display: block;
+}
+.author svg {
+	fill: rgba(255,255,255,0.8);
+	position: relative;
+	top: 2px;
+}
+.author a {
+	text-decoration: none;
+}
+.author a:hover {
+	text-decoration: underline;
+}
+.podcastWebsiteLink {
+	color:  rgba(255,255,255,0.8);
+	cursor: pointer;
+}
+.podcastWebsiteLink:hover {
+	border-bottom: 1px solid  rgba(255,255,255,0.8);
+}
+.description {
+	max-width: 600px;
+	
+	line-height: 22px;
+	margin-bottom: 20px;
+	color: #FFFFFF;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 5; /* number of lines to show */
+	-webkit-box-orient: vertical;
+}
+.description em {
+	color: #FFFFFF;
+	font-style: italic;
+}
+@media only screen and (min-width: 1300px) {
+	.description {
+		-webkit-line-clamp: 6;
+		text-align: justify;
+	}
+}
+@media only screen and (min-width: 1640px) {
+	.description {
+		-webkit-line-clamp: 7;
+	}
+}
+@media only screen and (min-width: 1900px) {
+	.description {
+		-webkit-line-clamp: 8;
+	}
+}

@@ -40,10 +40,10 @@ html, body {
 }
 .mainArea::-webkit-scrollbar {
 	width: 12px;
-	background-color: transparent;
+	background-color: #cccccc;
 }
 .mainArea::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.3);
   height: 20%;
   border-radius: 15px;
 }

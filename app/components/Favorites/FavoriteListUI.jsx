@@ -4,7 +4,9 @@ import { Link, withRouter } from 'react-router-alias';
 
 // import PodcastUtil from '~/app/library/PodcastUtil.js';
 
-import styles from './../SideBar.css';
+import styles from './FavoriteListUI.css';
+
+import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
 class FavoriteListUI extends React.Component {
 	/**
@@ -46,7 +48,13 @@ class FavoriteListUI extends React.Component {
 										podcast: podcast
 									}
 								}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name} >
-								<img src={podcast.artworkUrl100} className={styles.cover} />
+								<PodcastImage
+									imageErrorText={podcast.name}
+									src={podcast.artworkUrl100}
+									className={styles.cover}
+									width={60}
+									height={60}
+								/>
 								<div className={styles.podcastDetails}>
 									<span className={styles.podcastName}>{podcast.name}</span>
 									{ /* <span className={styles.episodesInfo}>12 episodes, 2 new</span> */ }

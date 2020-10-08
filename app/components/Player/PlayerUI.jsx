@@ -13,6 +13,8 @@ import styles from './../Player.scss';
 
 import PlayLoading from './../../images/play-button-loading.png';
 
+import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
+
 /**
 *
 */
@@ -58,8 +60,13 @@ class PlayerUI extends Component {
 						fromPlayer: true
 					}
 				}} className={styles.playing} onClick={(event) => { event.preventDefault(); this.goToPodcast() } }>
-					<div className={styles.cover}>
-						<img src={(this.props.activeEpisode.image ? this.props.activeEpisode.image : this.props.activePodcast.artworkUrl600)} />
+					<div className={styles.coverContainer}>
+						<PodcastImage
+							imageErrorText={this.props.activePodcast.name}
+							fallBackImage={this.props.activePodcast.artworkUrl600}
+							src={this.props.activeEpisode.image}
+							className={styles.cover}
+						/>
 					</div>
 					<div className={styles.playingText}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.props.title}} />

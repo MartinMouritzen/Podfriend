@@ -85,7 +85,7 @@ class EpisodeListItem extends React.Component {
 				<div className={styles.episodeInfo}>
 					<div className={styles.titleAndDescription}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.state.episodeTitle}} />
-						{ this.props.episodeType != 'full' && this.props.episodeType != '' &&
+						{ this.props.episodeType && this.props.episodeType != 'full' && this.props.episodeType !== '' &&
 							<span type={this.props.episodeType} className={styles.episodeType}>{this.props.episodeType}</span>
 						}
 						<div className={styles.date}>

@@ -176,7 +176,7 @@
 }
 
 .titleAndDescription {
-	padding-right: 60px;
+	
 }
 .title {
 	color: #1f335e;
@@ -251,9 +251,10 @@
 	margin-left: 10px;
 }
 .description {
-	font-size: 14px;
+	font-size: 16px;
+	line-height: 1.5;
 	
-	max-height: 75px;
+	max-width: 650px;
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical; 
@@ -298,6 +299,11 @@
 }
 .episodePlaying .duration span {
 	color: #FFFFFF;
+}
+@media only screen and (max-width: 450px) {
+	.episode .play {
+		display: none;
+	}
 }
 @media only screen and (max-width: 600px) {
 	.episode {
