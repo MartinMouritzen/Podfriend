@@ -8,6 +8,7 @@ import {
 	USER_NOT_LOGGED_IN,
 	PLAY_EPISODE, // Should be EPISODE_PLAY
 	EPISODE_TIME_UPDATED,
+	EPISODE_DURATION_UPDATE,
 	EPISODE_FINISHED,
 	PODCAST_LOADING,
 	PODCAST_LOAD_ERROR,
@@ -116,6 +117,8 @@ const podcastReducer = (state = initialState, action) => {
 		subscribedPodcasts.forEach((subscribedPodcast,index) => {
 			if (subscribedPodcast.path == action.payload.path) {
 				subscribed = true;
+
+				action.payload.archived = subscribedPodcast.archived;
 				/*
 				var subscriptionObject = {
 					guid: action.payload.guid,
@@ -295,9 +298,29 @@ const podcastReducer = (state = initialState, action) => {
 			activeEpisode: activeEpisode
 		});
 	}
-	else if (action.type === EPISODE_TIME_UPDATED) {
-		// console.log('EPISODE_TIME_UPDATED: ' + action.payload);
+	else if (action.type === EPISODE_DURATION_UPDATE) {
+		console.log('Duration change: ' + action.payload.duration);
+		var activePodcast = Object.assign({}, state.activePodcast);
 
+		var activeEpisode = Object.assign({}, state.activeEpisode);
+		activeEpisode.duration = action.payload.duration;
+		activePodcast.episodes[activeEpisode.episodeIndex].duration = action.payload.duration;
+
+		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
+		
+		var selectedPodcast = state.selectedPodcast;
+		if (selectedPodcast && (selectedPodcast.path == activePodcast.path)) {
+			selectedPodcast = Object.assign({}, state.selectedPodcast);
+			selectedPodcast.episodes[activeEpisode.episodeIndex].duration = action.payload.duration;
+		}
+		
+		return Object.assign({}, state, {
+			activePodcast: activePodcast,
+			activeEpisode: activeEpisode,
+			selectedPodcast: selectedPodcast
+		});
+	}
+	else if (action.type === EPISODE_TIME_UPDATED) {
 		var activePodcast = Object.assign({}, state.activePodcast);
 
 		var activeEpisode = Object.assign({}, state.activeEpisode);
@@ -305,20 +328,7 @@ const podcastReducer = (state = initialState, action) => {
 		
 		activePodcast.episodes[activeEpisode.episodeIndex].currentTime = action.payload;
 
-		// localForage.getItem('podcast_cache_' + state.activePodcast.path)
-		// .then((podcastCache) => {
-			// console.log(state.activeEpisode);
-			// console.log(podcastCache);
-			
-			// 1. Do we really need to retrieve the cache here, can't we just save the active podcast?
-			// 2. We need to update on the server here as well - also this code probably belongs in an action instead - also we should keep episodes states in a completely different key, and not have episodes all over the place like subscribed, active, selected
-			
-			// if (podcastCache) {
-				// console.log(podcastCache.episodes[state.activeEpisode.episodeIndex]);
-				// activePodcast.episodes[state.activeEpisode.episodeIndex].currentTime = action.payload;
-				localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
-			// }
-		// });
+		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
 		
 		var selectedPodcast = state.selectedPodcast;
 		if (selectedPodcast && (selectedPodcast.path == activePodcast.path)) {

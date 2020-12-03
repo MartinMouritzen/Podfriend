@@ -5,16 +5,24 @@
 	justify-content: center;
 	align-items: center;
 	background-color: #ffffff;
-	border-top: 1px solid #d4d4d4;
+	/* background-color: #0176e5;*/
 }
 .menuItem {
 	flex: 1;
 	text-align: center;
 	color: #b2b2b4;
+	/* color: rgba(255,255,255,0.5); */
 	text-decoration: none;
 }
 .menuItem svg {
 	fill: #b2b2b4;
+	/* fill: rgba(255,255,255,0.5);*/
+}
+.menuItemSelected {
+	color: #0176e5;
+}
+.menuItemSelected svg {
+	fill: #0176e5;
 }
 @media only screen and (max-width: 899px) {
 	.bottomNavigation {

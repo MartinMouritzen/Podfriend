@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import TextInput from '~/app/components/Form/TextInput.jsx';
 
-import ToolTip from 'react-portal-tooltip';
-
 import styles from './CreateAccountForm.css';
 
 import CheckMark from '~/app/images/checkmark_64x64.png';
@@ -36,6 +34,9 @@ class CreateAccountForm extends Component {
 		this.createAccountSubmit = this.createAccountSubmit.bind(this);
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
 		this.handlePasswordChange = this.handlePasswordChange.bind(this);
+		this.passwordInputFocused = this.passwordInputFocused.bind(this);
+		this.passwordInputBlurred = this.passwordInputBlurred.bind(this);
+		
 	}
 	/**
 	*
@@ -60,7 +61,19 @@ class CreateAccountForm extends Component {
 		});
 	}	
 	handlePasswordChange() {
-		this.setState({password: event.target.value});
+		this.setState({
+			password: event.target.value
+		});
+	}
+	passwordInputFocused() {
+		this.setState({
+			passwordInputFocused: true
+		});
+	}
+	passwordInputBlurred() {
+		this.setState({
+			passwordInputFocused: false
+		});
 	}
 	/**
 	*
@@ -69,7 +82,7 @@ class CreateAccountForm extends Component {
 		this.setState({
 			checkingUsername: true
 		},() => {
-			var url = "http://api.podfriend.com/user/?username=" + this.state.username;
+			var url = "https://api.podfriend.com/user/?username=" + this.state.username;
 
 			return fetch(url, {
 				method: "GET",
@@ -95,12 +108,15 @@ class CreateAccountForm extends Component {
 	*
 	*/
 	createUser() {
+		console.log('createuser');
 		this.props.onCreateUser(this.state.username,this.state.password,this.state.email);
 	}
 	/**
 	*
 	*/
 	createAccountSubmit(event) {
+		console.log('createAccountSubmit');
+		console.log(this.state.password);
 		event.preventDefault();
 
 		var isUsernameValid = true;
@@ -114,10 +130,18 @@ class CreateAccountForm extends Component {
 			isUsernameValid = false;
 		}
 		if (this.state.password.length <= 6) {
-			passwordErrorMessage = 'Your password is too simple. For your own security please follow the instructions to make your password more secure.';
+			passwordErrorMessage = 'Your password is too short. For your own security please follow the instructions to make your password more secure.';
 			isPasswordValid = false;
 		}
-				
+		if (!this.hasNumber(this.state.password)) {
+			passwordErrorMessage = 'Your password does not contain a number. For your own security please follow the instructions to make your password more secure.';
+			isPasswordValid = false;
+		}
+		if (!this.hasUpperCaseCharacter(this.state.password)) {
+			passwordErrorMessage = 'Your password does not contain an uppercase character. For your own security please follow the instructions to make your password more secure.';
+			isPasswordValid = false;
+		}
+
 		if (isUsernameValid && isPasswordValid) {
 			this.createUser();
 		}
@@ -130,6 +154,18 @@ class CreateAccountForm extends Component {
 				isPasswordValid: isPasswordValid,
 				inputCounter: ++this.state.inputCounter
 			});
+		}
+	}
+	hasNumber(testString) {
+		return /\d/.test(testString);
+	}
+	hasUpperCaseCharacter(testString) {
+		var lowerCaseString = testString.toLowerCase();
+		if (lowerCaseString == testString) {
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 	/**
@@ -165,7 +201,7 @@ class CreateAccountForm extends Component {
 
 					<div className={styles.inputField}>
 						<div className={(this.state.submitted && !this.state.isPasswordValid ? styles.errorInInput : '')}>
-							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={() => { this.setState({ passwordInputFocused: true }); } } onBlur={() => { this.setState({ passwordInputFocused: false }); } } />
+							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={this.passwordInputFocused} onBlur={this.passwordInputBlurred} />
 							{ this.state.submitted && !this.state.isPasswordValid &&
 								<div className={styles.error}>
 									<div className={styles.errorMessage}>
@@ -174,22 +210,44 @@ class CreateAccountForm extends Component {
 								</div>
 							}
 							
-							<ToolTip group={'passwordTip'} active={this.state.passwordInputFocused} position="left" arrow="center" parent="#password">
-							    <div style={{ width: '300px', padding: '20px'}}>
-							    	<div className={styles.passwordToolTipHeadline}>
-							    		Password requirements
-							    	</div>
-									<div className={styles.passwordToolTipRequirement}><img src={CheckMark} className={styles.checkMark} /> <span>More than 6 characters</span></div>
-									<div className={styles.passwordToolTipRequirement}><img src={CheckMark} className={styles.checkMark} /> <span>One Number</span></div>
-									<div className={styles.passwordToolTipRequirement}><img src={CheckMarkInactive} className={styles.checkMarkInactive} /> <span>One uppercase character</span></div>
-							    	<div className={styles.passwordToolTipHeadline}>
-							    		Password strength
-							    	</div>
-							    	<div className={styles.passwordStrengthContainer}>
-							    		<div className={styles.passwordStrength}>&nbsp;</div>
-							    	</div>
-							    </div>
-							</ToolTip>
+							<div style={{ width: '300px', padding: '20px' }}>
+								<div className={styles.passwordToolTipHeadline}>
+									Password requirements
+								</div>
+								<div className={styles.passwordToolTipRequirement}>
+									{ this.state.password.length > 6 &&
+										<img src={CheckMark} className={styles.checkMark} />
+									}
+									{ this.state.password.length <= 6 &&
+										<img src={CheckMarkInactive} className={styles.checkMarkInactive} />
+									}
+									<span>More than 6 characters</span>
+								</div>
+								<div className={styles.passwordToolTipRequirement}>
+									{ this.hasNumber(this.state.password) &&
+										<img src={CheckMark} className={styles.checkMark} />
+									}
+									{ !this.hasNumber(this.state.password) &&
+										<img src={CheckMarkInactive} className={styles.checkMarkInactive} />
+									}
+									<span>One Number</span>
+								</div>
+								<div className={styles.passwordToolTipRequirement}>
+									{ this.hasUpperCaseCharacter(this.state.password) &&
+										<img src={CheckMark} className={styles.checkMark} />
+									}
+									{ !this.hasUpperCaseCharacter(this.state.password) &&
+										<img src={CheckMarkInactive} className={styles.checkMarkInactive} />
+									}
+									<span>One uppercase character</span>
+								</div>
+								<div className={styles.passwordToolTipHeadline}>
+									Password strength
+								</div>
+								<div className={styles.passwordStrengthContainer}>
+									<div className={styles.passwordStrength}>&nbsp;</div>
+								</div>
+							</div>
 							
 						</div>
 					</div>

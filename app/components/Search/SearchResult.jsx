@@ -5,6 +5,8 @@ import { subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redu
 
 import { Link } from 'react-router-dom';
 
+import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
+
 import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
 import styles from './SearchResult.css';
@@ -33,7 +35,8 @@ class SearchResult extends Component {
 		let isSubscribed = false;
 
 		this.props.subscribedPodcasts.forEach((podcast) => {
-			if (podcast.feedUrl === this.props.result.feedUrl) {
+			// if (podcast.feedUrl === this.props.result.feedUrl) {
+			if (podcast.path === this.props.result.path) {
 				isSubscribed = true;
 			}
 		});
@@ -44,28 +47,34 @@ class SearchResult extends Component {
 					state: {
 						podcast: this.props.result
 					}
-				}} className={styles.searchResult}>
-				<div style={{ backgroundImage: 'url(' + this.props.result.artworkUrl600 + ')' }} className={styles.thumbNail}>
+				}} className='podcastItem'>
+				<PodcastImage
+					podcastPath={this.props.result.path}
+					imageErrorText={this.props.result.name}
+					width={600}
+					height={600}
+					src={this.props.result.artworkUrl600}
+					className='cover'
+					draggable="false"
+				/>
+				<div className='subscribeContainer'>
 					{ !isSubscribed &&
-						<div className={styles.subscribe} onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.subscribeToPodcast(this.props.result);  }}>
+						<div className='subscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.subscribeToPodcast(this.props.result);  }}>
 							<FaHeart />
 						</div>
 					}
 					{ isSubscribed &&
-						<div className={styles.unSubscribe} onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.unsubscribeToPodcast(this.props.result); /* this.props.onUnsubscribe(this.props.result); */ }}>
+						<div className='unsubscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.unsubscribeToPodcast(this.props.result); }}>
 							<FaHeartBroken />
 						</div>
 					}					
 				</div>
-				<div className={styles.content}>
-					<div className={styles.author}>
+				<div className='content'>
+					<div className='author'>
 						{this.props.result.author}
 					</div>
-					<div className={styles.title}>
+					<div className='title'>
 						{this.props.result.name}
-					</div>
-					<div className={styles.tags}>
-					
 					</div>
 				</div>
 			</Link>

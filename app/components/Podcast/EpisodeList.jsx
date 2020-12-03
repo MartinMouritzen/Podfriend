@@ -6,6 +6,8 @@ import { audioPlayRequested } from "podfriend-approot/redux/actions/audioActions
 
 import { FaCheck } from 'react-icons/fa';
 
+import FilterBar from './FilterBar.jsx';
+
 import EpisodeListItem from './EpisodeListItem.jsx';
 
 import styles from './EpisodeList.css';
@@ -38,25 +40,24 @@ class EpisodeList extends Component {
 		
 		// console.log('Look into using react-window (or react-virtualized) for the episodelist');
 
-		console.log('EpisodeList');
-		console.log(this.props.selectedPodcast);
-
 		this.handleHideListenedEpisodesFilter = this.handleHideListenedEpisodesFilter.bind(this);
 		this.selectEpisodeAndPlay = this.selectEpisodeAndPlay.bind(this);
 		this.changeSortBy = this.changeSortBy.bind(this);
 		this.changeOnlySeason = this.changeOnlySeason.bind(this);
 
-
 		this.setEpisodeOrder = this.setEpisodeOrder.bind(this);
 
 		this.state = {
-			episodes: [],
-			sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'season',
-			sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'asc',
+			episodes: this.props.episodes,
+			sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'date',
+			sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'desc',
 			onlySeason: this.props.selectedPodcast.onlySeason ? this.props.selectedPodcast.onlySeason : 'all',
 			hideListenedEpisodes: this.props.selectedPodcast.hideListenedEpisodes ? this.props.selectedPodcast.hideListenedEpisodes : true
 		};
+
+		// this.setEpisodeOrder();
 	}
+
 	/**
 	*
 	*/
@@ -70,16 +71,46 @@ class EpisodeList extends Component {
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		try {
+			if ((prevProps.episodes && this.props.episodes.length !== prevProps.episodes.length) || this.props.selectedPodcast.path !== prevProps.selectedPodcast.path) {
+				this.setState({
+					sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'date',
+					sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'desc',
+					onlySeason: this.props.selectedPodcast.onlySeason ? this.props.selectedPodcast.onlySeason : 'all',
+					hideListenedEpisodes: this.props.selectedPodcast.hideListenedEpisodes ? this.props.selectedPodcast.hideListenedEpisodes : true
+				},() => {
+					this.setEpisodeOrder();
+				});
+			}
+		}
+		catch(exception) {
+			console.log(exception);
+			console.log(this.props.episodes);
+			console.log(prevProps.episodes);
+		}
+
+		/*
 		if (this.props.selectedPodcast.path !== prevProps.selectedPodcast.path) {
 			this.setState({
-				sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'season',
-				sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'asc',
+				sortBy: this.props.selectedPodcast.sortBy ? this.props.selectedPodcast.sortBy : 'date',
+				sortType: this.props.selectedPodcast.sortType ? this.props.selectedPodcast.sortType : 'desc',
 				onlySeason: this.props.selectedPodcast.onlySeason ? this.props.selectedPodcast.onlySeason : 'all',
 				hideListenedEpisodes: this.props.selectedPodcast.hideListenedEpisodes ? this.props.selectedPodcast.hideListenedEpisodes : true
 			},() => {
 				this.setEpisodeOrder();
 			});
 		}
+		else {
+			if (this.props.selectedPodcast.path === prevProps.selectedPodcast.path) {
+				if (this.props.episodes.length !== prevProps.episodes.length) {
+					console.log(this.props.episodes);
+					console.log(prevProps.episodes);
+					console.log('new episodes!');
+				}
+			}
+
+		}
+		*/
 	}
 	/**
 	*
@@ -87,8 +118,8 @@ class EpisodeList extends Component {
 	changeSortBy(event) {
 		var sortRaw = event.target.value;
 
-		var sortBy = 'season_asc';
-		var sortType = 'asc';
+		var sortBy = 'date_desc';
+		var sortType = 'desc';
 
 		if (sortRaw == 'season_asc') {
 			sortBy = 'season';
@@ -282,44 +313,18 @@ class EpisodeList extends Component {
 		
 		return (
 			<div className={styles.episodeList}>
-				<div className={styles.filterBar}>
-					<div className={styles.filterItem}>
-						<label htmlFor="sortDropDown">Sort by {this.state.sortBy}</label>
-						<select id="sortDropDown" onChange={this.changeSortBy} value={this.state.sortBy + '_' + this.state.sortType}>
-							{ seasons.length > 0 &&
-								<>
-									<option value="season_asc">Season</option>
-									<option value="season_desc">Season newest first</option>
-								</>
-							}
-							<option value="date_asc">Oldest episodes first</option>
-							<option value="date_desc">Newest episodes first</option>
-							<option value="duration_desc">Longest first</option>
-							<option value="duration_asc">Shortest first</option>
-						</select>
-					</div>
-					{ seasons.length > 0 &&
-						<div className={styles.filterItem}>
-							<label htmlFor="seasonDropDown">Show</label>
-							<select id="seasonDropDown" onChange={this.changeOnlySeason} value={this.state.onlySeason}>
-								<option value={'all'}>All seasons</option>
-							{
-								seasons.map((season,index) => {
-									return (
-										<option value={season.seasonNumber} key={'season_' + season.seasonNumber}>Season {season.seasonNumber}</option>
-									)	
-								})
-							}
-								<option value='bonus'>Only bonus</option>
-							</select>
-						</div>
-					}
-					{ episodesListened > 0 &&
-						<div className={styles.hideListenedEpisodesFilter}>
-							<input type="checkbox" id="hideListenedCheckbox" checked={this.state.hideListenedEpisodes} onChange={this.handleHideListenedEpisodesFilter} /> <label className={styles.hideListenedEpisodesLabel} htmlFor='hideListenedCheckbox'>Hide {episodesListened} listened episodes</label>
-						</div>
-					}
-				</div>
+				<FilterBar
+					seasons={seasons}
+					sortBy={this.state.sortBy}
+					sortType={this.state.sortType}
+					changeSortBy={this.changeSortBy}
+					onlySeason={this.state.onlySeason}
+					changeOnlySeason={this.changeOnlySeason}
+					hideListenedEpisodes={this.state.hideListenedEpisodes}
+					hideListenedEpisodes={this.state.hideListenedEpisodes}
+					onHideListenedEpisodes={this.handleHideListenedEpisodesFilter}
+					episodesListened={episodesListened}
+				/>
 				{ this.state.episodes && this.state.episodes.length == episodesListened &&
 					<div style={{ padding: 60, textAlign: 'center' }} className={styles.listenedToAll}>
 						<div style={{ backgroundColor: '#28bd72', width: 100, height: 100, borderRadius: '50%', display: 'flex', alignItems: 'center',justifyContent: 'center',marginLeft: 'auto',marginRight: 'auto', marginBottom: '20px' }}>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import TextInput from '~/app/components/Form/TextInput.jsx';
 
-import ToolTip from 'react-portal-tooltip';
 import CheckMark from '~/app/images/checkmark_64x64.png';
 import CheckMarkInactive from '~/app/images/checkmark_inactive_64x64.png';
 
@@ -87,7 +86,7 @@ class PasswordForm extends Component {
 		return (
 			<div className={styles.loginForm}>
 				<h2>Let's get listening!</h2>
-
+				<p>Your email: {this.props.email}</p>
 				<form onSubmit={this.login}>
 					<div className={styles.inputField}>
 						<div className={(this.state.invalidPassword ? styles.errorInInput : '')}>
@@ -99,21 +98,20 @@ class PasswordForm extends Component {
 									</div>
 								</div>
 							}
-							
-							<ToolTip group={'passwordTip'} active={this.state.passwordInputFocused} position="left" arrow="center" parent="#password">
-							    <div style={{ width: '300px', padding: '20px'}}>
-							    	<div className={styles.passwordToolTipHeadline}>
-							    		Password hints
-							    	</div>
-									<div className={styles.passwordToolTipRequirement}><span>More than 6 characters</span></div>
-									<div className={styles.passwordToolTipRequirement}><span>At least one Number</span></div>
-									<div className={styles.passwordToolTipRequirement}><span>At least one uppercase character</span></div>
-							    </div>
-							</ToolTip>
 						</div>
 					</div>
 					
 					<input type="submit" value="Log in" />
+
+					<div style={{ width: '300px', padding: this.state.passwordInputFocused ? '20px' : '0px', height: this.state.passwordInputFocused ? 'auto' : '0px', overflow: 'hidden', transition: 'all 0.4s' }}>
+						<div className={styles.passwordToolTipHeadline}>
+							Password hints
+						</div>
+						<div className={styles.passwordToolTipRequirement}><span>More than 6 characters</span></div>
+						<div className={styles.passwordToolTipRequirement}><span>At least one number</span></div>
+						<div className={styles.passwordToolTipRequirement}><span>At least one uppercase character</span></div>
+					</div>
+
 				</form>
 			</div>
 		);

@@ -1,21 +1,28 @@
 @import 'sass/variables.scss';
 
 .player {
-	width: 100%;
-	border-top: 1px solid #05253f;
-	background-color: $theme-light-player-background-color;
+	width: 100vw;
+	border-top: 1px solid rgba(0,0,0,0.2);
+	/* background-color: $theme-light-player-background-color; */
+	background-color:  rgba(1,118,229,1);
 	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(12,40,80,1)  100%);
 	height: 90px;
-	max-height: 90px;
-	overflow: hidden;
+	
+
+	transition: width 0.7s;
+
+	position: absolute;
+	bottom: 60px;
+	right: 0px;
 }
 .controls {
+	white-space:nowrap;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 	flex: 2;
 }
-.playing {
+.playingPreview {
 	height: 90px;
 	display: flex;
 	text-decoration: none;
@@ -28,14 +35,43 @@
 	justify-content: center;
 	height: 90px;
 }
-.cover {
-	height: 90px;
-	width: 90px;
+.coverContainer {
+	transition: all 0.7s;
+
+	max-width: 400px;
+	max-height: 400px;
+
+	position: relative;
 }
-.cover img {
-	height: 90px;
-	width: 90px;
-	
+.coverContainer video {
+	background-color: #000000;
+	width: 100%;
+	height: 100%;
+	z-Index: 5;
+}
+.coverContainer .fullscreenIcon {
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	right: 10px;
+	top: 10px;
+	display: none;
+	z-Index: 6;
+}
+@media (any-hover: hover) {
+	.coverContainer:hover .fullscreenIcon {
+		display: block;
+	}
+}
+.fullscreenIcon svg {
+	width: 32px;
+	height: 32px;
+	fill: #FFFFFF;
+}
+.cover {
+	height: 100%;
+	width: 100%;
+
 	transition: all 0.5s;
 }
 .author {
@@ -44,6 +80,11 @@
 }
 .title {
 	color: rgba(255,255,255,1);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	margin-right: 10px;
 }
 .volumeControls {
 	min-width: 70px;
@@ -59,21 +100,25 @@
 }
 .progressBarOuter {
 	width: 100%;
+	max-width: 800px;
 }
 .progress {
 	margin-top: 6px;
 	margin-bottom: 0px;
 	display: flex;
+	justify-content: center;
 }
 .progressText {
 	margin-right: 10px;
 	font-size: 14px;
 	color: rgba(255,255,255,0.9);
+	align-self: center;
 }
 .durationText {
 	margin-left: 10px;
 	font-size: 14px;
 	color: rgba(255,255,255,0.8);
+	align-self: center;
 }
 .audioButtons {
 	height: 60px;
@@ -86,6 +131,8 @@
 	display: inline-block;
 	width: 60px;
 	height: 60px;
+
+	min-width: 60px;
 	
 	display: flex;
 	justify-content: center;
@@ -95,16 +142,9 @@
 	background-color: #0176e5;
 	/* background-color: rgba(0,0,0,0.5); */
 	border-radius: 50%;
-	padding: 20px;
+	padding: 15px;
 	
 	transition: all 0.4s;
-}
-.playButton:hover, .pauseButton:hover {
-	background-color: #1180e7;
-	transform: scale(1.1);
-}
-.playButton {
-
 }
 .playButton svg {
 	fill: #FFFFFF;
@@ -113,14 +153,10 @@
 }
 .pauseButton svg {
 	fill: #FFFFFF;
-}
-.pauseButton {
-
-}
-.pauseButton svg {
 	right: 3px;
+	width: 21px;
 }
-.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton, .moreControlsButton {
 	display: inline-block;
 
 	margin-right: 15px;
@@ -136,29 +172,36 @@
 	border-radius: 50%;
 	transition: all 0.1s;
 }
-.backwardButton:hover, .fastBackwardButton:hover, .forwardButton:hover, .fastForwardButton:hover {
-	background-color: #0153a3;
-	transform: scale(1.3);
-}
 .backwardButton {
 	margin-right: 20px;
 }
 .forwardButton {
 	margin-left: 20px;
 }
-.backwardButton svg, .fastBackwardButton svg, .forwardButton svg, .fastForwardButton svg {
+.backwardButton svg, .fastBackwardButton svg, .forwardButton svg, .fastForwardButton svg, .moreControlsButton svg {
 	fill: rgba(255,255,255,0.8);
 	position: relative;
-	
 }
-.backwardButton:hover svg, .fastBackwardButton:hover svg, .forwardButton:hover svg, .fastForwardButton:hover svg {
-	fill: #FFFFFF;
+.backwardButton svg, .forwardButton svg {
+	width: 30px;
+	height: 30px;
 }
-.backwardButton svg {
-	right: 1px;
+.moreControlsButton svg, .fastForwardButton svg, .fastBackwardButton svg {
+	width: 20px;
+	height: 20px;
 }
-.forwardButton svg {
-	left: 2px;
+@media (any-hover: hover) {
+	.playButton:hover, .pauseButton:hover {
+		background-color: #1180e7;
+		transform: scale(1.1);
+	}
+	.backwardButton:hover svg, .fastBackwardButton:hover svg, .forwardButton:hover svg, .fastForwardButton:hover svg, .moreControlsButton:hover svg {
+		fill: #FFFFFF;
+	}
+	.backwardButton:hover, .fastBackwardButton:hover, .forwardButton:hover, .fastForwardButton:hover, .moreControlsButton:hover {
+		background-color: #0153a3;
+		transform: scale(1.3);
+	}
 }
 /************************
 * Playertrack animation
@@ -192,125 +235,347 @@
 }
 */
 @media only screen and (min-width: 900px) {
-	.playing {
-		width: 400px;
+	.playingPreview {
+		/* width: 400px;*/
 		margin-right: 100px;
 	}
+	.audioButtons {
+		padding-left: 40px;
+	}
+	.playingText {
+		margin-left: 140px;
+	}
 	.coverContainer {
+		background-color: #000000;
 		position: absolute;
 		bottom: 20px;
 		left: 10px;
 		width: 100px;
 		height: 100px;
+		max-width: 100px;
+		max-height: 100px;
 		border: 2px solid #FFFFFF;
-		outline: 1px solid rgba(0,0,0,0.7);
-		transition: all 0.4s;
+		/* outline: 1px solid rgba(0,0,0,0.7); */
 		z-index: 10;
 	}
-	.coverContainer:hover {
-		width: 400px;
-		height: 400px;
+	@media (any-hover: hover) {
+		.episodeClosed {
+			.coverContainer:hover {
+				width: 600px;
+				height: 600px;
+				max-width: 600px;
+				max-height: 600px;
+			}
+			.coverContainer:hover * {
+				font-size: 14px;
+			}
+		}
 	}
 	.cover {
 		width: 100%;
 		height: 100%;
 	}
-	.playingText {
-		margin-left: 130px;
+}
+@media only screen and (max-width: 900px) {
+	.episodeClosed {
+		.controls {
+			display: flex;
+			flex-direction: column;
+		}
+		.progress {
+			display: flex;
+			margin-right: 10px;
+		}
+		.progressBarOuter {
+			width: 40vw;
+		}
+		.coverContainer {
+			width: 88px;
+			height: 88px;
+			max-width: 88px;
+		}
+		.cover {
+			width: 80px;
+			height: 80px;
+			margin-left: 5px;
+			margin-top: 5px;
+			border-radius: 5px;
+		}
+		&.player {
+			display: block;
+			background: none;
+			background-color: #174ea1;
+			height: 90px;
+		}
+		.playingPreview {
+			width: 100%;
+			height: 20px;
+			margin-right: 0px;
+		}
+		.playingText {
+			width: 100px;
+			height: 40px;
+			font-size: 14px;
+			display: flex;
+			margin-right: 5px;
+			margin-left: 20px;
+			display: flex;
+			justify-content: center;
+			height: 60px;
+		}
+		.playingText .author, .playingText .title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.playingText .title {
+			font-size: 15px;
+		}
+		.volumeControls {
+			display: none;
+		}
+
+		.fastBackwardButton, .forwardButton, .fastForwardButton {
+			
+		}
 	}
 }
-@media only screen and (max-width: 740px) {
-	.controls {
-		display: flex;
-		flex-direction: column;
+.bottomProgressBar {
+	height: 0px;
+	overflow: hidden;
+	transition: all 0.2s;
+}
+.bottomProgressBarInner {
+	background-color: #27bd72;
+}
+.episodeClosed {
+	.coverContainer {
+		overflow: hidden;
 	}
-	.progress {
-		display: flex;
+	.coverContainer * {
+		font-size: 9px;
+	}
+	@media only screen and (max-width: 360px) {
+		.fastBackwardButton, .fastForwardButton {
+			width: 0 !important;
+		}
+	}
+	@media only screen and (max-width: 400px) {
+		.fastBackwardButton {
+			width: 0 !important;
+		}
+	}
+	@media only screen and (max-width: 570px) {
+		.controls {
+			display: flex;
+			flex-direction: column;
+		}
+		.coverContainer {
+			width: 58px;
+			height: 58px;
+		}
+		.cover {
+			width: 50px;
+			height: 50px;
+		}
+		.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+			margin: 0px;
+		}
+		.progress {
+			display: none !important;
+		}
+		.pauseButton, .playButton {
+			width: 55px;
+			height: 55px;
+			min-width: 55px;
+			margin-right: 12px;
+		}
+
+		&.player {
+			height: 60px;
+
+			.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+				transition: all 0.3s;
+				overflow: hidden;
+			}
+			.playingText {
+				transition: all 0.3s;
+			}
+		}
+		&.player.playing {
+			.playingPreview {
+				width: auto;
+				max-width: 60px;
+			}
+			.playingText {
+				opacity: 0;
+				width: 0px;
+				margin: 0px;
+				flex: 0 1 auto;
+			}
+			.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
+				width: 60px;
+			}
+		}
+		&.player.notPlaying {
+			.audioButtons {
+				flex-direction: row-reverse;
+			}
+			.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton, .moreControlsButton {
+				width: 0px;
+			}
+			.controls {
+				width: 90px;
+			}
+		}
+		.bottomProgressBar {
+			height: 1px;
+			background-color: rgba(0,0,0,0.4);
+		}
+	}
+
+	@media only screen and (min-width: 670px) {
+		.backwardButton {
+			/* width: auto !important; */
+		}
+	}
+	@media only screen and (max-width: 380px) {
+		.fastBackwardButton {
+			width: 0px;
+		}
+	}
+}
+/*********************************************************
+* The "Open Episode" version of the player
+*********************************************************/
+.player.episodeOpen {
+	/* height: calc(100% - 24px); */
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	max-height: none;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 15px 15px 0px 0px;
+	background:  rgba(1,118,229,1);
+	z-Index: 9999;
+	overflow: auto;
+
+	.wave {
+		position: relative;
+		bottom: 1px;
+	}
+	.playingText {
+		height: auto;
+		margin-top: 20px;
+		text-align: center;
+		
+	}
+	.controls {
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	.progressText {
+		margin-left: 10px;
+	}
+	.durationText {
 		margin-right: 10px;
 	}
-	.progressBarOuter {
-		width: 40vw;
-	}
-	.cover {
-		width: 60px;
-		height: 60px;
-	}
-	.cover img {
-		width: 60px;
-		height: 60px;
-		margin-left: 5px;
-		margin-top: 5px;
-		border-radius: 5px;
-	}
-	.player {
-		position: relative;
+	.playingPreview {
 		display: block;
-		background: none;
-		background-color: #174ea1;
-		height: 90px;
-	}
-	.playing {
-		width: 100%;
-		height: 20px;
 		margin-right: 0px;
+		height: auto;
 	}
-	.playingText {
-		width: 100px;
-		height: 40px;
-		font-size: 12px;
-		display: flex;
-		margin-right: 5px;
-		margin-left: 20px;
-		display: flex;
-		justify-content: center;
-		height: 60px;
+	.episodeInfo {
+		width: 100%;
+		background-color: #FFFFFF;
+		padding-bottom: 60px;
 	}
-	.playingText .author, .playingText .title {
-		white-space: nowrap;
+	.coverContainer {
+		position: relative;
+		top: 0px;
+
+		width: 90vw;
+		height: 90vw;
+
+		border-radius: 10px;
 		overflow: hidden;
-		width: 100px;
-		text-overflow: ellipsis;
+
+		margin-top: 20px;
+
+		margin-left: auto;
+		margin-right: auto;
+
+		max-width: 400px;
+		max-height: 400px;
+
+		background-color: #000000;
+		border: 2px solid #FFFFFF;
+
+		z-index: 10;
 	}
-	.volumeControls {
-		display: none;
+	.fillerButton {
+		width: 25px;
+		margin-right: 15px;
+		margin-left: 15px;
 	}
-	.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
-		width: 20px;
+	.audioButtons {
+		margin-top: 5px;
 	}
-	.moreControlsButton {
-		display: none;
+	.playButton, .pauseButton {
+		background-color: #FFFFFF;
+		svg {
+			fill: #0176e5;
+		}
+	}
+	@media only screen and (max-width: 460px) {
+		.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton, .moreControlsButton {
+			margin-left: 10px;
+			margin-right: 10px;
+		}
 	}
 }
-@media only screen and (max-width: 320px) {
-	.fastBackwardButton, .fastForwardButton {
-		display: none !important;
-	}
-}
-@media only screen and (max-width: 450px) {
-	.cover {
-		width: 50px;
-		height: 50px;
-	}
-	.cover img {
-		width: 50px;
-		height: 50px;
-	}
-	.backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton {
-		margin: 0px;
-		margin-right: 12px;
-	}
-	.progress {
-		display: none !important;
-	}
-	.pauseButton, .playButton {
-		width: 55px;
-		height: 55px;
-		margin-right: 12px;
-	}
-	.pauseButton svg, .playButton svg {
-		width: 30px;
-	}
+@media only screen and (min-width: 900px) {
 	.player {
-		height: 60px;
+		bottom: 0px;
+	}
+	.player.episodeOpen {
+		width: calc(100vw - 450px);
+		border-radius: 15px 0px 0px 0px;
+	}
+	.audioButtons {
+		position: relative;
+		bottom: 5px;
+	}
+}
+.openPlayerBackground {
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.6);
+	top: 0px;
+	left: 0;
+	height: 100%;
+	width: 100%;
+
+	transition: all 0.7s;
+	
+	animation: fadeIn ease 0.7s;
+
+	z-index: 1;
+}
+@keyframes fadeIn {
+	0% {
+		opacity:0;
+	}
+	100% {
+		opacity:1;
+	}
+  }
+  @keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
 	}
 }

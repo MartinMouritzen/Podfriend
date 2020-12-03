@@ -1,44 +1,40 @@
 import React, { Component } from 'react';
 
-import { FaHeart } from "react-icons/fa";
+import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
 import { Link } from 'react-router-alias';
 
-import styles from './PodcastMatrixUI.css';
-
-/**
-*
-*/
-class PodcastMatrix extends Component {
-	render() {
-		return (
-			<div>
-			{
-				this.props.podcasts.map((podcast,index) => {
-					if (index >= 5) {
-						return false;
-					}
-					return (
-						<Link to={{ pathname: '/podcast/' + podcast.path, state: { podcast: podcast } }} key={'latestPodcast' + index} className={styles.searchResult}>
-							<div style={{ backgroundImage: 'url(' + podcast.artworkUrl600 + ')' }} className={styles.thumbNail}>
-								<div className={styles.subscribe} onClick={(event) => { event.stopPropagation(); this.props.onSubscribe(podcast); }}>
-									<FaHeart />
-								</div>
+const PodcastMatrixUI = ({ podcasts, type, max = 50 }) => {
+	return (
+		<div className={'podcastGrid ' + type}>
+		{
+			podcasts.map((podcast,index) => {
+				if (index >= max) {
+					return false;
+				}
+				return (
+					<Link to={{ pathname: '/podcast/' + podcast.path, state: { podcast: podcast } }} key={'latestPodcast' + index} className='podcastItem'>
+						<PodcastImage
+							podcastPath={podcast.path}
+							imageErrorText={podcast.name}
+							src={podcast.artworkUrl100 ? podcast.artworkUrl100 : podcast.image}
+							className='cover'
+							width={400}
+							height={400}
+						/>
+						<div className='content'>
+							<div className='author'>
+								{podcast.author}
 							</div>
-							<div className={styles.content}>
-								<div className={styles.author}>
-									{podcast.author}
-								</div>
-								<div className={styles.title}>
-									{podcast.name}
-								</div>
+							<div className='title'>
+								{podcast.name}
 							</div>
-						</Link>
-					);
-				})
-			}
-			</div>
-		);
-	}
+						</div>
+					</Link>
+				);
+			})
+		}
+		</div>
+	);
 }
-export default PodcastMatrix;
+export default PodcastMatrixUI;

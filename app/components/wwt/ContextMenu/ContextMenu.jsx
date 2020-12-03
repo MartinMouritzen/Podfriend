@@ -1,131 +1,119 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styles from './ContextMenu.css';
 
 /**
 *
 */
-export class ContextMenu extends Component {
-	/**
-	*
-	*/
-	constructor(props) {
-		super(props);
-		
-		this.state = {
-			show: this.props.show ? this.props.show : this.props.target ? false : true,
-			showType: this.props.show ? 'auto' : this.props.target ? 'auto' : 'managed',
-		};
-		this.onContextMenu = this.onContextMenu.bind(this);
-		this.onWindowBlur = this.onWindowBlur.bind(this);
-		this.onWindowClick = this.onWindowClick.bind(this);
-	}
-	/**
-	*
-	*/
-	componentDidMount() {
-		window.addEventListener('click',this.onWindowClick, false);
-		// window.addEventListener('contextmenu',this.onContextMenu, false);
-		window.addEventListener('blur',this.onWindowBlur, false);
-	}
-	/**
-	*
-	*/
-	componentWillUnmount() {
-		window.removeEventListener('click',this.onWindowClick, false);
-		// window.removeEventListener('contextmenu',this.onContextMenu, false);
-		window.removeEventListener('blur',this.onWindowBlur, false);
-	}
-	/**
-	*
-	*/
-	onWindowBlur(event) {
-		if (this.state.showType == 'auto') {
-			this.setState({
-				show: false
-			});
-		}
-		
-		if (this.props.onMenuHide) {
-			this.props.onMenuHide();
+const ContextMenu = ({ showType = 'auto', position = 'auto', showTrigger, element, target, style = {}, children }) => {
+	const contextMenuElement = useRef(null);
+	const [show,setShow] = useState(false);
+	const [top,setTop] = useState(0);
+	const [bottom,setBottom] = useState(0);
+	const [left,setLeft] = useState(0);
+
+	const onWindowBlur = () => {
+		if (showType == 'auto') {
+			setShow(false);
 		}
 	}
-	/**
-	*
-	*/
-	onContextMenu(event) {
-		if (!this.props.target) {
+	const onContextMenu = (event) => {
+		if (!target) {
 			return;
 		}
-		// var targetElement = document.querySelector(this.props.target);
-		
-		// console.log('contextmenu!');
-		// console.log(targetElement);
-		
-		if (!this.state.show && event.target.matches(this.props.target + ', ' + this.props.target + ' *')) {
-			this.setState({
-				show: true
-			});
-		}
-		else if (this.state.show && this.state.showType == 'auto') {
-			this.setState({
-				show: false
-			});
-		}
 
-		if (this.props.onMenuHide) {
-			this.props.onMenuHide();
+		if (!show && event.target.matches(target + ', ' + target + ' *')) {
+			setShow(true);
+		}
+		else if (show && showType == 'auto') {
+			setShow(false);
 		}
 	}
-	/**
-	*
-	*/
-	onWindowClick(event) {
-		if (this.state.show && this.state.showType == 'auto') {
-			this.setState({
-				show: false
-			});
+	const onWindowClick = (event) => {
+		if (show && showType == 'auto') {
+			setShow(false);
 		}
+	}
+	const showContextMenu = (event) => {
+		event.preventDefault();
+		event.stopImmediatePropagation();
 
-		if (this.props.onMenuHide) {
-			this.props.onMenuHide();
+		if (!show) { // If not showing, that means we want to set the position now, before we show
+			setContextMenuPosition(event);
 		}
-	}
-	/**
-	*
-	*/
-	render() {
-		return (
-			<div className={styles.contextMenu} style={{...this.props.style,display: this.state.show ? 'block' : 'none'}}>
-				{this.props.children}
-			</div>
-		);
-	}
+		setShow(!show);
+	};
+	const setContextMenuPosition = (event) => {
+		if (element.current) {
+			var bodyRect = document.body.getBoundingClientRect();
+			var elemRect = element.current.getBoundingClientRect();
+			var contextMenuElementRect = contextMenuElement.current.getBoundingClientRect();
+
+			var offsetTop = elemRect.top - bodyRect.top;
+			var offsetLeft = elemRect.left - bodyRect.left;
+			var offsetBottom = false;
+
+			if (offsetLeft + 200 > bodyRect.right) {
+				offsetLeft = offsetLeft - 150;
+			}
+
+			if (position === 'top') {
+				offsetTop = false;
+				offsetBottom = window.innerHeight - elemRect.top;
+			}
+			else if (position === 'bottom') {
+				offsetTop = elemRect.bottom;
+				offsetBottom = false;
+			}
+			else {
+				offsetTop = offsetTop + elemRect.bottom + 5;
+			}
+
+			setBottom(offsetBottom);
+
+			setTop(offsetTop);
+			setLeft(offsetLeft);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('click',onWindowClick, false);
+		// Check if is string, then we can use that instead of a target (to add a listener to window and listen for classname instead etc.)
+		if (element && element.current && showTrigger === 'click') {
+			element.current.addEventListener('click',showContextMenu, false);
+		}
+		// window.addEventListener('contextmenu',this.onContextMenu, false);
+		window.addEventListener('blur',onWindowBlur, false);
+
+		return () => {
+			if (element && element.current && showTrigger === 'click') {
+				element.current.removeEventListener('click',showContextMenu, false);
+			}
+			window.removeEventListener('click',onWindowClick, false);
+			// window.removeEventListener('contextmenu',this.onContextMenu, false);
+			window.removeEventListener('blur',onWindowBlur, false);
+		};
+	});
+
+	return (
+		<div className={styles.contextMenu} ref={contextMenuElement} style={{...style, display: show ? 'block' : 'none', top: top, left: left, bottom: bottom }}>
+			{children}
+		</div>
+	);
 }
-/**
-*
-*/
-export class ContextMenuItem extends Component {
-	/**
-	*
-	*/
-	constructor(props) {
-		super(props);
-	}
-	/**
-	*
-	*/
-	render() {
-		const Icon = this.props.icon;
-		
-		var innerMenuItem = (
-			<div className={styles.contextMenuItem} style={this.props.style}>
-				{this.props.children}
-			</div>
-		);
-		
+const ContextMenuItem = ({ style = {}, icon = null, children, onClick }) => {
+	const Icon = icon;
+	const isLink = children && children.type && children.type.displayName === 'Link' ? true : false;
+	
+	var innerMenuItem = (
+		<div className={styles.contextMenuItem + ' ' + (isLink ? styles.isLink : '')} style={style} onClick={onClick}>
+			{children}
+		</div>
+	);
 
-		
-		return innerMenuItem;
-	}
+	return innerMenuItem;
+}
+export {
+	ContextMenu,
+	ContextMenuItem
 }

@@ -2,6 +2,7 @@
   "short_name": "Podfriend",
   "name": "Podfriend Podcast Player",
   "description": "The worlds friendliest Podfriend Player",
+  "categories": ["entertainment", "news", "podcast", "social"],
   "icons": [
     {
       "src": "/images/icons/maskable_512x512.png",
@@ -25,6 +26,23 @@
       "type": "image/png",
       "sizes": "192x192"
     }
+  ],
+  "screenshots" : [
+	{
+		"src": "https://www.podfriend.com/img/choose-podfriend-screenshort-2.png",
+		"sizes": "680x1166",
+		"type": "image/png"
+	},
+	{
+		"src": "https://www.podfriend.com/img/choose-podfriend-screenshort-1.png",
+		"sizes": "680x1166",
+		"type": "image/png"
+	},
+	{
+	  "src": "https://www.podfriend.com/img/app-preview.png",
+	  "sizes": "970x588",
+	  "type": "image/png"
+	}
   ],
   "start_url": "/index.html?source=pwa",
   "background_color": "#00a4ff",

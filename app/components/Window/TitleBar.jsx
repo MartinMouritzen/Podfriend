@@ -4,17 +4,16 @@ import { connect } from "react-redux";
 
 import { FaWindowMinimize, FaWindowRestore, FaRegWindowMaximize, FaWindowClose, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import SearchField from './../SearchField.jsx';
 import UserTitleBar from './../user/userTitleBar.jsx';
 
 import logo from './../../images/logo/podfriend_logo_128x128.png';
 
+import SVG from 'react-inlinesvg';
+
 import styles from './TitleBar.css';
-
-const Entities = require('html-entities').XmlEntities;
-
 
 function mapStateToProps(state) {
 	return {
@@ -36,8 +35,6 @@ class TitleBar extends Component {
 		};
 		
 		this.canHistoryGo = this.canHistoryGo.bind(this);
-		
-		this.entities = new Entities();
 		
 		this.updateTitle();		
 	}
@@ -64,8 +61,18 @@ class TitleBar extends Component {
 		if ((this.props.activeEpisode !== prevProps.activeEpisode) || this.props.isPlaying != prevProps.isPlaying) {
 			this.updateTitle();
 		}
+		if (this.props.lastScrollDirection != prevProps.lastScrollDirection) {
+			if (this.props.lastScrollDirection === 'up') {
+				console.log('up1');
+			}
+			else {
+
+			}
+		}
 	}
 	canHistoryGo(number) {
+		// console.log(this.props.history);
+		// console.log(this.props.history.action);
 		if (this.props.history.canGo) {
 			return this.props.history.canGo(number);
 		}
@@ -90,16 +97,18 @@ class TitleBar extends Component {
 					</div>
 				}
 				{ this.state.platform != 'darwin' &&
-					<React.Fragment>
-						<img src={logo} className={styles.logo} />
-						<div className={styles.title}>
+					<>
+						<Link to={'/'} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+							<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
+						</Link>
+						<Link to={'/'} className={styles.title}>
 							PodFriend
-						</div>
-					</React.Fragment>
+						</Link>
+					</>
 				}
 				<div className={styles.navigationControls}>
-					<div className={this.canHistoryGo(-1) ? styles.navigationButton : styles.navigationButtonDisabled} onClick={() => { Events.emit('OnNavigateBackward',false); }}><FaArrowLeft /></div>
-					<div className={this.canHistoryGo(1) ? styles.navigationButton : styles.navigationButtonDisabled} onClick={() => { Events.emit('OnNavigateForward',false); }}><FaArrowRight /></div>
+					<div className={(styles.navigationButtonBack + ' ') + (this.canHistoryGo(-1) ? styles.navigationButton : styles.navigationButtonDisabled)} onClick={() => { Events.emit('OnNavigateBackward',false); }}><FaArrowLeft /></div>
+					<div className={(styles.navigationButtonForward + ' ') + (this.canHistoryGo(1) ? styles.navigationButton : styles.navigationButtonDisabled)} onClick={() => { Events.emit('OnNavigateForward',false); }}><FaArrowRight /></div>
 				</div>
 				<div className={styles.search}>
 					<SearchField onSearch={this.props.onSearch} />

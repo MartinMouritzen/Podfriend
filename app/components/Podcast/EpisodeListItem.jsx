@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { format, distanceInWordsToNow } from 'date-fns';
-import sanitizeHtml from 'sanitize-html';
+import DOMPurify from 'dompurify';
 
 import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
 
@@ -18,13 +18,13 @@ class EpisodeListItem extends React.Component {
 	constructor(props) {
 		super(props);
 
-		var episodeTitle = sanitizeHtml(props.title,{
-			allowedTags: []
+		var episodeTitle = DOMPurify.sanitize(props.title,{
+			ALLOWED_TAGS: []
 		});
 		
 		// Decode entities, so that text with double encodings (eg. if it contained HTML when served to itunes, and they already encoded it) won't have encoded tags in it, when we parse it
-		var description = sanitizeHtml(props.description,{
-			allowedTags: ['i','em']
+		var description = DOMPurify.sanitize(props.description,{
+			ALLOWED_TAGS: ['i','em']
 		});
 		
 		this.state = {
@@ -33,6 +33,7 @@ class EpisodeListItem extends React.Component {
 		};
 	}
 	shouldComponentUpdate(nextProps) {
+		if (this.props.isActiveEpisode) { return true; }
 		if (nextProps.title != this.props.title) { return true; }
 		if (nextProps.description != this.props.description) { return true; }
 		if (nextProps.url != this.props.url) { return true; }
@@ -70,7 +71,7 @@ class EpisodeListItem extends React.Component {
 		}
 		
 		return (
-			<div id={'episode-' + this.props.id} key={this.props.episode.url} className={episodeClass} onDoubleClick={() => { this.props.selectEpisodeAndPlay(this.props.episode); }}>
+			<div id={'episode-' + this.props.id} key={this.props.episode.url} className={episodeClass} onClick={() => { this.props.selectEpisodeAndPlay(this.props.episode); }}>
 				<div className={styles.play}>
 					<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.props.selectEpisodeAndPlay(this.props.episode); event.stopPropagation(); }}>
 						<FaPlay size="13px" />

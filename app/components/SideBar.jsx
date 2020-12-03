@@ -7,7 +7,7 @@ import { Link, withRouter } from 'react-router-alias';
 
 // import * as FontAwesomeIcons from "react-icons/fa";
 
-import { FaPlus, FaHome, FaFolder,FaRegClock } from "react-icons/fa";
+import { FaPlus, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
 
 // import * as GamerIcons from "react-icons/gi";
 
@@ -85,12 +85,26 @@ class SideBar extends Component {
 					<div className={styles.categories}>
 					<div className={styles.categoryList}>
 
-						<div className={styles.mainNavigationButton}>
+					<div className={styles.mainNavigationButton}>
 							<Link to="/">
 								<FaHome size="20" /> Home
 							</Link>
 						</div>
+						<div className={styles.mainNavigationButton}>
+							<Link to="/podfrndr/">
+								<FaHeart size="20" /> Podfrndr
+							</Link>
+						</div>
+
 						{ /*
+						<hr />
+
+						<div className={styles.mainNavigationButton}>
+							<Link to="/favorites/">
+								<FaPodcast size="20" /> Favorites
+							</Link>
+						</div>
+						
 
 						<CategoryList
 							

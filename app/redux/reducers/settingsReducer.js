@@ -1,26 +1,17 @@
-// import {
-	
-// } from "../constants/action-types";
+import {
+	SET_AUDIO_PLAYBACK_SPEED
+} from "../constants/setting-types";
 
 const initialState = {
-	minimizeToTray: false
+	audioPlaybackSpeed: 1
 };
 
 const settingsReducer = (state = initialState, action) => {
-	/*
-	if (action.type === AUDIO_PLAY) {
-		console.log('audio playing');
+	if (action.type === SET_AUDIO_PLAYBACK_SPEED) {
 		return Object.assign({}, state, {
-			isPlaying: true
+			audioPlaybackSpeed: action.payload
 		});
 	}
-	else if (action.type === AUDIO_PAUSE) {
-		console.log('audio paused');
-		return Object.assign({}, state, {
-			isPlaying: false
-		});
-	}
-	*/
 	return state;
 };
 export default settingsReducer;

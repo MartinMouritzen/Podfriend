@@ -6,6 +6,7 @@ import podcastReducer from './podcastReducer';
 import audioReducer from './audioReducer';
 import userReducer from './userReducer';
 import settingsReducer from './settingsReducer';
+import uiReducer from './uiReducer';
 
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
 	audio: audioReducer,
 	user: userReducer,
 	settings: settingsReducer,
+	ui: uiReducer
 	// routing: routerReducer
 });
 

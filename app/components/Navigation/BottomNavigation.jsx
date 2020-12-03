@@ -1,0 +1,78 @@
+import React, { useEffect, useState } from 'react';
+
+import styles from 'podfriend-approot/components/Navigation/BottomNavigation.css';
+
+import { Link, matchPath, useLocation } from 'react-router-dom';
+
+import {FaHome, FaPodcast, FaHeart, FaSearch } from "react-icons/fa";
+/**
+*
+*/
+const BottomNavigation = () => {
+	let location = useLocation();
+	const [iconSelected,setIconSelected] = useState(false);
+
+
+	useEffect(() => {
+		setIconSelected(false);
+		const isHome = matchPath(location.pathname, {
+			path: "/",
+			exact: true,
+			strict: false
+		});
+		if (isHome && isHome.isExact) {
+			setIconSelected('home');
+		}
+		const isPodfrndr = matchPath(location.pathname, {
+			path: "/podfrndr",
+			exact: true,
+			strict: false
+		});
+		if (isPodfrndr && isPodfrndr.isExact) {
+			setIconSelected('podfrndr');
+		}
+
+		const isFavorites = matchPath(location.pathname, {
+			path: "/favorites",
+			exact: true,
+			strict: false
+		});
+		if (isFavorites && isFavorites.isExact) {
+			setIconSelected('favorites');
+		}
+
+		const isSearch = matchPath(location.pathname, {
+			path: "/search",
+			exact: true,
+			strict: false
+		});
+		if (isSearch && isSearch.isExact) {
+			setIconSelected('search');
+		}
+	},[location.pathname]);
+
+	return (
+		<div className={styles.bottomNavigation}>
+			<Link to='/' className={styles.menuItem + (iconSelected === 'home' ? ' ' + styles.menuItemSelected : '')}>
+				<FaHome size="25" /><br />
+				Home
+			</Link>
+			<Link to='/podfrndr/' className={styles.menuItem + (iconSelected === 'podfrndr' ? ' ' + styles.menuItemSelected : '')}>
+				<FaHeart size="25" /><br />
+				Podfrndr
+			</Link>
+			<Link to='/favorites/' className={styles.menuItem + (iconSelected === 'favorites' ? ' ' + styles.menuItemSelected : '')}>
+				<FaPodcast size="25" /><br />
+				Subscriptions
+			</Link>
+			{/*
+			<Link to='/search/' className={styles.menuItem + (iconSelected === 'search' ? ' ' + styles.menuItemSelected : '')}>
+				<FaSearch size="25" /><br />
+				Search
+			</Link>
+			*/}
+		</div>
+	);
+}
+
+export default BottomNavigation;

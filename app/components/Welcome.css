@@ -1,12 +1,6 @@
 .homePage {
-	padding: 20px;
-	background-color: #f6f8fa;
-}
-.title {
-	font-size: 36px;
-	font-weight: bold;
-	color: #1f335e;
-	margin-bottom: 5px;
+	background-color: #FFFFFF;
+	padding-bottom: 90px;
 }
 .logo {
 	float: right;
@@ -34,7 +28,16 @@
 .podcastLine {
 	clear: both;
 }
-@media only screen and (max-width: 480px) {
+.playButton {
+	display: inline-block;
+	min-width: 200px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 15px;
+	overflow: hidden;
+	transition: all 0.4s;
+}
+@media (max-width: 480px) {
 	.homePage {
 		padding: 0px;
 	}
@@ -42,9 +45,6 @@
 		width: 25vw;
 	}
 	.title {
-		margin: 20px;
-	}
-	.podcastLine {
-		margin: 10px;
+		padding: 20px;
 	}
 }

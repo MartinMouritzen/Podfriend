@@ -1,0 +1,124 @@
+:global {
+	.modal h1 {
+		font-size: 26px;
+		margin: 0px;
+		padding: 20px;
+		background-color: #0176e5;
+		color: #FFFFFF;
+	}
+	.modalPage {
+		padding: 20px;
+	}
+}
+.pageModalOuter, .modalOuter {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.6);
+	top: 0px;
+	left: 0;
+	height: 100%;
+	width: 100%;
+
+	transition: all 0.3s;
+	
+	animation: fadeIn ease 0.5s;
+
+	z-index: 9999;
+}
+.modalOuterHiding, .pageModalOuterHiding {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.6);
+	top: 0px;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	
+	opacity: 0;
+	
+	animation: fadeOut ease 0.5s;
+}
+.modalInner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.modal {
+	display: inline-block;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background-clip: padding-box;
+	background-color: #FFFFFF;
+	color: #000000;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	overflow: hidden;
+
+	max-width: 90vw;
+
+	margin-left: auto;
+	margin-right: auto;
+	
+	
+	transition: all .2s;
+}
+@keyframes fadeIn {
+	0% {
+		opacity:0;
+	}
+	100% {
+		opacity:1;
+	}
+  }
+  @keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+@media only screen and (min-width: 750px) {
+	.modal {
+		max-width: 840px;
+	}
+}
+@media only screen and (max-width: 600px) {
+	.modal {
+		border-radius: 10px 10px 0px 0px;
+		width: 96vw;
+		max-width: 96vw;
+		max-height: 90%;
+
+		overflow: auto;
+
+		position: absolute;
+		bottom: 0px;
+
+		animation: fadeUp ease 0.5s;
+	}
+	.modalOuter {
+		display: block
+	}
+	@keyframes fadeUp {
+		0% {
+			transform: translate3d(0px,200px, 0);
+		}
+		100% {
+			transform: translate3d(0px, 0, 0);
+		}
+	  }
+	  @keyframes fadeDown {
+		0% {
+			transform: translate3d(0px,0px, 0);
+			opacity: 1;
+		}
+		100% {
+			transform: translate3d(0px, 200px, 0);
+			opacity: 0;
+		}
+	  }
+}

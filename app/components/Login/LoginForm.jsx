@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { authenticateUser, authTokenReceived } from "~/app/redux/actions/userActions";
 
-import styles from './LoginForm.css';
+import styles from './LoginForm.scss';
 
 import SignInForm from './SignInForm.jsx';
 import CreateAccountForm from './CreateAccountForm.jsx';
 import PasswordForm from './PasswordForm.jsx';
 
 import LoadingSpinner from './../Loading/LoadingSpinner.jsx';
+
+import SVG from 'react-inlinesvg';
 
 import FacebookLogo from './../../images/social/facebook-logo.png';
 import GoogleLogo from './../../images/social/google-logo.png';
@@ -33,6 +35,7 @@ class LoginForm extends Component {
 
 		
 		this.state = {
+			error: false,
 			email: '',
 			emailEntered: false,
 			checkingEmail: false,
@@ -78,12 +81,14 @@ class LoginForm extends Component {
 	onValidEmailEntered(email) {
 		this.setState({
 			email: email,
+			error: false,
 			checkingEmail: true,
 			emailEntered: true,
 			emailExists: false
 		},
 		() => {
-			var url = "https://api.podfriend.com/user/?email=" + this.state.email;
+			var url = "https://api.podfriend.com/user/?email=" + encodeURIComponent(this.state.email);
+			console.log(url);
 			
 			var startTime = new Date();
 
@@ -116,6 +121,14 @@ class LoginForm extends Component {
 						this.setState({ checkingEmail: false, emailEntered: true, emailExists: false });
 					}
 				},remainingTime);
+			})
+			.catch((error) => {
+				console.log('Error checking user');
+				console.log(error);
+				this.setState({
+					error: true,
+					ErrorMessage: 'Error logging in.'
+				 });
 			});
 		});
 	}
@@ -166,6 +179,7 @@ class LoginForm extends Component {
 		})
 		.catch((error) => {
 			alert('Error happened while creating user.');
+			console.log('Error happened while creating user.');
 			console.log(error);
 		});
 	}
@@ -182,10 +196,13 @@ class LoginForm extends Component {
 		}
 		
 		return (
-			<div className={styles.formOuter} style={{ height: formHeight }}>
+			<div className={styles.formOuter} style={{ minHeight: formHeight }}>
 				<div className={(this.state.checkingEmail || this.state.creatingAccount ? [styles.loginExplanationLoading,styles.loginExplanation].join(' ') : styles.loginExplanation)}>
 					{ this.state.emailExists &&
 						<React.Fragment>
+							<div>
+								<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
+							</div>
 							<h2>Hi friend</h2>
 							<p>
 								I'm super happy to see you again!
@@ -197,9 +214,12 @@ class LoginForm extends Component {
 					}
 					{ !this.state.creatingAccount && !this.state.emailEntered && !this.state.emailExists &&
 						<React.Fragment>
-							<h2>Get better podcast recommendations and listen across all your devices</h2>
+							<h2>Better recommendations and listen across devices</h2>
 							<p>
 								Creating your account will literally just take a few minutes, and will be so much more enjoyable.
+							</p>
+							<p>
+								If you already have an account, simply enter your email to the right, or log in with Facebook or Google.
 							</p>
 						</React.Fragment>
 					}
@@ -215,17 +235,36 @@ class LoginForm extends Component {
 					{ this.state.creatingAccount && this.state.createdAccount &&
 						<div className={styles.loadingArea}>
 							<div className={styles.loadingText}>
-								Fuck yeah
+								<div>
+									<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
+								</div>
+								<h2>Abso-fantasti-lute-full!</h2>
+								<p>Your account has been created, and you know what? I look so much forward to listening to lots of podcasts with you!</p>
 							</div>
 						</div>
 					}
 					{ !this.state.creatingAccount && this.state.checkingEmail &&
 						<div className={styles.loadingArea}>
-							<LoadingSpinner style={{ width: '120px', margin: '0 auto', marginBottom: '50px' }} />
-						
-							<div className={styles.loadingText}>
-								Let's see if you are already registered...
-							</div>
+							{ this.state.error === false &&
+								<>
+									<LoadingSpinner style={{ width: '120px', margin: '0 auto', marginBottom: '50px' }} />
+								
+									<div className={styles.loadingText}>
+										Let's see if you are already registered...
+									</div>
+								</>
+							}
+							{ this.state.error !== false &&
+								<>
+									<SVG src={require('podfriend-approot/images/design/icons/error.svg')} style={{ fill: '#FFFFFF', width: 100, height: 100 }} />
+
+									<div className={styles.loadingText}>
+										Oh no! There was a problem with logging in.<br /><br />
+										But don't despair. We are probably working hard on solving this.<br /><br />
+										In the unlikely case that the error continues, feel free to email info@podfriend.com
+									</div>
+								</>
+							}
 						</div>
 					}
 					{ !this.state.creatingAccount && this.state.emailEntered && !this.state.checkingEmail &&

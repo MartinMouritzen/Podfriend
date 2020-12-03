@@ -1,0 +1,39 @@
+.chapterList {
+	padding-top: 20px;
+
+	.chapter {
+		display: flex;
+	}
+	.activeChapter {
+		background-color: #EEEEEE;
+	}
+	.chapterImage {
+		width: 40px;
+		height: 40px;
+		min-width: 40px;
+		margin-right: 10px;
+	}
+	.chapterImage img {
+		width: 40px;
+		height: 40px;
+		border: 1px solid #EEEEEE;
+		border-radius: 5px;
+	}
+	.chapterTime {
+		margin-right: 10px;
+		width: 60px;
+		min-width: 60px;
+		text-align: right;
+		color: #999999;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+
+		
+	}
+	.chapterTitle {
+		color: #000000;
+		display: flex;
+		align-items: center;
+	}
+}

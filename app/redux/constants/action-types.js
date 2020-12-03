@@ -14,11 +14,13 @@ export const LOGIN_HIDE = 'LOGIN_HIDE';
 export const FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_NOT_LOGGED_IN = 'USER_NOT_LOGGED_IN';
+export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
 // Episode action types
 export const PLAY_EPISODE = 'PLAY_EPISODE';
 export const EPISODE_FINISHED = 'EPISODE_FINISHED';
 export const EPISODE_TIME_UPDATED = 'EPISODE_TIME_UPDATED';
+export const EPISODE_DURATION_UPDATE = 'EPISODE_DURATION_UPDATE';
 
 // Podcast action types
 export const PODCAST_LOADED = 'PODCAST_LOADED';

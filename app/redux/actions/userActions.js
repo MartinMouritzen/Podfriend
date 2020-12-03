@@ -4,9 +4,17 @@ import {
 	LOGIN_HIDE,
 	INITIATE_LOGIN,
 	USER_LOGGED_IN,
-	USER_NOT_LOGGED_IN
+	USER_NOT_LOGGED_IN,
+	USER_LOGGED_OUT
 } from "../constants/action-types";
 
+
+export function userLogout() {
+	return {
+		type: USER_LOGGED_OUT,
+		payload: false
+	};
+}
 export function initiateLogin() {
 	return {
 		type: LOGIN_SHOW,

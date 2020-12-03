@@ -11,12 +11,12 @@ class SubscribeButtonUI extends React.Component {
 	render() {
 		if (this.props.isSubscribed) {
 			return (
-				<span className={styles.subscribeButton} onClick={this.props.unsubscribeToPodcast}><FaHeartBroken /> Remove from Favorites</span>
+				<div className={styles.subscribeButton} onClick={this.props.unsubscribeToPodcast}><FaHeartBroken /> Remove from Favorites</div>
 			);
 		}
 		else {
 			return (
-				<span className={styles.subscribeButton} onClick={this.props.subscribeToPodcast}><FaHeart /> Add to Favorites</span>
+				<div className={styles.subscribeButton} onClick={this.props.subscribeToPodcast}><FaHeart /> Add to Favorites</div>
 			);
 		}
 	}

@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-alias';
 
 // import PodcastUtil from '~/app/library/PodcastUtil.js';
 
-import styles from './FavoriteListUI.css';
+import styles from './FavoriteListUI.scss';
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
@@ -18,11 +18,11 @@ class FavoriteListUI extends React.Component {
 	}
 	render() {
 		return (
-			<>
+			<div className={this.props.showResponsiveList ? styles.showResponsive + ' ' + styles.favoriteList : styles.favoriteList}>
 				{ this.props.subscribedPodcasts && this.props.subscribedPodcasts.length === 0 &&
 					<div className={styles.noPodcastsMessage}>
-						You have not added any podcasts to this category yet.<br /><br />
-						Favorite a podcast, and put it in here!
+						This is where your favorite podcasts will appear.<br /><br />
+						Favorite a podcast, to put it in here!
 					</div>
 				}
 				{ this.props.subscribedPodcasts && this.props.subscribedPodcasts.map((podcast,index) => {
@@ -49,11 +49,12 @@ class FavoriteListUI extends React.Component {
 									}
 								}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name} >
 								<PodcastImage
+									podcastPath={podcast.path}
 									imageErrorText={podcast.name}
 									src={podcast.artworkUrl100}
 									className={styles.cover}
-									width={60}
-									height={60}
+									width={120}
+									height={120}
 								/>
 								<div className={styles.podcastDetails}>
 									<span className={styles.podcastName}>{podcast.name}</span>
@@ -64,7 +65,7 @@ class FavoriteListUI extends React.Component {
 						)
 					})
 				}
-			</>
+			</div>
 		);
 	}
 }

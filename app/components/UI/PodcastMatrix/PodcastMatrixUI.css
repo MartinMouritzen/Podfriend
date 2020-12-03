@@ -27,7 +27,7 @@
 .searchResult:hover .author {
 	color: rgba(255,255,255,0.9);
 }
-.thumbNail {
+.cover {
 	width: 160px;
 	height: 160px;
 	margin-left: auto;
@@ -88,4 +88,21 @@
 }
 .thumbNail:hover .subscribe, .thumbNail:hover .unSubscribe {
 	display: block;
+}
+@media only screen and (max-width: 900px) {
+	.podcastMatrix {
+		display: flex;
+		height: 280px;
+		max-height: 280px;
+		overflow-x: auto;
+		overflow-y: hidden;
+	}
+}
+@media (any-hover: hover) {
+	.podcastMatrix {
+		display: block;
+		height: auto;
+		max-height: none;
+		overflow-y: visible;
+	}
 }

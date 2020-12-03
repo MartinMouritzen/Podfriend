@@ -1,16 +1,14 @@
 .subscribeButton {
-	background-color: #0176e5;
+	background-color: #28bd72;
 	border: 0px;
 	padding: 15px;
 	color: #FFFFFF;
 	font-size: 16px;
-	display: inline-block;
 	transition: all .2s;
-	margin-bottom: 10px;
-	margin-right: 10px;
+	border-radius: 5px;
 }
 .subscribeButton:hover {
-	background-color: #1180e7;
+	background-color: #11de77;
 	transform: scale(1.1);
 }
 .subscribeButton svg {

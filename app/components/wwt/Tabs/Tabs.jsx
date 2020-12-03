@@ -2,22 +2,10 @@ import React from 'react';
 
 import { Switch, Route, Link, withRouter } from 'react-router-alias';
 
-import { TouchableHighlight } from 'react-native';
-import { View, Text } from 'podfriend-approot/components/Layout/';
+import { View, Text } from 'react-native-web';
 
 import styles from './style.Tabs.js';
-/*
-					<Link to={'/podcast/' + this.props.selectedPodcast.path}>Episodes</Link>
-					<Link to={'/podcast/' + this.props.selectedPodcast.path + '/reviews'}>Reviews</Link>
-					<Switch>
-						<Route exact path={'/podcast/' + this.props.selectedPodcast.path}>
-							Test!
-						</Route>
-						<Route path={'/podcast/' + this.props.selectedPodcast.path + '/reviews'}>
-							test2
-						</Route>
-					</Switch>
-*/
+
 class TabsInternal extends React.Component {
 	/**
 	*
@@ -35,14 +23,19 @@ class TabsInternal extends React.Component {
 			tabWidth: 100
 		};
 		this.changeActiveTab = this.changeActiveTab.bind(this);
+		this.refreshActiveBorder = this.refreshActiveBorder.bind(this);
 	}
 	componentDidMount() {
 		this.changeActiveTab();
+		window.addEventListener('resize',this.refreshActiveBorder)
+	}
+	componentWillUnmount() {
+		window.removeEventListener('resize',this.refreshActiveBorder)
 	}
 	getSelectedIndex() {
 		var selectedIndex = 0;
 		for(var i=0;i<this.props.children.length;i++) {
-			if (this.props.children[i].props.link === this.props.location.pathname) {
+			if (this.props.children[i].props && this.props.children[i].props.link === this.props.location.pathname) {
 				selectedIndex = i;
 				break;
 			}
@@ -53,7 +46,7 @@ class TabsInternal extends React.Component {
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (prevProps.location.pathname !== this.props.location.pathname) {
+		if (prevProps.location.pathname !== this.props.location.pathname || prevProps.children !== this.props.children) {
 			var selectedIndex = this.getSelectedIndex();
 			
 			this.setState({
@@ -64,6 +57,9 @@ class TabsInternal extends React.Component {
 		}
 	}
 	changeActiveTab() {
+		this.refreshActiveBorder();
+	}
+	refreshActiveBorder() {
 		var activeTabRef = this.tabRefs[this.state.selectedIndex];
 		this.setState({
 			tabOffsetLeft: activeTabRef.offsetLeft,
@@ -73,41 +69,35 @@ class TabsInternal extends React.Component {
 	render() {
 		return (
 			<View>
-				<View style={styles.Tabs}>
-					{ this.props.children.map((TabChild,index) => {
-						return (
-							<Link to={TabChild.props.link} key={'TabHeading' + TabChild.props.title} ref={(ref) => { this.tabRefs[index] = ref}} style={styles.TabLink}>
-								<View style={(index == this.state.selectedIndex ? styles.selectedTab : styles.Tab)}>
-									<Text style={styles.TabText}>{TabChild.props.title}</Text>
-									{TabChild.props.badge &&
-										<View style={styles.badge}>
-											<Text style={styles.badgeText}>{TabChild.props.badge}</Text>
-										</View>
+				<View style={styles.TabsOuter}>
+					<View style={styles.Tabs}>
+						{ this.props.children.map((TabChild,index) => {
+							if (!TabChild || !TabChild.props || !TabChild.props.link) {
+								return null;
+							}
+							return (
+								<Link to={{
+									pathname: TabChild.props.link,
+									state: {
+										preventScroll: true
 									}
-								</View>
-							</Link>
-						);
-/*
-						return (
-							<Link to={TabChild.props.link} key={'TabHeading' + TabChild.props.title}>
-							<TouchableHighlight underlayColor="#eeeeee" onPress={() => { this.changeActiveTab(index); }} style={styles.TabOuter} ref={(ref) => { this.tabRefs[index] = ref}}>
-								<View style={(index == this.state.selectedIndex ? styles.selectedTab : styles.Tab)}>
-									<Text>{TabChild.props.title}</Text>
-									{TabChild.props.badge &&
-										<View style={styles.badge}>
-											<Text style={styles.badgeText}>{TabChild.props.badge}</Text>
-										</View>
-									}
-								</View>
-							</TouchableHighlight>
-							</Link>
-						);
-*/
-					}) }
-				</View>
-				<View style={styles.tabBorder}>
-					<View style={{ transition: 'all 0.2s', backgroundColor: '#0176e5', width: this.state.tabWidth, height: '3px', position: 'relative', left: this.state.tabOffsetLeft }}>
-						
+								}} key={'TabHeading' + TabChild.props.title} ref={(ref) => { this.tabRefs[index] = ref}} style={styles.TabLink}>
+									<View style={(index == this.state.selectedIndex ? styles.selectedTab : styles.Tab)}>
+										<Text style={styles.TabText}>{TabChild.props.title}</Text>
+										{TabChild.props.badge &&
+											<View style={styles.badge}>
+												<Text style={styles.badgeText}>{TabChild.props.badge}</Text>
+											</View>
+										}
+									</View>
+								</Link>
+							);
+						}) }
+					</View>
+					<View style={styles.tabBorder}>
+						<View style={{ transition: 'all 0.2s', backgroundColor: '#0176e5', width: this.state.tabWidth, height: '3px', position: 'relative', left: this.state.tabOffsetLeft }}>
+							
+						</View>
 					</View>
 				</View>
 				<View style={styles.tabContent}>
@@ -123,6 +113,9 @@ class TabsInternal extends React.Component {
 		return (
 			<Switch>
 				{ this.props.children.map((child,index) => {
+					if (!child || !child.props || !child.props.link) {
+						return null;
+					}
 					return (
 						<Route exact key={'TabChild' + index} path={child.props.link}>
 							{ child }
@@ -131,20 +124,6 @@ class TabsInternal extends React.Component {
 				}) }
 			</Switch>
 		);
-
-		/*
-		let result = null;
-		for(var i=0;i<this.props.children.length;i++) {
-			if (i === this.state.selectedIndex) {
-				result = (
-					<>
-						{ this.props.children[i] }
-					</>
-				);
-			}
-		}
-		return result;
-		*/
 	}
 }
 class TabInternal extends React.Component {

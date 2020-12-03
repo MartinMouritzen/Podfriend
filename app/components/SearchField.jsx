@@ -13,7 +13,6 @@ function SearchField(props) {
 	const onSearch = (event) => {
 		Events.emit('OnSearch',searchText);
 		event.preventDefault();
-		console.log(searchElement);
 		searchElement.current.blur();
 	};
 
@@ -22,9 +21,9 @@ function SearchField(props) {
 	};
 
 	return (
-		<form className={styles.searchFieldOuter} onSubmit={onSearch}>
+		<form action="." className={styles.searchFieldOuter} onSubmit={onSearch}>
 		<div className={styles.searchIcon}><FaSearch size={18} /></div>
-			<input placeholder="Search for a podcast" ref={searchElement} type="search" value={searchText} className={styles.searchField} onChange={onChangeHandler} />
+			<input placeholder="Search for a podcast" ref={searchElement} type="search" name="search" value={searchText} className={styles.searchField} onChange={onChangeHandler} />
 		</form>
 	);
 }

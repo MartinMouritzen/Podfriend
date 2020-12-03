@@ -1,11 +1,129 @@
-.PodcastExtras {
+.podcastExtras {
 	position: absolute;
-	top: 270px;
+	top: 250px;
 	right: 50px;
 	width: 300px;
-	padding: 20px;
-	min-height: 300px;
-	background-color: rgba(1,118,229,0.4);
+
+	background-color: rgba(1,118,229,0.9);
 	border-radius: 15px;
 	box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.35);
+
+	z-Index: 102;
+}
+.podcastExtras .headline {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+.podcastExtras .subscribe, .podcastExtras .share {
+	width: 100%;
+	padding: 20px;
+}
+.podcastExtras .subscribe >:not(:first-child) {
+	margin-top: 15px;
+}
+.podcastExtras .share {
+	display: none;
+}
+/*********************
+* Archive & subscribe & donate
+*********************/
+.donateButton {
+	background-color: #ffc353;
+	color: #000000;
+	width: 100%;
+	margin-top: 15px;
+	text-align: left;
+}
+.donateButton:hover {
+	background-color: #ffe280;
+	transform: scale(1.1);
+}
+.donateButton svg {
+	fill: #000000;
+}
+.archiveButton {
+	position: relative;
+	background-color: #4c749a;
+	border: 0px;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 16px;
+	transition: all .2s;
+	border-radius: 5px;
+}
+.archiveButton:hover {
+	background-color: #3474b1;
+	transform: scale(1.1);
+}
+.archiveButton svg {
+	fill: #FFFFFF;
+	position: relative;
+	top: 2px;
+	margin-right: 10px;
+	transition: all 0.5s;
+}
+.archiveButton:hover svg {
+	fill: #bc9671;
+}
+.toolTipText {
+	width: 400px;
+}
+.toolTipText p {
+	font-size: 14px;
+}
+@media only screen and (max-width: 1750px) {
+	.podcastExtras .subscribe {
+		display: flex;
+	}
+	.podcastExtras .subscribe * {
+		margin-bottom: 0px !important;
+	}
+	.podcastExtras .subscribe >:not(:first-child) {
+		margin-left: 10px;
+	}
+	.podcastExtras .subscribe > div, .podcastExtras .subscribe > button {
+		flex-grow: 1;
+		width: auto;
+		text-align: center;
+		margin-top: 0px !important;
+	}
+	.podcastExtras {
+		position: static;
+		background-color: #FFFFFF;
+		width: auto;
+		border-radius: 0;
+		box-shadow: none;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+	.podcastExtras .subscribe, .podcastExtras .share {
+		padding: 0px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+}
+@media only screen and (max-width: 1200px) {
+	.podcastExtras .subscribe {
+		flex-direction: column;
+		padding-top: 0px;
+	}
+	.podcastExtras .subscribe >:not(:first-child) {
+		margin: 0px;
+		margin-top: 10px !important;
+	}
+}
+@media only screen and (max-width: 540px) {
+	.podcastExtras {
+		padding-bottom: 20px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	.podcastExtras .subscribe {
+		padding: 0px;
+	}
+}
+@media only screen and (min-width: 1920px) {
+	.podcastExtras {
+		top: 30px;
+	}
 }

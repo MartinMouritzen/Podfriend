@@ -1,0 +1,246 @@
+.swipeExplorer {
+	min-height: 100%;
+	max-height: 100%;
+	height: 100%;
+	/* background: linear-gradient(#e66465, #9198e5); */
+	background-color: #FFFFFF;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+.filterContainer {
+	position: absolute;
+	top: 0px;
+	background-color: rgba(255,255,255,0.9);
+	width: 100%;
+	height: 40px;
+	overflow: hidden;
+	display: block;
+	transition: all 0.5s;
+}
+.filterContainer .filterLabel {
+	height: 40px;
+	line-height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.filterContainer .filterLabel svg {
+	margin-right: 10px;
+}
+.filterContainer .filters {
+	margin-top: 1px;
+}
+.filterContainer .filters .filterContainer {
+	margin-top: 1px;
+}
+.filterCategory {
+	display: flex;
+	flex-direction: row;
+
+}
+.filterCategoryName {
+	color: #FFFFFF;
+}
+.filterSubCategory {
+	color: #FFFFFF;
+}
+.activeFilterContainer {
+	height: 390px;
+	background-color: rgba(1,118,229,1);
+}
+.activeFilterContainer .filterLabel {
+	color: #FFFFFF;
+}
+.activeFilterContainer .filterLabel svg {
+	fill: #FFFFFF;
+}
+
+.swipeExplorer .cardContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+  }
+.swipe {
+	position: absolute;
+}
+.cardContainer {
+	width: 95vw;
+	height: 95vw;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+.card, .rootCard {
+	width: 95vw;
+	overflow: hidden;
+	min-height: 65vh;
+	max-height: 65vh;
+
+	background-color: #FFFFFF;
+	border-radius: 5px;
+
+	position: relative;
+	background-color: #fff;
+	border-radius: 20px;
+
+	background-size: cover;
+	background-position: center;
+
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: column;
+}
+.rootCard {
+	box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.card .cardInfo {
+	position: relative;
+}
+.card .active {
+	
+}
+.cardInfoInner {
+	background-color: rgba(255,255,255,0.97);
+	transition: all 0.5s;
+	height: 100px;
+	overflow: hidden;
+	padding: 20px;
+	padding-top: 40px;
+}
+.card .active .cardInfoInner {
+	height: 270px;
+}
+/*
+.card .cardInfo:hover {
+	height: 200px;
+}
+*/
+.swipe:nth-child(n+5) {
+	/* display: none; */
+}
+.cardContent {
+	width: 100%;
+	height: 100%;
+}
+.swipe:last-of-type {
+
+}
+.categories {
+	
+}
+.categories:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+.categoryName {
+	float: left;
+	background-color: #EEEEEE;
+	border-radius: 20px;
+	padding: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	display: inline-block;
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
+
+.card h3 {
+	text-align: left;
+	font-size: 18px;
+	font-weight: bold;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	color: #666666;
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 5px;
+	/*
+	padding: 10px;
+	padding-left: 20px;
+	color: #FFFFFF;
+    text-shadow:
+        0.05em 0 rgba(0,0,0,0.9),
+        0 0.05em rgba(0,0,0,0.9),
+        -0.05em 0 rgba(0,0,0,0.9),
+        0 -0.05em rgba(0,0,0,0.9),
+        -0.05em -0.05em rgba(0,0,0,0.9),
+        -0.05em 0.05em rgba(0,0,0,0.9),
+        0.05em -0.05em rgba(0,0,0,0.9),
+        0.05em 0.05em rgba(0,0,0,0.9);
+	background-color: rgba(1,118,229,0.6);
+	*/
+}
+.card .description {
+	text-align: left;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-bottom: 10px;
+	line-height: 20px;
+}
+.previewButtonContainer {
+	position: absolute;
+	top: -25px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.previewButton {
+	background-color: #0176e5;
+	border-radius: 15px;
+	color: #FFFFFF;
+	padding: 15px;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+.previewButton svg {
+	fill: #FFFFFF;
+	width: 20px;
+	height: 20px;
+}
+.previewButton span {
+	color: #FFFFFF;
+	width: 200px;
+	margin-left: 20px;
+	transition: all 0.5s;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.previewButton:hover span {
+	width: 200px;
+}
+.card .properties {
+	text-align: left;
+}
+.card .properties .property {
+	display: flex;
+	align-items: center;
+
+}
+.card .properties .property svg {
+	margin-right: 5px;
+}
+@media only screen and (min-width: 900px) {
+	.rootCard, .card {
+		width: 40vw;
+	}
+}

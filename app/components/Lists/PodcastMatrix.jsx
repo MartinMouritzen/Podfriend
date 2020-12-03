@@ -5,14 +5,12 @@ import PodcastMatrixUI from 'podfriend-ui/PodcastMatrix/PodcastMatrixUI.jsx';
 /**
 *
 */
-class PodcastMatrix extends Component {
-	render() {
-		return (
-			<PodcastMatrixUI
-				type={this.props.type}
-				podcasts={this.props.podcasts}
-			/>
-		);
-	}
+const PodcastMatrix = ({type,podcasts}) => {
+	return (
+		<PodcastMatrixUI
+			type={type}
+			podcasts={podcasts}
+		/>
+	);
 }
 export default PodcastMatrix;

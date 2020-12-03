@@ -210,6 +210,7 @@ const devConfig = merge.smart(baseConfig, {
 	},
 
 	devServer: {
+		host: '0.0.0.0',
 		disableHostCheck: true,
 		port: 8080,
 		publicPath: '/',

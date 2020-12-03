@@ -10,9 +10,20 @@ const mapStateToProps = (state) => ({
 
 class LatestVisitedPodcasts extends React.Component {
 	render() {
-		return (
-			<PodcastMatrix type={'ScrollList'} podcasts={this.props.lastVisitedPodcasts} showLoadMore={true} />
-		);
+		if (this.props.lastVisitedPodcasts.length > 0) {
+			return (
+				<div className='section'>
+					<div className='sectionInner'>
+						<div className='sectionSubTitle'>Your</div>
+						<div className='sectionTitle'>latest podcasts</div>
+					</div>
+					<PodcastMatrix type='scrollList' podcasts={this.props.lastVisitedPodcasts} showLoadMore={true} />
+				</div>
+			);
+		}
+		else {
+			return null;
+		}
 	}
 }
 

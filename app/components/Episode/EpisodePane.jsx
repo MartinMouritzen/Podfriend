@@ -1,83 +1,233 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Link, withRouter } from 'react-router-alias';
+import styles from './EpisodePane.scss';
 
-import { ScrollView, View, Image } from 'react-native';
-import { Content, Text } from 'native-base';
+// import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
-import LinearGradient from 'react-native-linear-gradient';
+import { Link, useParams, useHistory } from "react-router-dom";
 
-import Player from 'podfriend/Player.jsx';
-import PlayerUI from 'podfriend/Episode/EpisodePlayer.jsx';
+import ChatPane from 'podfriend-approot/components/Chat/ChatPane.jsx';
 
-class EpisodePane extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		var gradientColors = ['#cf5c36', '#a8382e', '#471e1e', '#000000'];
-		
-		return (
-			<LinearGradient start={{x: 1, y: 0}} end={{x: 1, y: 1}} colors={gradientColors}
-				style={{
-					flex: 1, flexDirection: 'column'
-				}}
-			>
-				<ScrollView contentContainerStyle={{ alignItems: 'center', paddingTop: 10, paddingBottom: 10 }}>
-					{ true &&
-						<View
-							style={{
-								flex: 1,
-								alignItems: 'center',
-								justifyContent: 'center',
-								backgroundColor: '#000000',
-								width: 370,
-								height: 370,
-								borderRadius: 15,
-								overflow: 'hidden',
-								shadowColor: "#000000",
-								shadowOffset: {
-									width: 0,
-									height: 0,
-								},
-								shadowOpacity: 0.25,
-								shadowRadius: 3.84,
-								elevation: 5
-							}}
-						>
-							<Image
-								source={{ uri: this.props.activeEpisode.image ? this.props.activeEpisode.image : this.props.activePodcast.artworkUrl600 }}
-								style={{
-									width: 370,
-									height: 370
-								}}
-							/>
-						</View>
-					}
-					<Text style={{ color: '#FFFFFF' }}>Episode</Text>
-				</ScrollView>
-				<View style={{ height: 60 }}>
-					<PlayerUI />
-				</View>
-			</LinearGradient>
-		);
-	}
-}
+import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
+import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
 
-const mapStateToProps = (state, ownProps) => {
-	return {
-		activePodcast: state.podcast.activePodcast,
-		activeEpisode: state.podcast.activeEpisode
+import { viewPodcast, playEpisode } from "podfriend-approot/redux/actions/podcastActions";
+
+import { FaPlay, FaPause, FaArrowLeft } from "react-icons/fa";
+
+import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
+
+import EpisodeChapterList from './Chapters/EpisodeChapterList.jsx';
+import EpisodeChapters from './Chapters/EpisodeChapters.jsx';
+import PodcastSubtitles from './PodcastSubtitles.jsx';
+// import EpisodePlayerControls from './EpisodePlayerControls.jsx';
+
+import DOMPurify from 'dompurify';
+
+const EpisodePane = () => {
+	const dispatch = useDispatch();
+	let { podcastName, episodeId } = useParams();
+
+	const [episode,setEpisode] = useState(false);
+	const [description,setDescription] = useState(false);
+	const [chapters,setChapters] = useState(false);
+	const [chaptersLoading,setChaptersLoading] = useState(true);
+	const [currentChapter,setCurrentChapter] = useState(false);
+
+	const { activeEpisode, selectedPodcast } = useSelector((state) => {
+		return {
+			activeEpisode: state.podcast.activeEpisode,
+			selectedPodcast: state.podcast.selectedPodcast
+		};
+	});
+
+	const isActiveEpisode = activeEpisode.id == episodeId;
+
+	const onEpisodePlay = () => {
+		let foundEpisode = false;
+		if (selectedPodcast && selectedPodcast.episodes && selectedPodcast.episodes.length) {
+			for (var i =0;i<selectedPodcast.episodes.length;i++) {
+				if (selectedPodcast.episodes[i].id === episode.id) {
+					foundEpisode = selectedPodcast.episodes[i];
+					break;
+				}
+			}
+		}
+		if (foundEpisode) {
+			dispatch(playEpisode(selectedPodcast,foundEpisode));
+		}
 	};
-}
 
+	const loadChapters = async(url) => {
+		let result = false;
+		try {
+			result = await fetch(url);
+		}
+		catch(exception) {
+			url = 'https://www.podfriend.com/tmp/rssproxy.php?rssUrl=' + encodeURI(url);
+			result = await fetch(url);
+		}
+		result = await result.json();
 
-const ConnectedEpisodePane = withRouter(connect(
-	mapStateToProps,
-	null
-)(EpisodePane));
+		try {
+			if (result.chapters && result.chapters.length > 0) {
+				setChapters(result.chapters);
+				setChaptersLoading(false);
+			}
+		}
+		catch(exception) {
+			console.log('Exception getting chapters from: ' + url);
+			console.log(exception);
+			setChaptersLoading(false);
+		}
+	};
 
-export default ConnectedEpisodePane;
+	useEffect(() => {
+		if (!isActiveEpisode) {
+			return;
+		}
+		var foundChapter = false;
+
+		if (activeEpisode.currentTime > 0) {
+			// First we walk through to find the active chapter
+			for(var i=0;i<chapters.length;i++) {
+				if (chapters[i].startTime <= activeEpisode.currentTime) {
+					// Let's make sure we get the latest chapter
+					if (!foundChapter || foundChapter.startTime < chapters[i].startTime) {
+						foundChapter = chapters[i];
+					}
+				}
+			}
+		}
+		if (foundChapter !== currentChapter) {
+			setCurrentChapter(foundChapter);
+		}
+	},[chapters,activeEpisode.currentTime]);
+
+	useEffect(() => {
+		dispatch(viewPodcast(podcastName));
+		const fetchEpisodeData = async() => {
+			try {
+				let episode = await fetch('https://api.podfriend.com/podcast/episode/' + episodeId + '?fulltext=true');
+
+				episode = await episode.json();
+
+				var tempDescription = DOMPurify.sanitize(episode.description, {
+					ALLOWED_TAGS: [
+						'p','br','ol','ul','li','b'
+					  ]
+				});
+				tempDescription = tempDescription.replace(/(?:\r\n|\r|\n)/g, '<br />');
+				setDescription(tempDescription);
+				setEpisode(episode);
+
+				if (episodeId == '583592038') {
+					loadChapters('https://studio.hypercatcher.com/chapters/podcast/http:feed.nashownotes.comrss.xml/episode/http:1291.noagendanotes.com');
+				}
+				else if (episode.chaptersUrl) {
+					loadChapters(episode.chaptersUrl);
+				}
+				else {
+					setChaptersLoading(false);
+				}
+			}
+			catch (exception) {
+				console.log('Exception loading episode data: ' + exception);
+			}
+		}
+		fetchEpisodeData();
+	},[episodeId]);
+
+	let history = useHistory();
+
+	const goToPodcast = (event) => {
+		event.preventDefault();
+
+		history.push({
+			pathname: '/podcast/' + podcastName,
+			search: '?clickTime=' + new Date().getMilliseconds(),
+			state: {
+				podcast: selectedPodcast
+			}
+		})
+	};
+
+	return (
+		<div className={styles.episodePane}>
+			<div className={styles.blueFiller}>
+				<div style={{ height: '80px', overflow: 'hidden' }} >
+					<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
+						<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
+					</svg>
+				</div>
+			</div>
+			<div className={styles.podcastCoverContainer}>
+				<Link className={styles.podcastTitle} to={'/podcast/' + podcastName} onClick={goToPodcast}>
+					<FaArrowLeft style={{ fill: '#FFFFFF', position: 'relative', top: 2, marginRight: 5 }}  /> { episode ? 'Back to ' + episode.feedTitle : 'Back to podcast' }
+				</Link>
+				<div className={styles.coverHolder}>
+					{ chapters &&
+						<EpisodeChapters chapters={chapters} progress={isActiveEpisode ? activeEpisode.currentTime : 0} />
+					}
+
+					<Link to={'/podcast/' + podcastName} onClick={goToPodcast}>
+						<PodcastImage
+							podcastPath={podcastName}
+							imageErrorText={episode.title}
+							width={600}
+							height={600}
+							src={episode.image}
+							fallBackImage={episode.feedImage}
+							className={styles.podcastCover}
+							draggable="false"
+							loadingComponent={() => { return ( <div className={styles.loadingCover}><img src={LoadingRings} /></div> ) }}
+						/>
+						</Link>
+				</div>
+			</div>
+			<div className={styles.episodeInfo}>
+			{ episode !== false && isActiveEpisode &&
+					<PodcastSubtitles episode={episode} progress={activeEpisode.currentTime} tempPodcast={selectedPodcast} />
+				}
+				<div className={styles.episodeTitle}>
+					{episode.title}
+				</div>
+
+				{ selectedPodcast !== false && episode !== false && 
+					<>
+						{ !isActiveEpisode &&
+							<div onClick={onEpisodePlay} className={styles.playButton}>
+									<FaPlay /> Play this episode
+							</div>
+						}
+					</>
+				}
+				<Tabs>
+					<Tab title="Description" active link={'/podcast/' + podcastName + '/' + episode.id }>
+						<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} /> 
+					</Tab>
+					{/*
+					<Tab title="Chat" active link={'/podcast/' + selectedPodcast.path + '/' + episode.id + '/chat/' }>
+						<ChatPane roomId={episodeId} />
+					</Tab>
+					*/}
+					{ chaptersLoading === true &&
+						<Tab title={'Loading Chapters'} active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
+							Loading Chapters
+						</Tab>
+					}
+					{ chapters !== false &&
+						<Tab title="Chapters" active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
+							<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
+						</Tab>
+					}
+				</Tabs>
+			</div>
+		</div>
+	);
+};
+
+export default EpisodePane;

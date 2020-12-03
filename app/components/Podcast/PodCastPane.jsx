@@ -5,7 +5,7 @@ import { viewPodcast, archivePodcast, unarchivePodcast, subscribeToPodcast, unsu
 
 import { Link, withRouter } from 'react-router-alias';
 
-import sanitizeHtml from 'sanitize-html';
+import DOMPurify from 'dompurify';
 
 const mapStateToProps = (state, ownProps) => {
 	var useSelectedPodcast = state.podcast.selectedPodcast;
@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
 		viewPodcast: (podcastPath) => { dispatch(viewPodcast(podcastPath)); },
 		subscribeToPodcast: (podcast) => { dispatch(subscribeToPodcast(podcast)); },
 		unsubscribeToPodcast: (podcast) => { dispatch(unsubscribeToPodcast(podcast)); },
-		archivePodcast: (podcast) => { dispatch(archivePodcast(podcast)); },
+		archivePodcast: (podcast) => { console.log('archiving'); dispatch(archivePodcast(podcast)); },
 		unarchivePodcast: (podcast) => { dispatch(unarchivePodcast(podcast)); }
 	};
 }
@@ -162,8 +162,8 @@ class PodCastPane extends Component {
 		var description = '';
 		// This should probably be done one single time, maybe on the server side and set as a property on the podcast instead?
 		if (this.props.selectedPodcast && this.props.selectedPodcast.description) {
-			description = sanitizeHtml(this.props.selectedPodcast.description,{
-				allowedTags: [] // we used to allow 'i','em', but it doesn't work on mobile. I'm not sure I can see a good reason to have them.
+			description = DOMPurify.sanitize(this.props.selectedPodcast.description,{
+				ALLOWED_TAGS: [] // we used to allow 'i','em', but it doesn't work on mobile. I'm not sure I can see a good reason to have them.
 			})
 			.trim();
 		}
@@ -186,6 +186,8 @@ class PodCastPane extends Component {
 				description={description}
 				isArchived={isArchived}
 				isSubscribed={isSubscribed}
+
+				showEpisode={this.props.showEpisode}
 				
 				podcastLoadingError={this.props.podcastLoadingError}
 

@@ -29,20 +29,17 @@ const userReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === AUDIO_REQUEST_PLAY) {
-		console.log('AUDIO_REQUEST_PLAY reducer');
 		return Object.assign({}, state, {
 			shouldPlay: true
 		});
 	}
 	else if (action.type === AUDIO_PLAY) {
-		console.log('audio playing');
 		return Object.assign({}, state, {
 			shouldPlay: true,
 			isPlaying: true
 		});
 	}
 	else if (action.type === AUDIO_PAUSE) {
-		console.log('audio paused');
 		return Object.assign({}, state, {
 			isPlaying: false,
 			shouldPlay: false

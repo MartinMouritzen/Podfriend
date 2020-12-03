@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { format, distanceInWordsToNow } from 'date-fns';
-import sanitizeHtml from 'sanitize-html';
+
+import DOMPurify from 'dompurify';
 
 import { ReviewStars } from 'podfriend-approot/components/Reviews/StarRating.jsx';
 
@@ -67,8 +68,8 @@ class RatingBreakDownLine extends React.PureComponent {
 }
 class Review extends React.PureComponent {
 	render() {
-		var reviewContent = nl2br(sanitizeHtml(this.props.reviewContent,{
-			allowedTags: ['i','em','b','strong']
+		var reviewContent = nl2br(DOMPurify.sanitize(this.props.reviewContent,{
+			ALLOWED_TAGS: ['i','em','b','strong']
 		}));
 		
 		return (

@@ -1,6 +1,18 @@
+.loginSection {
+	display: flex;
+	align-items: center;
+	justify-content: center;	
+}
+.loginSection span {
+	display: inline-block;
+	margin-right: 5px;
+	background-color: #f0f0f0;
+}
 .username {
 	-webkit-app-region: no-drag;
 	
 	align-items: center;
 	justify-content: center;
+
+	color: #FFFFFF;
 }

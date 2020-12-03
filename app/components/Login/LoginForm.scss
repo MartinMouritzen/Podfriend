@@ -1,22 +1,42 @@
 /*******************
-Todo: animation der gør venstre side mindre når man trykker
+Todo: animation der gÃ¦r venstre side mindre nÃ¥r man trykker
 *******************/
 .formOuter {
-	max-width: 740px;
+	max-width: 840px;
 	display: flex;
 	height: 100%;
+	max-height: 90vh;
 	
 	transition: all 1s;
+
+	@media only screen and (max-width: 600px) {
+		flex-direction: column;
+	}
 }
 .loginExplanation {
 	background-color: #0176e5;
 	
-	padding: 20px;
+	padding: 40px;
 	
 	width: 400px;
-	overflow: hidden;
 	
 	transition: all 1s;
+
+	@media only screen and (max-width: 600px) {
+		width: auto;
+		/* min-height: 265px; */
+	}
+	@media only screen and (min-width: 1300px) {
+		width: 400px;
+	}
+}
+.loginExplanation h2 {
+	margin: 0px;
+}
+.loginExplanation .logo {
+	max-width: 100px;
+	max-height: 100px;
+	margin-bottom: 20px;
 }
 .loginExplanationLoading {
 	width: 100%;

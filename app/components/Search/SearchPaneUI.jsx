@@ -51,8 +51,8 @@ class SearchPaneUI extends Component {
 								</div>
 						}
 						{ !this.props.searchError && !this.props.searching && this.props.searchResults && this.props.searchResults.length > 0 &&
-							<div className={styles.searchResults}>
-							{ this.props.searchResults.map((result,index) => {
+							<div className='podcastGrid'>
+							{ this.props.searchResults.map && this.props.searchResults.map((result,index) => {
 								var showResult = false;
 								if (!this.props.selectedGenres || this.props.selectedGenres.length == 0) {
 									showResult = true;

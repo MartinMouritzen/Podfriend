@@ -1,11 +1,10 @@
 .contextMenu {
 	position: absolute;
-	
-	top: 40px;
 
 	background-color: #ffffff;
 	
 	border: 1px solid #f0f0f0;
+	border-radius: 5px;
 	
 	box-shadow: 4px 4px 12px -3px rgba(0,0,0,0.65);
 	
@@ -13,7 +12,7 @@
 	
 	animation: fadein ease 0.6s;
 	
-	z-Index: 10;
+	z-Index: 9999999990;
 }
 @keyframes fadein {
 	0% {
@@ -26,28 +25,78 @@
 	}
 }
 .contextMenuItem {
-	/*
 	height: 45px;
 	min-width: 200px;
 	display: flex;
 	
 	align-items: center;
 	justify-content: flex-start;
-	*/
+
+	color: #333333;
 	background-color: #ffffff;
+	padding: 10px;
+	padding-left: 16px;
+	padding-right: 16px;
+	text-align: left;
+	border-radius: 5px;
+}
+.contextMenuItem.isLink {
+	padding: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 .contextMenuItem:hover {
 	background-color: #0176e5;
+	color: #FFFFFF;
+}
+.contextMenuItem a {
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+
+	width: 100%;
+	padding: 10px;
+	padding-left: 16px;
+	padding-right: 16px;
 }
 .contextMenuItem svg {
 	margin-right: 11px;
+	fill: #333333;
+	height: 20px;
+	width: 20px;
+}
+.contextMenuItem:hover a {
+	color: #FFFFFF;
 }
 .contextMenuItem:hover svg {
 	fill: #FFFFFF;
-	
-	position: relative;
-	bottom: 2px;
 }
+@media only screen and (max-width: 540px) {
+	.contextMenu {
+		margin-left: 2vw;
+		top: auto !important;
+		left: 0 !important;
+		bottom: 0 !important;
+		min-height: 200px;
+		border-radius: 5px 5px 0px 0px;
+
+		animation: fadein ease 0.3s;
+	}
+	.contextMenuItem {
+		width: 96vw;
+		max-width: 96vw;
+	}
+	@keyframes fadein {
+		0% {
+			transform: translate3d(0px,200px, 0);
+		}
+		100% {
+			transform: translate3d(0px, 0, 0);
+		}
+	}
+}
+/*
 .contextMenuItem a {
 	display: flex;
 	align-items: center;
@@ -66,3 +115,4 @@
 .contextMenuItem:hover a {
 	color: #FFFFFF;
 }
+*/

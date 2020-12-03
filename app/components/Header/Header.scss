@@ -1,0 +1,8 @@
+.header {
+	height: 60px;
+	position: sticky;
+	top: 0px;
+	background-color: #ff23aa;
+	padding-top: env(safe-area-inset-top);
+	height: calc(env(safe-area-inset-top) + 60px);
+}

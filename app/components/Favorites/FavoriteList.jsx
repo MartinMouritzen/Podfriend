@@ -32,20 +32,25 @@ class FavoriteList extends React.Component {
 			orderType: 'asc',
 		};
 		
+		this.__sort = this.__sort.bind(this);
+		this.sortBy = this.sortBy.bind(this);
+		this.checkArchiveStatus = this.checkArchiveStatus.bind(this);
+	}
+	checkArchiveStatus() {
 		var hasArchivedPodcast = false;
-		if (props.setHasArchived) {
-			props.subscribedPodcasts.map((podcast) => {
+		if (this.props.setHasArchived) {
+			this.props.subscribedPodcasts.map((podcast) => {
 				if (podcast.archived) {
 					hasArchivedPodcast = true;
 				}
 			});
 			if (hasArchivedPodcast) {
-				props.setHasArchived(hasArchivedPodcast);
+				this.props.setHasArchived(hasArchivedPodcast);
 			}
 		}
-		
-		this.__sort = this.__sort.bind(this);
-		this.sortBy = this.sortBy.bind(this);
+	}
+	componentDidMount() {
+		this.checkArchiveStatus();
 	}
 	/**
 	*
@@ -96,6 +101,7 @@ class FavoriteList extends React.Component {
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (this.props.subscribedPodcasts !== prevProps.subscribedPodcasts) {
+			this.checkArchiveStatus();
 			this.setState({
 				subscribedPodcasts: this.__sort(this.props.subscribedPodcasts,'name','asc'),
 			});
@@ -122,6 +128,7 @@ class FavoriteList extends React.Component {
 
 		return (
 			<FavoriteListUI
+				showResponsiveList={this.props.showResponsiveList}
 				showArchived={this.props.showArchived}
 				subscribedPodcasts={this.state.subscribedPodcasts}
 				activePodcast={this.props.activePodcast}

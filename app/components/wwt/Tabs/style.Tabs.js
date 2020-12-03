@@ -1,11 +1,12 @@
 export default {
-	TabLink: {
-		textDecoration: 'none'
+	TabsOuter: {
+		overflowX: 'auto'
 	},
 	Tabs: {
 		display: 'flex',
 		flexDirection: 'row',
-		backgroundColor: '#FFFFFF'
+		backgroundColor: '#FFFFFF',
+		justifyContent: 'space-between'
 	},
 	TabOuter: {
 		marginRight: 20
@@ -17,20 +18,30 @@ export default {
 	selectedTabBorder: {
 		backgroundColor: '#0176e5'
 	},
+	TabLink: {
+		textDecoration: 'none',
+		flexGrow: 1
+	},
 	Tab: {
-		padding: 20,
+		padding: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
 		paddingBottom: 14,
 		display: 'flex',
-		flexDirection: 'row'
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	selectedTab: {
-		padding: 20,
+		padding: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
 		paddingBottom: 14,
 		display: 'flex',
-		flexDirection: 'row'
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	TabText: {
-		
+		whiteSpace: 'nowrap'
 	},
 	badge: {
 		marginLeft: 5,

@@ -17,7 +17,13 @@ const loadImage = (src) => {
 	});
 }
 
-const PodcastImage = React.memo(({ podcastId = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false }) => {
+const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false }) => {
+	const originalSource = src;
+
+	if (podcastPath) {
+		src = 'https://podcastcovers.podfriend.com/' + podcastPath + '/' + width + 'x' + height + '/' + src;
+	}
+
 	const [status, setStatus] = useState(STATUS_PRELOAD);
 	const [imageSource, setImageSource] = useState(src);
 
@@ -29,32 +35,37 @@ const PodcastImage = React.memo(({ podcastId = false, src, width = 100, height =
 			setStatus(STATUS_LOADED);
 		})
 		.catch(() => {
+			console.log('Could not load fallback image: ' + fallBackImage);
 			setStatus(STATUS_ERROR);
 		});
 	};
 
 	useEffect(() => {
 		setStatus(STATUS_PRELOAD);
-			setImageSource(src);
+		setImageSource(src);
 
-			if (src) {
-				// Let's load the temp image
-				loadImage(src)
-				.then(() => {
-					setStatus(STATUS_LOADED);
-				})
-				.catch(() => {
-					if (fallBackImage) {
-						useFallbackImage();
-					}
-					else {
-						setStatus(STATUS_ERROR);
-					}
-				});
-			}
+		if (src) {
+			// Let's load the temp image
+			loadImage(src)
+			.then(() => {
+				setStatus(STATUS_LOADED);
+			})
+			.catch(() => {
+				console.log('Could not load: ' + src);
+				if (fallBackImage) {
+					useFallbackImage();
+				}
+				else {
+					setStatus(STATUS_ERROR);
+				}
+			});
+		}
+		else {
+			useFallbackImage();
+		}
 	}, [src, fallBackImage])
 
-	if (status === STATUS_PRELOAD && loadingComponent) {
+	if (status === STATUS_PRELOAD && loadingComponent !== false) {
 		return loadingComponent();
 	}
 	else if (status === STATUS_ERROR || status === STATUS_PRELOAD) {
@@ -86,7 +97,7 @@ const PodcastImage = React.memo(({ podcastId = false, src, width = 100, height =
 					color: fontColor,
 					fontSize: fontSize > 32 ? 32 : fontSize
 				}}
-				className={className}>
+				className={className} originalsource={originalSource}>
 				{imageErrorText}
 			</div>
 		);

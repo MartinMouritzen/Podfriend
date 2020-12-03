@@ -1,0 +1,108 @@
+.chapterScreen {
+	/*
+	width: 90vw;
+	height: 90vw;
+
+	margin-top: 1vh;
+	
+	box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
+	border-radius: 15px;
+	border: 5px solid #FFFFFF;
+	background-color: #c5d5e5;
+
+	position: relative;
+	transition: all 0.4s;
+	*/
+	position: relative;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+.chapter {
+	position: absolute;
+
+	display: flex;
+	flex-direction: column;
+
+	pointer-events: none;
+
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+.activeChapter {
+	opacity: 1;
+
+	pointer-events: all;
+
+	animation: fadeIn ease 0.5s;
+}
+.chapter .linkContainer {
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.chapter a {
+	width: 90%;
+	text-align: center;
+	font-size: 12px;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical; 
+	text-overflow: ellipsis;
+	overflow: hidden;
+	color: #272c34;
+}
+.fadeOut {
+	animation: fadeOut ease 1.5s;
+}
+@keyframes fadeIn {
+	0% {
+		opacity:0;
+	}
+	100% {
+		opacity:1;
+	}
+  }
+  @keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+.chapterTitleHeader {
+	height: 40px;
+	min-height: 40px;
+	padding-top: 10px;
+	background-color: #272c34;
+	color: #FFFFFF;
+	text-align: center;
+}
+.chapterTitleFull {
+	font-size: 26px;
+	color: #272c34;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	flex: 1;
+}
+.chapterImage {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+.chapterImage img {
+	max-width: calc(100% - 30px);
+	max-height: calc(100% - 30px);
+}
+
+@media (min-width: 900px) {
+	
+}

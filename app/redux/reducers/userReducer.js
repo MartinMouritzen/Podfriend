@@ -4,6 +4,7 @@ import {
 	LOGIN_HIDE,
 	FETCH_USER_PROFILE,
 	USER_LOGGED_IN,
+	USER_LOGGED_OUT,
 	USER_NOT_LOGGED_IN
 	
 } from "../constants/action-types";
@@ -27,6 +28,13 @@ const userReducer = (state = initialState, action) => {
 			isLoggedIn: true,
 			profileData: action.payload,
 			showLogin: false
+		});
+	}
+	else if (action.type === USER_LOGGED_OUT) {
+		return Object.assign({}, state, {
+			isLoggedIn: false,
+			profileData: false,
+			authToken: false
 		});
 	}
 	else if (action.type === USER_NOT_LOGGED_IN) {

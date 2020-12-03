@@ -38,7 +38,6 @@ export function audioBuffering() {
 }
 
 export function audioPlayRequested() {
-	console.log('requesting play');
 	return {
 		type: AUDIO_REQUEST_PLAY,
 		payload: {

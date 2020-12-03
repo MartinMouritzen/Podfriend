@@ -1,35 +1,10 @@
-.filterBar {
-	display: flex;
-	align-items: center;
-	background-color: #f6f6f6;
-	border-bottom: 1px solid #eeeeee;
-}
-.filterItem, .hideListenedEpisodesFilter {
-	padding-left: 10px;
-	padding-right: 10px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.filterItem select {
-	height: 30px;
-	font-size: 14px;
-	padding-left: 10px;
-	padding-right: 10px;
-}
-.filterItem option {
-	font-size: 14px;
-}
-.filterItem label {
-	font-size: 14px;
-}
 .episodeListLoading {
 	margin: 10px;
 }
 .episodeList {
 	flex: 1;
 }
-.episodeList label {
+.episodeList .episode label {
 	display: block;
 	padding: 20px;
 }
@@ -254,7 +229,6 @@
 	font-size: 16px;
 	line-height: 1.5;
 	
-	max-width: 650px;
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical; 
@@ -300,6 +274,16 @@
 .episodePlaying .duration span {
 	color: #FFFFFF;
 }
+@media only screen and (min-width: 1550px) {
+	.description {
+		max-width: 650px;
+	}
+}
+@media only screen and (min-width: 1300px) {
+	.description {
+		max-width: 55%;
+	}
+}
 @media only screen and (max-width: 450px) {
 	.episode .play {
 		display: none;
@@ -315,39 +299,5 @@
 		height: 21px;
 		top: 6px;
 		right: 6px;
-	}
-}
-@media only screen and (min-width: 1000px) and (max-width: 1250px) {
-	.filterBar .filterItem {
-		flex-direction: column;
-		align-items: stretch;
-		padding: 10px;
-	}
-	.filterBar label {
-		padding: 0px;
-		margin-bottom: 2px;
-	}
-	.filterBar select {
-		width: 130px;
-	}
-	.filterBar label.hideListenedEpisodesLabel {
-		margin-left: 10px;
-	}
-}
-@media only screen and (max-width: 999px) {
-	.filterBar {
-		display: block;
-	}
-	.filterBar label {
-		width: 100px;
-	}
-	.filterBar select {
-		flex: 1;
-	}
-	.hideListenedEpisodesFilter {
-		margin-left: 30px;
-	}
-	.filterBar label.hideListenedEpisodesLabel {
-		width: auto;
 	}
 }

@@ -1,87 +1,96 @@
-/*
- Copyright 2016 Google Inc. All Rights Reserved.
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- http://www.apache.org/licenses/LICENSE-2.0
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- */
+var VERSION = 'podfriendv4';
 
-// Names of the two caches used in this version of the service worker.
-// Change to v2, etc. when you update any of the local resources, which will
-// in turn trigger the install event again.
-const PRECACHE = 'precache-v6';
-const RUNTIME = 'runtime-v6';
-
-// A list of local resources we always want to be cached.
-const PRECACHE_URLS = [
-  '/index.html',
-  '/style.css',
-  '/style.css.map',
-  '/style.prod.js',
-  '/app/images/checkmark_64x64.png',
-  '/app/images/checkmark_inactive_64x64.png',
-  '/app/images/play-button-loading.png',
-  '/app/images/review-0-star.png',
-  '/app/images/review-5-star.png',
-  '/app/images/logo/podfriend_logo_128x128',
-  '/app/images/social/facebook-logo.png',
-  '/app/images/social/google-logo.png'
+var cacheFirstFiles = [
+	'/app/images/checkmark_64x64.png',
+	'/app/images/checkmark_inactive_64x64.png',
+	'/app/images/play-button-loading.png',
+	'/app/images/review-0-star.png',
+	'/app/images/review-5-star.png',
+	'/app/images/logo/podfriend_logo_128x128',
+	'/app/images/social/facebook-logo.png',
+	'/app/images/social/google-logo.png',
+	'/app/images/design/blue-wave-1.svg',
+	'/app/images/design/loading-hearts.svg',
+	'/app/images/design/loading-rings.svg',
+	'/app/images/design/player/forward.svg',
+	'/app/images/design/player/rewind.svg',
+	'/app/images/design/player/chromecast.svg',
+	'/app/images/design/player/clock.svg',
+	'/app/images/design/player/fullscreen.svg',
+	'/app/images/design/player/more.svg',
+	'/app/images/design/player/pause.svg',
+	'/app/images/design/player/play.svg',
+	'/app/images/design/player/share.svg',
+	'/app/images/design/player/speed.svg',
+	'/app/images/design/player/skip-backward.svg',
+	'/app/images/design/player/skip-forward.svg'
 ];
 
-// The install handler takes care of precaching the resources we always need.
+var networkFirstFiles = [
+	'/index.html',
+	'/style.css',
+	'/style.css.map',
+	'/style.prod.js',
+	'/web.prod.js'
+];
+
+// Below is the service worker code.
+
+var cacheFiles = cacheFirstFiles.concat(networkFirstFiles);
+
 self.addEventListener('install', event => {
-	console.log('SW install');
-	  event.waitUntil(
-	    caches.open(PRECACHE)
-	      .then(cache => cache.addAll(PRECACHE_URLS))
-	      .then(self.skipWaiting())
-	  );
+	event.waitUntil(
+		caches.open(VERSION).then(cache => {
+			return cache.addAll(cacheFiles);
+		})
+	);
 });
 
-// The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', event => {
-	console.log('SW activate');
-  const currentCaches = [PRECACHE, RUNTIME];
-  
-	  event.waitUntil(
-	    caches.keys().then(cacheNames => {
-	      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
-	    }).then(cachesToDelete => {
-	      return Promise.all(cachesToDelete.map(cacheToDelete => {
-	        return caches.delete(cacheToDelete);
-	      }));
-	    }).then(() => self.clients.claim())
-	  );
-
-
-});
-
-// The fetch handler serves responses for same-origin resources from a cache.
-// If no response is found, it populates the runtime cache with the response
-// from the network before returning it to the page.
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        return caches.open(RUNTIME).then(cache => {
-          return fetch(event.request).then(response => {
-            // Put a copy of the response in the runtime cache.
-            return cache.put(event.request, response.clone()).then(() => {
-              return response;
-            });
-          });
-        });
-      })
-    );
-  }
+	if (event.request.method !== 'GET') {
+		return;
+	}
+	if (networkFirstFiles.indexOf(event.request.url) !== -1) {
+		event.respondWith(networkElseCache(event));
+	}
+	else if (cacheFirstFiles.indexOf(event.request.url) !== -1) {
+		event.respondWith(cacheElseNetwork(event));
+	}
+	event.respondWith(fetch(event.request));
 });
+
+// If cache else network.
+// For images and assets that are not critical to be fully up-to-date.
+// developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/
+// #cache-falling-back-to-network
+function cacheElseNetwork (event) {
+	return caches.match(event.request).then(response => {
+		function fetchAndCache () {
+			 return fetch(event.request).then(response => {
+				// Update cache.
+				caches.open(VERSION).then(cache => cache.put(event.request, response.clone()));
+				return response;
+			});
+		}
+
+		// If not exist in cache, fetch.
+		if (!response) { return fetchAndCache(); }
+
+		// If exists in cache, return from cache while updating cache in background.
+		fetchAndCache();
+		return response;
+	});
+}
+
+// If network else cache.
+// For assets we prefer to be up-to-date (i.e., JavaScript file).
+function networkElseCache (event) {
+	return caches.match(event.request).then(match => {
+		if (!match) { return fetch(event.request); }
+		return fetch(event.request).then(response => {
+			// Update cache.
+			caches.open(VERSION).then(cache => cache.put(event.request, response.clone()));
+			return response;
+		}) || response;
+	});
+}

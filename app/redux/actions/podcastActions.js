@@ -25,6 +25,7 @@ import {
 	PLAY_EPISODE,
 	EPISODE_REQUEST_PLAY,
 	EPISODE_TIME_UPDATED,
+	EPISODE_DURATION_UPDATE,
 	EPISODE_FINISHED,
 	PODCAST_LOADING,
 	PODCAST_LOADED,
@@ -52,7 +53,15 @@ export function updateEpisodeTime(time) {
 	return {
 		type: EPISODE_TIME_UPDATED,
 		payload: time
-	}
+	};
+}
+export function updateEpisodeDuration(duration) {
+	return {
+		type: EPISODE_DURATION_UPDATE,
+		payload: {
+			duration: duration
+		}
+	};
 }
 /**
 *
@@ -286,6 +295,7 @@ export function viewPodcast(podcastPath) {
 
 						// Make sure we pass the status of the podcast. This should come from the server though.
 						if (podcastCache) {
+							data.archived = podcastCache.archived;
 							data.sortBy = podcastCache.sortBy;
 							data.sortType = podcastCache.sortType;
 							data.onlySeason = podcastCache.onlySeason;

@@ -11,8 +11,8 @@
 }
 .windowFrame {
 	border: 1px solid #000000;
-	
 	border-radius: 10px;
+	position: relative;
 }
 .windowFrameMaximized {
 	border: 0px solid #000000;
@@ -20,9 +20,9 @@
 .webContainer {
 	border-radius: 0px !important;
 }
-@media only screen and (max-width: 660px) {
+@media only screen and (max-width: 900px) {
 	.windowFrame, .windowFrameMaximized, .webContainer {
 		background: none;
-		background-color: #174ea1;
+		background-color: #0176e5;
 	}
 }

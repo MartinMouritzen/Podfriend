@@ -22,13 +22,41 @@ class AudioController {
 	setAudioElement(audioElement) {
 		this.audioElement = audioElement;
 	}
+	/**
+	*
+	*/
+	setPlaybackRate(playbackRate) {
+		if (this.audioElement && this.audioElement.current) {
+			this.audioElement.current.playbackRate = playbackRate;
+		}
+	}
+	/**
+	*
+	*/
 	setCurrentTime(newTime) {
-		this.audioElement.current.currentTime = newTime;
+		if (this.audioElement && this.audioElement.current) {
+			if (isNaN(newTime)) {
+				return Promise.resolve(true);
+			}
+			this.audioElement.current.currentTime = newTime;
+		}
 		return Promise.resolve(true);
 	}
+	retry() {
+		var currentTime = this.getCurrentTime();
+		this.load();
+		this.setCurrentTime(currentTime);
+		this.play();
+	}
+	/**
+	*
+	*/
 	getCurrentTime() {
 		return this.audioElement.current.currentTime;
 	}
+	/**
+	*
+	*/
 	getDuration() {
 		return this.audioElement.current.duration;
 	}

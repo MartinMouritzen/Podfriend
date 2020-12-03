@@ -45,6 +45,7 @@
 	flex: 1;
 	/* color: #FFFFFF; */
 	color: #FFFFFF;
+	text-decoration: none;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -55,6 +56,7 @@
 	width: 70px;
 	align-items: center;
 	justify-content: center;
+	transition: all 0.3s;
 }
 .navigationButton, .navigationButtonDisabled {
 	width: 35px;
@@ -93,10 +95,7 @@
 	align-items: center;
 }
 .user {
-	min-width: 160px;
-	max-width: 160px;
-	
-	display: none;
+	margin-right: 10px;
 	
 	align-items: center;
 	justify-content: flex-start;
@@ -161,14 +160,18 @@
 .close {
 	
 }
+.navigationButtonBack {
+	
+}
+.navigationButtonForward {
+	
+}
 .close:hover {
 	background-color: #b13435;
 }
 .close:hover svg {
 	fill: #FFFFFF;
 }
-
-
 @media only screen and (max-width: 540px) {
 	.titleBar {
 		height: 60px;
@@ -184,6 +187,10 @@
 		width: 40px;
 	}
 	.navigationControls {
+		width: 40px;
+		margin-right: 5px;
+	}
+	.navigationButtonForward {
 		display: none;
 	}
 }
@@ -204,5 +211,13 @@
 @media only screen and (min-width: 1001px) {
 	.windowControls {
 		width: 15%;
+	}
+}
+@media only screen and (max-width: 900px) {
+	@supports(padding-top:env(safe-area-inset-top)) {
+		.titleBar {
+			padding-top: env(safe-area-inset-top);
+			height: calc(env(safe-area-inset-top) + 60px);
+		}
 	}
 }

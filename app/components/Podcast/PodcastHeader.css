@@ -7,16 +7,14 @@
 	overflow: hidden;
 }
 .wave {
-
+	position: relative;
+	bottom: 1px;
 }
 .mainInfo {
 	position: absolute;
-	background-size: cover;
-	background-position: 30% 20%;
-	background-blend-mode: lighten;
+	top: 0px;
 }
 .mainInfoInner {
-	border-radius: 20px 0px 0px 0px;
 	display: flex;
 	flex-direction: row;
 	padding-bottom: 20px;
@@ -29,14 +27,14 @@
 	
 	box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
 	border-radius: 15px;
-	border: 5px solid #FFFFFF;
+	border: 3px solid #FFFFFF;
 	background-color: #c5d5e5;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-.loadingCover svg {
-	
+.loadingIndicator {
+	max-width: 90%;
 }
 .starRating {
 	margin-left: 30px;
@@ -49,16 +47,21 @@
 	font-size: 36px;
 	font-weight: bold;
 	color: #FFFFFF;
+	margin: 0px;
+	padding-left: 0px;
 	margin-bottom: 5px;
 
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp: 1; /* number of lines to show */
+	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 }
 .author {
 	display: flex;
+	height: 22px;
+	overflow: hidden;
+	margin-bottom: 5px;
 }
 .middot {
 	color: rgba(255,255,255,0.8);
@@ -68,9 +71,12 @@
 }
 .authorLink {
 	color:  rgba(255,255,255,0.8);
-	margin-bottom: 20px;
 	text-decoration: none;
 	display: block;
+	max-width: 300px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .author svg {
 	fill: rgba(255,255,255,0.8);
@@ -83,16 +89,17 @@
 .author a:hover {
 	text-decoration: underline;
 }
-.podcastWebsiteLink {
+.podcastWebsiteLink, .podcastWebsiteLink .websiteLabel {
 	color:  rgba(255,255,255,0.8);
 	cursor: pointer;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .podcastWebsiteLink:hover {
 	border-bottom: 1px solid  rgba(255,255,255,0.8);
 }
 .description {
-	max-width: 600px;
-	
 	line-height: 22px;
 	margin-bottom: 20px;
 	color: #FFFFFF;
@@ -102,10 +109,36 @@
 	display: -webkit-box;
 	-webkit-line-clamp: 5; /* number of lines to show */
 	-webkit-box-orient: vertical;
+	max-width: 600px;
 }
 .description em {
 	color: #FFFFFF;
 	font-style: italic;
+}
+.descriptionBody {
+	background-color: #FFFFFF;
+	line-height: 22px;
+	color: #333333;
+	padding-left: 34px;
+	padding-right: 34px;
+	padding-top: 40px;
+}
+.categories {
+	padding-left: 34px;
+	padding-right: 34px;
+	padding-top: 20px;
+}
+.categories > :not(:last-child) {
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.category {
+	color: #FFFFFF;
+	font-size: 12px;
+	padding: 10px;
+	background-color: #62a9ed;
+	display: inline-block;
+	border-radius: 5px;
 }
 @media only screen and (min-width: 1300px) {
 	.description {
@@ -118,8 +151,119 @@
 		-webkit-line-clamp: 7;
 	}
 }
+@media only screen and (min-width: 1200px) {
+	.description {
+        display: -webkit-box;
+	}
+	.descriptionBody {
+		display: none;
+	}
+}
+@media only screen and (max-width: 1199px) {
+	.authorLink {
+		max-width: 200px;
+	}
+	/*
+	.authorLink {
+		max-width: 300px;
+		margin-bottom: 10px;
+	}
+	.middot {
+		display: none;
+	}
+	.author {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 10px;
+	}
+	*/
+	.description {
+		display: none;
+	}
+	.descriptionBody {
+		display: block;
+	}
+	.podcastName {
+		-webkit-line-clamp: 3;
+	}
+	.blueFiller {
+		height: 110px;
+	}
+}
+@media only screen and (max-width: 1065px) {
+	.authorLink {
+		max-width: 179px;
+	}
+	.websiteLabel {
+		display: none;
+	}
+}
+@media only screen and (min-width: 900px) and (max-width: 950px) {
+	.authorLink {
+		max-width: 120px;
+	}
+}
+@media only screen and (max-width: 1100px) {
+	.podcastName {
+		font-size: 28px;
+		-webkit-line-clamp: 2;
+	}
+}
 @media only screen and (min-width: 1900px) {
 	.description {
 		-webkit-line-clamp: 8;
+		max-width: 600px;
+	}
+}
+@media only screen and (max-width: 899px) {
+	.podcastName {
+		font-size: 5vw;
+		-webkit-line-clamp: 2;
+	}
+	.descriptionBody {
+		padding-top: 0px;
+	}
+	.blueFiller {
+		height: 100px;
+	}
+}
+@media only screen and (max-width: 700px) {
+	.podcastCover, .loadingCover {
+		width: 160px;
+		height: auto;
+	}
+	.website {
+		display: none;
+	}
+	.podcastInfo {
+		margin: 20px;
+		margin-right: 10px;
+	}
+}
+@media only screen and (max-width: 540px) {
+	.podcastCover, .loadingCover {
+		margin-left: 10px;
+		margin-top: 10px;
+	}
+	.descriptionBody, .categories {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+@media only screen and (max-width: 380px) {
+	.descriptionBody {
+		padding-top: 20px;
+	}
+	.podcastInfo {
+		margin: 10px;
+		margin-top: 30px;
+	}
+	.podcastName {
+		-webkit-line-clamp: 3;
+		width: auto;
+		padding-right: 10px;
+	}
+	.authorLink {
+		max-width: 95px;
 	}
 }
