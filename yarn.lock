@@ -14344,7 +14344,7 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-win-audio@^2.0.2:
+win-audio@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/win-audio/-/win-audio-2.0.2.tgz#6c2f81f34b5786e7be67223da0261c13a6836e63"
   integrity sha512-yrGFjfU7hOb4FeOwE+VKaqOdYPBDijnJGDMHsyURJoV1Ko8V6SvvjeAdnmucLrRsJLdVCrA8CkOTdrJTmhfa8g==

@@ -28,7 +28,6 @@
 	text-decoration: none;
 }
 .playingText {
-	margin-left: 25px;
 	display: flex;
 	flex: 2;
 	flex-direction: column;
@@ -242,9 +241,6 @@
 	.audioButtons {
 		padding-left: 40px;
 	}
-	.playingText {
-		margin-left: 140px;
-	}
 	.coverContainer {
 		background-color: #000000;
 		position: absolute;
@@ -355,6 +351,11 @@
 	.coverContainer * {
 		font-size: 9px;
 	}
+	@media (min-width: 900px) {
+		.playingText {
+			margin-left: 140px;
+		}
+	}
 	@media only screen and (max-width: 360px) {
 		.fastBackwardButton, .fastForwardButton {
 			width: 0 !important;
@@ -462,6 +463,9 @@
 	z-Index: 9999;
 	overflow: auto;
 
+	.subtitleContainer {
+		margin-bottom: 20px;
+	}
 	.wave {
 		position: relative;
 		bottom: 1px;
@@ -470,7 +474,6 @@
 		height: auto;
 		margin-top: 20px;
 		text-align: center;
-		
 	}
 	.controls {
 		width: 100%;

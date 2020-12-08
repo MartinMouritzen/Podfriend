@@ -56,8 +56,9 @@ class SignInForm extends Component {
 	render() {
 		return (
 			<div className={styles.loginForm}>
-				<h2>Sign in or register with</h2>
-				<div>
+				<h2 style={{ display: 'none' }}>Sign in or register with</h2>
+				<h2>Sign in</h2>
+				<div style={{ display: 'none' }}>
 					<div className={styles.socialMediaButton}>
 						<img src={FacebookLogo} />
 						<div className={styles.facebook}>Facebook</div>
@@ -68,7 +69,7 @@ class SignInForm extends Component {
 					</div>
 					
 				</div>
-				<div className={styles.orLine}>
+				<div className={styles.orLine} style={{ display: 'none' }}>
 					<div className={styles.orLineHR}>
 						<hr />
 					</div>

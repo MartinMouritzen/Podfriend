@@ -18,6 +18,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 	}
 
 	useEffect(() => {
+		console.log('shown changed');
 		setHidden(!shown);
 	},[shown]);
 
@@ -41,7 +42,13 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 	}
 
 	return (
-		<div className={modalOuterClasses} onClick={() => { startHidingModal();  } } style={{ backdropFilter: useBlur ? 'grayscale(50%) blur(2px)' : 'none', display: hidden ? 'none' : 'flex' }}>
+		<div className={modalOuterClasses}
+			onClick={(event) => { event.stopPropagation(); startHidingModal();  } }
+			style={{ touchAction: 'none', backdropFilter: useBlur ? 'grayscale(50%) blur(2px)' : 'none', display: hidden ? 'none' : 'flex' }}
+			onTouchStart={(event) => { event.preventDefault(); event.stopPropagation(); }}
+			onTouchMove={(event) => { event.preventDefault(); event.stopPropagation(); }}
+			onDrag={(event) => { event.preventDefault(); event.stopPropagation(); }}
+		>
 			<div className={styles.modalInner}>
 				<div className={styles.modal + ' modal'} onClick={(event) => { event.stopPropagation(); } } >
 					{ title &&

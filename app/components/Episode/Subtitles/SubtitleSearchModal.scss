@@ -1,0 +1,49 @@
+.subtitleSearchPane {
+	@media (min-width: 900px) {
+		width: 600px;
+	}
+}
+.subtitleSearchPane {
+	input {
+		font-size: 18px;
+		width: 100%;
+		padding: 10px;
+		border-radius: 5px;
+		margin-bottom: 10px;
+	}
+	.searchResults {
+		min-height: 300px;
+		max-height: 60vh;
+		overflow: auto;
+	}
+	.searchResult {
+		display: flex;
+		padding: 10px;
+		cursor: pointer;
+		border-radius: 5px;
+	}
+	@media (any-hover: hover) {
+		.searchResult:hover {
+			background-color: #EEEEEE;
+		}
+	}
+	.searchResult:active {
+		background-color: rgba(1,118,229,1);
+
+		.time {
+			color: #FFFFFF;
+		}
+		.caption {
+			color: #FFFFFF;
+		}
+	}
+	.searchResult .time {
+		min-width: 60px;
+		text-align: right;
+	}
+	.searchResult .caption {
+		text-align: left;
+		margin-left: 10px;
+		color: #000000;
+	}
+}

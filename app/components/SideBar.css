@@ -21,8 +21,14 @@
 	display: flex;
 	height: 100%;
 }
-
+.categories hr {
+	width: 90%;
+	height: 1px;
+	background-color: rgba(255,255,255,0.4);
+	border: 0;
+}
 .category, .selectedCategory, .mainNavigationButton {
+	display: block;
 	padding-top: 5px;
 	padding-bottom: 9px;
 	padding-left: 20px;
@@ -31,7 +37,13 @@
 	font-size: 14px;
 	color: #FFFFFF;
 	transition: 0.3s all ease;
+
+	cursor: pointer;
 }
+.mainNavigationButton:hover {
+	background-color: rgba(255,255,255,0.2);
+}
+
 .category svg, .selectedCategory svg, .mainNavigationButton svg {
 	fill: #FFFFFF;
 	position: relative;

@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-
+import { initiateLogin, userLogout } from "~/app/redux/actions/userActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
-// import * as FontAwesomeIcons from "react-icons/fa";
-
-import { FaPlus, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
-
-// import * as GamerIcons from "react-icons/gi";
+import { FaPlus, FaUser, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
 
 import Toggle from 'react-toggle';
 
@@ -22,6 +18,7 @@ import styles from './SideBar.css';
 
 function mapStateToProps(state) {
 	return {
+		isLoggedIn: state.user.isLoggedIn,
 		subscribedPodcasts: state.podcast.subscribedPodcasts,
 		selectedPodcast: state.podcast.selectedPodcast,
 		activePodcast: state.podcast.activePodcast
@@ -30,7 +27,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		
+		initiateLogin: () => { dispatch(initiateLogin()); }
 	};
 }
 
@@ -85,17 +82,23 @@ class SideBar extends Component {
 					<div className={styles.categories}>
 					<div className={styles.categoryList}>
 
-					<div className={styles.mainNavigationButton}>
-							<Link to="/">
-								<FaHome size="20" /> Home
-							</Link>
-						</div>
-						<div className={styles.mainNavigationButton}>
-							<Link to="/podfrndr/">
-								<FaHeart size="20" /> Podfrndr
-							</Link>
-						</div>
-
+						<Link to="/" className={styles.mainNavigationButton}>
+							<FaHome size="20" /> Home
+						</Link>
+						<Link to="/podfrndr/" className={styles.mainNavigationButton}>
+							<FaHeart size="20" /> Podfrndr
+						</Link>
+						{ this.props.isLoggedIn === false &&
+							<div className={styles.mainNavigationButton} onClick={this.props.initiateLogin}>
+								<FaUser size="20" /> Log in
+							</div>
+						}
+						<hr />
+						{ this.props.isLoggedIn === true &&
+							<div className={styles.mainNavigationButton}>
+								<FaUser size="20" /> Account
+							</div>
+						}
 						{ /*
 						<hr />
 

@@ -22,7 +22,7 @@ import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
 
 import EpisodeChapterList from './Chapters/EpisodeChapterList.jsx';
 import EpisodeChapters from './Chapters/EpisodeChapters.jsx';
-import PodcastSubtitles from './PodcastSubtitles.jsx';
+import PodcastSubtitles from './Subtitles/PodcastSubtitles.jsx';
 // import EpisodePlayerControls from './EpisodePlayerControls.jsx';
 
 import DOMPurify from 'dompurify';

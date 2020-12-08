@@ -2,6 +2,8 @@
 	padding: 20px;
 
 	transition: all 1s;
+
+	min-width: 320px;
 	
 	flex: 1;
 }

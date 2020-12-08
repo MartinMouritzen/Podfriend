@@ -49,7 +49,7 @@ const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, 
 							/>
 						}
 						{ !coverImage &&
-							<div className={styles.podcastCover}><img class={styles.loadingIndicator} src={LoadingRings} /></div>
+							<div className={styles.podcastCover}><img className={styles.loadingIndicator} src={LoadingRings} /></div>
 						}
 						{ /*
 						<div className={styles.starRating}>

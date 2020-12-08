@@ -6,11 +6,20 @@ import parseSRT from 'parse-srt';
 
 import DOMPurify from 'dompurify';
 
+import SVG from 'react-inlinesvg';
+const SearchIcon = () => <SVG src={require('podfriend-approot/images/design/icons/search.svg')} />;
+
+import SubtitleSearchModal from 'podfriend-approot/components/Episode/Subtitles/SubtitleSearchModal.jsx';
+
+import Modal from 'podfriend-approot/components/Window/Modal';
+
 import styles from './PodcastSubtitles.scss';
 
-const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false, subtitleFileURL = false }) => {
+const PodcastSubtitles = React.memo(({ progress, url, tempPodcast = false, episode = false, subtitleFileURL = false, episodeOpen = false }) => {
 	// This part is temporary until the podcast index supports having transcripts and subtitles in the index.
 	const [feedUrl,setFeedUrl] = useState(false);
+
+	const [searching,setSearching] = useState(false);
 
 	const [subtitleContent,setSubtitleContent] = useState(false);
 
@@ -109,6 +118,7 @@ const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false,
 	};
 
 	useEffect(() => {
+		setSubtitleContent(false);
 		try {
 			var re = /(?:\.([^.]+))?$/;
 			var ext = re.exec(subtitleFileURL)[1];
@@ -119,8 +129,6 @@ const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false,
 		catch(exception) {
 			console.log('Error parsing subtitles: ' + exception);
 		}
-
-		
 	},[subtitleFileURL]);
 
 	useEffect(() => {
@@ -129,6 +137,12 @@ const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false,
 		}
 		parseFeed();
 	},[episode, feedUrl]);
+
+	useEffect(() => {
+		if (searching && !episodeOpen) {
+			setSearching(false);
+		}
+	},[episodeOpen]);
 	
 	useEffect(() => {
 		if (!episode || !tempPodcast) {
@@ -147,15 +161,25 @@ const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false,
 				}
 			}
 			return (
-				<div className={styles.subtitles}>
-					{ useText.map((segment) => {
-						var cleanText = DOMPurify.sanitize(segment.text,{
-							ALLOWED_TAGS: ['br']
-						});
-						return (
-							<div className={styles.subtitleLine} key={segment.id} dangerouslySetInnerHTML={{__html:cleanText}} />
-						)
-					}) }
+				<div className={styles.subtitleContainer}>
+					<div className={styles.subtitles}>
+						{ useText.map((segment) => {
+							var cleanText = DOMPurify.sanitize(segment.text,{
+								ALLOWED_TAGS: ['br']
+							});
+							return (
+								<div className={styles.subtitleLine} key={segment.id} dangerouslySetInnerHTML={{__html:cleanText}} />
+							)
+						}) }
+					</div>
+					<div onClick={(event) => { event.preventDefault(); event.stopPropagation(); console.log('search prompt'); setSearching(true); }} >
+						<SearchIcon />
+					</div>
+					{ searching &&
+						<Modal shown={searching} onClose={() => { setSearching(false); }}>
+							<SubtitleSearchModal subtitleContent={subtitleContent} />
+						</Modal>
+					}
 				</div>
 			);
 		}
@@ -183,6 +207,6 @@ const PodcastSubtitles = ({ progress, url, tempPodcast = false, episode = false,
 		}
 	}
 	return null;
-}
+});
 
 export default PodcastSubtitles;

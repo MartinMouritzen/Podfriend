@@ -11,6 +11,7 @@ import DOMPurify from 'dompurify';
 import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
 import SVG from 'react-inlinesvg';
+
 const FullScreenIcon = () => <SVG src={require('podfriend-approot/images/design/player/fullscreen.svg')} />;
 const PlayIcon = () => <SVG src={require('podfriend-approot/images/design/player/play.svg')} />;
 const PauseIcon = () => <SVG src={require('podfriend-approot/images/design/player/pause.svg')} />;
@@ -24,7 +25,7 @@ const ChromecastIcon = () => <SVG src={require('podfriend-approot/images/design/
 const SkipForwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-forward.svg')} />;
 const SkipBackwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-backward.svg')} />;
 
-import TimeUtil from './../../library/TimeUtil.js';
+import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
 import styles from './../Player.scss';
 
@@ -37,7 +38,7 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/EpisodeChapterList.jsx';
 import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/EpisodeChapters.jsx';
-import PodcastSubtitles from 'podfriend-approot/components/Episode/PodcastSubtitles.jsx';
+import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
 
 import { showSpeedSettingWindow } from 'podfriend-approot/redux/actions/uiActions';
 
@@ -228,14 +229,19 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	},[chapters,activeEpisode.currentTime]);
 
 	useEffect(() => {
+		setSubtitleFileURL(false);
+		setChapters(false);
+
 		const fetchEpisodeData = async() => {
-			setChapters(false);
 			// console.log('fetching activeEpisode');
 			let episodeId = activeEpisode.id;
 			try {
 				let episode = await fetch('https://api.podfriend.com/podcast/episode/' + episodeId + '?fulltext=true');
 
 				episode = await episode.json();
+
+				console.log('episode data');
+				console.log(episode);
 			
 				var description = DOMPurify.sanitize(episode.description, {
 					ALLOWED_TAGS: [
@@ -309,9 +315,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						}
 					</div>
 					<div className={styles.playingText}>
-						{ episodeOpen && subtitleFileURL !== false &&
-							<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} />
-						}
+							<div className={styles.subtitleContainer} style={{ display: (episodeOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
+								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={episodeOpen} />
+							</div>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: title}} />
 						<div className={styles.author}>
 							{activePodcast.name}
