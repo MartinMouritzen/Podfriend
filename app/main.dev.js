@@ -25,7 +25,8 @@ const { audio } = require('system-control');
 
 app.commandLine.appendSwitch('--autoplay-policy','no-user-gesture-required');
 
-let podfriendIcon = __dirname + '/images/logo/podfriend_logo_128x128.png';
+let podfriendIcon = __dirname + '/images/logo/podfriend_logo_512x512.png';
+let podfriendTrayIcon = __dirname + '/images/logo/podfriend_logo_18x18.png';
 // let podfriendIcon = __dirname + '/../resources/icon.ico';
 
 var autoUpdatesEnabled = process.env.NODE_ENV === 'production' ? true : false;
@@ -339,14 +340,16 @@ app.on('ready', async () => {
 	
 	// System tray
 	app.whenReady().then(() => {
-		systemTray = new Tray(podfriendIcon);
+		systemTray = new Tray(podfriendTrayIcon);
 		// systemTray.setHighlightMode('on');
 		const trayContextMenu = Menu.buildFromTemplate([
 			{ label: 'Show Podfriend window', click: () => {
 				mainWindow.show();
 			}},
+			/*
 			{ label: 'Item2', type: 'radio' },
 			{ label: 'Item3', type: 'radio', checked: true },
+			*/
 			{ label: 'Exit Podfriend', click: () => {
 				mainWindow.destroy();
 				app.quit();	
