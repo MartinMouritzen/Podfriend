@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
 
 import { Link, useHistory } from 'react-router-dom';
 
@@ -63,6 +65,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [currentChapter,setCurrentChapter] = useState(false);
 	const [subtitleFileURL,setSubtitleFileURL] = useState(false);
 
+	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
+
 	useEffect(() => {
 		audioController.setAudioElement(audioElement);
 		onAudioElementReady();
@@ -70,8 +74,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	const openEpisode = (event) => {
 		event.preventDefault();
-		if (episodeOpen === false) {
-			setEpisodeOpen(true);
+		if (fullPlayerOpen === false) {
+			// setEpisodeOpen(true);
+			dispatch(showFullPlayer(true));
 		}
 		else {
 			history.push({
@@ -80,7 +85,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					podcast: activePodcast
 				}
 			});
-			setEpisodeOpen(false);
+			// setEpisodeOpen(false);
+			showFullPlayer(false);
 		}
 	}
 
@@ -137,7 +143,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	};
 
 	const retryAudioOnError = () => {
-		if (errorRetries > 3) {
+		if (errorRetries >= 3) {
 			console.log('Retried audio more than 3 times. Will not try again.');
 		}
 		else {
@@ -170,14 +176,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			console.log(error); console.log(error.nativeEvent);
 			console.log(error.nativeEvent.message);
 			console.log(error.nativeEvent.code);
+			console.log(error.currentTarget);
 
-			var errorSpecified = Object.keys(Object.getPrototypeOf(error.currentTarget.error)).find(key => error.currentTarget.error[key] === error.currentTarget.error.code);
-			console.log(errorSpecified);
+			// var errorSpecified = Object.keys(Object.getPrototypeOf(error.currentTarget.error)).find(key => error.currentTarget.error[key] === error.currentTarget.error.code);
+			// console.log(errorSpecified);
 
 			// Wait half a second before retrying.
 			setTimeout(() => {
 				retryAudioOnError();
-			},500);
+			},1000);
 		},
 		onAbort: (error) => { console.log('onAbort happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); },
 		onEmptied: (error) => { console.log('onEmptied happened in audio element'); console.log(error); console.log(error.nativeEvent); console.log(error.nativeEvent.message); console.log(error.nativeEvent.code); },
@@ -269,16 +276,18 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	},[activeEpisode.id]);
 
 	const showEpisodePane = () => {
-		setEpisodeOpen(true);
+		// setEpisodeOpen(true);
+		dispatch(showFullPlayer(true));
 	};
 	const hideEpisodePane = () => {
-		setEpisodeOpen(false);
+		// setEpisodeOpen(false);
+		dispatch(showFullPlayer(false));
 	};
 
 	return (
 		<>
-			<div className={styles.openPlayerBackground} style={{ display: (episodeOpen ? 'block' : 'none') }} onClick={() => { setEpisodeOpen(false); }} />
-			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={episodeOpen} className={(episodeOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'none' }}>
+			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
+			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'none' }}>
 				<div
 					className={styles.playingPreview}
 					onClick={openEpisode}
@@ -315,8 +324,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						}
 					</div>
 					<div className={styles.playingText}>
-							<div className={styles.subtitleContainer} style={{ display: (episodeOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
-								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={episodeOpen} />
+							<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
+								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} />
 							</div>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: title}} />
 						<div className={styles.author}>
@@ -341,7 +350,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 									onTouchStart={(event) => { props.onTouchStart(event); }}
 									style={{
 										...props.style,
-										height: episodeOpen ? '36px' : '24px',
+										height: fullPlayerOpen ? '36px' : '24px',
 										width: '100%',
 										display: 'flex'
 									}}
@@ -393,10 +402,10 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
 						{ isBuffering &&
 							<div key="playButton" className={styles.playButton} onClick={pause}>
-								{ episodeOpen && 
+								{ fullPlayerOpen && 
 									<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
 								}
-								{ episodeOpen === false && 
+								{ fullPlayerOpen === false && 
 									<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
 								}
 							</div>
@@ -445,7 +454,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					/>
 					*/ }
 				</div>
-				{ episodeOpen &&
+				{ fullPlayerOpen &&
 					<div className={styles.episodeInfo}>
 						<div className={styles.blueFiller}>
 							<div style={{ height: '80px', overflow: 'hidden' }} >
@@ -464,7 +473,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				}
 
 			</DraggablePane>
-			{ episodeOpen === false && 
+			{ fullPlayerOpen === false && 
 				<div className={styles.bottomProgressBar}>
 					<div className={styles.bottomProgressBarInner} style={{ width: ((100 * progress) / duration) + '%' }}>
 						&nbsp;

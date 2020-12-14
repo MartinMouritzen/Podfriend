@@ -5,12 +5,12 @@ import PodcastMatrixUI from 'podfriend-ui/PodcastMatrix/PodcastMatrixUI.jsx';
 /**
 *
 */
-const PodcastMatrix = ({type,podcasts}) => {
+const PodcastMatrix = React.memo(({type,podcasts}) => {
 	return (
 		<PodcastMatrixUI
 			type={type}
 			podcasts={podcasts}
 		/>
 	);
-}
+})
 export default PodcastMatrix;

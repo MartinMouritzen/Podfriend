@@ -37,4 +37,4 @@ const PodcastMatrixUI = ({ podcasts, type, max = 50 }) => {
 		</div>
 	);
 }
-export default PodcastMatrixUI;
+export default React.memo(PodcastMatrixUI);

@@ -15,6 +15,7 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
 
 import { viewPodcast, playEpisode } from "podfriend-approot/redux/actions/podcastActions";
+import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
 
 import { FaPlay, FaPause, FaArrowLeft } from "react-icons/fa";
 
@@ -58,6 +59,7 @@ const EpisodePane = () => {
 		}
 		if (foundEpisode) {
 			dispatch(playEpisode(selectedPodcast,foundEpisode));
+			dispatch(showFullPlayer(true));
 		}
 	};
 

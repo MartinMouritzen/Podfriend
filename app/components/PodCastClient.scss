@@ -147,6 +147,28 @@ input, textarea {
 		overflow-y: auto;
 		height: 100%;
 	}
+	.contentPage, .landingPage {
+		h1 {
+			margin: 0px;
+			font-weight: bold;
+			font-size: 56px;
+		}
+	}
+	.landingPage {
+		background-color: #FFFFFF;
+
+		.hero {
+			background-color: rgba(255,195,0,0.5);
+			padding: 40px;
+		}
+		.hero * {
+			color: rgb(27, 27, 33);
+		}
+	}
+	.contentPage {
+		background-color: #FFFFFF;
+		padding: 20px;
+	}
 
 
 

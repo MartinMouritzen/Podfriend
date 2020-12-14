@@ -1,29 +1,37 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 
 import { connect } from "react-redux";
-import { authenticateUser, abortLogin } from "../redux/actions/userActions";
+import { authenticateUser } from "../redux/actions/userActions";
+import { abortLogin } from "../redux/actions/uiActions";
 import { hideSpeedSettingWindow } from 'podfriend-approot/redux/actions/uiActions';
 
-import { Route, Redirect, Link, Switch, withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import styles from './PodCastClient.scss';
 
 import PodCastService from './../library/PodCastService.js';
 import SideBar from './SideBar';
 
-import SearchPane from './Search/SearchPane';
-import SearchPaneUI from './Search/SearchPaneUI.jsx';
+// import SearchPane from './Search/SearchPane';
+// import SearchPaneUI from './Search/SearchPaneUI.jsx';
+const SearchPane = lazy(() => import('./Search/SearchPane'));
+const SearchPaneUI = lazy(() => import('./Search/SearchPaneUI.jsx'));
 
-import PodCastPane from './Podcast/PodCastPane.jsx';
-import PodcastPaneUI from './Podcast/PodcastPaneUI.jsx';
+// import PodCastPane from './Podcast/PodCastPane.jsx';
+// import PodcastPaneUI from './Podcast/PodcastPaneUI.jsx';
+const PodCastPane = lazy(() => import('./Podcast/PodCastPane.jsx'));
+const PodcastPaneUI = lazy(() => import('./Podcast/PodcastPaneUI.jsx'));
 
 import Player from './Player';
 import PlayerUI from './Player/PlayerUI.jsx';
 
 import Welcome from './Welcome';
-import SettingsPage from '~/app/components/user/SettingsPage';
+// import SettingsPage from '~/app/components/user/SettingsPage';
+const SettingsPage = lazy(() => import('~/app/components/user/SettingsPage'));
 
 import EpisodePane from 'podfriend-approot/components/Episode/EpisodePane';
+// import ForPodcasters from 'podfriend-approot/components/Pages/ForPodcasters.jsx';
+const ForPodcasters = lazy(() => import('podfriend-approot/components/Pages/ForPodcasters.jsx'));
 
 import BottomNavigation from 'podfriend-approot/components/Navigation/BottomNavigation';
 
@@ -34,12 +42,16 @@ import LoginForm from './Login/LoginForm';
 import FavoriteList from './Favorites/FavoriteList.jsx';
 import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
 
-import SwipeExplorer from './Explore/SwipeExplorer.jsx';
+// import SwipeExplorer from './Explore/SwipeExplorer.jsx';
+const SwipeExplorer = lazy(() => import('./Explore/SwipeExplorer.jsx'));
 
 import AudioSpeedSettingModal from 'podfriend-approot/components/Player/AudioSpeedSettingModal.jsx';
 
+import { BottomSheet } from 'react-spring-bottom-sheet';
+import 'react-spring-bottom-sheet/dist/style.css'
+
 const mapStateToProps = state => ({
-	showLogin: state.user.showLogin,
+	showLogin: state.ui.showLogin,
 	activeEpisode: state.podcast.activeEpisode,
 	authToken: state.user.authToken,
 	speedSettingWindowVisible: state.ui.showSpeedSettingWindow
@@ -201,24 +213,27 @@ class PodcastClient extends Component {
 				<div className={styles.top}>
 					<SideBar />
 					<div id="mainArea" onScroll={this.props.onScroll} className={styles.mainArea} ref={this.mainArea}>
-						<Switch>
-							<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
-							<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
-							<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
-							<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />
-							<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-							<Route exact path="/podcast/:podcastName/:episodeId" render={(props) => { return (<EpisodePane {...props} />); }} />
-							<Route exact path="/podcast/:podcastName/:episodeId/chapters/" render={(props) => { return (<EpisodePane {...props} />); }} />
-							<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />
-							<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
-							<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showResponsiveList={true} showArchived={false} setHasArchived={false} /> ); }} />
-							<Redirect to='/' />
-						</Switch>
+						<Suspense fallback={<div>Loading...</div>}>
+							<Switch>
+								<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
+								<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
+								<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
+								<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />
+								<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+								<Route exact path="/podcast/:podcastName/:episodeId" render={(props) => { return (<EpisodePane {...props} />); }} />
+								<Route exact path="/podcast/:podcastName/:episodeId/chapters/" render={(props) => { return (<EpisodePane {...props} />); }} />
+								<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />
+								<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
+								<Route path="/podcasters/" render={(props) => { return (<ForPodcasters />); }} />
+								<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showResponsiveList={true} showArchived={false} setHasArchived={false} /> ); }} />
+								<Redirect to='/' />
+							</Switch>
+						</Suspense>
 					</div>
 				</div>
 				<Player audioController={this.props.audioController} onEpisodeSelect={this.onEpisodeSelect} UI={PlayerUI} />
@@ -227,6 +242,11 @@ class PodcastClient extends Component {
 					<Modal onClose={this.props.abortLogin}>
 						<LoginForm />
 					</Modal>
+				}
+				{ false &&
+					<BottomSheet open={(this.props.showLogin === true)}>
+						<LoginForm />
+					</BottomSheet>
 				}
 				{ this.props.speedSettingWindowVisible && 
 					<AudioSpeedSettingModal onClose={this.props.hideSpeedSettingWindow} />
@@ -246,7 +266,7 @@ class PodcastClient extends Component {
 	*/
 	onSearch(query) {
 		this.props.history.push({
-			pathname: '/search/' + query
+			pathname: '/search/' + encodeURIComponent(query)
 		});
 	}
 }

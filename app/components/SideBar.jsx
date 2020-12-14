@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { initiateLogin, userLogout } from "~/app/redux/actions/userActions";
+import { userLogout } from "~/app/redux/actions/userActions";
+import { initiateLogin } from "~/app/redux/actions/uiActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
@@ -99,6 +100,9 @@ class SideBar extends Component {
 								<FaUser size="20" /> Account
 							</div>
 						}
+						<Link to="/podcasters/" className={styles.mainNavigationButton}>
+							<FaPodcast size="20" /> For Podcasters
+						</Link>
 						{ /*
 						<hr />
 

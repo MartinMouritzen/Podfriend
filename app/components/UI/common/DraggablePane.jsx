@@ -32,7 +32,10 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 	},[open,windowWidth]);
 
 	useEffect(() => {
-		set({ height: heightWithoutDrag });
+		// Giving it a little time before calling, to prevent it being triggered before mouseup, otherwise we get weird sideeffects.
+		setTimeout(() => {
+			set({ height: heightWithoutDrag });
+		},50);
 	},[heightWithoutDrag]);
 
 	const bind = useGesture({
@@ -41,7 +44,7 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 			// elementRef.current.scrollTop = startDragScrollOffsetY;
 		},
 		onDrag: ({ down, initial: [ix,iy], movement: [mx, my], direction: velocity }) => {
-			let dragValues;
+			let dragValues = { height: heightWithoutDrag };
 			
 			if (my === 0) {
 				return;
@@ -51,18 +54,17 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 				if (open && (elementRef.current.scrollTop > 0 || my < 0)) {
 					const canScrollDown = true;
 
-					if (down && canScrollDown) {
+					// if (down && canScrollDown) {
 						elementRef.current.scrollTop = startDragScrollOffsetY + (my * -1);
-						dragValues = { y: startDragScrollOffsetY + (my * -1) + 2 };
+						dragValues.y = startDragScrollOffsetY + (my * -1) + 2;
 						set(dragValues);
-					}
+					// }
 				}
 				else {
 					dragValues = { height: down ? heightWithoutDrag - my : heightWithoutDrag };
 					if (open && my > 100 && !down) {
 						if (onHide) {
 							onHide();
-							dragValues = { height: heightWithoutDrag };
 						}
 					}
 					else if (!open && !down) {

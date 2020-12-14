@@ -15,18 +15,6 @@ export function userLogout() {
 		payload: false
 	};
 }
-export function initiateLogin() {
-	return {
-		type: LOGIN_SHOW,
-		payload: false
-	};
-}
-export function abortLogin() {
-	return {
-		type: LOGIN_HIDE,
-		payload: false
-	};
-}
 export function userLoggedIn(userObj) {
 	return {
 		type: USER_LOGGED_IN,

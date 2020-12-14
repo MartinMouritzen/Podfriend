@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+// import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
+
+// import { useDispatch } from 'react-redux';
 
 import { format, distanceInWordsToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
@@ -11,108 +15,106 @@ import ShareButtons from './ShareButtons.jsx';
 
 import styles from './EpisodeList.css';
 
-/**
-*
-*/
-class EpisodeListItem extends React.Component {
-	constructor(props) {
-		super(props);
+const EpisodeListItem = ({ id, title, description, duration, currentTime, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
+	// const dispatch = useDispatch();
+	const [episodeTitle,setEpisodeTitle] = useState(title);
+	const [episodeDescription,setEpisodeDescription] = useState(description);
 
-		var episodeTitle = DOMPurify.sanitize(props.title,{
+	useEffect(() => {
+		setEpisodeTitle(DOMPurify.sanitize(title,{
 			ALLOWED_TAGS: []
-		});
-		
-		// Decode entities, so that text with double encodings (eg. if it contained HTML when served to itunes, and they already encoded it) won't have encoded tags in it, when we parse it
-		var description = DOMPurify.sanitize(props.description,{
+		}));
+		setEpisodeDescription(DOMPurify.sanitize(description,{
 			ALLOWED_TAGS: ['i','em']
-		});
-		
-		this.state = {
-			episodeTitle: episodeTitle,
-			description: description
-		};
+		}));
+	},[title, description]);
+
+	var totalMinutes = Math.round(duration / 60);
+	var minutesLeft = currentTime ? Math.round((duration - currentTime) / 60) : totalMinutes;
+	
+	var progressPercentage = currentTime ? (100 * currentTime) / duration : 0;
+	if (progressPercentage > 100) {
+		progressPercentage = 100;
 	}
-	shouldComponentUpdate(nextProps) {
-		if (this.props.isActiveEpisode) { return true; }
-		if (nextProps.title != this.props.title) { return true; }
-		if (nextProps.description != this.props.description) { return true; }
-		if (nextProps.url != this.props.url) { return true; }
-		if (nextProps.currentTime != this.props.currentTime) { return true; }
-		if (nextProps.duration != this.props.duration) { return true; }
-		if (nextProps.listened != this.props.listened) { return true; }
-		if (nextProps.isActiveEpisode != this.props.isActiveEpisode) { return true; }
-		if (nextProps.hideListenedEpisodes != this.props.hideListenedEpisodes) { return true; }
-		if (this.props.isActiveEpisode && nextProps.isPlaying != this.props.isPlaying) { return true; }
-		
-		return false;
+	
+	var episodeClass = styles.episode;
+	if (isActiveEpisode) {
+		episodeClass += ' ' + styles.episodePlaying;
 	}
-	render() {
-		var totalMinutes = Math.round(this.props.duration / 60);
-		var minutesLeft = this.props.currentTime ? Math.round((this.props.duration - this.props.currentTime) / 60) : totalMinutes;
-		
-		var progressPercentage = this.props.currentTime ? (100 * this.props.currentTime) / this.props.duration : 0;
-		if (progressPercentage > 100) {
-			progressPercentage = 100;
-		}
-		
-		var episodeClass = styles.episode;
-		if (this.props.isActiveEpisode) {
-			episodeClass += ' ' + styles.episodePlaying;
-		}
-		if (this.props.isActiveEpisode && this.props.isPlaying) {
-			episodeClass += ' ' + styles.isPlaying;
-		}
-		if (this.props.listened) {
-			episodeClass += ' ' + styles.listened;
-		}
-		
-		if (!this.props.isActiveEpisode && this.props.hideListenedEpisodes && this.props.listened) {
-			episodeClass += ' ' + styles.hidden;
-		}
-		
-		return (
-			<div id={'episode-' + this.props.id} key={this.props.episode.url} className={episodeClass} onClick={() => { this.props.selectEpisodeAndPlay(this.props.episode); }}>
-				<div className={styles.play}>
-					<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={(event) => { this.props.selectEpisodeAndPlay(this.props.episode); event.stopPropagation(); }}>
-						<FaPlay size="13px" />
-					</div>
-					<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>
-						<FaPause size="14px" />
-					</div>
-					<div className={[styles.checkIcon,styles.icon].join(' ')}>
-						<FaCheck size="14px"  />
-					</div>
-				</div>
-				<div className={styles.episodeInfo}>
-					<div className={styles.titleAndDescription}>
-						<div className={styles.title} dangerouslySetInnerHTML={{__html: this.state.episodeTitle}} />
-						{ this.props.episodeType && this.props.episodeType != 'full' && this.props.episodeType !== '' &&
-							<span type={this.props.episodeType} className={styles.episodeType}>{this.props.episodeType}</span>
-						}
-						<div className={styles.date}>
-							{format(this.props.date,'MMM D, YYYY')}
-							<span className={styles.agoText}>({distanceInWordsToNow(this.props.date)} ago)</span>
-						</div>
-						<div className={styles.description} dangerouslySetInnerHTML={{__html:this.state.description}} />
-					</div>
-					<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(this.props.duration))}>
-						<div className={styles.progressBarOuter}>
-							<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
-						</div>
-						
-						<span className={styles.duration}>
-							{ minutesLeft == totalMinutes && 
-								<span>{totalMinutes} minutes</span>
-							}
-							{ minutesLeft != totalMinutes && 
-								<span>{Math.round((this.props.duration - this.props.currentTime) / 60)} of {totalMinutes} minutes left</span>
-							}
-						</span>
-					</span>
-					<ShareButtons podcastTitle={this.props.podcastTitle} episodeTitle={this.props.title} episodeId={this.props.id} podcastPath={this.props.podcastPath} />
-				</div>
+	if (isActiveEpisode && isPlaying) {
+		episodeClass += ' ' + styles.isPlaying;
+	}
+	if (listened) {
+		episodeClass += ' ' + styles.listened;
+	}
+	
+	if (!isActiveEpisode && hideListenedEpisodes && listened) {
+		episodeClass += ' ' + styles.hidden;
+	}
+
+	const onPlay = (event) => {
+		event.stopPropagation();
+		selectEpisodeAndPlay(episode);
+		// dispatch(showFullPlayer(true));
+	};
+
+	return (
+		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay}>
+		<div className={styles.play}>
+			<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={onPlay}>
+				<FaPlay size="13px" />
 			</div>
-		);
-	}
+			<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>
+				<FaPause size="14px" />
+			</div>
+			<div className={[styles.checkIcon,styles.icon].join(' ')}>
+				<FaCheck size="14px"  />
+			</div>
+		</div>
+		<div className={styles.episodeInfo}>
+			<div className={styles.titleAndDescription}>
+				<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
+				{ episodeType && episodeType != 'full' && episodeType !== '' &&
+					<span type={episodeType} className={styles.episodeType}>{episodeType}</span>
+				}
+				<div className={styles.date}>
+					{format(date,'MMM D, YYYY')}
+					<span className={styles.agoText}>({distanceInWordsToNow(date)} ago)</span>
+				</div>
+				<div className={styles.description} dangerouslySetInnerHTML={{__html:episodeDescription}} />
+			</div>
+			<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(duration))}>
+				<div className={styles.progressBarOuter}>
+					<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
+				</div>
+				
+				<span className={styles.duration}>
+					{ minutesLeft == totalMinutes && 
+						<span>{totalMinutes} minutes</span>
+					}
+					{ minutesLeft != totalMinutes && 
+						<span>{Math.round((duration - currentTime) / 60)} of {totalMinutes} minutes left</span>
+					}
+				</span>
+			</span>
+			<ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} />
+		</div>
+	</div>
+	);
+};
+function episodeShouldCache(prevEpisode,nextEpisode) {
+	if (nextEpisode.isActiveEpisode) { return false; }
+	if (nextEpisode.title != prevEpisode.title) { return false; }
+	if (nextEpisode.description != prevEpisode.description) { return false; }
+	if (nextEpisode.url != prevEpisode.url) { return false; }
+	if (nextEpisode.currentTime != prevEpisode.currentTime) { return false; }
+	if (nextEpisode.duration != prevEpisode.duration) { return false; }
+	if (nextEpisode.listened != prevEpisode.listened) { return false; }
+	if (nextEpisode.isActiveEpisode != prevEpisode.isActiveEpisode) { return false; }
+	if (nextEpisode.hideListenedEpisodes != prevEpisode.hideListenedEpisodes) { return false; }
+	if (prevEpisode.isActiveEpisode && nextEpisode.isPlaying != prevEpisode.isPlaying) { return false; }
+	
+	return true;
 }
-export default EpisodeListItem;
+export default React.memo(EpisodeListItem, episodeShouldCache);
+// export default EpisodeListItem;

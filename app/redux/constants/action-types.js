@@ -9,8 +9,6 @@ export const AUDIO_REQUEST_PLAY = 'AUDIO_REQUEST_PLAY';
 
 // User action types
 export const AUTH_TOKEN_RECEIVED = 'AUTH_TOKEN_RECEIVED';
-export const LOGIN_SHOW = 'LOGIN_SHOW';
-export const LOGIN_HIDE = 'LOGIN_HIDE';
 export const FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_NOT_LOGGED_IN = 'USER_NOT_LOGGED_IN';

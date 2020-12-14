@@ -1,17 +1,13 @@
 import {
 	AUTH_TOKEN_RECEIVED,
-	LOGIN_SHOW,
-	LOGIN_HIDE,
 	FETCH_USER_PROFILE,
 	USER_LOGGED_IN,
 	USER_LOGGED_OUT,
 	USER_NOT_LOGGED_IN
-	
 } from "../constants/action-types";
 
 const initialState = {
 	isLoggedIn: false,
-	showLogin: false,
 	profileData: {},
 	authToken: false
 };
@@ -41,16 +37,6 @@ const userReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			isLoggedIn: false,
 			profileData: false
-		});
-	}
-	else if (action.type === LOGIN_SHOW) {
-		return Object.assign({}, state, {
-			showLogin: true
-		});
-	}
-	else if (action.type === LOGIN_HIDE) {
-		return Object.assign({}, state, {
-			showLogin: false
 		});
 	}
 	return state;
