@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { audioPaused, audioPlayRequested } from 'podfriend-approot/redux/actions/audioActions.js';
 
 import LatestVisitedPodcasts from 'podfriend-approot/components/Lists/LatestVisitedPodcasts.jsx';
+import LatestEpisodes from 'podfriend-approot/components/Lists/LatestEpisodes.jsx';
 import TrendingPodcasts from 'podfriend-approot/components/Lists/TrendingPodcasts.jsx';
 
 import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
@@ -167,9 +168,14 @@ const Welcome = () => {
 				<p>Martin</p>
 			</div>
 			*/}
+
+			<LatestEpisodes />
+
 			{ activePodcast !== false &&
 				<LatestVisitedPodcasts />
 			}
+
+
 
 			<TrendingPodcasts subTitle='Trending' title='Podcasts' limit={14} />
 

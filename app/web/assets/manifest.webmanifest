@@ -44,7 +44,7 @@
 	  "type": "image/png"
 	}
   ],
-  "start_url": "/index.html?source=pwa",
+  "start_url": "/",
   "background_color": "#00a4ff",
   "display": "standalone",
   "theme_color": "#0176e5",

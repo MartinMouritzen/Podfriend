@@ -13,6 +13,20 @@ class TimeUtil {
 	/**
 	*
 	*/
+	static HmsToSeconds(hms) {
+		var p = hms.split(':'),
+        s = 0, m = 1;
+
+		while (p.length > 0) {
+			s += m * parseInt(p.pop(), 10);
+			m *= 60;
+		}
+
+		return s;
+	}
+	/**
+	*
+	*/
 	static formatPrettyDurationText(duration) {
 		let [h,m,s] = TimeUtil.secondsToHms(duration);
 		

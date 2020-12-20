@@ -4,10 +4,37 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import { Link } from 'react-router-alias';
 
-const PodcastMatrixUI = ({ podcasts, type, max = 50 }) => {
+const PodcastMatrixUI = ({ podcasts = false, episodes = false, type, max = 50 }) => {
 	return (
 		<div className={'podcastGrid ' + type}>
-		{
+		{ episodes !== false &&
+			episodes.map((episode,index) => {
+				if (index >= max) {
+					return false;
+				}
+				return (
+					<Link to={{ pathname: '/podcast/' + episode.path + '/' + episode.id, state: { podcast: episode } }} key={'latestPodcast' + index} className='podcastItem'>
+						<PodcastImage
+							podcastPath={episode.path}
+							imageErrorText={episode.name}
+							src={episode.image ? episode.image : episode.feedImage}
+							className='cover'
+							width={400}
+							height={400}
+						/>
+						<div className='content'>
+							<div className='author'>
+								{episode.author}
+							</div>
+							<div className='title'>
+								{episode.title}
+							</div>
+						</div>
+					</Link>
+				);
+			})
+		}
+		{ podcasts !== false &&
 			podcasts.map((podcast,index) => {
 				if (index >= max) {
 					return false;

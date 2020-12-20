@@ -66,7 +66,7 @@ export function updateEpisodeDuration(duration) {
 /**
 *
 */
-export function playEpisode(podcast,episode) {
+export function playEpisode(podcast,episode,timeStamp = false) {
 
 	console.log('playEpisode');
 	/*
@@ -87,7 +87,8 @@ export function playEpisode(podcast,episode) {
 			type: PLAY_EPISODE,
 			payload: {
 				podcast: podcast,
-				episode: episode
+				episode: episode,
+				timeStamp: timeStamp
 			}
 		});
 		dispatch({

@@ -1,6 +1,7 @@
 import {
 	UI_SHOW_SPEED_SETTING_WINDOW,
 	UI_HIDE_SPEED_SETTING_WINDOW,
+	UI_SHOW_SHARE_WINDOW,
 	UI_SHOW_LOGIN,
 	UI_HIDE_LOGIN,
 	UI_SHOW_FULLPLAYER,
@@ -9,6 +10,7 @@ import {
 
 const initialState = {
 	showSpeedSettingWindow: false,
+	showShareWindow: false,
 	showLogin: false,
 	showFullPlayer: false
 };
@@ -22,6 +24,11 @@ const uiReducer = (state = initialState, action) => {
 	else if (action.type === UI_HIDE_SPEED_SETTING_WINDOW) {
 		return Object.assign({}, state, {
 			showSpeedSettingWindow: action.payload
+		});
+	}
+	if (action.type === UI_SHOW_SHARE_WINDOW) {
+		return Object.assign({}, state, {
+			showShareWindow: action.payload
 		});
 	}
 	else if (action.type === UI_SHOW_LOGIN) {

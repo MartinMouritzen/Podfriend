@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { Range } from 'react-range';
 
@@ -42,7 +42,7 @@ import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/Ep
 import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/EpisodeChapters.jsx';
 import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
 
-import { showSpeedSettingWindow } from 'podfriend-approot/redux/actions/uiActions';
+import { showSpeedSettingWindow, showShareWindow } from 'podfriend-approot/redux/actions/uiActions';
 
 import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
 
@@ -51,7 +51,8 @@ import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.
 /**
 *
 */
-const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady }) => {
+
+const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady }) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const audioElement = useRef(null);
@@ -122,6 +123,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			const resourceUrl = new URL(fileUrl);
 			resourceUrl.searchParams.delete('_from');
 			resourceUrl.searchParams.append('_from','podfriend.com');
+			resourceUrl.searchParams.append('_guid',activeEpisode.statsId);
 			return resourceUrl.toString();
 		}
 		catch (exception) {
@@ -130,11 +132,12 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			try {
 				var fallbackUrl = fileUrl;
 				if (fallbackUrl.includes('?')) {
-					fallbackUrl += '&_from=podfriend.com';
+					fallbackUrl += '&_from=podfriend.com&_guid=' + activeEpisode.statsId;
 				}
 				else {
-					fallbackUrl += '?_from=podfriend.com';
+					fallbackUrl += '?_from=podfriend.com&_guid=' + activeEpisode.statsId;
 				}
+				return fallbackUrl;
 			}
 			catch (exception2) {
 				return fileUrl;
@@ -168,6 +171,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		onSeeked: onSeek,
 		onTimeUpdate: onTimeUpdate,
 		onEnded: onEnded,
+		onLoadedData: () => { onLoadedData },
 
 		preload: "auto",
 		disableremoteplayback: "true",
@@ -284,6 +288,10 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		dispatch(showFullPlayer(false));
 	};
 
+	const generateTimeHash = () => {
+		return '#t=' + Math.round(activeEpisode.currentTime ? activeEpisode.currentTime : 0);
+	};
+
 	return (
 		<>
 			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
@@ -297,14 +305,14 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							<>
 								<div className={styles.fullscreenIcon} onClick={videoFullscreen}><FullScreenIcon /></div>
 								<video {...audioElementProps}>
-									<source src={addUserAgentToUrl(activeEpisode.url)} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
+									<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
 								</video>
 							</>
 						}
 						{ isVideo === false &&
 							<>
 								<audio {...audioElementProps}>
-									<source src={addUserAgentToUrl(activeEpisode.url)} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
+									<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
 								</audio>
 
 								{ chapters !== false &&
@@ -456,12 +464,10 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				</div>
 				{ fullPlayerOpen &&
 					<div className={styles.episodeInfo}>
-						<div className={styles.blueFiller}>
-							<div style={{ height: '80px', overflow: 'hidden' }} >
-								<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
-									<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
-								</svg>
-							</div>
+						<div style={{ height: '80px', overflow: 'hidden' }} >
+							<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
+								<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
+							</svg>
 						</div>
 						{ chapters !== false &&
 							<div style={{ padding: 20 }}>
@@ -482,8 +488,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			}
 			<ContextMenu element={moreIconElement} showTrigger="click" position='top'>
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
+				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
 				{/*
-				<ContextMenuItem><ShareIcon /> Share episode</ContextMenuItem>
 				<ContextMenuItem><ClockIcon /> Set sleep timer</ContextMenuItem>
 				<ContextMenuItem><ChromecastIcon /> Chromecast</ContextMenuItem>
 				*/}

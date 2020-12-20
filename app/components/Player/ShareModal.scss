@@ -1,0 +1,39 @@
+.shareUrlInput {
+	width: 640px;
+	max-width: 100%;
+	padding: 10px;
+	font-size: 14px;
+	margin-bottom: 10px;
+	border-width: 0px;
+	background-color: #EEEEEE;
+	border-radius: 5px;
+}
+.instructionLabel {
+	margin-bottom: 10px;
+	margin-top: 15px;
+	font-weight: bold;
+}
+.episodeTitle {
+	margin-bottom: 10px;
+}
+.shareModal {
+	min-width: 320px;
+}
+.shareModal textarea {
+	width: 640px;
+	min-height: 160px;
+	max-width: 100%;
+	padding: 10px;
+	border: 0px;
+	font-size: 16px;
+	line-height: 25px;
+	background-color: #EEEEEE;
+	border-radius: 5px;
+}
+.timeStampInput {
+	width: 80px;
+	padding: 10px;
+	font-size: 14px;
+	border-width: 0px;
+	border-bottom: 1px solid #000000;
+}

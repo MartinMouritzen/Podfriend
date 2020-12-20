@@ -6,7 +6,7 @@ import styles from './EpisodePane.scss';
 
 // import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
 import ChatPane from 'podfriend-approot/components/Chat/ChatPane.jsx';
 
@@ -28,9 +28,17 @@ import PodcastSubtitles from './Subtitles/PodcastSubtitles.jsx';
 
 import DOMPurify from 'dompurify';
 
+function useQuery() {
+	return new URLSearchParams(useLocation().search);
+}
+
 const EpisodePane = () => {
 	const dispatch = useDispatch();
 	let { podcastName, episodeId } = useParams();
+
+	// http://localhost:8080/podcast/someone-knows-something/499651292?t=60
+	let query = useQuery();
+	var timeStamp = query.get('t');
 
 	const [episode,setEpisode] = useState(false);
 	const [description,setDescription] = useState(false);
@@ -58,7 +66,7 @@ const EpisodePane = () => {
 			}
 		}
 		if (foundEpisode) {
-			dispatch(playEpisode(selectedPodcast,foundEpisode));
+			dispatch(playEpisode(selectedPodcast,foundEpisode,timeStamp ? timeStamp : false));
 			dispatch(showFullPlayer(true));
 		}
 	};
@@ -203,6 +211,11 @@ const EpisodePane = () => {
 						{ !isActiveEpisode &&
 							<div onClick={onEpisodePlay} className={styles.playButton}>
 									<FaPlay /> Play this episode
+							</div>
+						}
+						{ isActiveEpisode &&
+							<div onClick={onEpisodePlay} className={styles.playButton}>
+									<FaPlay /> Resume this episode
 							</div>
 						}
 					</>

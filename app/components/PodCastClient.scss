@@ -7,7 +7,7 @@ html, body {
 
 	overflow: hidden;
 }
-input, textarea {
+input[type=submit], input[type=text], textarea {
 	-webkit-user-select:text;
 	-webkit-appearance: none;
 }

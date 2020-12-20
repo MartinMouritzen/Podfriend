@@ -3,7 +3,8 @@ import {
 	UI_SHOW_LOGIN,
 	UI_HIDE_LOGIN,
 	UI_SHOW_FULLPLAYER,
-	UI_HIDE_FULLPLAYER
+	UI_HIDE_FULLPLAYER,
+	UI_SHOW_SHARE_WINDOW
 } from "../constants/ui-types";
 
 export function showSpeedSettingWindow() {
@@ -18,6 +19,19 @@ export function hideSpeedSettingWindow() {
 		payload: false
 	};
 }
+export function showShareWindow() {
+	return {
+		type: UI_SHOW_SHARE_WINDOW,
+		payload: true
+	};
+}
+export function hideShareWindow() {
+	return {
+		type: UI_SHOW_SHARE_WINDOW,
+		payload: false
+	};
+}
+
 export function initiateLogin() {
 	return {
 		type: UI_SHOW_LOGIN,

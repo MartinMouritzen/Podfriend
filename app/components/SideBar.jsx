@@ -95,14 +95,16 @@ class SideBar extends Component {
 							</div>
 						}
 						<hr />
-						{ this.props.isLoggedIn === true &&
+						{ false && this.props.isLoggedIn === true &&
 							<div className={styles.mainNavigationButton}>
 								<FaUser size="20" /> Account
 							</div>
 						}
-						<Link to="/podcasters/" className={styles.mainNavigationButton}>
-							<FaPodcast size="20" /> For Podcasters
-						</Link>
+						{ false && 
+							<Link to="/podcasters/" className={styles.mainNavigationButton}>
+								<FaPodcast size="20" /> For Podcasters
+							</Link>
+						}
 						{ /*
 						<hr />
 

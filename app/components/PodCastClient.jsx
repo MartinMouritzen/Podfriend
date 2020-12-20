@@ -2,8 +2,7 @@ import React, { Component, Suspense, lazy } from 'react';
 
 import { connect } from "react-redux";
 import { authenticateUser } from "../redux/actions/userActions";
-import { abortLogin } from "../redux/actions/uiActions";
-import { hideSpeedSettingWindow } from 'podfriend-approot/redux/actions/uiActions';
+import { abortLogin, hideSpeedSettingWindow, hideShareWindow } from 'podfriend-approot/redux/actions/uiActions';
 
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
@@ -45,6 +44,7 @@ import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
 // import SwipeExplorer from './Explore/SwipeExplorer.jsx';
 const SwipeExplorer = lazy(() => import('./Explore/SwipeExplorer.jsx'));
 
+import ShareModal from 'podfriend-approot/components/Player/ShareModal.jsx';
 import AudioSpeedSettingModal from 'podfriend-approot/components/Player/AudioSpeedSettingModal.jsx';
 
 import { BottomSheet } from 'react-spring-bottom-sheet';
@@ -54,12 +54,14 @@ const mapStateToProps = state => ({
 	showLogin: state.ui.showLogin,
 	activeEpisode: state.podcast.activeEpisode,
 	authToken: state.user.authToken,
-	speedSettingWindowVisible: state.ui.showSpeedSettingWindow
+	speedSettingWindowVisible: state.ui.showSpeedSettingWindow,
+	showShareWindow: state.ui.showShareWindow
 })
 const mapDispatchToProps = dispatch => ({
 	authenticateUser: () => dispatch(authenticateUser()),
 	abortLogin: () => dispatch(abortLogin()),
-	hideSpeedSettingWindow: () => dispatch(hideSpeedSettingWindow())
+	hideSpeedSettingWindow: () => dispatch(hideSpeedSettingWindow()),
+	hideShareWindow: () => dispatch(hideShareWindow())
 })
 
 /**
@@ -83,6 +85,10 @@ class PodcastClient extends Component {
 		this.checkMouseNavigation = this.checkMouseNavigation.bind(this);
 		
 		this.mainArea = React.createRef();
+
+		var timeStamp = new URLSearchParams(this.props.location.search).get("t");
+
+		console.log('timeStamp: ' + timeStamp);
 		
 		this.state = {
 			services: services
@@ -250,6 +256,9 @@ class PodcastClient extends Component {
 				}
 				{ this.props.speedSettingWindowVisible && 
 					<AudioSpeedSettingModal onClose={this.props.hideSpeedSettingWindow} />
+				}
+				{ this.props.showShareWindow && 
+					<ShareModal onClose={this.props.hideShareWindow} />
 				}
 			</div>
 		);

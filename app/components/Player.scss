@@ -478,6 +478,7 @@
 	.controls {
 		width: 100%;
 		margin-bottom: 20px;
+		flex: 0 1 auto;
 	}
 	.progressText {
 		margin-left: 10px;
@@ -494,6 +495,7 @@
 		width: 100%;
 		background-color: #FFFFFF;
 		padding-bottom: 60px;
+		flex: 2;
 	}
 	.coverContainer {
 		position: relative;

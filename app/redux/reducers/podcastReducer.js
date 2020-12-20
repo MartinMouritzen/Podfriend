@@ -1,5 +1,7 @@
 import localForage from "localforage";
 
+import { v4 as uuidv4 } from 'uuid';
+
 import {
 	LOGIN_SHOW,
 	LOGIN_HIDE,
@@ -49,7 +51,28 @@ const initialState = {
 
 const podcastReducer = (state = initialState, action) => {
 	if (action.type === PLAY_EPISODE) {
-		// action.payload.episode.currentTime = 0;
+
+		if (action.payload.timeStamp) {
+			action.payload.episode.currentTime = action.payload.timeStamp;
+		}
+
+		try {
+			if (action.payload.podcast.episodes[action.payload.episode.episodeIndex].statsId) {
+				action.payload.episode.statsId = action.payload.podcast.episodes[action.payload.episode.episodeIndex].statsId;
+			}
+			else {
+				let statsId = uuidv4();
+				action.payload.episode.statsId = statsId;
+				action.payload.podcast.episodes[action.payload.episode.episodeIndex].statsId = statsId;
+				localForage.setItem('podcast_cache_' + action.payload.podcast.path,action.payload.podcast);
+			}
+		}
+		catch(exception) {
+			console.log('exception working on statsid: ');
+			console.log(exception);
+		}
+
+
 		
 		return Object.assign({}, state, {
 			activePodcast: action.payload.podcast,

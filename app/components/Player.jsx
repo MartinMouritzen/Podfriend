@@ -56,6 +56,7 @@ class Player extends Component {
 		
 		this.onProgressSliderChange = this.onProgressSliderChange.bind(this);
 		this.onLoadedMetadata = this.onLoadedMetadata.bind(this);
+		this.onLoadedData = this.onLoadedData.bind(this);
 		this.onTimeUpdate = this.onTimeUpdate.bind(this);
 		this.onEnded = this.onEnded.bind(this);
 		this.onNextEpisode = this.onNextEpisode.bind(this);
@@ -220,6 +221,9 @@ class Player extends Component {
 	*
 	*/
 	onCanPlay(event) {
+		// alert('set time: ' + this.props.activeEpisode.currentTime);
+		// this.setCurrentTime(this.props.activeEpisode.currentTime);
+
 		this.props.audioCanPlay();
 	}
 	/**
@@ -246,12 +250,26 @@ class Player extends Component {
 	onLoadedMetadata(event) {
 		let newDuration = this.props.audioController.getDuration();
 		console.log('OnloadedMetaData. duration: ' + newDuration + ', episodeid: ' + this.props.activeEpisode.id);
+
+		// alert(this.props.audioController.audioElement.current.currentTime);
+
+		// alert('set time: ' + this.props.activeEpisode.currentTime);
+		this.setCurrentTime(this.props.activeEpisode.currentTime);
+
+		// alert(this.props.audioController.audioElement.current.currentTime);
+
 		this.props.updateEpisodeDuration(newDuration);
 		this.setState({
 			duration: newDuration
 		});
 		// On IOS sometimes only this event is sent, not the onCanPlay - so we use this to signal that we can play too
 		this.onCanPlay();
+	}
+	/**
+	*
+	*/
+	onLoadedData(event) {
+		// this.setCurrentTime(this.props.activeEpisode.currentTime);
 	}
 	/**
 	*
@@ -460,6 +478,7 @@ class Player extends Component {
 				onCanPlay={this.onCanPlay}
 				onBuffering={this.onBuffering}
 				onLoadedMetadata={this.onLoadedMetadata}
+				onLoadedData={this.onLoadedData}
 				
 				isBuffering={this.props.isBuffering}
 				

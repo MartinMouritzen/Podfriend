@@ -12,7 +12,7 @@ const LatestVisitedPodcasts = () => {
 			<div className='section'>
 				<div className='sectionInner'>
 					<div className='sectionSubTitle'>Your</div>
-					<div className='sectionTitle'>latest podcasts</div>
+					<div className='sectionTitle'>Latest podcasts</div>
 				</div>
 				<PodcastMatrix type='scrollList' podcasts={lastVisitedPodcasts} showLoadMore={true} />
 			</div>

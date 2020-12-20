@@ -1,7 +1,7 @@
 {
 	"name": "podfriend",
 	"productName": "PodFriend",
-	"version": "0.6.1",
+	"version": "0.6.6",
 	"description": "PodFriend - Because everyone needs a PodFriend.",
 	"license": "UNLICENSED",
 	"private": true,
@@ -272,7 +272,8 @@
 		"redux-thunk": "^2.3.0",
 		"socket.io-client": "^2.3.1",
 		"source-map-support": "^0.5.9",
-		"system-control": "^0.1.1"
+		"system-control": "^0.1.1",
+		"uuid": "^8.3.2"
 	},
 	"optionalDependencies": {
 		"win-audio": "2.0.2"
