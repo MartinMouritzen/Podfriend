@@ -7,9 +7,21 @@ html, body {
 
 	overflow: hidden;
 }
-input[type=submit], input[type=text], textarea {
+h2 {
+	color: #000000;
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 20px;
+}
+/* input[type=submit], input[type=text], input[type=email], input[type=password], textarea {
+ let's see if the below is enough	
+*/
+input, textarea {
 	-webkit-user-select:text;
 	-webkit-appearance: none;
+}
+input[type=checkbox] {
+	-webkit-appearance: auto;
 }
 :global(.themeDark) {
 	
@@ -142,6 +154,15 @@ input[type=submit], input[type=text], textarea {
 /*******************************************
 * Global Podfriend styles
 ********************************************/
+:root {
+	
+}
+:global {
+
+	div[data-rsbs-root] * {
+		z-Index: 10000;
+	}
+}
 :global {
 	.podcastPage {
 		overflow-y: auto;
@@ -226,9 +247,7 @@ input[type=submit], input[type=text], textarea {
 		position: relative;
 		background-color: #f0f0f0;
 
-		&:not(:first-child) {
-			border-top: 1px solid #d5d5d5;
-		}
+		border-bottom: 1px solid #d5d5d5;
 
 		.sectionInner {
 			padding-top: 15px;
@@ -519,7 +538,6 @@ input[type=submit], input[type=text], textarea {
 			.cover {
 				width: 100%;
 				height: auto;
-				/* max-height: 195px; */
 				display: block;
 				background-size: contain;
 				background-repeat: no-repeat;

@@ -1,5 +1,6 @@
 .episodeListLoading {
-	margin: 10px;
+	padding: 10px;
+	background-color: #FFFFFF;
 }
 .episodeList {
 	flex: 1;
@@ -78,28 +79,35 @@
 	padding-left: 20px;
 	color: #BBBBBB;
 }
+/*
 .play {
 	min-width: 55px;
 	max-width: 55px;
 	padding-top: 15px;
 	padding-left: 20px;
 }
+*/
 .icon {
 	border-radius: 50%;
 	background-color: #cccccc;
 	border: 2px solid #cccccc;
-	width: 30px;
-	height: 30px;
-	padding: 10px;
-	padding-top: 10px;
+	width: 40px;
+	height: 40px;
 	transition: all 0.4s;
+	padding: 10px;
+
+	opacity: 0.8;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .icon:hover {
 	transform: scale(1.2);
 }
 .playIcon, .pauseIcon {
 	background-color: #0176e5;
-	border: 2px solid #0176e5;
+	border: 2px solid #FFFFFF;
 }
 .playIcon svg, .pauseIcon svg {
 	fill: #FFFFFF;
@@ -119,13 +127,12 @@
 }
 .playIcon svg {
 	position: relative;
-	bottom: 5px;
-	right: 2px;
+	left: 2px;
 }
 .pauseIcon svg {
 	position: relative;
-	bottom: 5px;
-	right: 4px;
+	bottom: 1px;
+	right: 1px;
 }
 
 .checkIcon svg {
@@ -234,8 +241,35 @@
 	-webkit-box-orient: vertical; 
 	text-overflow: ellipsis;
 	overflow: hidden;
+
+	word-break : break-all;
 	
 	transition: all 2s;
+}
+.cover {
+	margin-left: 20px;
+	margin-top: 20px;
+	width: 120px;
+	height: 120px;
+	max-width: 120px;
+	max-height: 120px;
+
+	background-size: cover;
+	border-radius: 5px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.25);
+}
+@media only screen and (max-width: 460px) {
+	.cover {
+		width: 60px;
+		height: 60px;
+		max-width: 60px;
+		max-height: 60px;
+	}
 }
 
 
@@ -285,9 +319,11 @@
 	}
 }
 @media only screen and (max-width: 450px) {
+	/*
 	.episode .play {
 		display: none;
 	}
+	*/
 }
 @media only screen and (max-width: 600px) {
 	.episode {

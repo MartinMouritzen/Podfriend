@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaAssistiveListeningSystems } from 'react-icons/fa';
 
 const STATUS_PRELOAD = 1;
 const STATUS_LOADED = 2;
@@ -17,7 +18,7 @@ const loadImage = (src) => {
 	});
 }
 
-const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false }) => {
+const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false, asBackground = false, children }) => {
 	const originalSource = src;
 
 	if (podcastPath) {
@@ -82,7 +83,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 			fontColor = '#FFFFFF';
 		}
 		
-		const fontSize = Math.round(width / 8);
+		const fontSize = Math.round(width / 12);
 
 		return (
 			<div
@@ -95,10 +96,17 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 					alignItems: 'center',
 					textAlign: 'center',
 					color: fontColor,
-					fontSize: fontSize > 32 ? 32 : fontSize
+					fontSize: fontSize > 18 ? 18 : fontSize
 				}}
 				className={className} originalsource={originalSource}>
 				{imageErrorText}
+			</div>
+		);
+	}
+	else if (asBackground) {
+		return (
+			<div className={className} style={{ backgroundImage: 'url("' + imageSource + '")' }}>
+				{children}
 			</div>
 		);
 	}

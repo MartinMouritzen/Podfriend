@@ -15,7 +15,7 @@ import styles from './PodCastPane.css';
 import PodcastHeader from './PodcastHeader.jsx';
 import PodcastExtras from './PodcastExtras.jsx';
 
-const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podcastLoading, podcastLoadingError, isSubscribed, subscribedPodcasts, subscribeToPodcast, unsubscribeToPodcast, isArchived, archivePodcast, unarchivePodcast, currentPodcastPlaying, onEpisodeSelect }) => {
+const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podcastLoading, podcastLoadingError, isSubscribed, subscribedPodcasts, subscribeToPodcast, unsubscribeToPodcast, isArchived, archivePodcast, unarchivePodcast, currentPodcastPlaying, onEpisodeSelect, rssFeed = false }) => {
 	const location = useLocation();
 	const podcastPane = useRef(null);
 
@@ -44,6 +44,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 				podcastLoading={podcastLoading}
 				podcastLoadingError={podcastLoadingError}
 
+				rssFeed={rssFeed}
 			/>
 			<PodcastExtras
 				isSubscribed={isSubscribed}
@@ -55,6 +56,8 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 				podcastLoadingError={podcastLoading}
 				archivePodcast={archivePodcast}
 				unarchivePodcast={unarchivePodcast}
+
+				rssFeed={rssFeed}
 			/>
 
 			<div className={styles.podcastContent}>

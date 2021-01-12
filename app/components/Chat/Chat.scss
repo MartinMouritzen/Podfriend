@@ -1,0 +1,69 @@
+.messagePane {
+	min-height: 200px;
+	padding-top: 5px;
+	/*
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	*/
+
+	.messageLine {
+		padding: 5px;
+		padding-left: 7px;
+		font-size: 15px;
+
+		.messageUsername {
+			margin-right: 5px;
+			font-weight: bold;
+		}
+		.messageText {
+
+		}
+	}
+}
+.textInputPane {
+	max-height: 50px;
+	height: 50px;
+	padding: 5px;
+
+	display: flex;
+	justify-content: center;
+
+	input[type=text] {
+		background-color: #EEEEEE;
+		border-radius: 5px;
+		border: 0px;
+		outline: 0px;
+		padding-left: 10px;
+		padding-right: 5px;
+
+		color: #333333;
+		font-size: 16px;
+
+		flex: 1;
+
+		&::placeholder {
+			color: #999999;
+		}
+	}
+	.sendButton {
+		height: 40px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		svg {
+			height: 30px;
+			fill: #0176e5;
+		}
+		&.hasMessage {
+			width: 35px;
+			overflow: hidden;
+		}
+		&.noMessage {
+			width: 0px;
+			padding: 0px;
+			margin: 0px;
+			overflow: hidden;
+		}
+	}
+}

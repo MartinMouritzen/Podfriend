@@ -9,6 +9,17 @@
 	.modalPage {
 		padding: 20px;
 	}
+	.modalContent {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.bottomSheet {
+
+	}
+	.bottomSheet h1 {
+		color: #000000;
+		margin-left: 20px;
+	}
 }
 .pageModalOuter, .modalOuter {
 	display: flex;
@@ -57,7 +68,10 @@
 	border-radius: 10px;
 	overflow: hidden;
 
+	flex: 1;
+
 	max-width: 90vw;
+	max-height: 95vh;
 
 	margin-left: auto;
 	margin-right: auto;
@@ -83,7 +97,7 @@
 }
 @media only screen and (min-width: 750px) {
 	.modal {
-		max-width: 840px;
+		max-width: 90vw;
 	}
 }
 @media only screen and (max-width: 600px) {

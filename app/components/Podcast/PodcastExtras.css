@@ -34,10 +34,6 @@
 	margin-top: 15px;
 	text-align: left;
 }
-.donateButton:hover {
-	background-color: #ffe280;
-	transform: scale(1.1);
-}
 .donateButton svg {
 	fill: #000000;
 }
@@ -51,10 +47,6 @@
 	transition: all .2s;
 	border-radius: 5px;
 }
-.archiveButton:hover {
-	background-color: #3474b1;
-	transform: scale(1.1);
-}
 .archiveButton svg {
 	fill: #FFFFFF;
 	position: relative;
@@ -62,14 +54,24 @@
 	margin-right: 10px;
 	transition: all 0.5s;
 }
-.archiveButton:hover svg {
-	fill: #bc9671;
-}
 .toolTipText {
 	width: 400px;
 }
 .toolTipText p {
 	font-size: 14px;
+}
+@media (any-hover: hover) {
+	.donateButton:hover {
+		background-color: #ffe280;
+		transform: scale(1.1);
+	}
+	.archiveButton:hover {
+		background-color: #3474b1;
+		transform: scale(1.1);
+	}
+	.archiveButton:hover svg {
+		fill: #bc9671;
+	}
 }
 @media only screen and (max-width: 1750px) {
 	.podcastExtras .subscribe {
@@ -97,15 +99,15 @@
 		padding-right: 30px;
 	}
 	.podcastExtras .subscribe, .podcastExtras .share {
+		background-color: #FFFFFF;
 		padding: 0px;
-		margin-top: 20px;
-		margin-bottom: 20px;
+		padding-top: 20px;
+		padding-bottom: 20px;
 	}
 }
 @media only screen and (max-width: 1200px) {
 	.podcastExtras .subscribe {
 		flex-direction: column;
-		padding-top: 0px;
 	}
 	.podcastExtras .subscribe >:not(:first-child) {
 		margin: 0px;
@@ -117,9 +119,6 @@
 		padding-bottom: 20px;
 		padding-left: 10px;
 		padding-right: 10px;
-	}
-	.podcastExtras .subscribe {
-		padding: 0px;
 	}
 }
 @media only screen and (min-width: 1920px) {

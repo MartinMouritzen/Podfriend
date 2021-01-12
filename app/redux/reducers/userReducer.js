@@ -14,7 +14,6 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
 	if (action.type === AUTH_TOKEN_RECEIVED) {
-		console.log('auth received');
 		return Object.assign({}, state, {
 			authToken: action.payload
 		});
@@ -22,8 +21,7 @@ const userReducer = (state = initialState, action) => {
 	else if (action.type === USER_LOGGED_IN) {
 		return Object.assign({}, state, {
 			isLoggedIn: true,
-			profileData: action.payload,
-			showLogin: false
+			profileData: action.payload
 		});
 	}
 	else if (action.type === USER_LOGGED_OUT) {

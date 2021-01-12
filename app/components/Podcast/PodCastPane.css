@@ -1,12 +1,11 @@
 .podcastPane {
 	width: 100%;
 
-
 	height: calc(100% - 90px);
 
 	overflow: auto;
 
-	background-color: #FFFFFF;
+	background-color: #0176e5;
 
 	position: relative;
 }

@@ -138,7 +138,7 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 		});
 
 		var service = services['itunes'];
-		return service.search(query,{ authorName: authorName, authorId: authorId },searchType)
+		return service.search(query,searchType)
 		.then((results) => {
 			var genres = [];
 			var genreKeys = {};

@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
-
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { Range } from 'react-range';
@@ -12,8 +10,9 @@ import DOMPurify from 'dompurify';
 
 import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
-import SVG from 'react-inlinesvg';
 
+
+import SVG from 'react-inlinesvg';
 const FullScreenIcon = () => <SVG src={require('podfriend-approot/images/design/player/fullscreen.svg')} />;
 const PlayIcon = () => <SVG src={require('podfriend-approot/images/design/player/play.svg')} />;
 const PauseIcon = () => <SVG src={require('podfriend-approot/images/design/player/pause.svg')} />;
@@ -23,6 +22,7 @@ const MoreIcon = () => <SVG src={require('podfriend-approot/images/design/player
 const ShareIcon = () => <SVG src={require('podfriend-approot/images/design/player/share.svg')} />;
 const SpeedIcon = () => <SVG src={require('podfriend-approot/images/design/player/speed.svg')} />;
 const ClockIcon = () => <SVG src={require('podfriend-approot/images/design/player/clock.svg')} />;
+const ChatIcon = () => <SVG src={require('podfriend-approot/images/design/player/chat.svg')} />;
 const ChromecastIcon = () => <SVG src={require('podfriend-approot/images/design/player/chromecast.svg')} />;
 const SkipForwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-forward.svg')} />;
 const SkipBackwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-backward.svg')} />;
@@ -38,21 +38,28 @@ import { ContextMenu, ContextMenuItem } from 'podfriend-approot/components/wwt/C
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
-import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/EpisodeChapterList.jsx';
+
 import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/EpisodeChapters.jsx';
 import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
-
-import { showSpeedSettingWindow, showShareWindow } from 'podfriend-approot/redux/actions/uiActions';
+import { showFullPlayer, showSpeedSettingWindow, showShareWindow, showSleepTimer, hideSleepTimer } from 'podfriend-approot/redux/actions/uiActions';
 
 import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
 
 import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.jsx';
 
+import ChatProvider from 'podfriend-approot/components/Chat/ChatProvider.jsx';
+import ChatModal from 'podfriend-approot/components/Chat/ChatModal.jsx';
+import SleepTimerModal from './SleepTimerModal.jsx';
+
+import OpenPlayerUI from './OpenPlayerUI.jsx';
+
+import VolumeSlider from './VolumeSlider.jsx';
+
 /**
 *
 */
 
-const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady }) => {
+const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged }) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const audioElement = useRef(null);
@@ -65,8 +72,10 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [chaptersLoading,setChaptersLoading] = useState(true);
 	const [currentChapter,setCurrentChapter] = useState(false);
 	const [subtitleFileURL,setSubtitleFileURL] = useState(false);
+	const [chatShown,setChatShown] = useState(false);
 
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
+	const showSleepTimerWindow = useSelector((state) => state.ui.showSleepTimerWindow);
 
 	useEffect(() => {
 		audioController.setAudioElement(audioElement);
@@ -74,6 +83,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	},[audioElement]);
 
 	const openEpisode = (event) => {
+		if (!hasEpisode) {
+			return;
+		}
 		event.preventDefault();
 		if (fullPlayerOpen === false) {
 			// setEpisodeOpen(true);
@@ -198,25 +210,42 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const loadChapters = async(url) => {
 		console.log('loading chapters');
 		let result = false;
+
 		try {
 			result = await fetch(url);
 		}
 		catch(exception) {
+			// console.error('Cors probably missing on chapters, using proxy');
 			url = 'https://www.podfriend.com/tmp/rssproxy.php?rssUrl=' + encodeURI(url);
-			result = await fetch(url);
-		}
-		result = await result.json();
 
+			try {
+				result = await fetch(url);
+			}
+			catch(exception2) {
+				console.error('Proxy call to chapters failed.');
+				console.error(exception2);
+			}
+		}
 		try {
-			if (result.chapters && result.chapters.length > 0) {
-				setChapters(result.chapters);
+			let resultJson = await result.json();
+
+			try {
+				if (resultJson.chapters && resultJson.chapters.length > 0) {
+					setChapters(resultJson.chapters);
+					setChaptersLoading(false);
+				}
+			}
+			catch(exception) {
+				console.error('Exception getting chapters from: ' + url);
+				console.error(exception);
 				setChaptersLoading(false);
 			}
 		}
 		catch(exception) {
-			console.log('Exception getting chapters from: ' + url);
-			console.log(exception);
-			setChaptersLoading(false);
+			console.error('Exception parsing chapters');
+			console.error(exception);
+			console.error(url);
+			console.error(result);
 		}
 	};
 
@@ -251,12 +280,12 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 				episode = await episode.json();
 
-				console.log('episode data');
-				console.log(episode);
+				// console.log('episode data');
+				// console.log(episode);
 			
 				var description = DOMPurify.sanitize(episode.description, {
 					ALLOWED_TAGS: [
-						'p','br','ol','ul','li','b'
+						'a','p','br','ol','ul','li','b'
 					  ]
 				});
 				description = description.replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -288,6 +317,10 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		dispatch(showFullPlayer(false));
 	};
 
+	const toggleChat = () => {
+		setChatShown(!chatShown);
+	};
+
 	const generateTimeHash = () => {
 		return '#t=' + Math.round(activeEpisode.currentTime ? activeEpisode.currentTime : 0);
 	};
@@ -295,7 +328,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	return (
 		<>
 			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
-			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'none' }}>
+			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'flex' }}>
 				<div
 					className={styles.playingPreview}
 					onClick={openEpisode}
@@ -316,7 +349,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 								</audio>
 
 								{ chapters !== false &&
-									<EpisodeChapters chapters={chapters} progress={activeEpisode.currentTime} />
+									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
 								}
 								<PodcastImage
 									podcastPath={activePodcast.path}
@@ -341,141 +374,112 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						</div>
 					</div>
 				</div>
-				<div className={styles.controls}>
-					<div className={styles.progress}>
-						<div className={styles.progressText}>
-							{TimeUtil.formatPrettyDurationText(progress)}
-						</div>
-						<div className={styles.progressBarOuter}>
-						<Range
-							step={0.1}
-							values={[(100 * progress) / duration]}
-							min={0}
-							max={100}
-							renderTrack={({ props, children }) => (
-								<div
-									onMouseDown={(event) => { props.onMouseDown(event); }}
-									onTouchStart={(event) => { props.onTouchStart(event); }}
-									style={{
-										...props.style,
-										height: fullPlayerOpen ? '36px' : '24px',
-										width: '100%',
-										display: 'flex'
-									}}
-								>
-									<div
-										ref={props.ref}
-										style={{
-											height: '6px',
-											width: '100%',
-											alignSelf: 'center',
-											backgroundColor: 'rgba(10, 10, 0, 0.5)'
-										}}
-									>
-										{children}
-									</div>
-								</div>
-								)}
-								renderThumb={({ props, isDragged }) => (
-								<div
-									{...props}
-									style={{
-										...props.style,
-										height: '16px',
-										width: '16px',
-										borderRadius: '50%',
-										backgroundColor: '#FFFFFF',
-										transition: 'all 0.3s',
-										boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)'
-									}}
+				{ hasEpisode && 
+					<div className={styles.controls}>
+						<div className={styles.progress}>
+							<div className={styles.progressText}>
+								{TimeUtil.formatPrettyDurationText(progress)}
+							</div>
+							<div className={styles.progressBarOuter}>
+								<Range
+									step={0.1}
+									values={[(100 * progress) / duration]}
+									min={0}
+									max={100}
+									renderTrack={({ props, children }) => (
+										<div
+											onMouseDown={(event) => { props.onMouseDown(event); }}
+											onTouchStart={(event) => { props.onTouchStart(event); }}
+											style={{
+												...props.style,
+												height: fullPlayerOpen ? '36px' : '24px',
+												width: '100%',
+												display: 'flex'
+											}}
+										>
+											<div
+												ref={props.ref}
+												style={{
+													height: '6px',
+													width: '100%',
+													alignSelf: 'center',
+													backgroundColor: 'rgba(10, 10, 0, 0.5)'
+												}}
+											>
+												{children}
+											</div>
+										</div>
+									)}
+									renderThumb={({ props, isDragged }) => (
+										<div
+											{...props}
+											style={{
+												...props.style,
+												height: '16px',
+												width: '16px',
+												borderRadius: '50%',
+												backgroundColor: '#FFFFFF',
+												transition: 'all 0.3s',
+												boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)'
+											}}
+										/>
+									)}
+									onChange={(values) => { onProgressSliderChange(values[0],false); }}
 								/>
-						)}
-						onChange={(values) => { onProgressSliderChange(values[0],false); }}
+
+								{/*
+								<ProgressBar
+									progress={progress}
+									duration={duration}
+									onProgressSliderChange={onProgressSliderChange}
+								/>*/}
+							</div>
+							<div className={styles.durationText} title={TimeUtil.formatPrettyDurationText(duration - progress) + ' left.'}>
+								{TimeUtil.formatPrettyDurationText(duration)}
+							</div>
+						</div>
+						<div className={styles.audioButtons}>
+							{ false && 
+								<div className={styles.chatButton} onClick={toggleChat}><ChatIcon /></div>
+							}
+							<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
+							<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
+							{ isBuffering &&
+								<div key="playButton" className={styles.playButton} onClick={pause}>
+									{ fullPlayerOpen && 
+										<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
+									}
+									{ fullPlayerOpen === false && 
+										<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
+									}
+								</div>
+							}
+							{ canPlay && !playing &&
+								<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
+							}
+							{ canPlay && playing &&
+								<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
+							}
+							
+							<div className={styles.forwardButton} onClick={onForward}><ForwardIcon /></div>
+							<div className={styles.fastForwardButton} onClick={onNextEpisode}><SkipForwardIcon /></div>
+							<div className={styles.moreControlsButton} ref={moreIconElement}><MoreIcon /></div>
+						</div>
+					</div>
+				}
+				{ audioElement.current && 
+					<VolumeSlider audioElement={audioElement.current} />
+				}
+				{ fullPlayerOpen &&
+					<OpenPlayerUI
+						description={description}
+						activePodcast={activePodcast}
+						activeEpisode={activeEpisode}
+						chaptersLoading={chaptersLoading}
+						chapters={chapters}
+						currentChapter={currentChapter}
 					/>
 
-							{/*
-							<ProgressBar
-								progress={progress}
-								duration={duration}
-								onProgressSliderChange={onProgressSliderChange}
-							/>*/}
-						</div>
-						<div className={styles.durationText} title={TimeUtil.formatPrettyDurationText(duration - progress) + ' left.'}>
-							{TimeUtil.formatPrettyDurationText(duration)}
-						</div>
-					</div>
-					<div className={styles.audioButtons}>
-						<div className={styles.fillerButton}>&nbsp;</div>
-						<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
-						<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
-						{ isBuffering &&
-							<div key="playButton" className={styles.playButton} onClick={pause}>
-								{ fullPlayerOpen && 
-									<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
-								}
-								{ fullPlayerOpen === false && 
-									<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
-								}
-							</div>
-						}
-						{ canPlay && !playing &&
-							<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
-						}
-						{ canPlay && playing &&
-							<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
-						}
-						
-						<div className={styles.forwardButton} onClick={onForward}><ForwardIcon /></div>
-						<div className={styles.fastForwardButton} onClick={onNextEpisode}><SkipForwardIcon /></div>
-						<div className={styles.moreControlsButton} ref={moreIconElement}><MoreIcon /></div>
-					</div>
-				</div>
-				<div className={styles.volumeControls}>
-					{ /*
-					{ this.props.volume === 0 &&
-						<FaVolumeMute size='20px' />
-					}
-					{ this.props.volume > 0 && this.props.volume <= 60 &&
-						<FaVolumeDown size='20px' />
-					}
-					{ this.props.volume > 60 &&
-						<FaVolumeUp size='20px' />
-					}
-					<Range
-					value={this.props.volume}
-					thumbSize={16}
-					height={6}
-					width="100%"
-					fillColor={{
-						r: 40,
-						g: 189,
-						b: 114,
-						a: 1,
-					}}
-					trackColor={{
-						r: 10,
-						g: 10,
-						b: 0,
-						a: 0.5,
-					}}
-					onChange={this.onVolumeSliderChange}
-					/>
-					*/ }
-				</div>
-				{ fullPlayerOpen &&
-					<div className={styles.episodeInfo}>
-						<div style={{ height: '80px', overflow: 'hidden' }} >
-							<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
-								<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
-							</svg>
-						</div>
-						{ chapters !== false &&
-							<div style={{ padding: 20 }}>
-								<div>Chapters</div>
-								<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
-							</div>
-						}
-					</div>
 				}
 
 			</DraggablePane>
@@ -489,11 +493,17 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			<ContextMenu element={moreIconElement} showTrigger="click" position='top'>
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
+				<ContextMenuItem onClick={() => { dispatch(showSleepTimer()); }}><ClockIcon /> Set sleep timer</ContextMenuItem>
 				{/*
-				<ContextMenuItem><ClockIcon /> Set sleep timer</ContextMenuItem>
 				<ContextMenuItem><ChromecastIcon /> Chromecast</ContextMenuItem>
 				*/}
 			</ContextMenu>
+			{ showSleepTimerWindow &&
+				<SleepTimerModal audioController={audioController} shown={showSleepTimerWindow} onDismiss={() => { dispatch(hideSleepTimer()); }} />
+			}
+			{ chatShown &&
+				<ChatProvider roomId={activePodcast.guid} chatModal={(props) => <ChatModal {...props} shown={chatShown} onDismiss={() => { setChatShown(false); }} activePodcast={activePodcast} activeEpisode={activeEpisode} />} />
+			}
 		</>
 	);
 }

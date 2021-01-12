@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { viewPodcast, archivePodcast, unarchivePodcast, subscribeToPodcast, unsubscribeToPodcast } from "podfriend-approot/redux/actions/podcastActions";
 
+import PodcastFeed from 'podfriend-approot/library/PodcastFeed.js';
+
 import { Link, withRouter } from 'react-router-alias';
 
 import DOMPurify from 'dompurify';
@@ -70,10 +72,41 @@ class PodCastPane extends Component {
 			podcastLoading: true,
 			podcastFeed: {},
 			scrolled: false,
-			scrolledRequestTime: new Date()
+			scrolledRequestTime: new Date(),
+			fetchingRSSFeed: false,
+			fetchedRSSFeed: false,
+			rssFeed: false
 		};
 
 		this.adjustScrollOffsetOnLoad = this.adjustScrollOffsetOnLoad.bind(this);
+	}
+
+	retrieveOriginalPodcastFeed() {
+		// console.error('wa1');
+		if (!this.state.fetchedRSSFeed && !this.state.fetchingRSSFeed) {
+			// console.error('wa2');
+			this.setState({
+				fetchingRSSFeed: true,
+				rssFeed: false
+			},async () => {
+				// console.error('wa3');
+				var podcastFeed = new PodcastFeed(this.props.selectedPodcast.feedUrl);
+				podcastFeed.parse()
+				.then((feed) => {
+					// console.error('wa4');
+					// console.error(feed);
+					this.setState({
+						fetchingRSSFeed: false,
+						fetchedRSSFeed: true,
+						rssFeed: feed
+					});	
+				})
+				.catch((error) => {
+					console.error('Error parsing RSS feed: ');
+					console.error(error);
+				});
+			});
+		}
 	}
 	/**
 	*
@@ -84,21 +117,34 @@ class PodCastPane extends Component {
 		this.props.viewPodcast(podcastPath);
 		
 		this.adjustScrollOffsetOnLoad();
+		this.retrieveOriginalPodcastFeed();
 	}
 	/**
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		var podcastPath = this.props.match.params.podcastName;
+
+		// console.error('cdu: ' + this.props.selectedPodcast.feedUrl);
+		// console.error('dcu: ' + prevProps.selectedPodcast.feedUrl);
 				
-		if (podcastPath !== prevProps.match.params.podcastName) {
+		if (this.props.selectedPodcast.feedUrl !== prevProps.selectedPodcast.feedUrl) {
+			console.log('cdu2: ' + this.props.selectedPodcast.feedUrl);
+			this.setState({
+				fetchingRSSFeed: false,
+				fetchedRSSFeed: false,
+				rssFeed: false
+			},() => {
+				this.retrieveOriginalPodcastFeed();
+			});
+		}
+		if (this.props.location.pathname != prevProps.location.pathname) {
 			this.setState({
 				podcastLoading: true
 			},() => {
 				this.props.viewPodcast(podcastPath);
 			});
-		}
-		if (this.props.location.pathname != prevProps.location.pathname) {
+
 			this.adjustScrollOffsetOnLoad();
 		}
 	}
@@ -186,6 +232,8 @@ class PodCastPane extends Component {
 				description={description}
 				isArchived={isArchived}
 				isSubscribed={isSubscribed}
+
+				rssFeed={this.state.rssFeed}
 
 				showEpisode={this.props.showEpisode}
 				

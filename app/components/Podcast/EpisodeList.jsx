@@ -372,10 +372,12 @@ class EpisodeList extends Component {
 							<EpisodeListItem
 								id={episode.id}
 								key={episode.url}
-								podcastPath={this.props.selectedPodcast.path}
-								podcastTitle={this.props.selectedPodcast.name}
+								podcast={this.props.podcastInfo}
+								podcastPath={this.props.podcastInfo.path}
+								podcastTitle={this.props.podcastInfo.name}
 								title={episode.title}
 								description={episode.description}
+								episodeImage={episode.image ? episode.image : this.props.podcastInfo.artworkUrl600 ? this.props.podcastInfo.artworkUrl600 : this.props.podcastInfo.image}
 								episodeType={episode.episodeType}
 								date={episode.date}
 								listened={episode.listened}

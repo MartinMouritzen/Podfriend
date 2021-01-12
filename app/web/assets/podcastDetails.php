@@ -70,14 +70,18 @@ if($debug || !$cache->get($podcastPath, $return)) {
 		}
 	}
 }
-$canonicalURL = "https://web.podfriend.com".($podcast["path"] ? "/".$podcast["path"]."/".$episodeId : "");
+if ($podcast["path"]) {
+	$canonicalURL = "https://web.podfriend.com/podcast/".($podcast["path"] ? $podcast["path"]."/".$episodeId : "");
+}
 
 print "<title>".$title."</title>\n";
 print "<meta name=\"description\" content=\"".$description."\">\n";
 print "<meta property=\"og:title\" content=\"".$title."\">\n";
 print "<meta property=\"og:description\" content=\"".$description."\">\n";
 print "<meta property=\"og:image\" content=\"".($image ? $image : "https://".$_SERVER["HTTP_HOST"]."/images/app-preview.png")."\">\n";
-print "<link rel=\"canonical\" href=\"".$canonicalURL."\" />\n";
+if ($canonicalURL) {
+	print "<link rel=\"canonical\" href=\"".$canonicalURL."\" />\n";
+}
 
 if ($hasEpisode) {
 	print "<meta property=\"twitter:card\" content=\"player\" />\n";

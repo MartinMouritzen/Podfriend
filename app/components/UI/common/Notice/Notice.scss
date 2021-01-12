@@ -1,0 +1,39 @@
+.notice {
+	padding: 15px;
+
+	margin: 15px;
+	border-radius: 5px;
+
+	display: flex;
+
+	color: #022041;
+
+	.headline {
+		color: #022041;
+		margin-bottom: 5px;
+		-webkit-text-stroke: 0.25px;
+	}
+	.text {
+		color: #022041;
+		p {
+			margin-top: 0px;
+			color: #022041;
+		}
+	}
+	.icon {
+		margin-right: 10px;
+
+		svg {
+			width: 40px;
+			height: 40px;
+			fill: #022041;
+		}
+	}
+	&.notice_warning {
+		background-color: #ffb52b;
+		border-bottom: 5px solid #ffdd80;
+	}
+	&.notice_error {
+		background-color: #ffdcdc;
+	}
+}

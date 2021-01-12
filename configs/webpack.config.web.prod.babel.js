@@ -24,7 +24,7 @@ const productionConfig = merge.smart(baseConfig, {
 	output: {
 		path: path.join(__dirname, '..', 'release/web/'),
 		publicPath: './',
-		filename: 'web.prod.js',
+		filename: 'web.[contenthash].prod.js',
 		libraryTarget: 'umd'
 	},
 	module: {

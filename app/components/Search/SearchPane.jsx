@@ -31,10 +31,12 @@ class SearchPane extends Component {
 		super(props);
 
 		this.state = {
-			selectedGenres: []
+			selectedGenres: [],
+			searchType: props.searchType ? props.searchType : 'podcasts'
 		};
 		
 		this.onGenreFilterChange = this.onGenreFilterChange.bind(this);
+		this.onSearchTypeChange = this.onSearchTypeChange.bind(this);
 	}
 	/**
 	*
@@ -42,6 +44,14 @@ class SearchPane extends Component {
 	onGenreFilterChange(selectedGenres) {
 		this.setState({
 			selectedGenres: selectedGenres && selectedGenres.length > 0 ? selectedGenres.map((option) => { return option.value; }) : []
+		});
+	}
+
+	onSearchTypeChange(newValue) {
+		this.setState({
+			searchType: newValue
+		},() => {
+			this.props.searchPodcasts(this.props.query,this.state.searchType,this.props.authorName,this.props.authorId);
 		});
 	}
 	/**
@@ -54,10 +64,11 @@ class SearchPane extends Component {
 				searching={this.props.searching}
 				searchResults={this.props.searchResults}
 				searchError={this.props.searchError}
-				searchType={this.props.searchType}
+				useSearchType={this.state.searchType}
 				authorId={this.props.authorId}
 				query={this.props.query}
 				onGenreFilterChange={this.onGenreFilterChange}
+				onSearchTypeChange={this.onSearchTypeChange}
 				selectedGenres={this.state.selectedGenres}
 			/>
 		);
@@ -67,17 +78,17 @@ class SearchPane extends Component {
 	*/
 	componentDidMount() {
 		console.log(this.props.query);
-		console.log(this.props.searchType);
+		console.log(this.state.searchType);
 		console.log(this.props.authorName);
 		console.log(this.props.authorId);
-		this.props.searchPodcasts(this.props.query,this.props.searchType,this.props.authorName,this.props.authorId);
+		this.props.searchPodcasts(this.props.query,this.state.searchType,this.props.authorName,this.props.authorId);
 	}
 	/**
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (this.props.location.pathname !== prevProps.location.pathname || this.props.query !== prevProps.query || this.props.authorId !== prevProps.authorId) {
-			this.props.searchPodcasts(this.props.query,this.props.searchType,this.props.authorName,this.props.authorId);
+			this.props.searchPodcasts(this.props.query,this.state.searchType,this.props.authorName,this.props.authorId);
 		}
 	}
 }

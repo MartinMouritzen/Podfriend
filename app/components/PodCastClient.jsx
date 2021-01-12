@@ -85,10 +85,6 @@ class PodcastClient extends Component {
 		this.checkMouseNavigation = this.checkMouseNavigation.bind(this);
 		
 		this.mainArea = React.createRef();
-
-		var timeStamp = new URLSearchParams(this.props.location.search).get("t");
-
-		console.log('timeStamp: ' + timeStamp);
 		
 		this.state = {
 			services: services
@@ -250,7 +246,10 @@ class PodcastClient extends Component {
 					</Modal>
 				}
 				{ false &&
-					<BottomSheet open={(this.props.showLogin === true)}>
+					<BottomSheet
+						open={(this.props.showLogin === true)}
+						onDismiss={(this.props.abortLogin)}
+					>
 						<LoginForm />
 					</BottomSheet>
 				}

@@ -19,7 +19,7 @@ class ITunes {
 	/**
 	*
 	*/
-	search(query,authorInfo = false,searchType = 'podcast') {
+	search(query,searchType = 'podcast') {
 		var searchUrl = false;
 		if (searchType == 'podcast') {
 			if (this.proxyCalls) {
@@ -29,13 +29,14 @@ class ITunes {
 				searchUrl = 'https://itunes.apple.com:443/search?term=' + encodeURIComponent(query) + '&media=podcast&limit=200';
 			}
 		}
-		else if (searchType == 'author') {
+		else if (searchType == 'person' || searchType == 'author') {
 			if (this.proxyCalls) {
-				searchUrl = this.proxyConfig['serverURL'] + 'search/author/?authorName=' + encodeURIComponent(authorInfo.authorName) + '&authorId=' + encodeURIComponent(authorInfo.authorId);
+				searchUrl = this.proxyConfig['serverURL'] + 'search/person/' + encodeURIComponent(query);
 			}
 			else {
 				searchUrl = 'https://itunes.apple.com:443/lookup?id=' + encodeURIComponent(author) + '&entity=podcast&limit=200';
 			}
+			console.log(searchUrl);
 		}
 		// console.log('searching: ' + searchUrl);
 		return axios({
@@ -49,36 +50,43 @@ class ITunes {
 			let results = [];
 			for (var i = 0; i < response.data.results.length; i++) {
 				let resultRaw = response.data.results[i];
-				
-				if (resultRaw.wrapperType != 'track') {
-					continue;
-				}
-				
-				resultRaw.genres = resultRaw.genres.filter((value,index,array) => {
-					return value != 'Podcasts'
-				});
 
-				var result = {
-					version: 1,
-					provider: 'itunes',
-					providerData: {
-						artistId: resultRaw.artistId,
-						collectionId: resultRaw.collectionId,
-						collectionId: resultRaw.collectionId
-					},
-					explicit: resultRaw.collectionExplicitness == 'explicit' ? true : false,
-					country: resultRaw.country,
-					feedUrl: resultRaw.feedUrl,
-					author: resultRaw.artistName,
-					name: resultRaw.name,
-					artworkUrl30: resultRaw.artworkUrl30,
-					artworkUrl60: resultRaw.artworkUrl60,
-					artworkUrl100: resultRaw.artworkUrl100,
-					artworkUrl600: resultRaw.artworkUrl600,
-					primaryGenre: resultRaw.primaryGenreName,
-					genres: resultRaw.genres,
-					episodeCount: resultRaw.trackCount
-				};
+				var result = {};
+				if (searchType == 'podcast') {
+					if (resultRaw.wrapperType != 'track') {
+						continue;
+					}
+					
+					resultRaw.genres = resultRaw.genres.filter((value,index,array) => {
+						return value != 'Podcasts'
+					});
+
+					result = {
+						version: 1,
+						provider: 'itunes',
+						providerData: {
+							artistId: resultRaw.artistId,
+							collectionId: resultRaw.collectionId,
+							collectionId: resultRaw.collectionId
+						},
+						explicit: resultRaw.collectionExplicitness == 'explicit' ? true : false,
+						country: resultRaw.country,
+						feedUrl: resultRaw.feedUrl,
+						author: resultRaw.artistName,
+						name: resultRaw.name,
+						artworkUrl30: resultRaw.artworkUrl30,
+						artworkUrl60: resultRaw.artworkUrl60,
+						artworkUrl100: resultRaw.artworkUrl100,
+						artworkUrl600: resultRaw.artworkUrl600,
+						primaryGenre: resultRaw.primaryGenreName,
+						genres: resultRaw.genres,
+						episodeCount: resultRaw.trackCount
+					};
+				}
+				else if (searchType == 'person' || searchType == 'author') {
+					console.log('person result');
+					console.log(resultRaw);
+				}
 				// console.log(result);
 				results.push(result);
 			}

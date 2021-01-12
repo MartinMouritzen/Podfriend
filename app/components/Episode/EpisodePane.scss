@@ -1,9 +1,14 @@
 .episodePane {
 	background-color: #FFFFFF;
-	height: 100%;
+	
 	overflow: auto;
 
-	padding-bottom: 120px;
+	height: calc(100% - 90px);
+	@media only screen and (max-width: 570px) {
+		height: calc(100% - 60px);
+	}
+
+	padding-bottom: 50px;
 
 	position: relative;
 
@@ -63,7 +68,7 @@
 	.episodeInfo {
 		margin-left: auto;
 		margin-right: auto;
-		margin-top: calc(13vw + 25px);
+		margin-top: calc(13vw + 75px);
 		max-width: 600px;
 
 		.episodeTitle {
@@ -93,9 +98,12 @@
 		.playButton {
 			background-color: #0076e4;
 			margin-top: 10px;
+			margin-left: 10px;
+			margin-right: 10px;
+			margin-bottom: 20px;
 			padding: 20px;
-			padding-top: 10px;
-			padding-bottom: 10px;
+			padding-top: 20px;
+			padding-bottom: 20px;
 			border-radius: 5px;
 			color: #FFFFFF;
 			display: flex;
@@ -106,6 +114,11 @@
 		.playButton svg {
 			fill: #FFFFFF;
 			margin-right: 10px;
+		}
+	}
+	@media only screen and (min-width: 480px) {
+		.episodeInfo {
+			margin-top: 110px;
 		}
 	}
 	@media only screen and (min-width: 600px) {

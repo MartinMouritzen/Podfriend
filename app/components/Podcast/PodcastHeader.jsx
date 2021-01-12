@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styles from './PodcastHeader.css';
 
@@ -6,7 +6,7 @@ import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
 import { Link } from 'react-router-alias';
 
-import { FaGlobeAmericas, FaMicrophoneAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaGlobeAmericas, FaMicrophoneAlt } from "react-icons/fa";
 
 import { ReviewStarsWithText } from 'podfriend-approot/components/Reviews/StarRating.jsx';
 
@@ -16,7 +16,17 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
 
-const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, website, description, podcastLoading, podcastLoadingError, categories = false }) => {
+import PodcastMap from './PodcastMap.jsx';
+import PodcastPersons from './PodcastPersons.jsx';
+
+import Modal from 'podfriend-approot/components/Window/Modal';
+
+const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, title, author, website, description, podcastLoading, podcastLoadingError, categories = false, rssFeed = false }) => {
+	const [location,setLocation] = useState(false);
+	const [showLocation,setShowLocation] = useState(false);
+
+	const [persons,setPersons] = useState(false);
+
 	const goToWebsite = () => {
 		if (isElectron()) {
 			var shell = require('electron').shell;
@@ -26,6 +36,25 @@ const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, 
 			window.open(website,"_blank");
 		}
 	}
+
+	useEffect(() => {
+		if (rssFeed.location) {
+			setLocation(rssFeed.location);
+		}
+		else {
+			setLocation(false);
+		}
+		if (rssFeed.persons) {
+			setPersons(rssFeed.persons);
+		}
+		else {
+			setPersons(false);
+		}
+	},[rssFeed]);
+
+	const onDismissLocation = () => {
+		setShowLocation(false);
+	};
 
 	return (
 		<>
@@ -93,7 +122,6 @@ const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, 
 						{ (description || !podcastLoading) && 
 							<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} />
 						}
-
 					</div>
 				</div>
 			</div>
@@ -109,6 +137,24 @@ const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, 
 			{ (description || !podcastLoading) && 
 				<div className={styles.descriptionBody} dangerouslySetInnerHTML={{__html:description}} />
 			}
+
+			{ location !== false &&
+				<div className={styles.locationLine} onClick={() => { setShowLocation(!showLocation); }}>
+					<FaMapMarkerAlt size="24" /> {location.name}
+				</div>
+			}
+			{ showLocation !== false &&
+				<Modal shown={showLocation} onClose={onDismissLocation}>
+					<PodcastMap location={location} />
+				</Modal>
+			}
+			{ persons !== false &&
+				<div className={styles.personContainer}>
+					<h2>Creators and guests behind the podcast</h2>
+					<PodcastPersons persons={persons} />
+				</div>
+			}
+
 			<div className={styles.categories}>
 				{ categories && Object.keys(categories).map((categoryId) => {
 					return (
@@ -119,5 +165,5 @@ const PodcastHeader = ({ coverImage, imageUrlHash = false, path, title, author, 
 			</div>
 		</>
 	);
-}
+});
 export default PodcastHeader;

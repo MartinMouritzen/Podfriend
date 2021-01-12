@@ -14,6 +14,30 @@
 	display: table;
 }
 
+.checkingChanges {
+	border: 1px solid #c0c0c0;
+	background-color: #e0e0e2;
+	margin-left: 8px;
+	margin-right: 2px;
+	margin-bottom: 10px;
+	padding: 10px;
+	border-radius: 5px;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+	color: #999999;
+
+	.loadingIndicator {
+		width: 48px;
+		height: 64px;
+		margin-right: 10px;
+		opacity: 0.5;
+		filter: grayscale(100%);
+	}
+}
+
 .podcast, .podcastPlaying, .podcastSelected, .podcastArchived {
 	text-decoration: none;
 	font-size: 12px;
@@ -138,95 +162,8 @@
 		min-width: none;
 		max-height: none;
 		max-width: none;
-		/*
-		min-width: 27vw;
-		min-height: 27vw;
-		max-width: 27vw;
-		max-height: 27vw;
-		width: 27vw;
-		height: 27vw;
-		*/
 	}
 	@media only screen and (max-width: 410px) {
 		grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
 	}
-	/*
-	@media only screen and (min-width: 700px) {
-		.podcast, .podcastPlaying, .podcastSelected {
-			max-width: 22vw;
-			height: 35vw;
-			max-height: 35vw;
-		}
-		.cover {
-			min-width: 20vw;
-			min-height: 20vw;
-			max-width: 20vw;
-			max-height: 20vw;
-			width: 20vw;
-			height: 20vw;
-		}
-	}
-	@media only screen and (min-width: 900px) {
-		.podcast, .podcastPlaying, .podcastSelected {
-			max-width: 190px;
-			height: 290px;
-			max-height: 290px;
-			margin-left: 5px;
-			margin-right: 5px;
-			margin-bottom: 10px;
-			padding: 5px;
-		}
-		.podcastDetails {
-			padding-left: 5px;
-			padding-right: 5px;
-		}
-		.podcastDetails .podcastName {
-			font-size: 18px;
-			margin-top: 10px;
-		}
-		.cover {
-			min-width: 170px;
-			min-height: 170px;
-			max-width: 170px;
-			max-height: 170px;
-			width: 170px;
-			height: 170px;
-		}
-	}
-	@media only screen and (max-width: 560px) {
-		grid-template-columns: auto auto;
-
-		.podcast, .podcastPlaying, .podcastSelected {
-			float: left;
-			display: flex;
-			flex-direction: column;
-			max-width: 44vw;
-			height: 62vw;
-			max-height: 62vw;
-			margin-left: 1vw;
-			margin-right: 1vw;
-			padding: 1vw;
-		}
-		.podcastDetails {
-			padding: 0px;
-			max-width: 42vw;
-			padding-left: 1vw;
-			padding-right: 1vw;
-		}
-		.podcastDetails .podcastName {
-			max-width: 42vw;
-			margin-top: 2vw;
-			margin-bottom: 1vw;
-			-webkit-line-clamp: 3;
-		}
-		.cover {
-			min-width: 42vw;
-			min-height: 42vw;
-			max-width: 42vw;
-			max-height: 42vw;
-			width: 42vw;
-			height: 42vw;
-		}
-	}
-	*/
 }

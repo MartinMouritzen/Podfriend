@@ -24,13 +24,11 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 	};
 
 	const navigatorShare = () => {
-		navigator.share(
-			{
-			  title: shareTitle,
-			  text: episodeDescription ? episodeDescription : false,
-			  url: shareURL
-			}
-		  );
+		navigator.share({
+			title: shareTitle,
+			text: shareTitle,
+			url: shareURL
+		});
 	};
 
 	return (
@@ -40,7 +38,7 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 			&nbsp;
 			{ navigator.share &&
 				<>
-					<div className={styles.clipBoardButton} onClick={() => { navigatorShare(); }}>
+					<div className={styles.clipBoardButton} onClick={(event) => { event.stopPropagation(); event.preventDefault(); navigatorShare(); }}>
 						Share panel
 					</div>
 					&nbsp;

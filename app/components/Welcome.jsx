@@ -17,6 +17,8 @@ import styles from './welcome.css';
 
 import DOMPurify from 'dompurify';
 
+import Warning from 'podfriend-approot/components/UI/common/Notice/Warning.jsx';
+
 import SVG from 'react-inlinesvg';
 const PlayIcon = () => <SVG src={require('podfriend-approot/images/design/player/play.svg')} />;
 const PauseIcon = () => <SVG src={require('podfriend-approot/images/design/player/pause.svg')} />;
@@ -155,6 +157,19 @@ const Welcome = () => {
 
 	return (
 		<div className={'podcastPage ' + styles.homePage}>
+			{ false && 
+				<div>
+					<Warning
+						title="Notice for iPhone users"
+						targetClass="appType_standalone"
+						targetPlatform="ios"
+						targetVersion=""
+					>
+						<p>You have added Podfriend to your home screen, and we love that you want to do that.</p>
+						<p>However... Apple have a really weird rule that makes audio no</p>
+					</Warning>
+				</div>
+			}
 			<CurrentlyPlaying />
 			{/*
 			<div className={styles.welcomeMessage}>

@@ -123,7 +123,30 @@
 	padding-right: 34px;
 	padding-top: 40px;
 }
+.locationLine {
+	color: #000000;
+	background-color: #FFFFFF;
+	padding-left: 34px;
+	padding-right: 34px;
+	padding-top: 30px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+	cursor: pointer;
+}
+.locationLine svg {
+	fill: #666666;
+	margin-right: 10px;
+}
+.personContainer {
+	background-color: #FFFFFF;
+	padding-left: 34px;
+	padding-right: 34px;
+	padding-top: 30px;
+}
 .categories {
+	background-color: #FFFFFF;
 	padding-left: 34px;
 	padding-right: 34px;
 	padding-top: 20px;
@@ -246,6 +269,10 @@
 		margin-top: 10px;
 	}
 	.descriptionBody, .categories {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	.locationLine, .personContainer {
 		padding-left: 10px;
 		padding-right: 10px;
 	}

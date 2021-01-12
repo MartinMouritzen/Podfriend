@@ -27,7 +27,6 @@ if (navigator.standalone || window.matchMedia(mediaQueryStandAlone).matches) {
 	appType = 'standalone';
 	Router = MemoryRouter;
 }
-
 /*
 *
 */

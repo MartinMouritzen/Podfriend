@@ -49,7 +49,9 @@ class Player extends Component {
 			playing: false,
 			progress: this.props.activeEpisode ? (this.props.activeEpisode.currentTime ? this.props.activeEpisode.currentTime : 0) : 0,
 			duration: this.props.activeEpisode ? (this.props.activeEpisode.duration ? this.props.activeEpisode.duration : 0) : 0,
-			volume: 100
+			volume: 100,
+			sleepTimerEnabled: false,
+			sleepTimerEnding: false
 		};
 		this.onCanPlay = this.onCanPlay.bind(this);
 		this.onBuffering = this.onBuffering.bind(this);

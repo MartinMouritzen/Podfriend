@@ -6,7 +6,7 @@ import styles from './EpisodeChapters.scss';
 
 var randomColor = require('randomcolor');
 
-const EpisodeChapters = ({ chapters, progress }) => {
+const EpisodeChapters = ({ audioController, chapters, progress }) => {
 	// const [chapters,setChapters] = useState(false);
 
 	const [fadeOutChapter,setFadeoutChapter] = useState(false);
@@ -22,6 +22,27 @@ const EpisodeChapters = ({ chapters, progress }) => {
 		console.log(currentChapter);
 	},[currentChapter]);
 	*/
+	useEffect(() => {
+		setCurrentChapter(false);
+	},[]);
+
+	useEffect(() => {
+		if (!currentChapter) {
+			return;
+		}
+
+		if ('mediaSession' in navigator) {
+			if (currentChapter.img && audioController) {
+				audioController.setCoverImage(currentChapter.img);
+			}
+			else if (audioController) {
+				audioController.restoreCoverImage();
+			}
+		}
+
+		// console.log('new current Chapter: ');
+		// console.log(currentChapter);
+	},[currentChapter]);
 
 	useEffect(() => {
 		var foundChapter = false;
@@ -37,7 +58,7 @@ const EpisodeChapters = ({ chapters, progress }) => {
 				}
 			}
 		}
-		if (foundChapter !== currentChapter) {
+		if (foundChapter != currentChapter) {
 			setFadeoutChapter(currentChapter);
 			setCurrentChapter(foundChapter);
 		}

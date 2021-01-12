@@ -8,8 +8,6 @@ import styles from './EpisodePane.scss';
 
 import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
-import ChatPane from 'podfriend-approot/components/Chat/ChatPane.jsx';
-
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
 import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
@@ -134,10 +132,7 @@ const EpisodePane = () => {
 				setDescription(tempDescription);
 				setEpisode(episode);
 
-				if (episodeId == '583592038') {
-					loadChapters('https://studio.hypercatcher.com/chapters/podcast/http:feed.nashownotes.comrss.xml/episode/http:1291.noagendanotes.com');
-				}
-				else if (episode.chaptersUrl) {
+				if (episode.chaptersUrl) {
 					loadChapters(episode.chaptersUrl);
 				}
 				else {
@@ -209,12 +204,12 @@ const EpisodePane = () => {
 				{ selectedPodcast !== false && episode !== false && 
 					<>
 						{ !isActiveEpisode &&
-							<div onClick={onEpisodePlay} className={styles.playButton}>
+							<div onClick={onEpisodePlay} className={'button ' + styles.playButton}>
 									<FaPlay /> Play this episode
 							</div>
 						}
 						{ isActiveEpisode &&
-							<div onClick={onEpisodePlay} className={styles.playButton}>
+							<div onClick={onEpisodePlay} className={'button ' + styles.playButton}>
 									<FaPlay /> Resume this episode
 							</div>
 						}

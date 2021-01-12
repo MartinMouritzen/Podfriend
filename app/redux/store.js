@@ -1,6 +1,9 @@
 import { createStore, applyMiddleware, compose, combineReducers  } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
+import { getStoredState, persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+
+import storage from 'redux-persist/lib/storage';
+import localforage from 'localforage';
 
 // import { createBrowserHistory } from 'history';
 // import { syncHistoryWithStore } from 'react-router-redux'
@@ -11,12 +14,43 @@ import rootReducer from './reducers/rootReducer';
 import { createOffline } from '@redux-offline/redux-offline';
 import offlineConfig from '@redux-offline/redux-offline/lib/defaults/index';
 
-export default function configureStore(storage,enableDevTools) {
+const migrateStorage = async (state) => {
+	// Migrate from async storage to indexdb
+	// console.log('migrate - Attempting migration');
+	// console.log(state);
+	if (!state) {
+		// if indexdb storage is empty try to read state from previous storage
+		console.log('migrate - No state in indexdb.');
+		try {
+			const asyncState = await getStoredState({
+				key: 'root',
+				storage,
+				stateReconciler: autoMergeLevel2,
+				throttle: 1000,
+				blacklist: ['audio','ui']
+			})
+			if (asyncState) {
+				console.log('migrate - Async state not empty. Attempting migration.') // eslint-disable-line
+				// if data exists in `AsyncStorage` - rehydrate fs persistor with it
+
+				return asyncState;
+			}
+		}
+		catch (ex) {
+			console.warn('migrate - getStoredState error', ex) // eslint-disable-line
+		}
+	}
+	// console.log('migrate - indexdb state not empty') // eslint-disable-line
+	return state;
+}
+
+export default function configureStore(enableDevTools) {
 	console.log(enableDevTools);
 	
 	const persistConfig = {
 		key: 'root',
-		storage,
+		storage: localforage,
+		migrate: migrateStorage,
 		stateReconciler: autoMergeLevel2,
 		throttle: 1000,
 		blacklist: ['audio','ui']

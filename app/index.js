@@ -3,9 +3,7 @@ import { render } from 'react-dom';
 
 import configureStore from './redux/store'
 
-import storage from 'redux-persist/lib/storage';
-
-var [ store, persistor, history ] = configureStore(storage,true);
+var [ store, persistor, history ] = configureStore(true);
 
 import Events from './library/Events.js';
 

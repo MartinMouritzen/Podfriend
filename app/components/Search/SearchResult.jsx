@@ -40,45 +40,91 @@ class SearchResult extends Component {
 				isSubscribed = true;
 			}
 		});
-		
-		return (
-			<Link to={{
-					pathname: '/podcast/' + this.props.result.path,
-					state: {
-						podcast: this.props.result
-					}
-				}} className='podcastItem'>
-				<PodcastImage
-					podcastPath={this.props.result.path}
-					imageErrorText={this.props.result.name}
-					width={600}
-					height={600}
-					src={this.props.result.artworkUrl600}
-					className='cover'
-					draggable="false"
-				/>
-				<div className='subscribeContainer'>
-					{ !isSubscribed &&
-						<div className='subscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.subscribeToPodcast(this.props.result);  }}>
-							<FaHeart />
-						</div>
-					}
-					{ isSubscribed &&
-						<div className='unsubscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.unsubscribeToPodcast(this.props.result); }}>
-							<FaHeartBroken />
-						</div>
-					}					
-				</div>
-				<div className='content'>
-					<div className='author'>
-						{this.props.result.author}
+
+		if (this.props.searchType == 'podcast') {
+			const resultUrl = '/podcast/' + this.props.result.path;
+			
+			return (
+				<Link to={{
+						pathname: resultUrl,
+						state: {
+							podcast: this.props.result
+						}
+					}} className='podcastItem'>
+					<PodcastImage
+						podcastPath={this.props.result.path}
+						imageErrorText={this.props.result.name}
+						width={600}
+						height={600}
+						src={this.props.result.artworkUrl600}
+						className='cover'
+						draggable="false"
+					/>
+					<div className='subscribeContainer'>
+						{ !isSubscribed &&
+							<div className='subscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.subscribeToPodcast(this.props.result);  }}>
+								<FaHeart />
+							</div>
+						}
+						{ isSubscribed &&
+							<div className='unsubscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.unsubscribeToPodcast(this.props.result); }}>
+								<FaHeartBroken />
+							</div>
+						}					
 					</div>
-					<div className='title'>
-						{this.props.result.name}
+					<div className='content'>
+						<div className='author'>
+							{this.props.result.author}
+						</div>
+						<div className='title'>
+							{this.props.result.name}
+						</div>
 					</div>
-				</div>
-			</Link>
-		);
+				</Link>
+			);
+		}
+		else {
+			const resultUrl = '/podcast/' + this.props.result.path + '/' + this.props.result.id;
+			
+			return (
+				<Link to={{
+						pathname: resultUrl,
+						state: {
+							podcast: this.props.result
+						}
+					}} className='podcastItem'>
+					<PodcastImage
+						podcastPath={this.props.result.path}
+						imageErrorText={this.props.result.name}
+						width={600}
+						height={600}
+						src={this.props.result.image ? this.props.result.image : this.props.result.feedImage}
+						className='cover'
+						draggable="false"
+					/>
+					<div className='subscribeContainer'>
+						{ !isSubscribed &&
+							<div className='subscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.subscribeToPodcast(this.props.result);  }}>
+								<FaHeart />
+							</div>
+						}
+						{ isSubscribed &&
+							<div className='unsubscribe' onClick={(event) => { event.preventDefault(); event.stopPropagation(); this.props.unsubscribeToPodcast(this.props.result); }}>
+								<FaHeartBroken />
+							</div>
+						}					
+					</div>
+					<div className='content'>
+						<div className='author'>
+							{this.props.result.name}
+						</div>
+						<div className='title'>
+							{this.props.result.title}
+						</div>
+					</div>
+				</Link>
+			);
+		}
 	}
 }
 

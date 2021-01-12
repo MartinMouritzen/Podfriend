@@ -7,10 +7,6 @@
 	transition: all .2s;
 	border-radius: 5px;
 }
-.subscribeButton:hover {
-	background-color: #11de77;
-	transform: scale(1.1);
-}
 .subscribeButton svg {
 	fill: #FFFFFF;
 	position: relative;
@@ -18,8 +14,14 @@
 	margin-right: 10px;
 	transition: all 0.5s;
 }
-.subscribeButton:hover svg {
-	fill: #FF0000;
+@media (any-hover: hover) {
+	.subscribeButton:hover {
+		background-color: #11de77;
+		transform: scale(1.1);
+	}
+	.subscribeButton:hover svg {
+		fill: #FF0000;
+	}
 }
 @media only screen and (max-width: 770px) {
 	.subscribeButton {

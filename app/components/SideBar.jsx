@@ -81,74 +81,74 @@ class SideBar extends Component {
 			<div className={styles.sideBar} onClick={this.onFocusClick}>
 				<div className={styles.panes}>
 					<div className={styles.categories}>
-					<div className={styles.categoryList}>
+						<div className={styles.categoryList}>
 
-						<Link to="/" className={styles.mainNavigationButton}>
-							<FaHome size="20" /> Home
-						</Link>
-						<Link to="/podfrndr/" className={styles.mainNavigationButton}>
-							<FaHeart size="20" /> Podfrndr
-						</Link>
-						{ this.props.isLoggedIn === false &&
-							<div className={styles.mainNavigationButton} onClick={this.props.initiateLogin}>
-								<FaUser size="20" /> Log in
-							</div>
-						}
-						<hr />
-						{ false && this.props.isLoggedIn === true &&
+							<Link to="/" className={styles.mainNavigationButton}>
+								<FaHome size="20" /> Home
+							</Link>
+							<Link to="/podfrndr/" className={styles.mainNavigationButton}>
+								<FaHeart size="20" /> Podfrndr
+							</Link>
+							{ this.props.isLoggedIn === false &&
+								<div className={styles.mainNavigationButton} onClick={this.props.initiateLogin}>
+									<FaUser size="20" /> Log in
+								</div>
+							}
+							<hr />
+							{ false && this.props.isLoggedIn === true &&
+								<div className={styles.mainNavigationButton}>
+									<FaUser size="20" /> Account
+								</div>
+							}
+							{ false && 
+								<Link to="/podcasters/" className={styles.mainNavigationButton}>
+									<FaPodcast size="20" /> For Podcasters
+								</Link>
+							}
+							{ /*
+							<hr />
+
 							<div className={styles.mainNavigationButton}>
-								<FaUser size="20" /> Account
+								<Link to="/favorites/">
+									<FaPodcast size="20" /> Favorites
+								</Link>
 							</div>
-						}
-						{ false && 
-							<Link to="/podcasters/" className={styles.mainNavigationButton}>
-								<FaPodcast size="20" /> For Podcasters
-							</Link>
-						}
-						{ /*
-						<hr />
-
-						<div className={styles.mainNavigationButton}>
-							<Link to="/favorites/">
-								<FaPodcast size="20" /> Favorites
-							</Link>
-						</div>
-						
-
-						<CategoryList
 							
-						/>
 
-						<div className={styles.mainNavigationButton}>
-							<FaFolder size="20" /> Uncategorized
-						</div>
-						<div className={styles.mainNavigationButton}>
-							<FaRegClock size="20" /> Recent podcasts
-						</div>
+							<CategoryList
+								
+							/>
 
-						
-						<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
-
-						*/ }
-					</div>
-				</div>
-				<div className={styles.podcasts}>
-					<div className={styles.podcastHeader}>Podcasts</div>
-					<div className={styles.podcastList}>
-						<FavoriteList UI={FavoriteListUI} showArchived={this.state.showArchived} setHasArchived={this.setHasArchived} />
-					</div>
-					{ this.state.hasArchivedPodcasts &&
-						<div className={styles.filter}>
-							<div>
-								<Toggle
-									id='archived-status'
-									defaultChecked={this.state.showArchived}
-									icons={{ checked: null, unchecked: null }}
-									onChange={this.handleShowArchivedChange} />
-								<label htmlFor='cheese-status'>Show archived podcasts</label>
+							<div className={styles.mainNavigationButton}>
+								<FaFolder size="20" /> Uncategorized
 							</div>
+							<div className={styles.mainNavigationButton}>
+								<FaRegClock size="20" /> Recent podcasts
+							</div>
+
+							
+							<div className={styles.addMoreButton}><FaPlus size="12" /> Add new category</div>
+
+							*/ }
 						</div>
-					}
+					</div>
+					<div className={styles.podcasts}>
+						<div className={styles.podcastHeader}>Podcasts</div>
+						<div className={styles.podcastList}>
+							<FavoriteList UI={FavoriteListUI} showArchived={this.state.showArchived} setHasArchived={this.setHasArchived} />
+						</div>
+						{ this.state.hasArchivedPodcasts &&
+							<div className={styles.filter}>
+								<div>
+									<Toggle
+										id='archived-status'
+										defaultChecked={this.state.showArchived}
+										icons={{ checked: null, unchecked: null }}
+										onChange={this.handleShowArchivedChange} />
+									<label htmlFor='cheese-status'>Show archived podcasts</label>
+								</div>
+							</div>
+						}
 					</div>
 				</div>
 			</div>

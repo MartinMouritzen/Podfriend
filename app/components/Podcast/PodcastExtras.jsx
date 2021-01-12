@@ -10,7 +10,7 @@ const DonateIcon = () => <SVG src={require('podfriend-approot/images/design/podc
 
 import styles from './PodcastExtras.css';
 
-const PodcastExtras = ({isSubscribed, isArchived, selectedPodcast,subscribedPodcasts,subscribeToPodcast,unsubscribeToPodcast, podcastLoading, archivePodcast, unarchivePodcast}) => {
+const PodcastExtras = React.memo(({isSubscribed, isArchived, selectedPodcast,subscribedPodcasts,subscribeToPodcast,unsubscribeToPodcast, podcastLoading, archivePodcast, unarchivePodcast}) => {
 	let isArchiveTooltipActive = false;
 
 	const showTooltip = () => {
@@ -74,6 +74,6 @@ const PodcastExtras = ({isSubscribed, isArchived, selectedPodcast,subscribedPodc
 			</div>
 		</div>
 	);
-};
+});
 
 export default PodcastExtras;

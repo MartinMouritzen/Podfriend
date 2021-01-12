@@ -1,89 +1,101 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select'
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import SearchResult from './SearchResult.jsx';
 
 import styles from './SearchPane.css';
 
-class SearchPaneUI extends Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		// console.log(this.props.searchResults);
-		return (
-			<div className={styles.searchPane}>
-				{ !this.props.query &&
-					<React.Fragment>
-						Recent searches
-					</React.Fragment>
-				}
-				{ this.props.query &&
-					<React.Fragment>
-						{ this.props.searchType == 'podcast' &&
-							<h1>Search results for &quot;{this.props.query}&quot;</h1>
-						}
-						{ this.props.searchType == 'author' &&
-							<h1>Podcasts by {this.props.query}</h1>
-						}
-						{ this.props.searchError &&
-								<div>
-									{this.props.searchError}
-								</div>
-						}
-						{ this.props.searchGenres && this.props.searchGenres.length > 0 &&
-							<div className={styles.genreSelectArea}>
-								Only show podcasts in
-									<Select className={styles.genreSelect} placeholder="Select category" isSearchable={false} isMulti={true} options={this.props.searchGenres.map((genre) => { return { value: genre, label: genre }; }) } onChange={this.onGenreFilterChange} />
-							</div>
-						}		
-						{ !this.props.searchError && this.props.searching &&
-								<div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-									<div className="loading-line loading-podcast">&nbsp;</div>
-								</div>
-						}
-						{ !this.props.searchError && !this.props.searching && this.props.searchResults && this.props.searchResults.length > 0 &&
-							<div className='podcastGrid'>
-							{ this.props.searchResults.map && this.props.searchResults.map((result,index) => {
-								var showResult = false;
-								if (!this.props.selectedGenres || this.props.selectedGenres.length == 0) {
-									showResult = true;
-								}
-								else if (this.props.selectedGenres && this.props.selectedGenres.length > 0)  {
-									if (result.genres && result.genres.length > 0) {
-										result.genres.forEach((genre) => {
-											if (this.props.selectedGenres.includes(genre)) {
-												showResult = true;
-											}
-										});
-									}
-								}
-								if (showResult) {	
-									return (
-										<SearchResult key={index} result={result} />
-									)
-								}
-							}) }
-							</div>
-						}
-						{ !this.props.searching && this.props.searchResults && this.props.searchResults.length === 0 && 
-							<React.Fragment>
-								No results found.
-							</React.Fragment>
-						}
-					</React.Fragment>
-				}
-			</div>
-		);
-	}
-}
+const SearchPaneUI = ({ query, useSearchType, searching, searchResults, searchError, searchGenres, selectedGenres, onGenreFilterChange, onSearchTypeChange }) => {
 
+	const [searchType,setSearchType] = useState(useSearchType);
+
+	const handleTabChange = (event, newValue) => {
+		setSearchType(newValue);
+		onSearchTypeChange(newValue);
+	};
+
+	return (
+		<div className={styles.searchPane}>
+			<Tabs
+				value={searchType}
+				onChange={handleTabChange}
+				style={{ marginLeft: '10px' }}
+			>
+				<Tab label="Podcasts" value="podcast" />
+				<Tab label="People" value="person" />
+			</Tabs>
+			{ !query &&
+				<React.Fragment>
+					Recent searches
+				</React.Fragment>
+			}
+			{ query &&
+				<React.Fragment>
+					{ searchType === 'podcast' &&
+						<h1>Podcast results for &quot;{query}&quot;</h1>
+					}
+					{ searchType === 'person' &&
+						<h1>People results for &quot;{query}&quot;</h1>
+					}
+					{ searchError &&
+						<div>
+							{searchError}
+						</div>
+					}
+					{ searchGenres && searchGenres.length > 0 &&
+						<div className={styles.genreSelectArea}>
+							Only show podcasts in
+								<Select className={styles.genreSelect} placeholder="Select category" isSearchable={false} isMulti={true} options={searchGenres.map((genre) => { return { value: genre, label: genre }; }) } onChange={onGenreFilterChange} />
+						</div>
+					}		
+					{ !searchError && searching &&
+							<div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+								<div className="loading-line loading-podcast">&nbsp;</div>
+							</div>
+					}
+					{ !searchError && !searching && searchResults && searchResults.length > 0 &&
+						<div className='podcastGrid'>
+						{ searchResults.map && searchResults.map((result,index) => {
+							var showResult = false;
+							if (!selectedGenres || selectedGenres.length == 0) {
+								showResult = true;
+							}
+							else if (selectedGenres && selectedGenres.length > 0)  {
+								if (result.genres && result.genres.length > 0) {
+									result.genres.forEach((genre) => {
+										if (selectedGenres.includes(genre)) {
+											showResult = true;
+										}
+									});
+								}
+							}
+							if (showResult) {	
+								return (
+									<SearchResult searchType={searchType} key={index} result={result} />
+								)
+							}
+						}) }
+						</div>
+					}
+					{ !searching && searchResults && searchResults.length === 0 && 
+						<div style={{ padding: 15 }}>
+							No results found.
+						</div>
+					}
+				</React.Fragment>
+			}
+		</div>
+	);
+}
 export default SearchPaneUI;

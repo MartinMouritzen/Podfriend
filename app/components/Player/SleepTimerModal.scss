@@ -1,0 +1,16 @@
+.sleepTimerLine {
+	padding: 20px;
+	border-bottom: 1px solid #999999;
+	width: 100%;
+	min-width: 250px;
+
+	@media (any-hover: hover) {
+		&:hover {
+			background-color: #EEEEEE;
+			cursor: pointer;
+		}
+	}
+}
+.currentTimer {
+	padding: 20px;
+}
