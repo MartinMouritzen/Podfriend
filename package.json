@@ -1,7 +1,7 @@
 {
 	"name": "podfriend",
 	"productName": "PodFriend",
-	"version": "0.7.0",
+	"version": "0.7.1",
 	"description": "PodFriend - Because everyone needs a PodFriend.",
 	"license": "UNLICENSED",
 	"private": true,
@@ -75,8 +75,21 @@
 			],
 			"target": [
 				"nsis",
-				"msi"
+				"msi",
+				"appx"
 			]
+		},
+		"appx": {
+			"applicationId": "Podfriend.Podfriend",
+			"backgroundColor": "#0176e5",
+			"displayName": "Podfriend",
+			"identityName": "51008Podfriend.Podfriend",
+			"publisher": "CN=CEE666B1-CA88-4DED-AAAE-327BEA0D24D5",
+			"publisherDisplayName": "Podfriend",
+			"languages": [
+				"en-us"
+			],
+			"showNameOnTiles": "true"
 		},
 		"linux": {
 			"target": [

@@ -1,8 +1,10 @@
 {
   "short_name": "Podfriend",
-  "name": "Podfriend Podcast Player",
+  "name": "Podfriend",
   "description": "The worlds friendliest Podfriend Player",
   "categories": ["entertainment", "news", "podcast", "social"],
+  "orientation": "portrait-primary",
+  "iarc_rating_id": "9e378e3d-c0b7-4138-a1b9-23d94aac8abd",
   "icons": [
     {
       "src": "/images/icons/maskable_512x512.png",
