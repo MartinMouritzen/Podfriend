@@ -6,7 +6,8 @@ import {
 	UI_SHOW_LOGIN,
 	UI_HIDE_LOGIN,
 	UI_SHOW_FULLPLAYER,
-	UI_HIDE_FULLPLAYER
+	UI_HIDE_FULLPLAYER,
+	USER_SYNCING
 } from "../constants/ui-types";
 
 import {
@@ -18,7 +19,10 @@ const initialState = {
 	showShareWindow: false,
 	showSleepTimerWindow: false,
 	showLogin: false,
-	showFullPlayer: false
+	showFullPlayer: false,
+	syncHappening: false,
+	syncedPodcastsThisSession: false,
+	syncLastDate: false
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -60,6 +64,13 @@ const uiReducer = (state = initialState, action) => {
 	else if (action.type === UI_HIDE_FULLPLAYER) {
 		return Object.assign({}, state, {
 			showFullPlayer: false
+		});
+	}
+	else if (action.type === USER_SYNCING) {
+		console.log(action.payload);
+		return Object.assign({}, state, {
+			syncHappening: action.payload,
+			syncedPodcastsThisSession: true
 		});
 	}
 	return state;

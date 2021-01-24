@@ -9,6 +9,8 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
+import { format } from 'date-fns';
+
 import styles from './SearchResult.css';
 
 function mapStateToProps(state) {
@@ -40,6 +42,8 @@ class SearchResult extends Component {
 				isSubscribed = true;
 			}
 		});
+
+		// console.log(this.props.result);
 
 		if (this.props.searchType == 'podcast') {
 			const resultUrl = '/podcast/' + this.props.result.path;
@@ -85,6 +89,7 @@ class SearchResult extends Component {
 		}
 		else {
 			const resultUrl = '/podcast/' + this.props.result.path + '/' + this.props.result.id;
+			var datePublished = format(new Date(this.props.result.datePublished * 1000),'MMM D, YYYY');
 			
 			return (
 				<Link to={{
@@ -120,6 +125,9 @@ class SearchResult extends Component {
 						</div>
 						<div className='title'>
 							{this.props.result.title}
+						</div>
+						<div className='date'>
+							{datePublished}
 						</div>
 					</div>
 				</Link>

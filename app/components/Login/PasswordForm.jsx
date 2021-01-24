@@ -20,10 +20,12 @@ class PasswordForm extends Component {
 		this.state = {
 			password: '',
 			invalidPassword: false,
-			inputCounter: 0
+			inputCounter: 0,
+			forgotPasswordInitiated: false
 		};
 		this.handlePasswordChange = this.handlePasswordChange.bind(this);
 		this.login = this.login.bind(this);
+		this.forgotPassword = this.forgotPassword.bind(this);
 	}
 	/**
 	*
@@ -82,6 +84,18 @@ class PasswordForm extends Component {
 	/**
 	*
 	*/
+	forgotPassword(event) {
+		event.preventDefault();
+
+		this.setState({
+			forgotPasswordInitiated: true
+		},() => {
+			console.log('forgot pw');
+		});
+	}
+	/**
+	*
+	*/
 	render() {
 		return (
 			<div className={styles.loginForm}>
@@ -102,6 +116,18 @@ class PasswordForm extends Component {
 					</div>
 					
 					<input type="submit" value="Log in" />
+
+					{ this.state.forgotPasswordInitiated === false && 
+						<div style={{ marginTop: '20px' }}>
+							<a href="#" onClick={this.forgotPassword}>... I forgot my password</a>
+						</div>
+					}
+					{ this.state.forgotPasswordInitiated === true && 
+						<div style={{ marginTop: '20px', marginBottom: '20px' }}>
+							<div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Do not despair my friend!</div>
+							<div style={{ lineHeight: '25px' }} >An email has been sent to <span style={{ fontWeight: 'bold' }}>{this.props.email}</span>, with instructions for resetting your password.</div>
+						</div>
+					}
 
 					<div style={{ width: '300px', padding: this.state.passwordInputFocused ? '20px' : '0px', height: this.state.passwordInputFocused ? 'auto' : '0px', overflow: 'hidden', transition: 'all 0.4s' }}>
 						<div className={styles.passwordToolTipHeadline}>

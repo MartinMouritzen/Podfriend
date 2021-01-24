@@ -212,7 +212,6 @@ export function searchPodcasts(query,searchType = 'podcast',authorName = false,a
 *
 */
 export function viewPodcast(podcastPath) {
-	console.log('loading episodes');
 	return (dispatch,getState) => {
 		if (fetchingPodcast) {
 			console.log('was fetching, aborted old request');

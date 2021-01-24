@@ -3,6 +3,8 @@ import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import { format } from 'date-fns';
+
 import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/EpisodeChapterList.jsx';
 
 import styles from './OpenPlayerUI.scss';
@@ -23,6 +25,8 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 		setTabIndex(newValue);
 	};
 
+	const activeEpisodeTime = activeEpisode.date ? format(new Date(activeEpisode.date),'MMM D, YYYY') : false;
+
 	return (
 		<div className={styles.episodeInfo}>
 			<div style={{ height: '80px', overflow: 'hidden' }} >
@@ -34,6 +38,11 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 			<Tabs
 				value={tabIndex}
 				onChange={handleTabChange}
+				TabIndicatorProps={{
+					style: {
+						backgroundColor: '#0176e5'
+					}
+				}}
 			>
 				<Tab label="Description" value="description" />
 
@@ -46,16 +55,18 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 			</Tabs>
 			{ tabIndex === 'description' &&
 				<TabPanel>
+					<div className={styles.episodeMasterData}>
+						Episode published: { activeEpisodeTime }
+					</div>
 					<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} /> 
 				</TabPanel>
 			}
 			{ tabIndex === 'chapters' &&
 				<TabPanel>
 					{ chaptersLoading === true &&
-						
-							<div>
-								Fetching chapters for episode
-							</div>
+						<div>
+							Fetching chapters for episode
+						</div>
 					}
 					{ chapters !== false &&
 						<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />

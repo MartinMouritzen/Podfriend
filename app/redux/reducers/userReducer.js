@@ -6,6 +6,12 @@ import {
 	USER_NOT_LOGGED_IN
 } from "../constants/action-types";
 
+/*
+import {
+	
+} from "../constants/user-types";
+*/
+
 const initialState = {
 	isLoggedIn: false,
 	profileData: {},

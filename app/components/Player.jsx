@@ -70,6 +70,7 @@ class Player extends Component {
 		this.playOrPause = this.playOrPause.bind(this);
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
 
 		this.onAudioElementReady = this.onAudioElementReady.bind(this);
 		
@@ -102,12 +103,15 @@ class Player extends Component {
 		Events.addListener('MediaPreviousTrack',() => { console.log('MediaPreviousTrack'); this.onPrevEpisode(); },'Player');
 		Events.addListener('MediaRewindTrack',() => {  console.log('MediaRewingTrack'); this.onBackward(); },'Player');
 		Events.addListener('MediaForwardTrack',() => {  console.log('MediaForwardTrack'); this.onForward(); },'Player');
+
+		document.addEventListener("keydown",this.handleKeyDown);
 	}
 	/**
 	*
 	*/
 	componentWillUnmount() {
 		Events.removeListenersInGroup('Player');
+		document.removeEventListener("keydown",this.handleKeyDown);
 	}
 	/**
 	*
@@ -166,6 +170,12 @@ class Player extends Component {
 				episode: this.props.activeEpisode.episode
 			});
 */
+		}
+	}
+	handleKeyDown(event) {
+		console.log(event);
+		if (event.keyCode === 32) {
+			console.log('yay');
 		}
 	}
 	/**

@@ -156,6 +156,16 @@
 	right: 3px;
 	width: 21px;
 }
+.errorButton {
+	background-color: #fb797e;
+
+	svg {
+		position: static;
+		fill: #FFFFFF;
+		width: 25px;
+		height: 25px;
+	}
+}
 .chatButton, .backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton, .moreControlsButton {
 	display: inline-block;
 
@@ -530,6 +540,9 @@
 	}
 	.audioButtons {
 		margin-top: 5px;
+	}
+	.author {
+		margin-top: 3px;
 	}
 	.playButton, .pauseButton {
 		background-color: #FFFFFF;

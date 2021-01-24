@@ -23,8 +23,13 @@ const SearchPaneUI = ({ query, useSearchType, searching, searchResults, searchEr
 				value={searchType}
 				onChange={handleTabChange}
 				style={{ marginLeft: '10px' }}
+				TabIndicatorProps={{
+					style: {
+						backgroundColor: '#0176e5'
+					}
+				}}
 			>
-				<Tab label="Podcasts" value="podcast" />
+				<Tab label="Podcasts" value="podcast" style={{ border: '0px' }} />
 				<Tab label="People" value="person" />
 			</Tabs>
 			{ !query &&

@@ -8,3 +8,7 @@ export const UI_SHOW_LOGIN = 'UI_SHOW_LOGIN';
 export const UI_HIDE_LOGIN = 'UI_HIDE_LOGIN';
 export const UI_SHOW_FULLPLAYER = 'UI_SHOW_FULLPLAYER';
 export const UI_HIDE_FULLPLAYER = 'UI_HIDE_FULLPLAYER';
+
+
+
+export const USER_SYNCING = 'USER_SYNCING';

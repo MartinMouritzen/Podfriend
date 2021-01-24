@@ -207,6 +207,10 @@ input[type=checkbox] {
 		button:hover, .button:hover {
 			background-color: #1180e7;
 			transform: scale(1.1);
+			color: #FFFFFF;
+		}
+		button:hover > span, .button:hover > span {
+			color: #FFFFFF;
 		}
 	}
 	button svg, .button svg {
@@ -572,6 +576,9 @@ input[type=checkbox] {
 				
 				transition: color 0.2s;
 			}
+			.date {
+				font-size: 13px;
+			}
 			.subscribe svg, .unsubscribe svg {
 				fill: #999999;
 				position: relative;
@@ -608,18 +615,19 @@ input[type=checkbox] {
 			.podcastItem:hover .author {
 				color: rgba(255,255,255,0.9);
 			}
+			.podcastItem:hover .date {
+				color: #FFFFFF;
+			}
 			.podcastItem:hover .subscribeContainer {
 				display: block;
 			}
 		}
 	}
 
-
-
-
 	/****
 	* Are we even using react-toggle anymore?
 	*************/
+	/*
 	.react-toggle {
 	  touch-action: pan-x;
 	
@@ -670,21 +678,9 @@ input[type=checkbox] {
 	  transition: all 0.2s ease;
 	}
 	
-	/*
-	.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
-	  background-color: #000000;
-	}
-	*/
-	
 	.react-toggle--checked .react-toggle-track {
 	  background-color: #4bcd0e;
 	}
-	
-	/*
-	.react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-	  background-color: #4bcd0e;
-	}
-	*/
 	
 	.react-toggle-track-check {
 	  position: absolute;
@@ -755,9 +751,9 @@ input[type=checkbox] {
 	}
 	
 	.react-toggle:hover .react-toggle-thumb {
-	  /*box-shadow: 0px 0px 2px 3px #0099E0; */
 	  background-color: #DDDDDD;
 	}
+	*/
 }
 @media only screen and (max-width: 899px) {
 	.mainArea {

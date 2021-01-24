@@ -2,7 +2,7 @@ import React, { Component, Suspense, lazy } from 'react';
 
 import { connect } from "react-redux";
 import { authenticateUser } from "../redux/actions/userActions";
-import { abortLogin, hideSpeedSettingWindow, hideShareWindow } from 'podfriend-approot/redux/actions/uiActions';
+import { abortLogin, hideSpeedSettingWindow, hideShareWindow, synchronizePodcasts } from 'podfriend-approot/redux/actions/uiActions';
 
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
@@ -55,13 +55,18 @@ const mapStateToProps = state => ({
 	activeEpisode: state.podcast.activeEpisode,
 	authToken: state.user.authToken,
 	speedSettingWindowVisible: state.ui.showSpeedSettingWindow,
-	showShareWindow: state.ui.showShareWindow
+	showShareWindow: state.ui.showShareWindow,
+	isLoggedIn: state.user.isLoggedIn,
+	syncHappening: state.ui.syncHappening,
+	syncedPodcastsThisSession: state.ui.syncedPodcastsThisSession,
+	syncLastDate: state.ui.syncLastDate
 })
 const mapDispatchToProps = dispatch => ({
 	authenticateUser: () => dispatch(authenticateUser()),
 	abortLogin: () => dispatch(abortLogin()),
 	hideSpeedSettingWindow: () => dispatch(hideSpeedSettingWindow()),
-	hideShareWindow: () => dispatch(hideShareWindow())
+	hideShareWindow: () => dispatch(hideShareWindow()),
+	synchronizePodcasts: () => dispatch(synchronizePodcasts())
 })
 
 /**
@@ -146,6 +151,18 @@ class PodcastClient extends Component {
 		if (this.props.activeEpisode.url !== prevProps.activeEpisode.url) {
 			if (this.props.onEpisodeChange) {
 				this.props.onEpisodeChange(this.props.activeEpisode);
+			}
+		}
+		if (this.props.isLoggedIn) {
+			console.log('is logged in');
+			if (this.props.syncHappening === false) {
+				if (this.props.syncedPodcastsThisSession === false) {
+					console.log('sync not happening and has not happened this session');
+					this.props.synchronizePodcasts();
+				}
+				//
+				// syncedPodcastsThisSession: state.ui.syncedPodcastsThisSession,
+				// syncLastDate:
 			}
 		}
 		if (this.props.location.pathname !== prevProps.location.pathname) {

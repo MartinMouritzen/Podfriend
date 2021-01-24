@@ -87,10 +87,11 @@ const CurrentlyPlaying = () => {
 						>
 							<PodcastImage
 								imageErrorText={activePodcast.name}
-								width={300}
-								height={300}
+								width={400}
+								height={400}
 								fallBackImage={podcastFallbackImage}
-								src={podcastImage}
+								podcastPath={activePodcast.path}
+								src={podcastImage ? podcastImage : activePodcast.image }
 								className={ showBorder ? 'podcastCover' : 'podcastCover noBorder'}
 								draggable="false"
 								loadingComponent={() => { return ( <LoadingPodcastCover /> ) }}

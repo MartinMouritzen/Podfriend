@@ -184,7 +184,7 @@ const EpisodePane = () => {
 							imageErrorText={episode.title}
 							width={600}
 							height={600}
-							src={episode.image}
+							src={episode.image ? episode.image : episode.feedImage}
 							fallBackImage={episode.feedImage}
 							className={styles.podcastCover}
 							draggable="false"

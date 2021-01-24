@@ -8,6 +8,11 @@ import {
 	USER_LOGGED_OUT
 } from "../constants/action-types";
 
+/*
+import {
+	
+} from "../constants/user-types";
+*/
 
 export function userLogout() {
 	return {

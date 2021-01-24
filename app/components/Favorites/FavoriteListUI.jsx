@@ -4,16 +4,18 @@ import { Link, useLocation } from 'react-router-alias';
 
 // import PodcastUtil from '~/app/library/PodcastUtil.js';
 
+import { useSelector } from 'react-redux';
+
 import styles from './FavoriteListUI.scss';
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
-import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
+import LoadingRings from 'podfriend-approot/images/design/loading/loading1.svg';
 
-const FavoriteListUI = ({ showResponsiveList, subscribedPodcasts, showArchived, activePodcast }) => {
+const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, showArchived, activePodcast }) => {
 	var location = useLocation();
 
-	var isCheckingPodcasts = false;
+	var isCheckingPodcasts = useSelector((state) => state.ui.syncHappening);
 
 	return (
 		<div className={showResponsiveList ? styles.showResponsive + ' ' + styles.favoriteList : styles.favoriteList}>
@@ -44,6 +46,8 @@ const FavoriteListUI = ({ showResponsiveList, subscribedPodcasts, showArchived, 
 
 					// var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';
 
+					console.log(podcast);
+
 					return (
 						<Link to={{
 								pathname: '/podcast/' + podcast.path,
@@ -54,10 +58,10 @@ const FavoriteListUI = ({ showResponsiveList, subscribedPodcasts, showArchived, 
 							<PodcastImage
 								podcastPath={podcast.path}
 								imageErrorText={podcast.name}
-								src={podcast.artworkUrl100}
+								src={podcast.artworkUrl100 ? podcast.artworkUrl100 : podcast.image}
 								className={styles.cover}
-								width={120}
-								height={120}
+								width={400}
+								height={400}
 							/>
 							<div className={styles.podcastDetails}>
 								<span className={styles.podcastName}>{podcast.name}</span>
@@ -70,6 +74,6 @@ const FavoriteListUI = ({ showResponsiveList, subscribedPodcasts, showArchived, 
 			}
 		</div>
 	);
-}
+});
 
 export default FavoriteListUI;

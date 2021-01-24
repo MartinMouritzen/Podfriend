@@ -26,6 +26,7 @@ const ChatIcon = () => <SVG src={require('podfriend-approot/images/design/player
 const ChromecastIcon = () => <SVG src={require('podfriend-approot/images/design/player/chromecast.svg')} />;
 const SkipForwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-forward.svg')} />;
 const SkipBackwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-backward.svg')} />;
+const ErrorIcon = () => <SVG src={require('podfriend-approot/images/design/player/error.svg')} />;
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
@@ -73,6 +74,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [currentChapter,setCurrentChapter] = useState(false);
 	const [subtitleFileURL,setSubtitleFileURL] = useState(false);
 	const [chatShown,setChatShown] = useState(false);
+	const [error,setError] = useState(false);
+	const [errorText,setErrorText] = useState(false);
+
 
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
 	const showSleepTimerWindow = useSelector((state) => state.ui.showSleepTimerWindow);
@@ -104,6 +108,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	}
 
 	useEffect(() => {
+		setError(false);
+		setErrorText(false);
 		setErrorRetries(0);
 		setSubtitleFileURL(false);
 		if (activeEpisode.type === 'video/mpeg'
@@ -157,9 +163,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		}
 	};
 
+	const enableChromeCast = () => {
+		console.log('ENABLE CHROMECAST');
+	};
+
 	const retryAudioOnError = () => {
 		if (errorRetries >= 3) {
 			console.log('Retried audio more than 3 times. Will not try again.');
+			setError(true);
+			setErrorText('Could not load audio file.');
 		}
 		else {
 			console.log('Error happened in audio stream. Retrying #' + errorRetries);
@@ -168,6 +180,12 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			audioController.retry();
 		}
 	}
+	const startRetry = () => {
+		setError(false);
+		setErrorText(false);
+		setErrorRetries(0);
+		play();
+	};
 
 	const audioElementProps = {
 		key: "audioPlayer",
@@ -444,21 +462,31 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							}
 							<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
 							<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
-							{ isBuffering &&
-								<div key="playButton" className={styles.playButton} onClick={pause}>
-									{ fullPlayerOpen && 
-										<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
-									}
-									{ fullPlayerOpen === false && 
-										<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
-									}
+
+							{ error === true &&
+								<div key="playButton" className={styles.playButton + ' ' + styles.errorButton} onClick={startRetry}>
+									<ErrorIcon />
 								</div>
 							}
-							{ canPlay && !playing &&
-								<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
-							}
-							{ canPlay && playing &&
-								<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
+							{ error === false &&
+								<>
+									{ isBuffering &&
+										<div key="playButton" className={styles.playButton} onClick={pause}>
+											{ fullPlayerOpen && 
+												<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
+											}
+											{ fullPlayerOpen === false && 
+												<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
+											}
+										</div>
+									}
+									{ canPlay && !playing &&
+										<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
+									}
+									{ canPlay && playing &&
+										<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
+									}
+								</>
 							}
 							
 							<div className={styles.forwardButton} onClick={onForward}><ForwardIcon /></div>
@@ -494,9 +522,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showSleepTimer()); }}><ClockIcon /> Set sleep timer</ContextMenuItem>
-				{/*
-				<ContextMenuItem><ChromecastIcon /> Chromecast</ContextMenuItem>
-				*/}
+				{ /* <ContextMenuItem onClick={() => { enableChromeCast(); } }><ChromecastIcon /> Chromecast</ContextMenuItem> */ }
 			</ContextMenu>
 			{ showSleepTimerWindow &&
 				<SleepTimerModal audioController={audioController} shown={showSleepTimerWindow} onDismiss={() => { dispatch(hideSleepTimer()); }} />

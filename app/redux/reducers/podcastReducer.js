@@ -31,6 +31,10 @@ import {
 	REVIEWS_LOAD_ERROR
 } from "../constants/action-types";
 
+import {
+	PODCAST_SYNC_COMPLETE
+} from '../constants/podcast-types';
+
 const initialState = {
 	activePodcast: false,
 	activeEpisode: false,
@@ -413,6 +417,30 @@ const podcastReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			selectedPodcast: selectedPodcast,
 			activePodcast: activePodcast
+		});
+	}
+	else if (action.type === PODCAST_SYNC_COMPLETE) {
+		console.log('PODCAST_SYNC_COMPLETE');
+		console.log(action.payload);
+
+		var subscribedPodcasts = [...state.subscribedPodcasts];
+
+		console.log(subscribedPodcasts);
+
+		action.payload.forEach((podcast) => {
+			var found = false;
+			subscribedPodcasts.forEach((subscribedPodcast,index) => {
+				if (subscribedPodcast.guid == podcast.guid) {
+					found = true;
+				}
+			});
+			if (!found) {
+				subscribedPodcasts.push(podcast);
+			}
+		});
+		
+		return Object.assign({}, state, {
+			subscribedPodcasts: subscribedPodcasts
 		});
 	}
 	return state;

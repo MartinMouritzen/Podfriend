@@ -4,6 +4,8 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import { Link } from 'react-router-alias';
 
+import { format } from 'date-fns';
+
 const PodcastMatrixUI = ({ podcasts = false, episodes = false, type, max = 50 }) => {
 	return (
 		<div className={'podcastGrid ' + type}>
@@ -12,6 +14,9 @@ const PodcastMatrixUI = ({ podcasts = false, episodes = false, type, max = 50 })
 				if (index >= max) {
 					return false;
 				}
+				
+				var datePublished = format(new Date(episode.datePublished * 1000),'MMM D, YYYY')
+
 				return (
 					<Link to={{ pathname: '/podcast/' + episode.path + '/' + episode.id, state: { podcast: episode } }} key={'latestPodcast' + index} className='podcastItem'>
 						<PodcastImage
@@ -21,13 +26,18 @@ const PodcastMatrixUI = ({ podcasts = false, episodes = false, type, max = 50 })
 							className='cover'
 							width={400}
 							height={400}
-						/>
+						>
+							<div>test</div>
+						</PodcastImage>
 						<div className='content'>
 							<div className='author'>
-								{episode.author}
+								{episode.name}
 							</div>
 							<div className='title'>
 								{episode.title}
+							</div>
+							<div className='date'>
+								{datePublished}
 							</div>
 						</div>
 					</Link>
