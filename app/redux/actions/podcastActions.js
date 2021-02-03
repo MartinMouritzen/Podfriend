@@ -385,37 +385,80 @@ export function subscribeToPodcast(podcast) {
 
 		const { isLoggedIn, authToken } = getState().user;
 		
-		console.log('subscribeToPodcast - user is logged in: ' + isLoggedIn + ':' + authToken);
+		// console.log('subscribeToPodcast - user is logged in: ' + isLoggedIn + ':' + authToken);
 		
 		// headers.Authorization = `Bearer ${token}`;
 		
-		dispatch({
-			type: PODCAST_SUBSCRIBED,
-			payload: podcast,
-			meta: {
-				offline: {
-					effect: {
-						url: 'https://api.podfriend.com/user/favorites/',
-						method: 'POST',
-						json: {
-							podcastPath: podcast.path
+		if (isLoggedIn) {
+			dispatch({
+				type: PODCAST_SUBSCRIBED,
+				payload: podcast,
+				meta: {
+					offline: {
+						effect: {
+							url: 'https://api.podfriend.com/user/favorites/',
+							method: 'POST',
+							json: {
+								podcastPath: podcast.path,
+								type: 'subscribe'
+							},
+							headers: {
+								'Authorization': `Bearer ${authToken}`
+							}
 						},
-						headers: {
-							'Authorization': `Bearer ${authToken}`
-						}
-					},
-					commit: { type: 'PODCAST_SUBSCRIBED_SUCCESS', meta: { podcast: podcast } },
-					rollback: { type: 'PODCAST_SUBSCRIBED_ERROR', meta: { podcast: podcast } }
+						commit: { type: 'PODCAST_SUBSCRIBED_SUCCESS', meta: { podcast: podcast } },
+						rollback: { type: 'PODCAST_SUBSCRIBED_ERROR', meta: { podcast: podcast } }
+					}
 				}
-			}
-		});
+			});
+		}
+		else {
+			dispatch({
+				type: PODCAST_SUBSCRIBED,
+				payload: podcast
+			});
+		}
 	};
 }
 export function unsubscribeToPodcast(podcast) {
-	return {
-		type: PODCAST_UNSUBSCRIBED,
-		payload: podcast
-	}
+	return (dispatch, getState) => {
+
+		const { isLoggedIn, authToken } = getState().user;
+		
+		// console.log('unsubscribeToPodcast - user is logged in: ' + isLoggedIn + ':' + authToken);
+		
+		// headers.Authorization = `Bearer ${token}`;
+		
+		if (isLoggedIn) {
+			dispatch({
+				type: PODCAST_UNSUBSCRIBED,
+				payload: podcast,
+				meta: {
+					offline: {
+						effect: {
+							url: 'https://api.podfriend.com/user/favorites/',
+							method: 'POST',
+							json: {
+								podcastPath: podcast.path,
+								type: 'unsubscribe'
+							},
+							headers: {
+								'Authorization': `Bearer ${authToken}`
+							}
+						},
+						commit: { type: 'PODCAST_UNSUBSCRIBED_SUCCESS', meta: { podcast: podcast } },
+						rollback: { type: 'PODCAST_UNSUBSCRIBED_ERROR', meta: { podcast: podcast } }
+					}
+				}
+			});
+		}
+		else {
+			dispatch({
+				type: PODCAST_UNSUBSCRIBED,
+				payload: podcast
+			});
+		}
+	};
 }
 
 /**********************

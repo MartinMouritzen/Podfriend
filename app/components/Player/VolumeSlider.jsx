@@ -1,15 +1,25 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
 import { Range } from 'react-range';
+import { FaVolumeMute, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './../Player.scss';
 
-import { FaVolumeMute, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
+import { setConfigOption } from 'podfriend-approot/redux/actions/settingsActions';
 
 const VolumeSlider = ({ audioElement }) => {
+	const dispatch = useDispatch();
+
+	const volumeLevel = useSelector((state) => state.settings.volumeLevel);
+
 	const onVolumeSliderChange = (newVolume) => {
-		audioElement.volume = newVolume;
+		dispatch(setConfigOption('volumeLevel',newVolume));
 	};
+
+	useEffect(() => {
+		console.log('setting volume to: ' + volumeLevel);
+		audioElement.volume = volumeLevel;
+	},[volumeLevel,audioElement]);
 
 	return (
 		<div className={styles.volumeControls}>
@@ -24,7 +34,7 @@ const VolumeSlider = ({ audioElement }) => {
 			}
 			<Range
 				step={0.05}
-				values={[audioElement.volume]}
+				values={[volumeLevel]}
 				min={0}
 				max={1}
 				renderTrack={({ props, children }) => (

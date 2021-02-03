@@ -50,6 +50,25 @@ import AudioSpeedSettingModal from 'podfriend-approot/components/Player/AudioSpe
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css'
 
+
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/react/css/core.css';
+
+
+/* Basic CSS for apps built with Ionic */
+// import '@ionic/react/css/normalize.css';
+// import '@ionic/react/css/structure.css';
+// import '@ionic/react/css/typography.css';
+
+/* Optional CSS utils that can be commented out */
+// import '@ionic/react/css/padding.css';
+// import '@ionic/react/css/float-elements.css';
+// import '@ionic/react/css/text-alignment.css';
+// import '@ionic/react/css/text-transformation.css';
+// import '@ionic/react/css/flex-utils.css';
+// import '@ionic/react/css/display.css';
+
+
 const mapStateToProps = state => ({
 	showLogin: state.ui.showLogin,
 	activeEpisode: state.podcast.activeEpisode,
@@ -154,10 +173,8 @@ class PodcastClient extends Component {
 			}
 		}
 		if (this.props.isLoggedIn) {
-			console.log('is logged in');
 			if (this.props.syncHappening === false) {
 				if (this.props.syncedPodcastsThisSession === false) {
-					console.log('sync not happening and has not happened this session');
 					this.props.synchronizePodcasts();
 				}
 				//

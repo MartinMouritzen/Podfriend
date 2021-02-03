@@ -90,7 +90,9 @@ class PasswordForm extends Component {
 		this.setState({
 			forgotPasswordInitiated: true
 		},() => {
-			console.log('forgot pw');
+			var url = "https://api.podfriend.com/user/reset-password/?email=" + this.props.email;
+
+			fetch(url);
 		});
 	}
 	/**

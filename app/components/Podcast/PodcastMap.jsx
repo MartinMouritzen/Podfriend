@@ -37,8 +37,8 @@ const PodcastMap = ({ location }) => {
 
 	return (
 		<div style={{ minWidth: '85vw', height: '90vh', width: '100vw' }}>
-			{ location.name &&
-				<h1>{location.name}</h1>
+			{ location['#text'] &&
+				<h1>{location['#text']}</h1>
 			}
 			<GoogleMapReact
 				bootstrapURLKeys={{ key: 'AIzaSyBOcTd7Gk4oDJNrKVch2Amd-f8HgNYX4qg' }}
@@ -48,7 +48,7 @@ const PodcastMap = ({ location }) => {
 				<Marker
 					lat={center.lat}
 					lng={center.lng}
-					text={location.name}
+					text={location['#text']}
 				/>
 			</GoogleMapReact>
 		</div>

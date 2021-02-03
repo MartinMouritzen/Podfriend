@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link, useLocation } from 'react-router-alias';
 
@@ -15,11 +15,17 @@ import LoadingRings from 'podfriend-approot/images/design/loading/loading1.svg';
 const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, showArchived, activePodcast }) => {
 	var location = useLocation();
 
+	const [showPodcastCheckIndicator,setShowPodcastCheckIndicator] = useState(false);
+
 	var isCheckingPodcasts = useSelector((state) => state.ui.syncHappening);
+
+	useEffect(() => {
+		setShowPodcastCheckIndicator(isCheckingPodcasts);
+	},[isCheckingPodcasts]);
 
 	return (
 		<div className={showResponsiveList ? styles.showResponsive + ' ' + styles.favoriteList : styles.favoriteList}>
-			{ isCheckingPodcasts &&
+			{ showPodcastCheckIndicator &&
 				<div className={styles.checkingChanges}>
 					<img className={styles.loadingIndicator} src={LoadingRings} /> Refreshing your podcasts
 				</div>
@@ -44,9 +50,11 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 					
 					var isSelected = podcast.path == podcastPath;
 
+					const podcastCover = (podcast.artworkUrl100 ? podcast.artworkUrl100 : podcast.image);
+
 					// var podcastInternalUrl = '/podcast/' + PodcastUtil.generatePodcastUrl(podcast.name) + '/';
 
-					console.log(podcast);
+					// console.log(podcast);
 
 					return (
 						<Link to={{
@@ -54,15 +62,16 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 								state: {
 									podcast: podcast
 								}
-							}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name} >
-							<PodcastImage
-								podcastPath={podcast.path}
-								imageErrorText={podcast.name}
-								src={podcast.artworkUrl100 ? podcast.artworkUrl100 : podcast.image}
-								className={styles.cover}
-								width={400}
-								height={400}
-							/>
+							}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name}>
+								<PodcastImage
+									podcastPath={podcast.path}
+									imageErrorText={podcast.name}
+									src={podcastCover}
+									className={styles.cover}
+									width={400}
+									height={400}
+								/>
+							
 							<div className={styles.podcastDetails}>
 								<span className={styles.podcastName}>{podcast.name}</span>
 								{ /* <span className={styles.episodesInfo}>12 episodes, 2 new</span> */ }

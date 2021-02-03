@@ -96,6 +96,10 @@ class AudioController {
 	*/
 	setPlaybackRate(playbackRate) {
 		if (this.audioElement && this.audioElement.current) {
+			if (!playbackRate || !Number.isInteger(playbackRate)) {
+				playbackRate = 1;
+			}
+
 			this.audioElement.current.playbackRate = playbackRate;
 		}
 	}

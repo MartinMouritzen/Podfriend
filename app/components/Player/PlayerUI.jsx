@@ -4,13 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import { Range } from 'react-range';
+import { Range, getTrackBackground } from 'react-range';
 
 import DOMPurify from 'dompurify';
-
-import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
-
-
 
 import SVG from 'react-inlinesvg';
 const FullScreenIcon = () => <SVG src={require('podfriend-approot/images/design/player/fullscreen.svg')} />;
@@ -421,7 +417,12 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 													height: '6px',
 													width: '100%',
 													alignSelf: 'center',
-													backgroundColor: 'rgba(10, 10, 0, 0.5)'
+													background: getTrackBackground({
+														values: [(100 * progress) / duration],
+														colors: ['#29bd73', 'rgba(10, 10, 0, 0.5)'],
+														min: 0,
+														max: 100
+													})
 												}}
 											>
 												{children}

@@ -1,9 +1,22 @@
+ion-item {
+	--padding-start: 0px;
+	--padding-end: 0px;
+	--inner-padding-end: 0px;
+}
+ion-item-options {
+	background-color: #ff23aa;
+}
+ion-item-option {
+	color: #FFFFFF;
+	background-color: #ffcc00;
+}
 .episodeListLoading {
 	padding: 10px;
 	background-color: #FFFFFF;
 }
 .episodeList {
 	flex: 1;
+	background-color: #FFFFFF;
 }
 .episodeList .episode label {
 	display: block;
@@ -31,9 +44,11 @@
 	transition: all 1s;
 	border-bottom: 2px solid #EEEEEE;
 }
-.episode:hover {
-	/* border: 1px solid #DDDDDD; */
-	background-color: #F0F0F0;
+@media (any-hover: hover) {
+	.episode:hover {
+		/* border: 1px solid #DDDDDD; */
+		background-color: #F0F0F0;
+	}
 }
 .episode.listened {
 	background-color: #FFFFFF;
@@ -102,8 +117,10 @@
 	justify-content: center;
 	align-items: center;
 }
-.icon:hover {
-	transform: scale(1.2);
+@media (any-hover: hover) {
+	.icon:hover {
+		transform: scale(1.2);
+	}
 }
 .playIcon, .pauseIcon {
 	background-color: #0176e5;

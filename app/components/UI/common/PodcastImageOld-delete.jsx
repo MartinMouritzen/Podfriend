@@ -29,60 +29,6 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 	const [status, setStatus] = useState(STATUS_PRELOAD);
 	const [imageSource, setImageSource] = useState(src);
 
-	useEffect(() => {
-		setStatus(STATUS_PRELOAD);
-		setImageSource(src);
-	},[podcastPath]);
-
-	const onError = () => {
-		console.log('image error1');
-		if (fallBackImage) {
-			console.log('image error2');
-			if (fallBackImage == src) {
-				console.log('image error3');
-				setStatus(STATUS_ERROR);
-			}
-			else {
-				setImageSource(fallBackImage);
-			}
-		}
-		else {
-			setStatus(STATUS_ERROR);
-		}
-	};
-
-
-
-	return (
-		<>
-			{ status === STATUS_ERROR &&
-				<PodcastImageFallback
-					podcastId={podcastId}
-					imageSource={imageSource}
-					imageErrorText={imageErrorText}
-					originalSource={originalSource}
-					className={className}
-					isError={(status === STATUS_ERROR)}
-					width={width}
-				/>
-			}
-			{ status !== STATUS_ERROR &&
-				<img
-					loading="lazy"
-					key={imageSource}
-					src={imageSource}
-					style={{
-
-					}}
-					alt={alt}
-					className={className}
-					onError={onError}
-				/>
-			}
-		</>
-	);
-
-	/*
 	const useFallbackImage = () => {
 		// Let's load the temp image
 		loadImage(fallBackImage)
@@ -155,6 +101,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 			{ status === STATUS_LOADED && !asBackground &&
 			<>
 			HELO4
+			{/*
 				<img
 					src={imageSource}
 					style={{
@@ -163,12 +110,11 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 					alt={alt}
 					className={className}
 				/>
-
+				*/}
 				</>
 			}
 		</>
 	);
-	*/
 });
 
 export default PodcastImage;

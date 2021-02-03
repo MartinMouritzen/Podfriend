@@ -12,6 +12,8 @@ import EpisodeListItem from './EpisodeListItem.jsx';
 
 import styles from './EpisodeList.css';
 
+import { IonList, IonItem, IonLabel, IonInput, IonToggle, IonRadio, IonCheckbox, IonItemSliding, IonItemOption, IonItemOptions, IonContent } from '@ionic/react';
+
 function mapStateToProps(state) {
 	return {
 		selectedPodcast: state.podcast.selectedPodcast,
@@ -333,6 +335,9 @@ class EpisodeList extends Component {
 						You listened to all the episodes in this podcast!
 					</div>
 				}
+				<IonList
+					 class="ion-no-padding"
+				>
 				{ this.state.episodes && this.state.episodes.length > 0 &&
 					this.state.episodes.map((episode,index) => {
 						if (seasons.length > 0 && this.state.onlySeason != 'all' && this.state.onlySeason != episode.season) {
@@ -395,6 +400,7 @@ class EpisodeList extends Component {
 						return episodeHTMLElements;
 					})
 				}
+				</IonList>
 			</div>
 		);
 	}

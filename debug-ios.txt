@@ -1,0 +1,7 @@
+Make sure iTunes is open
+Make sure phone is connected through a lightning/usb cable
+
+# run ios_webkit_debug_proxy
+run remotedebug_ios_webkit_adapter --port=9000
+
+visit chrome://inspect

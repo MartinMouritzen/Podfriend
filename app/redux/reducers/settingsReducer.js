@@ -1,9 +1,11 @@
 import {
-	SET_AUDIO_PLAYBACK_SPEED
+	SET_AUDIO_PLAYBACK_SPEED,
+	SET_CONFIG_OPTION
 } from "../constants/setting-types";
 
 const initialState = {
-	audioPlaybackSpeed: 1
+	audioPlaybackSpeed: 1,
+	volumeLevel: 1
 };
 
 const settingsReducer = (state = initialState, action) => {
@@ -11,6 +13,16 @@ const settingsReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			audioPlaybackSpeed: action.payload
 		});
+	}
+	else if (action.type === SET_CONFIG_OPTION) {
+		var newState = Object.assign({}, state, {
+			
+		});
+
+		if (action.payload.key) {
+			newState[action.payload.key] = action.payload.value;
+		}
+		return newState;
 	}
 	return state;
 };

@@ -67,6 +67,7 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 					<div>
 						{ coverImage && 
 							<PodcastImage
+								alt={title + ' cover art'}
 								imageErrorText={title}
 								podcastPath={path}
 								width={600}
@@ -80,11 +81,11 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 						{ !coverImage &&
 							<div className={styles.podcastCover}><img className={styles.loadingIndicator} src={LoadingRings} /></div>
 						}
-						{ /*
+						{/*
 						<div className={styles.starRating}>
 							<ReviewStarsWithText rating={4} reviews={0} />
 						</div>
-						*/ }
+						*/}
 					</div>
 					<div className={styles.podcastInfo}>
 					{ author &&
@@ -138,9 +139,9 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 				<div className={styles.descriptionBody} dangerouslySetInnerHTML={{__html:description}} />
 			}
 
-			{ location !== false &&
+			{ location !== false && location['#text'] &&
 				<div className={styles.locationLine} onClick={() => { setShowLocation(!showLocation); }}>
-					<FaMapMarkerAlt size="24" /> {location.name}
+					<FaMapMarkerAlt size="24" /> {location['#text']}
 				</div>
 			}
 			{ showLocation !== false &&

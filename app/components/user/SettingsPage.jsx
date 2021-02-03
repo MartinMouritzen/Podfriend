@@ -4,60 +4,48 @@ import React, { Component } from 'react';
 
 import SectionHeader from '~/app/components/Page/SectionHeader';
 
+import Page from 'podfriend-approot/components/UI/Layout/Page.jsx';
+import TitleHeader from 'podfriend-approot/components/UI/Layout/TitleHeader.jsx';
+
 import styles from './SettingsPage.css';
 
-/**
-*
-*/
-class SettingsPage extends Component {
-	/**
-	*
-	*/
-	constructor(props) {
-		super(props);
-		
-		this.deletePrivateData = this.deletePrivateData.bind(this);
-	}
-	/**
-	*
-	*/
-	deleteLocalData() {
-		if (confirm('Are you sure you want to delete all your local data? This cannot be undone.','Delete private data')) {
-			localStorage.clear();
-			// getCurrentWindow().reload();
-		}
-	}
-	/**
-	*
-	*/
-	deletePrivateData() {
-		if (confirm('Are you sure you want to delete all your data? This cannot be undone.','Delete private data')) {
-			localStorage.clear();
-			// getCurrentWindow().reload();
-		}
-	}
-	/**
-	*
-	*/
-	render() {
-		return (
-			<div className={styles.page}>
-				<div className={styles.title}>Settings</div>
-				
-				<SectionHeader>Language</SectionHeader>
-				<div>
-					... Coming ...
-				</div>
+import localforage from 'localforage';
 
-				<SectionHeader>Your data</SectionHeader>
-				<div>
-					<button onClick={this.deleteLocalData}>Delete my local data (Might be good if you encounter bugs)</button>
-				</div>
-				<div>
-					<button onClick={this.deletePrivateData}>Delete my private data (Will delete both local and serverside data. Good if you hate Podfriend)</button>
-				</div>
-			</div>
-		);
+const SettingsPage = () => {
+	const deleteLocalData = () => {
+		if (confirm('Are you sure you want to delete all your local data? This cannot be undone. Your information is still saved on the server.','Delete private data')) {
+			localforage.clear().then(() => {
+				alert('Local data has been deleted.');
+				window.location.reload(false); 
+			});
+		}
 	}
+
+	const deletePrivateData = () => {
+		if (confirm('Are you sure you want to delete ALL your data? This cannot be undone.','Delete private data')) {
+			localforage.clear().then(() => {
+				alert('Local data has been deleted. Server data deletion is not yet supported. Please email info@podfriend.com to be deleted fully.');
+				window.location.reload(false); 
+			});
+		}
+	}
+	return (
+		<Page>
+			<TitleHeader>Settings</TitleHeader>
+			
+			<SectionHeader>Language</SectionHeader>
+			<div style={{ padding: '20px' }}>
+				... Coming ...
+			</div>
+
+			<SectionHeader>Your data</SectionHeader>
+			<div style={{ marginTop: '20px' }}>
+				<button onClick={deleteLocalData}>Delete my local data (Might be good if you encounter bugs)</button>
+			</div>
+			<div style={{ marginTop: '20px' }}>
+				<button onClick={deletePrivateData}>Delete my private data (Will delete both local and serverside data. Good if you hate Podfriend)</button>
+			</div>
+		</Page>
+	);
 }
 export default SettingsPage;

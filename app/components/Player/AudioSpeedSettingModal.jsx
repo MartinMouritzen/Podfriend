@@ -14,7 +14,12 @@ const AudioSpeedSettingModal = ({ onClose }) => {
 	const dispatch = useDispatch();
 	const speedButtons = [0.75,1.0,1.25,1.5];
 
-	const audioSpeed = useSelector((state) => { return state.settings.audioPlaybackSpeed; });
+	var audioSpeed = useSelector((state) => {
+		return state.settings.audioPlaybackSpeed;
+	});
+	if (!audioSpeed) {
+		audioSpeed = 1;
+	}
 
 	const onSpeedChange = (value) => {
 		var scaledValue = Number.parseFloat(map_range(value,0,100,0.7,3.0)).toFixed(2);

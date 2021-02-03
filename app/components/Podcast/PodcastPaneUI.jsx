@@ -61,7 +61,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 			/>
 
 			<div className={styles.podcastContent}>
-			<EpisodeList currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
+				<EpisodeList currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
 				{/*
 				<Tabs>
 					<Tab title="Episodes" active link={'/podcast/' + selectedPodcast.path}>
@@ -109,7 +109,6 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 					<Tab title="Podcast content" link={'/podcast/' + selectedPodcast.path + '/extraContent'}>
 						podcast test content
 					</Tab>
-
 				</Tabs>
 				*/}
 			</div>

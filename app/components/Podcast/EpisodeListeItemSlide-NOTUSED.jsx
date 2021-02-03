@@ -69,6 +69,10 @@ const EpisodeListItem = ({ id, title, description, episodeImage, duration, curre
 	};
 
 	return (
+		<IonItemSliding>
+			<IonItem
+				
+			>
 		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay}>
 			<PodcastImage
 				podcastPath={podcastPath}
@@ -121,6 +125,17 @@ const EpisodeListItem = ({ id, title, description, episodeImage, duration, curre
 				<ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} />
 			</div>
 		</div>
+		</IonItem>
+		<IonItemOptions side="end"
+		 ionSwipe={() => { console.log('ionswipe1'); }}
+		>
+          <IonItemOption onClick={() => { console.log('fuck yeah'); }}
+		   ionSwipe={() => { console.log('ionswipe2'); }}
+		  >
+		 	 <IonIcon slot="end" icon={archive} />
+			  Mark as listened</IonItemOption>
+        </IonItemOptions>
+		</IonItemSliding>
 	);
 };
 function episodeShouldCache(prevEpisode,nextEpisode) {

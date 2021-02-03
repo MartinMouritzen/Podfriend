@@ -60,6 +60,7 @@ class UserTitleBar extends Component {
 					{/*
 					<ContextMenuItem><Link to='/account/'><FaUser />Account</Link></ContextMenuItem>
 					<ContextMenuItem><Link to='/feedback/'><FaComment />Give feedback</Link></ContextMenuItem>
+					
 					<ContextMenuItem><Link to='/settings/'><FaCog />Settings</Link></ContextMenuItem>
 					*/}
 					<ContextMenuItem onClick={this.props.userLogout}><FaLock />Log out</ContextMenuItem>

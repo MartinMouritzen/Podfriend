@@ -173,9 +173,21 @@ class Player extends Component {
 		}
 	}
 	handleKeyDown(event) {
-		// console.log(event);
-		if (event.keyCode === 32) {
-			// console.log('yay');
+		try {
+			if (event.keyCode === 32) {
+				console.log(event);
+				var isInputOrTextarea = false;
+
+				if (['INPUT','TEXTAREA'].indexOf(event.srcElement.nodeName) == -1) {
+					event.preventDefault();
+					this.playOrPause();
+				}
+				// console.log('yay');
+			}
+		}
+		catch (exception) {
+			console.log('exception while handling handleKeyDown in');
+			console.log(exception);
 		}
 	}
 	/**
