@@ -156,16 +156,6 @@
 	right: 3px;
 	width: 21px;
 }
-.errorButton {
-	background-color: #fb797e;
-
-	svg {
-		position: static;
-		fill: #FFFFFF;
-		width: 25px;
-		height: 25px;
-	}
-}
 .chatButton, .backwardButton, .fastBackwardButton, .forwardButton, .fastForwardButton, .moreControlsButton {
 	display: inline-block;
 
@@ -214,6 +204,34 @@
 	}
 	.chatButton:hover svg {
 		transform: scale(0.9);
+	}
+}
+.errorPlaying {
+	.errorButton {
+		background-color: #d72828 !important;
+
+		z-Index: 10;
+
+		svg {
+			position: static;
+			fill: #FFFFFF !important;
+			width: 25px;
+			height: 25px;
+		}
+	}
+
+	.chatButton, .backwardButton, .forwardButton, .moreControlsButton {
+		display: none;
+	}
+	.errorText {
+		z-Index: 9;
+		background-color: #e74c3c;
+		color: #FFFFFF;
+		border-radius: 5px;
+		padding: 5px;
+		padding-left: 15px;
+		position: relative;
+		left: -10px;
 	}
 }
 /************************

@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import { Range, getTrackBackground } from 'react-range';
-
 import DOMPurify from 'dompurify';
 
 import SVG from 'react-inlinesvg';
@@ -35,6 +33,7 @@ import { ContextMenu, ContextMenuItem } from 'podfriend-approot/components/wwt/C
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
+import PodcastFeed from 'podfriend-approot/library/PodcastFeed.js';
 
 import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/EpisodeChapters.jsx';
 import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
@@ -50,6 +49,7 @@ import SleepTimerModal from './SleepTimerModal.jsx';
 
 import OpenPlayerUI from './OpenPlayerUI.jsx';
 
+import ProgressBarSlider from './ProgressBarSlider.jsx';
 import VolumeSlider from './VolumeSlider.jsx';
 
 /**
@@ -58,13 +58,14 @@ import VolumeSlider from './VolumeSlider.jsx';
 
 const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged }) => {
 	const dispatch = useDispatch();
+
 	const history = useHistory();
 	const audioElement = useRef(null);
 	const moreIconElement = useRef(null);
 	const [errorRetries,setErrorRetries] = useState(0);
 	const [isVideo,setIsVideo] = useState(false);
 	const [episodeOpen,setEpisodeOpen] = useState(false);
-	const [description,setDescription] = useState(false);
+	const [description,setDescription] = useState('');
 	const [chapters,setChapters] = useState(false);
 	const [chaptersLoading,setChaptersLoading] = useState(true);
 	const [currentChapter,setCurrentChapter] = useState(false);
@@ -73,6 +74,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [error,setError] = useState(false);
 	const [errorText,setErrorText] = useState(false);
 
+	const [rssFeed,setRSSFeed] = useState(false);
+	const [rssFeedCurrentEpisode,setRssFeedCurrentEpisode] = useState(false);
 
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
 	const showSleepTimerWindow = useSelector((state) => state.ui.showSleepTimerWindow);
@@ -222,7 +225,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	};
 
 	const loadChapters = async(url) => {
-		console.log('loading chapters');
+		// console.log('loading chapters');
 		let result = false;
 
 		try {
@@ -283,10 +286,75 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	},[chapters,activeEpisode.currentTime]);
 
 	useEffect(() => {
+		if (rssFeedCurrentEpisode !== false) {
+			console.log(rssFeedCurrentEpisode);
+			var description = DOMPurify.sanitize(rssFeedCurrentEpisode['description'], {
+				ALLOWED_TAGS: [
+					'a','p','br','ol','ul','li','b'
+					]
+			});
+			description = description.replace(/(?:\r\n|\r|\n)/g, '<br />');
+			setDescription(description);
+
+			if (rssFeedCurrentEpisode.chaptersUrl) {
+				loadChapters(rssFeedCurrentEpisode.chaptersUrl);
+			}
+			else {
+				setChaptersLoading(false);
+			}
+			if (rssFeedCurrentEpisode.transcript) {
+				var useTranscript = rssFeedCurrentEpisode.transcript;
+				if (useTranscript && useTranscript.length) {
+					for (var i=0;i< rssFeedCurrentEpisode.transcript.length;i++) {
+						if (rssFeedCurrentEpisode.transcript[i].type === 'application/srt') {
+							useTranscript = rssFeedCurrentEpisode.transcript[i];
+							break;
+						}
+					}
+				}
+				if (useTranscript) {
+					setSubtitleFileURL(useTranscript.url);
+				}
+			}
+		}
+	},[rssFeedCurrentEpisode]);
+
+	useEffect(() => {
 		setSubtitleFileURL(false);
 		setChapters(false);
+		setRSSFeed(false);
+		setRssFeedCurrentEpisode(false);
+		setDescription('');
 
 		const fetchEpisodeData = async() => {
+			var podcastFeed = new PodcastFeed(activePodcast.feedUrl);
+			podcastFeed.parse()
+			.then((feed) => {
+				setRSSFeed(feed);
+
+				// console.log(activeEpisode);
+				// console.log(feed.items[0]);
+				
+				var foundEpisode = false;
+
+				for(var i=0;i<feed.items.length;i++) {
+					if (activeEpisode.url == feed.items[i].enclosureUrl) {
+						foundEpisode = true;
+						setRssFeedCurrentEpisode(feed.items[i]);
+						break;
+					}
+				}
+
+				if (!foundEpisode) {
+					setChaptersLoading(false);
+				}
+
+			})
+			.catch((error) => {
+				console.error('Error parsing RSS feed: ');
+				console.error(error);
+			});
+			/*
 			// console.log('fetching activeEpisode');
 			let episodeId = activeEpisode.id;
 			try {
@@ -318,6 +386,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			catch (exception) {
 				console.log('Exception loading episode data: ' + exception);
 			}
+			*/
 		}
 		fetchEpisodeData();
 	},[activeEpisode.id]);
@@ -389,61 +458,17 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					</div>
 				</div>
 				{ hasEpisode && 
-					<div className={styles.controls}>
+					<div className={styles.controls + ' ' + (error ? styles.errorPlaying : '')}>
 						<div className={styles.progress}>
 							<div className={styles.progressText}>
 								{TimeUtil.formatPrettyDurationText(progress)}
 							</div>
 							<div className={styles.progressBarOuter}>
-								<Range
-									step={0.1}
-									values={[(100 * progress) / duration]}
-									min={0}
-									max={100}
-									renderTrack={({ props, children }) => (
-										<div
-											onMouseDown={(event) => { props.onMouseDown(event); }}
-											onTouchStart={(event) => { props.onTouchStart(event); }}
-											style={{
-												...props.style,
-												height: fullPlayerOpen ? '36px' : '24px',
-												width: '100%',
-												display: 'flex'
-											}}
-										>
-											<div
-												ref={props.ref}
-												style={{
-													height: '6px',
-													width: '100%',
-													alignSelf: 'center',
-													background: getTrackBackground({
-														values: [(100 * progress) / duration],
-														colors: ['#29bd73', 'rgba(10, 10, 0, 0.5)'],
-														min: 0,
-														max: 100
-													})
-												}}
-											>
-												{children}
-											</div>
-										</div>
-									)}
-									renderThumb={({ props, isDragged }) => (
-										<div
-											{...props}
-											style={{
-												...props.style,
-												height: '16px',
-												width: '16px',
-												borderRadius: '50%',
-												backgroundColor: '#FFFFFF',
-												transition: 'all 0.3s',
-												boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)'
-											}}
-										/>
-									)}
-									onChange={(values) => { onProgressSliderChange(values[0],false); }}
+								<ProgressBarSlider
+									progress={progress}
+									duration={duration}
+									fullPlayerOpen={fullPlayerOpen}
+									onProgressSliderChange={onProgressSliderChange}
 								/>
 
 								{/*
@@ -465,9 +490,14 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
 
 							{ error === true &&
-								<div key="playButton" className={styles.playButton + ' ' + styles.errorButton} onClick={startRetry}>
-									<ErrorIcon />
-								</div>
+								<>
+									<div key="playButton" className={styles.playButton + ' ' + styles.errorButton} onClick={startRetry}>
+										<ErrorIcon />
+									</div>
+									<div className={styles.errorText}>
+										{errorText ? errorText : 'Could not load audio.'}
+									</div>
+								</>
 							}
 							{ error === false &&
 								<>

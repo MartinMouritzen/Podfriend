@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Range } from 'react-range';
+import React, { useEffect, useState } from 'react';
+import { Range, getTrackBackground } from 'react-range';
 import { FaVolumeMute, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -11,26 +11,41 @@ const VolumeSlider = ({ audioElement }) => {
 	const dispatch = useDispatch();
 
 	const volumeLevel = useSelector((state) => state.settings.volumeLevel);
+	const [volumeLevelBeforeMute,setVolumeLevelBeforeMute] = useState(volumeLevel);
 
 	const onVolumeSliderChange = (newVolume) => {
 		dispatch(setConfigOption('volumeLevel',newVolume));
 	};
 
 	useEffect(() => {
-		console.log('setting volume to: ' + volumeLevel);
+		// console.log('setting volume to: ' + volumeLevel);
 		audioElement.volume = volumeLevel;
 	},[volumeLevel,audioElement]);
+
+	const muteOrUnmute = () => {
+		// Test if muted
+		if (volumeLevel === 0) {
+			if (volumeLevelBeforeMute === 0) {
+				volumeLevelBeforeMute = 1;
+			}
+			dispatch(setConfigOption('volumeLevel',volumeLevelBeforeMute));
+		}
+		else {
+			setVolumeLevelBeforeMute(volumeLevel);
+			dispatch(setConfigOption('volumeLevel',0));
+		}
+	};
 
 	return (
 		<div className={styles.volumeControls}>
 			{ audioElement.volume === 0 &&
-				<FaVolumeMute size='20px' />
+				<FaVolumeMute size='20px' onClick={muteOrUnmute} style={{cursor: 'pointer' }} />
 			}
 			{ audioElement.volume > 0 && audioElement.volume <= 0.6 &&
-				<FaVolumeDown size='20px' />
+				<FaVolumeDown size='20px' onClick={muteOrUnmute} style={{cursor: 'pointer' }} />
 			}
 			{ audioElement.volume > 0.6 &&
-				<FaVolumeUp size='20px' />
+				<FaVolumeUp size='20px' onClick={muteOrUnmute} style={{cursor: 'pointer' }} />
 			}
 			<Range
 				step={0.05}
@@ -54,7 +69,12 @@ const VolumeSlider = ({ audioElement }) => {
 								height: '6px',
 								width: '100%',
 								alignSelf: 'center',
-								backgroundColor: 'rgba(10, 10, 0, 0.5)'
+								background: getTrackBackground({
+									values: [volumeLevel],
+									colors: ['#0176e5', 'rgba(10, 10, 0, 0.5)'],
+									min: 0,
+									max: 1
+								})
 							}}
 						>
 							{children}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -19,7 +19,7 @@ const TabPanel = ({ children }) => {
 
 const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoading, chapters, currentChapter }) => {
 
-	const [tabIndex, setTabIndex] = React.useState('description');
+	const [tabIndex, setTabIndex] = useState('description');
 
 	const handleTabChange = (event, newValue) => {
 		setTabIndex(newValue);

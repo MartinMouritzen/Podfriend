@@ -39,7 +39,7 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 			{ navigator.share &&
 				<>
 					<div className={styles.clipBoardButton} onClick={(event) => { event.stopPropagation(); event.preventDefault(); navigatorShare(); }}>
-						Share panel
+						Share
 					</div>
 					&nbsp;
 				</>

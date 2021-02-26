@@ -97,6 +97,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 					>
 						<div className={styles.modalInner} onClick={(event) => { event.stopPropagation(); }}>
 							<div className={styles.modal + ' modal'} onClick={(event) => { event.stopPropagation(); } } >
+								{ header }
 						{childContent}
 							</div>
 						</div>

@@ -6,7 +6,13 @@ import {
 	UI_HIDE_FULLPLAYER,
 	UI_SHOW_SHARE_WINDOW,
 	UI_SHOW_SLEEPTIMER_WINDOW,
-	USER_SYNCING
+	USER_SYNCING,
+	WALLET_SYNCING,
+	WALLET_SYNC_COMPLETE,
+	WALLET_INVOICE_LOAD,
+	WALLET_INVOICE_SUCCESS,
+	WALLET_INVOICE_ERROR,
+	UI_SHOW_WALLET_WINDOW
 } from "../constants/ui-types";
 
 import {
@@ -126,6 +132,156 @@ export function synchronizePodcasts() {
 			dispatch({
 				type: USER_SYNCING,
 				payload: false
+			});
+		});
+	};
+}
+export function showWalletModal() {
+	return {
+		type: UI_SHOW_WALLET_WINDOW,
+		payload: true
+	};
+}
+export function hideWalletModal() {
+	return {
+		type: UI_SHOW_WALLET_WINDOW,
+		payload: false
+	};
+}
+export function synchronizeWallet() {
+	return (dispatch,getState) => {
+
+		dispatch({
+			type: WALLET_SYNCING,
+			payload: true
+		});
+
+		var { authToken } = getState().user;
+
+		const walletBalanceURL = 'https://api.podfriend.com/user/wallet/';
+		return fetch(walletBalanceURL, {
+			method: "GET",
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': `Bearer ${authToken}`
+			}
+		})
+		.then((resp) => {
+			return resp.json();
+		})
+		.then((response) => {
+			// console.log('WALLET SYNC');
+			// console.log(response);
+
+			dispatch({
+				type: WALLET_SYNC_COMPLETE,
+				payload: {
+					walletBalance: response.balance
+				}
+			});
+		})
+		.catch((error) => {
+			console.log('error synchronizing wallet data.');
+			console.log(error);
+
+			dispatch({
+				type: WALLET_SYNCING,
+				payload: false
+			});
+		});
+	};
+}
+export function sendValue(valueBlock) {
+	var recognizedMethod = false;
+	var validDestinations = false;
+
+	if (valueBlock.model && valueBlock.model.method === 'keysend' && valueBlock.model.type === 'lightning') {
+		recognizedMethod = true;
+	}
+	if (valueBlock.destinations && valueBlock.destinations.length > 0) {
+		validDestinations = true;
+	}
+
+	if (recognizedMethod && validDestinations) {
+		return (dispatch,getState) => {
+			console.log('sending value');
+			console.log(valueBlock);
+
+			var { authToken } = getState().user;
+
+			const valueData = {
+				valueType: valueBlock.model.type,
+				valueMethod: valueBlock.model.method,
+				amount: 5,
+				destinations: valueBlock.destinations
+			};
+
+			console.log(valueData);
+
+			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/';
+			return fetch(walletInvoiceURL, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+					'Authorization': `Bearer ${authToken}`
+				},
+				body: JSON.stringify(valueData)
+			})
+			.then((resp) => {
+				return resp.json()
+			})
+			.then((response) => {
+				console.log('sent value!');
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log('error sending value');
+				console.log(error);
+			});
+		};
+	}
+}
+export function getInvoice() {
+	return (dispatch,getState) => {
+
+		dispatch({
+			type: WALLET_INVOICE_LOAD,
+			payload: true
+		});
+
+		var { authToken } = getState().user;
+
+		const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/invoice/';
+		return fetch(walletInvoiceURL, {
+			method: "GET",
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': `Bearer ${authToken}`
+			}
+		})
+		.then((resp) => {
+			return resp.json()
+		})
+		.then((response) => {
+			// console.log('INVOICE!');
+			// console.log(response);
+
+
+			dispatch({
+				type: WALLET_INVOICE_SUCCESS,
+				payload: response
+			});
+		})
+		.catch((error) => {
+			console.log('error getting wallet invoice data.');
+			console.log(error);
+
+			dispatch({
+				type: WALLET_INVOICE_ERROR,
+				payload: 'Error getting wallet invoice data.'
 			});
 		});
 	};

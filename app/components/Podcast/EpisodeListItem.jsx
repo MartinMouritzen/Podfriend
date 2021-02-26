@@ -9,8 +9,10 @@ import React, { useEffect, useState } from 'react';
 // import 'rc-swipeout/assets/index.css';
 // import 'rc-swipeout/assets/index.less';
 
+/*
 import { IonList, IonIcon, IonItem, IonLabel, IonInput, IonToggle, IonRadio, IonCheckbox, IonItemSliding, IonItemOption, IonItemOptions, IonContent } from '@ionic/react';
 import { archive } from 'ionicons/icons';
+*/
 
 import { format, distanceInWordsToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
@@ -118,7 +120,9 @@ const EpisodeListItem = ({ id, title, description, episodeImage, duration, curre
 						}
 					</span>
 				</span>
-				<ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} />
+				<div className={styles.ShareButtons}>
+					<ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} />
+				</div>
 			</div>
 		</div>
 	);

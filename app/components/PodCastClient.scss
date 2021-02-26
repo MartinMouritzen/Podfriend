@@ -64,19 +64,23 @@ input[type=checkbox] {
 	
 	filter: blur(0px); /* hack for chrome to make backdrop-filter and scrolling work on childs */
 }
-@media (any-hover: hover) {
-	.mainArea::-webkit-scrollbar {
-		width: 12px;
-		background-color: #cccccc;
-	}
-	.mainArea::-webkit-scrollbar-thumb {
-		background: rgba(0,0,0,0.3);
-		height: 20%;
-		border-radius: 15px;
-	}
-	.mainArea::-webkit-scrollbar-track {
-		background: transparent;
-		display: none;
+:global {
+	@media (any-hover: hover) {
+		/*
+		.podcastPage::-webkit-scrollbar {
+			width: 12px;
+			background-color: #0176e5;
+		}
+		.podcastPage::-webkit-scrollbar-thumb {
+			background: #02489d;
+			height: 20%;
+			border-radius: 15px;
+		}
+		.podcastPage::-webkit-scrollbar-track {
+			background: transparent;
+			display: none;
+		}
+		*/
 	}
 }
 /*

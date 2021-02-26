@@ -14,7 +14,7 @@ const ShareModal = ({ onClose }) => {
 	const activePodcast = useSelector((state) => state.podcast.activePodcast);
 	const activeEpisode = useSelector((state) => state.podcast.activeEpisode);
 	const [shareMessage,setShareMessage] = useState('');
-	const [shareUrl,setShareUrl] = useState(false);
+	const [shareUrl,setShareUrl] = useState('https://web.podfriend.com/podcast/' + activePodcast.path + '/' + activeEpisode.id);
 	const [includeTime,setIncludeTime] = useState(false);
 	const [timeStamp,setTimeStamp] = useState(TimeUtil.formatPrettyDurationText(Math.round(activeEpisode.currentTime)));
 
@@ -25,7 +25,7 @@ const ShareModal = ({ onClose }) => {
 			newShareUrl += '?t=' + TimeUtil.HmsToSeconds(timeStamp)
 		}
 		setShareUrl(newShareUrl);
-	},[includeTime,timeStamp]);
+	},[includeTime,timeStamp,activeEpisode]);
 
 	useEffect(() => {
 		setShareMessage('Check out this episode: ' + activeEpisode.title + ', from the podcast ' + activePodcast.name + ': ' + shareUrl);

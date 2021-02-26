@@ -63,9 +63,12 @@
 .categories {
 	/* border-right: 1px solid #dee6ee; */
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 .categoryList {
 	margin-top: 30px;
+	flex: 1;
 }
 .addMoreButton {
 	display: inline-block;
@@ -120,20 +123,6 @@
 	overflow: auto;
 	padding-top: 6px;
 	padding-bottom: 90px;
-}
-.podcastList::-webkit-scrollbar {
-	width: 10px;
-}
-.podcastList::-webkit-scrollbar-thumb {
-  background:rgba(0,0,0,0);
-  height: 20%;
-  border-radius: 15px;
-}
-.podcastList::-webkit-scrollbar-track {
-  background: transparent;
-}
-.podcastList:hover::-webkit-scrollbar-thumb {
-	background: rgba(0,0,0,0.2);
 }
 
 @media only screen and (max-width: 899px) {

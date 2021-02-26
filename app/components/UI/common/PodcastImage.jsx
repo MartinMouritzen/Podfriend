@@ -35,7 +35,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 	},[podcastPath]);
 
 	const onError = () => {
-		console.log('image error1');
+		console.log('image error1: ' + imageSource + '||| (original: ' + src + ')');
 		if (fallBackImage) {
 			console.log('image error2');
 			if (fallBackImage == src) {
@@ -51,6 +51,19 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 		}
 	};
 
+	const onLoad = (event) => {
+		/*
+		try {
+			var image = event.nativeEvent.srcElement;
+			var imageWidth = image.width;
+			image.style.height = (imageWidth) + 'px';
+		}
+		catch (exception) {
+			console.log('Error resizing image');
+			console.log(exception);
+		}
+		*/
+	};
 
 
 	return (
@@ -77,6 +90,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 					alt={alt}
 					className={className}
 					onError={onError}
+					onLoad={onLoad}
 				/>
 			}
 		</>

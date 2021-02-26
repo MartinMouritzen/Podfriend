@@ -1,0 +1,21 @@
+.walletIndicator {
+	margin-top: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 150px;
+
+	cursor: pointer;
+}
+.walletBalanceLabel {
+	color: rgba(255,255,255,0.6);
+	font-size: 13px;
+	margin-left: 2px;
+	margin-bottom: 3px;
+}
+.walletBalance {
+	background-color: rgba(255,255,255,0.2);
+	color: rgba(255,255,255,0.8);
+	border-radius: 10px;
+	padding: 10px;
+	text-align: right;
+}

@@ -15,6 +15,8 @@ import CategoryList from './CategoryList/CategoryList.jsx';
 import FavoriteList from './Favorites/FavoriteList.jsx';
 import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
 
+import WalletBalance from 'podfriend-approot/components/Wallet/WalletBalance.jsx';
+
 import styles from './SideBar.css';
 
 function mapStateToProps(state) {
@@ -131,6 +133,9 @@ class SideBar extends Component {
 
 							*/ }
 						</div>
+						{ /*
+						<WalletBalance />
+						*/ }
 					</div>
 					<div className={styles.podcasts}>
 						<div className={styles.podcastHeader}>Podcasts</div>

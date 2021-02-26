@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../redux/actions/audioActions";
 import { updateEpisodeTime, updateEpisodeDuration, episodeFinished, playEpisode } from "../redux/actions/podcastActions";
+import { sendValue } from "../redux/actions/uiActions";
+
+// import PodcastWallet from 'podfriend-approot/library/PodcastWallet/PodcastWallet.js';
 
 import DOMPurify from 'dompurify';
 
@@ -29,11 +32,13 @@ function mapDispatchToProps(dispatch) {
 		audioPaused: () => { dispatch(audioPaused()); },
 		audioCanPlay: () => { dispatch(audioCanPlay()); },
 		audioBuffering: () => { dispatch(audioBuffering()); },
-		audioPlayRequested: () => { dispatch(audioPlayRequested()); }
+		audioPlayRequested: () => { dispatch(audioPlayRequested()); },
+		sendValue: (valueBlock) => { dispatch(sendValue(valueBlock)); }
 	};
 }
 
 let progressTimeoutId = false;
+let segmentTimeoutId = false;
 
 /**
 *
@@ -51,7 +56,8 @@ class Player extends Component {
 			duration: this.props.activeEpisode ? (this.props.activeEpisode.duration ? this.props.activeEpisode.duration : 0) : 0,
 			volume: 100,
 			sleepTimerEnabled: false,
-			sleepTimerEnding: false
+			sleepTimerEnding: false,
+			monetizeSegmentStart: false
 		};
 		this.onCanPlay = this.onCanPlay.bind(this);
 		this.onBuffering = this.onBuffering.bind(this);
@@ -61,6 +67,8 @@ class Player extends Component {
 		this.onLoadedData = this.onLoadedData.bind(this);
 		this.onTimeUpdate = this.onTimeUpdate.bind(this);
 		this.onEnded = this.onEnded.bind(this);
+		this.onPlay = this.onPlay.bind(this);
+		this.onPause = this.onPause.bind(this);
 		this.onNextEpisode = this.onNextEpisode.bind(this);
 		this.onPrevEpisode = this.onPrevEpisode.bind(this);
 		this.changeEpisode = this.changeEpisode.bind(this);
@@ -201,6 +209,9 @@ class Player extends Component {
 			this.play();
 		}
 	}
+	/**
+	*
+	*/
 	play() {
 		this.props.audioPlayRequested();
 	}
@@ -238,8 +249,52 @@ class Player extends Component {
 	/**
 	*
 	*/
-	onPlay(event) {
+	resetSegmentTime() {
+		console.log('this.props.activePodcast');
+		console.log(this.props.activePodcast);
+		if (this.props.activePodcast.value) {
+			var currentTime = this.props.audioController.getCurrentTime();
+			this.setState({
+				monetizeSegmentStart: currentTime
+			},() => {
+				this.startNewSegmentTimer();
+			});
+		}
+	}
+	stopSegmentTimer() {
+		clearTimeout(segmentTimeoutId);
+	}
+	/**
+	*
+	*/
+	startNewSegmentTimer() {
+		clearTimeout(segmentTimeoutId);
 
+		segmentTimeoutId = setInterval(() => {
+			this.segmentTimeTrigger();
+		},5000);
+		// },60000);
+	}
+	/**
+	*
+	*/
+	segmentTimeTrigger() {
+		if (this.props.activePodcast.value) {
+			// PodcastWallet.sendValue(this.props.activePodcast.value);
+			// console.log(this.props.activePodcast);
+			// console.log(this.props.activePodcast.value);
+			return false;
+			this.props.sendValue(this.props.activePodcast.value);
+		}
+		else {
+			console.log('Podcast has no value block, cannot send.');
+		}
+	}
+	/**
+	*
+	*/
+	onPlay(event) {
+		this.resetSegmentTime();
 	}
 	/**
 	*
@@ -260,7 +315,7 @@ class Player extends Component {
 	*
 	*/
 	onPause(event) {
-
+		this.stopSegmentTimer();
 	}
 	/**
 	*
@@ -318,8 +373,12 @@ class Player extends Component {
 		// Make sure we don't overload the html5 component
 		progressTimeoutId = setTimeout(() => {
 			this.setCurrentTime(placeInTrack);
+			this.resetSegmentTime();
 	 	},100);
 	}
+	/**
+	* 
+	*/
 	setCurrentTime(value) {
 		// this.props.audioController.pause();
 		this.props.audioController.setCurrentTime(value);
@@ -437,6 +496,7 @@ class Player extends Component {
 			this.props.audioController.setCurrentTime(currentTime + 15);
 			if (this.props.shouldPlay) {
 				this.props.audioController.play();
+				this.resetSegmentTime();
 			}
 		}
 	}
@@ -457,6 +517,7 @@ class Player extends Component {
 		.then(() => {
 			if (this.props.shouldPlay) {
 				this.props.audioController.play();
+				this.resetSegmentTime();
 			}
 		});
 	}

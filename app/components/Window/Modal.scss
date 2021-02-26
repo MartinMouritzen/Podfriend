@@ -1,5 +1,5 @@
 :global {
-	.modal h1 {
+	.modal h1, .modal h2 {
 		font-size: 26px;
 		margin: 0px;
 		padding: 20px;
@@ -60,11 +60,11 @@
 }
 .modal {
 	display: inline-block;
-	border: 1px solid rgba(0, 0, 0, 0.2);
+	/* border: 1px solid rgba(0, 0, 0, 0.2); */
 	background-clip: padding-box;
 	background-color: #FFFFFF;
 	color: #000000;
-	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.7);
 	border-radius: 10px;
 	overflow: hidden;
 

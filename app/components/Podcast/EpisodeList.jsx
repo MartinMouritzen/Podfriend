@@ -17,7 +17,6 @@ import { IonList, IonItem, IonLabel, IonInput, IonToggle, IonRadio, IonCheckbox,
 function mapStateToProps(state) {
 	return {
 		selectedPodcast: state.podcast.selectedPodcast,
-		activePodcast: state.podcast.activePodcast,
 		activeEpisode: state.podcast.activeEpisode,
 		isPlaying: state.audio.isPlaying
 	};

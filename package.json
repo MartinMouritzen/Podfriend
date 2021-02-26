@@ -1,7 +1,7 @@
 {
 	"name": "podfriend",
 	"productName": "PodFriend",
-	"version": "0.7.3",
+	"version": "0.7.4",
 	"description": "PodFriend - Because everyone needs a PodFriend.",
 	"license": "UNLICENSED",
 	"private": true,
@@ -278,6 +278,7 @@
 		"react-native-web": "^0.13.5",
 		"react-portal-tooltip": "^2.4.7",
 		"react-power-tooltip": "^1.0.2",
+		"react-qr-code": "^1.0.5",
 		"react-range": "^1.8.3",
 		"react-redux": "^7.2.0",
 		"react-responsive": "^8.0.3",

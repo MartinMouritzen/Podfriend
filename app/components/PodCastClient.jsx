@@ -8,6 +8,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 
 import styles from './PodCastClient.scss';
 
+import PodcastWallet from './../library/PodcastWallet/PodcastWallet.js';
 import PodCastService from './../library/PodCastService.js';
 import SideBar from './SideBar';
 
@@ -52,7 +53,7 @@ import 'react-spring-bottom-sheet/dist/style.css'
 
 
 /* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+// import '@ionic/react/css/core.css';
 
 
 /* Basic CSS for apps built with Ionic */
@@ -101,6 +102,8 @@ class PodcastClient extends Component {
 		var services = {};
 		services['itunes'] = new PodCastService('ITunes',window.podfriend.config.proxyPodcastVendorRequests,window.podfriend.config.api);
 		// services['spotify'] = new PodCastService('Spotify');
+
+		var podcastWallet = new PodcastWallet();
 		
 		this.onSearch = this.onSearch.bind(this);
 		
@@ -111,7 +114,8 @@ class PodcastClient extends Component {
 		this.mainArea = React.createRef();
 		
 		this.state = {
-			services: services
+			services: services,
+			podcastWallet: podcastWallet
 		}
 	}
 	/**

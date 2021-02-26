@@ -7,7 +7,13 @@ import {
 	UI_HIDE_LOGIN,
 	UI_SHOW_FULLPLAYER,
 	UI_HIDE_FULLPLAYER,
-	USER_SYNCING
+	USER_SYNCING,
+	WALLET_SYNCING,
+	WALLET_SYNC_COMPLETE,
+	WALLET_INVOICE_LOAD,
+	WALLET_INVOICE_SUCCESS,
+	WALLET_INVOICE_ERROR,
+	UI_SHOW_WALLET_WINDOW
 } from "../constants/ui-types";
 
 import {
@@ -22,7 +28,15 @@ const initialState = {
 	showFullPlayer: false,
 	syncHappening: false,
 	syncedPodcastsThisSession: false,
-	syncLastDate: false
+	syncLastDate: false,
+	walletSyncHappening: false,
+	walletLastSyncDate: false,
+	walletBalance: false,
+	showWalletModal: false,
+	walletInvoiceLoading: false,
+	walletInvoiceError: false,
+	walletInvoiceString: false,
+	walletInvoiceDate: false
 };
 
 const uiReducer = (state = initialState, action) => {
@@ -67,12 +81,54 @@ const uiReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === USER_SYNCING) {
-		console.log(action.payload);
+		// console.log(action.payload);
 		return Object.assign({}, state, {
 			syncHappening: action.payload,
 			syncedPodcastsThisSession: true
 		});
 	}
+	else if (action.type === WALLET_SYNCING) {
+		return Object.assign({}, state, {
+			walletSyncHappening: action.payload
+		});
+	}
+	else if (action.type === WALLET_SYNC_COMPLETE) {
+		return Object.assign({}, state, {
+			walletSyncHappening: false,
+			walletBalance: action.payload.walletBalance
+		});
+	}
+	else if (action.type === UI_SHOW_WALLET_WINDOW) {
+		return Object.assign({}, state, {
+			showWalletModal: action.payload
+		});
+	}
+
+	else if (action.type === WALLET_INVOICE_LOAD) {
+		return Object.assign({}, state, {
+			walletInvoiceLoading: true,
+			walletInvoiceError: false,
+			walletInvoiceString: false,
+			walletInvoiceDate: false
+		});
+	}
+	else if (action.type === WALLET_INVOICE_SUCCESS) {
+		return Object.assign({}, state, {
+			walletInvoiceLoading: false,
+			walletInvoiceError: false,
+			walletInvoiceString: action.payload['payment_request'],
+			walletInvoiceDate: new Date()
+		});
+	}
+	else if (action.type === WALLET_INVOICE_ERROR) {
+		return Object.assign({}, state, {
+			walletInvoiceLoading: false,
+			walletInvoiceError: action.payload,
+			walletInvoiceString: false,
+			walletInvoiceDate: false
+		});
+	}
+
 	return state;
 };
 export default uiReducer;

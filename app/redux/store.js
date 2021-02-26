@@ -45,7 +45,7 @@ const migrateStorage = async (state) => {
 }
 
 export default function configureStore(enableDevTools) {
-	console.log(enableDevTools);
+	// console.log(enableDevTools);
 	
 	const persistConfig = {
 		key: 'root',

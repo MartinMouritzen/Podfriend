@@ -291,6 +291,7 @@ export function viewPodcast(podcastPath) {
 					}
 					else {
 						console.log('Received new version of: ' + data.name);
+						console.log(data);
 						data.receivedFromServer = new Date();
 
 						// Make sure we pass the status of the podcast. This should come from the server though.
