@@ -57,16 +57,25 @@ const SearchPaneUI = ({ query, useSearchType, searching, searchResults, searchEr
 						</div>
 					}		
 					{ !searchError && searching &&
-							<div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
-								<div className="loading-line loading-podcast">&nbsp;</div>
+							<div className='podcastGrid'>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
+								<div className="loading-line loading-podcast-item">&nbsp;</div>
 							</div>
 					}
 					{ !searchError && !searching && searchResults && searchResults.length > 0 &&

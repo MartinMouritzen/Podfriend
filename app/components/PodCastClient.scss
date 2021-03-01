@@ -116,7 +116,7 @@ input[type=checkbox] {
     animation-name: placeHolderShimmer;
     animation-timing-function: linear;
     background: #f6f7f8;
-    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background: linear-gradient(to right, rgba(0,0,0,0.1) 8%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.1) 33%);
     background-size: 800px 104px;
     height: 18px;
 }
@@ -180,19 +180,29 @@ input[type=checkbox] {
 		}
 	}
 	.landingPage {
-		background-color: #FFFFFF;
+		background-color: #0176e5;
 
 		.hero {
-			background-color: rgba(255,195,0,0.5);
+			/* background-color: rgba(255,195,0,0.5); */
+			background-color: #0176e5;
 			padding: 40px;
 		}
 		.hero * {
-			color: rgb(27, 27, 33);
+			/* color: rgb(27, 27, 33); */
+			color: #FFFFFF;
+		}
+		p {
+			line-height: 28px;
+		}
+		.pageContent {
+			padding-top: 40px;
+			padding-bottom: 300px;
+			background-color: #FFFFFF;
 		}
 	}
 	.contentPage {
 		background-color: #FFFFFF;
-		padding: 20px;
+		
 	}
 
 
@@ -260,6 +270,10 @@ input[type=checkbox] {
 		.sectionInner {
 			padding-top: 15px;
 			padding-left: 15px;
+
+			@media (any-hover: hover) {
+				display: block;
+			}
 		}
 		.sectionBody {
 			font-size: 16px;
@@ -294,9 +308,24 @@ input[type=checkbox] {
 			margin-top: 5px;
 		}
 	}
+	@media (any-hover: none) {
+		.section:not(.waveSection) {
+			.sectionInner {
+				display: flex;
+
+				.sectionTitle {
+					text-transform: lowercase;
+					margin-left: 6px;
+				}
+			}
+		}
+	}
+
+
 	.sectionTitle {
 		color: #024699;
-		font-size: 6vw;
+
+		font-size: 5.5vw;
 	}
 	.sectionSubTitle {
 		color: #0263e8;
@@ -528,20 +557,33 @@ input[type=checkbox] {
 				overflow-y: visible;
 
 				.podcastItem {
-					max-width: 200px;
-					min-width: 200px;
+					max-width: 180px;
+					min-width: 180px;
+
+				}
+				.loading-podcast-item {
+					max-width: 180px;
+					min-width: 180px;
+					min-height: 180px;
+					max-height: 180px;
 				}
 			}
 		}
-
-		.podcastItem {
+		.podcastItem, .loading-podcast-item {
 			padding: 10px;
 		
 			border-radius: 5px;
 			
-			transition: all 0.5s;
-			
 			text-decoration: none;
+		}
+		.loading-podcast-item {
+			margin: 10px;
+			height: 180px;
+		}
+		.podcastItem {
+			transition: all 0.5s;
+
+			flex-direction: column;
 
 			.cover {
 				width: 100%;
@@ -554,6 +596,8 @@ input[type=checkbox] {
 			}
 			.content {
 				padding: 10px;
+				padding-left: 0px;
+				padding-right: 0px;
 			}
 			.title {
 				font-size: 16px;

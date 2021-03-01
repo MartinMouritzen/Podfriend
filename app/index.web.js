@@ -1,6 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
 import configureStore from './redux/store'
 
 import storage from 'redux-persist/lib/storage';
@@ -42,6 +44,8 @@ render(
 	<WebContainer store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 	document.getElementById('root')
 );
+
+defineCustomElements(window);
 
 if (module.hot) {
 	module.hot.accept('./components/Window/WebContainer',() => {

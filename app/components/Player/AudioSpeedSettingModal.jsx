@@ -73,7 +73,7 @@ const AudioSpeedSettingModal = ({ onClose }) => {
 					<Range
 						step={0.1}
 						values={[percentage]}
-						min={1}
+						min={0}
 						max={100}
 						renderTrack={({ props, children }) => (
 							<div

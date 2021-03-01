@@ -135,6 +135,7 @@ class Player extends Component {
 		}
 
 		if (this.props.playbackSpeed !== prevProps.playbackSpeed) {
+			// console.log('changing playback speed: ' + this.props.playbackSpeed);
 			this.props.audioController.setPlaybackRate(this.props.playbackSpeed);
 		}
 
@@ -250,8 +251,8 @@ class Player extends Component {
 	*
 	*/
 	resetSegmentTime() {
-		console.log('this.props.activePodcast');
-		console.log(this.props.activePodcast);
+		// console.log('this.props.activePodcast');
+		// console.log(this.props.activePodcast);
 		if (this.props.activePodcast.value) {
 			var currentTime = this.props.audioController.getCurrentTime();
 			this.setState({

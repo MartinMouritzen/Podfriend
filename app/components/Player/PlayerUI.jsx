@@ -338,7 +338,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				var foundEpisode = false;
 
 				for(var i=0;i<feed.items.length;i++) {
-					if (activeEpisode.url == feed.items[i].enclosureUrl) {
+					if (activeEpisode.guid == feed.items[i].guid) {
 						foundEpisode = true;
 						setRssFeedCurrentEpisode(feed.items[i]);
 						break;
@@ -346,6 +346,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				}
 
 				if (!foundEpisode) {
+					console.log('Did not find episode in RSS Feed.');
 					setChaptersLoading(false);
 				}
 

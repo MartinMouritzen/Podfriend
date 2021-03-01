@@ -7,7 +7,7 @@ import { initiateLogin } from "~/app/redux/actions/uiActions";
 
 import { ContextMenu, ContextMenuItem } from "~/app/components/wwt/ContextMenu/ContextMenu";
 
-import { FaUser, FaCog, FaComment, FaLock } from "react-icons/fa";
+import { FaRegEnvelope, FaUser, FaCog, FaComment, FaLock } from "react-icons/fa";
 
 import SVG from 'react-inlinesvg';
 
@@ -63,6 +63,7 @@ class UserTitleBar extends Component {
 					
 					<ContextMenuItem><Link to='/settings/'><FaCog />Settings</Link></ContextMenuItem>
 					*/}
+					<ContextMenuItem><Link to='/contact/'><FaRegEnvelope />Contact us</Link></ContextMenuItem>
 					<ContextMenuItem onClick={this.props.userLogout}><FaLock />Log out</ContextMenuItem>
 				</ContextMenu>
 			</div>

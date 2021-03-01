@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">podfriend</string>
+    <string name="title_activity_main">podfriend</string>
+    <string name="package_name">com.podfriend</string>
+    <string name="custom_url_scheme">com.podfriend</string>
+</resources>

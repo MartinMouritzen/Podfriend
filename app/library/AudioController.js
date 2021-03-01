@@ -96,7 +96,7 @@ class AudioController {
 	*/
 	setPlaybackRate(playbackRate) {
 		if (this.audioElement && this.audioElement.current) {
-			if (!playbackRate || !Number.isInteger(playbackRate)) {
+			if (!playbackRate || Number.isNaN(playbackRate)) {
 				playbackRate = 1;
 			}
 

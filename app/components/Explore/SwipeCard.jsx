@@ -78,5 +78,4 @@ const SwipeCard = ({episode, swiped, outOfFrame, playAudio, stopAudio }) => {
 		</TinderCard>
 	)
 };
-
 export default SwipeCard;

@@ -1,7 +1,7 @@
 {
 	"name": "podfriend",
 	"productName": "PodFriend",
-	"version": "0.7.4",
+	"version": "0.7.5",
 	"description": "PodFriend - Because everyone needs a PodFriend.",
 	"license": "UNLICENSED",
 	"private": true,
@@ -241,10 +241,16 @@
 		"yarn": "^1.12.3"
 	},
 	"dependencies": {
+		"@capacitor/android": "2.4.6",
+		"@capacitor/cli": "^2.4.6",
+		"@capacitor/core": "^2.4.6",
+		"@capacitor/ios": "2.4.6",
 		"@fortawesome/fontawesome-free": "^5.5.0",
+		"@ionic/pwa-elements": "^3.0.2",
 		"@ionic/react": "^5.5.3",
 		"@ionic/react-router": "^5.5.3",
 		"@material-ui/core": "^4.11.2",
+		"@material-ui/lab": "^4.0.0-alpha.57",
 		"@redux-offline/redux-offline": "^2.6.0",
 		"axios": "^0.18.0",
 		"axios-jsonp": "^1.0.2",

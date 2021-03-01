@@ -6,11 +6,13 @@ import { initiateLogin } from "~/app/redux/actions/uiActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
-import { FaPlus, FaUser, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
+import { FaRegEnvelope, FaPlus, FaUser, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
 
 import Toggle from 'react-toggle';
 
-import CategoryList from './CategoryList/CategoryList.jsx';
+import PodcastList from 'podfriend-approot/components/PodcastList/PodcastList.jsx';
+
+/* import CategoryList from './CategoryList/CategoryList.jsx'; */
 
 import FavoriteList from './Favorites/FavoriteList.jsx';
 import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
@@ -96,7 +98,6 @@ class SideBar extends Component {
 									<FaUser size="20" /> Log in
 								</div>
 							}
-							<hr />
 							{ false && this.props.isLoggedIn === true &&
 								<div className={styles.mainNavigationButton}>
 									<FaUser size="20" /> Account
@@ -107,6 +108,13 @@ class SideBar extends Component {
 									<FaPodcast size="20" /> For Podcasters
 								</Link>
 							}
+							{ true && 
+								<Link to="/contact/" className={styles.mainNavigationButton}>
+									<FaRegEnvelope size="20" /> Contact us
+								</Link>
+							}
+							<hr />
+							<PodcastList />
 							{ /*
 							<hr />
 

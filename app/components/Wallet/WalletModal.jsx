@@ -27,9 +27,9 @@ const WalletModal = ({ shown, onDismiss }) => {
 			defaultSnap={({ maxHeight }) => maxHeight / 2}
 			snapPoints={({ maxHeight }) => [ maxHeight / 2, maxHeight - 30 ]}
 			header={
-				<h2>
+				<h1>
 					Podcast Wallet
-				</h2>
+				</h1>
 			  }
 		  >
 			<div className={styles.walletModal}>

@@ -32,6 +32,7 @@ const SettingsPage = lazy(() => import('~/app/components/user/SettingsPage'));
 import EpisodePane from 'podfriend-approot/components/Episode/EpisodePane';
 // import ForPodcasters from 'podfriend-approot/components/Pages/ForPodcasters.jsx';
 const ForPodcasters = lazy(() => import('podfriend-approot/components/Pages/ForPodcasters.jsx'));
+const ContactPage = lazy(() => import('podfriend-approot/components/Pages/ContactPage.jsx'));
 
 import BottomNavigation from 'podfriend-approot/components/Navigation/BottomNavigation';
 
@@ -270,6 +271,7 @@ class PodcastClient extends Component {
 								<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />
 								<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
 								<Route path="/podcasters/" render={(props) => { return (<ForPodcasters />); }} />
+								<Route path="/contact/" render={(props) => { return (<ContactPage />); }} />
 								<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showResponsiveList={true} showArchived={false} setHasArchived={false} /> ); }} />
 								<Redirect to='/' />
 							</Switch>

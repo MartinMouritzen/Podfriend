@@ -16,6 +16,8 @@ const LatestVisitedPodcasts = () => {
 			feedPaths.push(subscribedPodcasts[i].path);
 		}
 
+		console.log(feedPaths);
+
 		try {
 			var result = await fetch('https://api.podfriend.com/podcast/episodes/?feedPaths=' + feedPaths.join(',') + '&max=14');
 			var episodes = await result.json();
@@ -23,7 +25,7 @@ const LatestVisitedPodcasts = () => {
 			if (episodes.error) {
 				setError(true);
 			}
-			else {		
+			else {
 				setLatestEpisodes(episodes);
 			}
 
@@ -49,6 +51,17 @@ const LatestVisitedPodcasts = () => {
 			</div>
 			{ latestEpisodes !== false && 
 				<PodcastMatrix type='scrollList' episodes={latestEpisodes} showLoadMore={true} />
+			}
+			{ latestEpisodes === false &&
+				<div className="podcastGrid scrollList">
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+					<div className="loading-line loading-podcast-item">&nbsp;</div>
+				</div>
 			}
 		</div>
 	);
