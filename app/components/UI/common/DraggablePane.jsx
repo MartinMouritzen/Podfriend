@@ -14,23 +14,25 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 	const elementRef = useRef(null);
 
 	const [startDragScrollOffsetY,setStartDragScrollOffsetY] = useState(0);
+
+	const [safeAreaTop,setSafeAreaTop] = useState(0);
 	const [safeAreaBottom,setSafeAreaBottom] = useState(0);
 
 	const [{ y, height }, set] = useSpring(() => ({ y: 0, height: heightWithoutDrag }))
 
 	useEffect(() => {
 		try {
-			var safeAreaBottomRaw = getComputedStyle(document.documentElement).getPropertyValue("--safeAreaBottom");
-			var safeAreaBottomInteger = parseInt(safeAreaBottomRaw, 10);
-			setSafeAreaBottom(safeAreaBottomInteger);
+			setSafeAreaTop(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--safeAreaTop"),10));
+			setSafeAreaBottom(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--safeAreaBottom"),10));
 		}
 		catch(exception) {
 			console.log('Error parsing safeAreaBottom value in DraggablePane');
+			safeAreaTop(0);
 			setSafeAreaBottom(0);
 		}
 
 		if (open) {
-			setHeightWithoutDrag(windowHeight - 24);
+			setHeightWithoutDrag(windowHeight - (safeAreaTop ? safeAreaTop : 24));
 		}
 		else {
 			if (windowWidth <= 570) {
