@@ -1,5 +1,15 @@
 @import 'sass/variables.scss';
 
+/*****
+* This is so we can read the variables from javascript.
+*****/
+:root {
+    --safeAreaTop: env(safe-area-inset-top);
+    --safeAreaRight: env(safe-area-inset-right);
+    --safeAreaBottom: env(safe-area-inset-bottom);
+    --safeAreaLeft: env(safe-area-inset-left);
+}
+
 html, body {
 	margin: 0px;
 	padding: 0px;
