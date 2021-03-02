@@ -435,15 +435,17 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 								{ chapters !== false &&
 									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
 								}
-								<PodcastImage
-									podcastPath={activePodcast.path}
-									width={600}
-									height={600}
-									imageErrorText={activePodcast.name}
-									fallBackImage={activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
-									src={activeEpisode.image ? activeEpisode.image : activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
-									className={styles.cover}
-								/>
+								{ activeEpisode !== false &&
+									<PodcastImage
+										podcastPath={activePodcast.path}
+										width={600}
+										height={600}
+										imageErrorText={activePodcast.name}
+										fallBackImage={activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
+										src={activeEpisode.image ? activeEpisode.image : activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
+										className={styles.cover}
+									/>
+								}
 
 							</>
 						}
