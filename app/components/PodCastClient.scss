@@ -17,7 +17,8 @@ h2 {
  let's see if the below is enough	
 */
 input, textarea {
-	-webkit-user-select:text;
+	-webkit-user-select: text;
+	user-select: text;
 	-webkit-appearance: none;
 }
 input[type=checkbox] {

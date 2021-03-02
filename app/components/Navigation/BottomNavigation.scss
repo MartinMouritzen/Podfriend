@@ -6,6 +6,15 @@
 	align-items: center;
 	background-color: #ffffff;
 	/* background-color: #0176e5;*/
+
+	@media only screen and (max-width: 900px) {
+		display: flex;
+
+		@supports(padding-bottom:env(safe-area-inset-bottom)) {
+			padding-bottom: env(safe-area-inset-bottom);
+			height: calc(env(safe-area-inset-top) + 60px);
+		}
+	}
 }
 .menuItem {
 	flex: 1;
@@ -23,9 +32,4 @@
 }
 .menuItemSelected svg {
 	fill: #0176e5;
-}
-@media only screen and (max-width: 899px) {
-	.bottomNavigation {
-		display: flex;
-	}
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import styles from 'podfriend-approot/components/Navigation/BottomNavigation.css';
+import styles from 'podfriend-approot/components/Navigation/BottomNavigation.scss';
 
 import { Link, matchPath, useLocation } from 'react-router-dom';
 
