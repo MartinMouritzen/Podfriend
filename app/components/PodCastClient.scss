@@ -10,6 +10,13 @@
     --safeAreaLeft: env(safe-area-inset-left);
 }
 
+reach-portal div[data-rsbs-header="true"] h1 {
+	margin: 0px;
+	margin-top: 5px;
+	padding: 0px;
+	color: #000000;
+}
+
 html, body {
 	margin: 0px;
 	padding: 0px;
@@ -234,7 +241,7 @@ input[type=checkbox] {
 			transform: scale(1.1);
 			color: #FFFFFF;
 		}
-		button:hover > span, .button:hover > span {
+		button:hover > span, .button:hover > span, button:hover > span > span {
 			color: #FFFFFF;
 		}
 	}
@@ -364,6 +371,7 @@ input[type=checkbox] {
 			height: auto;
 		}
 		.sectionContentStart {
+			background-color: #FFFFFF;
 			background-repeat: no-repeat;
 			background-size: 100%;
 			min-height: calc(17vw);

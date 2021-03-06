@@ -1,13 +1,15 @@
 .reviewPane {
-
-}
-.reviewPane h1 {
-	color: #25333c;
-	font-weight: bold;
+	background-color: #FFFFFF;
 }
 .reviewColumns {
 	display: flex;
 	flex-direction: row;
+
+	padding: 20px;
+
+	@media only screen and (max-width: 900px) {
+		display: block;
+	}
 }
 /***************************
 * Aggregated info panel
@@ -16,7 +18,11 @@
 	width: 300px;
 	padding: 20px;
 	padding-top: 0px;
-	margin-right: 40px;
+
+	padding-right: 60px;
+	
+	margin-left: auto;
+	margin-right: auto;
 }
 .reviewAggregatedInfo .totalScore {
 	font-size: 56px;
@@ -61,7 +67,8 @@
 	transition: all 0.2s;
 }
 .reviewAggregatedInfo .ratingBreakdownLines .ratingBreakdownLine:hover .ratingBreakdownLineInner {
-	background-color: gold;
+	/* background-color: gold; */
+	background-color: #ffcc48;
 	overflow: hidden;
 	height: 20px;
 	border-bottom: 1px solid #c68840;

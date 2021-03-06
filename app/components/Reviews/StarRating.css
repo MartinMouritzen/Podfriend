@@ -1,18 +1,12 @@
 .starRating {
 	display: flex;
-	flex-direction: column;
-
+	flex-direction: row;
 	align-items: center;
-	justify-content: center;
-	
-	margin-left: auto;
-	margin-right: auto;
 }
 .reviewBasedOn {
-	color: #AAAAAA;
+	color: #FFFFFF;
 	margin-left: 10px;
-	font-size: 12px;
-	margin-top: 6px;
+	font-size: 14px;
 }
 .stars {
 	display: flex;
@@ -21,13 +15,17 @@
 	align-items: center;
 }
 .starNormal, .starFilled {
-  font-size: 30px;
+	font-size: 25px;
 }
 .starNormal {
-  color: #c5c5c5;
-  text-shadow: 0 1px 0 #a2a2a2;
+	color: #75757e;
+	opacity: 0.8;
 } 
 .starFilled {
-  color: gold;
-  text-shadow: 0 1px 0 #ab5414;
+	color: #ffcc48;
+}
+@media (min-width: 1200px) {
+	.starNormal, .starFilled {
+		font-size: 35px;
+	}
 }

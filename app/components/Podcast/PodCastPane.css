@@ -29,9 +29,9 @@
 	width: 250px;
 	border-left: 1px solid #cccccc;
 }
-
-
-
+.podcastContent {
+	background-color: #FFFFFF;
+}
 
 @media only screen and (min-width: 1500px) {
 	.podcastCover {

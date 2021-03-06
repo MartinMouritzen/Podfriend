@@ -6,14 +6,27 @@ import { useLocation } from 'react-router-dom';
 
 import Header from 'podfriend-approot/components/Header/Header.jsx';
 
-import ReviewPane from 'podfriend-approot/components/Reviews/ReviewPane.jsx';
+import Badge from '@material-ui/core/Badge';
 
-import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { withStyles } from "@material-ui/core/styles";
 
 import styles from './PodCastPane.css';
 
 import PodcastHeader from './PodcastHeader.jsx';
 import PodcastExtras from './PodcastExtras.jsx';
+
+const StyledBadge = withStyles(theme => ({
+	badge: {
+	  backgroundColor: '#0176e5',
+	  color: '#FFFFFF',
+	  borderRadius: '5px',
+	  position: 'static',
+	  transform: 'none',
+	  marginLeft: '10px'
+	}
+  }))(Badge);
 
 const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podcastLoading, podcastLoadingError, isSubscribed, subscribedPodcasts, subscribeToPodcast, unsubscribeToPodcast, isArchived, archivePodcast, unarchivePodcast, currentPodcastPlaying, onEpisodeSelect, rssFeed = false }) => {
 	const location = useLocation();
@@ -22,6 +35,12 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 	useEffect(() => {
 		podcastPane.current.scrollTop = 0;
 	},[location]);
+
+	const [tabIndex, setTabIndex] = useState('episodes');
+
+	const handleTabChange = (event, newValue) => {
+		setTabIndex(newValue);
+	};
 
 	return (
 		<div ref={podcastPane} className={styles.podcastPane}>
@@ -36,6 +55,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 				coverImage={selectedPodcast.artworkUrl600}
 				imageUrlHash={selectedPodcast.imageUrlHash}
 				categories={selectedPodcast.categories}
+				podcastGuid={selectedPodcast.guid}
 				path={selectedPodcast.path}
 				title={selectedPodcast.name}
 				author={selectedPodcast.author}
@@ -61,40 +81,56 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 			/>
 
 			<div className={styles.podcastContent}>
+								
 				<EpisodeList currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
-				{/*
-				<Tabs>
-					<Tab title="Episodes" active link={'/podcast/' + selectedPodcast.path}>
-						<div className={styles.episodeTab}>
-							<div className={styles.episodeColumn}>
-							<EpisodeList currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
-							
-								{ podcastLoadingError &&
-									<div>
-										Error reading Podcast File
-									</div>
-								}
-								{ !podcastLoadingError && podcastLoading && 
-									<div className={styles.episodeListLoading}>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-										<div className="loading-line loading-episode">&nbsp;</div>
-									</div>
-								}
-							</div>
-						</div>
-					</Tab>
+								
+{/*
+				<Tabs
+					variant="fullWidth"
+					value={tabIndex}
+					onChange={handleTabChange}
+					TabIndicatorProps={{
+						style: {
+							backgroundColor: '#0176e5'
+						}
+					}}
+				>
+					<Tab label={<StyledBadge badgeContent={4} max={999}>Episodes</StyledBadge>} value="episodes" />
+					<Tab label={<StyledBadge badgeContent={3} max={999}>Reviews</StyledBadge>} value="reviews" />
+				</Tabs>
 
-					<Tab title="Reviews" link={'/podcast/' + selectedPodcast.path + '/reviews'} badge={3}>
-						<ReviewPane podcast={selectedPodcast} />
-					</Tab>
-					<Tab title="Community" link={'/podcast/' + selectedPodcast.path + '/community'}>
+				{ tabIndex === 'episodes' &&
+					<div className={styles.episodeTab}>
+						<div className={styles.episodeColumn}>
+						<EpisodeList currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
+						
+							{ podcastLoadingError &&
+								<div>
+									Error reading Podcast File
+								</div>
+							}
+							{ !podcastLoadingError && podcastLoading && 
+								<div className={styles.episodeListLoading}>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+									<div className="loading-line loading-episode">&nbsp;</div>
+								</div>
+							}
+						</div>
+					</div>
+				}
+				{ tabIndex === 'reviews' &&
+					<ReviewPane podcast={selectedPodcast} />
+				}
+*/}
+{/*
+				<Tab title="Community" link={'/podcast/' + selectedPodcast.path + '/community'}>
 						community test content
 					</Tab>
 
@@ -109,7 +145,6 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 					<Tab title="Podcast content" link={'/podcast/' + selectedPodcast.path + '/extraContent'}>
 						podcast test content
 					</Tab>
-				</Tabs>
 				*/}
 			</div>
 			{/*
