@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { loadReviews } from "podfriend-approot/redux/actions/podcastActions";
 
-import ReviewPaneUI from 'podfriend-ui/Reviews/ReviewPaneUI.jsx';
+import ReviewPaneUI from 'podfriend-approot/components/Reviews/ReviewPaneUI.jsx';
 
 class ReviewPane extends React.Component {
 	/**
@@ -29,16 +29,16 @@ class ReviewPane extends React.Component {
 	*
 	*/
 	componentDidMount() {
-		if (this.props.podcast.guid) {
-			this.props.loadReviews(this.props.podcast.guid);
+		if (this.props.podcastGuid) {
+			this.props.loadReviews(this.props.podcastGuid);
 		}
 	}
 	/**
 	*
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		if (this.props.podcast.guid !== prevProps.podcast.guid) {
-			this.props.loadReviews(this.props.podcast.guid);
+		if (this.props.podcastGuid !== prevProps.podcastGuid) {
+			this.props.loadReviews(this.props.podcastGuid);
 		}
 	}
 }

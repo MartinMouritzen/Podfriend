@@ -8,7 +8,7 @@ import { ReviewStars } from 'podfriend-approot/components/Reviews/StarRating.jsx
 
 import Avatar from 'podfriend-approot/components/Avatar/Avatar.jsx';
 
-import styles from './ReviewPaneUI.css';
+import styles from './ReviewPaneUI.scss';
 
 
 function nl2br (str, is_xhtml) {
@@ -32,7 +32,7 @@ class ReviewAggregatedInfo extends React.PureComponent {
 				<div style={{ display: 'flex'}}>
 					<div className={styles.totalScore}>{parseFloat(this.props.totalScore).toFixed(1)}</div>
 					<div>
-						<ReviewStars rating={this.props.totalScore} size={30} />
+						<ReviewStars secondaryColor='#cecece' rating={this.props.totalScore} size={30} />
 						<div className={styles.basedOn}>based on {this.props.totalCountReviews} review{this.props.totalCountReviews != 1 ? 's' : ''}</div>
 					</div>
 				</div>
@@ -81,7 +81,7 @@ class Review extends React.PureComponent {
 				</div>
 				<div className={styles.reviewColumn}>
 					<div className={styles.rating}>
-						<ReviewStars rating={this.props.rating} size={24} />
+						<ReviewStars secondaryColor='#cecece' rating={this.props.rating} size={24} />
 					</div>
 					<div className={styles.reviewerName}>
 						{this.props.reviewerName}
@@ -106,7 +106,6 @@ class ReviewPaneUI extends React.PureComponent {
 	render() {
 		return (
 			<div className={styles.reviewPane}>
-				<h1>Feedback from other podfriends</h1>
 				<div className={styles.reviewColumns}>
 					<ReviewAggregatedInfo totalCountReviews={this.props.totalCountReviews} totalScore={this.props.totalScore} />
 					<div className={styles.reviewList}>
