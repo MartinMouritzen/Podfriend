@@ -180,10 +180,19 @@ input[type=checkbox] {
 	
 }
 :global {
-
-	div[data-rsbs-root] * {
+	/****
+	* To make our own player in open mode play nice with react-spring-bottom-sheet
+	****/
+	div[data-rsbs-backdrop="true"] {
 		z-Index: 10000;
 	}
+	div[data-rsbs-overlay="true"] {
+		z-Index: 10001;
+	}
+	[data-rsbs-root]:after {
+		z-Index: 10000;
+	}
+	
 }
 :global {
 	.podcastPage {
