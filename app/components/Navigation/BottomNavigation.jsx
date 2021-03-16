@@ -6,8 +6,8 @@ import { Link, matchPath, useLocation } from 'react-router-dom';
 
 import {
 	FaHome,
-	FaHeart, FaRegHeart,
-	FaPodcast,
+	FaRegLightbulb, FaLightbulb,
+	FaThLarge,
 	FaSearch
 } from "react-icons/fa";
 /**
@@ -64,17 +64,17 @@ const BottomNavigation = () => {
 			</Link>
 			<Link to='/podfrndr/' className={styles.menuItem + (iconSelected === 'podfrndr' ? ' ' + styles.menuItemSelected : '')}>
 				{ iconSelected === 'podfrndr' &&
-					<FaHeart size="25" />
+					<FaLightbulb size="25" />
 				}
 				{ iconSelected !== 'podfrndr' &&
-					<FaRegHeart size="25" />
+					<FaRegLightbulb size="25" />
 				}
 				<br />
 				Podfrndr
 			</Link>
 			<Link to='/favorites/' className={styles.menuItem + (iconSelected === 'favorites' ? ' ' + styles.menuItemSelected : '')}>
-				<FaPodcast size="25" /><br />
-				Subscriptions
+				<FaThLarge size="25" /><br />
+				My Podcasts
 			</Link>
 			{/*
 			<Link to='/search/' className={styles.menuItem + (iconSelected === 'search' ? ' ' + styles.menuItemSelected : '')}>

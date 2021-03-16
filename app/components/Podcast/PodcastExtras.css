@@ -29,6 +29,7 @@
 *********************/
 .donateButton {
 	background-color: #ffc353;
+	border-bottom-color: #d9a749;
 	color: #000000;
 	width: 100%;
 	margin-top: 15px;
@@ -61,19 +62,18 @@
 	font-size: 14px;
 }
 @media (any-hover: hover) {
-	.donateButton:hover {
+	.donateButton:hover, .donateButton:active {
 		background-color: #ffe280;
-		transform: scale(1.1);
+		color: #333333;
 	}
 	.archiveButton:hover {
 		background-color: #3474b1;
-		transform: scale(1.1);
 	}
 	.archiveButton:hover svg {
 		fill: #bc9671;
 	}
 }
-@media only screen and (max-width: 1750px) {
+@media only screen and (max-width: 1860px) {
 	.podcastExtras .subscribe {
 		display: flex;
 	}
@@ -101,7 +101,7 @@
 	.podcastExtras .subscribe, .podcastExtras .share {
 		background-color: #FFFFFF;
 		padding: 0px;
-		padding-top: 20px;
+		padding-top: 0px;
 		padding-bottom: 20px;
 	}
 }

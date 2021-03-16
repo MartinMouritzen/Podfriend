@@ -45,7 +45,7 @@ class TextInput extends Component {
 	*
 	*/
 	render() {
-		const { id, placeholder, onBlur, onFocus, type, refs, className, ...otherProps } = this.props;
+		const { id, placeholder, onBlur, onFocus, type, refs, className, autocomplete, ...otherProps } = this.props;
 		
 		return (
 			<div className={(this.state.active ? [styles.TextInputContainer,styles.TextInputContainerActive].join(' ') : [styles.TextInputContainer,styles.TextInputContainerInactive].join(' '))}>
@@ -59,6 +59,7 @@ class TextInput extends Component {
 					onFocus={this.onFocus}
 					ref={refs}
 					type={type}
+					autocomplete={autocomplete}
 					{...otherProps}
 					ref={(input) => { this.nameInput = input; }}
 				/>

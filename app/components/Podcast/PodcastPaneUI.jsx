@@ -52,6 +52,8 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 			</Header>
 			*/}
 			<PodcastHeader
+				reviewCount={selectedPodcast.review_totalCount}
+				reviewScore={selectedPodcast.review_totalScore}
 				coverImage={selectedPodcast.artworkUrl600}
 				imageUrlHash={selectedPodcast.imageUrlHash}
 				categories={selectedPodcast.categories}

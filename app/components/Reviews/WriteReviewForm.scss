@@ -1,0 +1,41 @@
+.writeReviewForm {
+	width: 100%;
+	padding: 20px;
+
+	h2 {
+		margin-top: 20px;
+	}
+	.writeReviewFormFields {
+		margin-top: 20px;
+		flex: 1;
+	}
+	button {
+		width: 100%;
+		margin-top: 10px;
+	}
+	.optionalReviewTitle {
+		font-size: 35px;
+		margin-bottom: 10px;
+	}
+	.optionalReviewLabel {
+		margin-bottom: 15px;
+	}
+	.reviewWritten {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.reviewWrittenIllustration img {
+			max-width: 200px;
+		}
+		.reviewWrittenHeadline {
+			margin-top: 20px;
+
+			h2 {
+				margin-left: 20px;
+				color: #333333;
+			}
+		}
+	}
+}

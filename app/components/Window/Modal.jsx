@@ -75,6 +75,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 		return ReactDOM.createPortal(
 			<>
 				<BottomSheet
+					data-body-scroll-lock-ignore="true"
 					open={onlyBottomSheet || matches}
 					onDismiss={onClose}
 					style={{ zIndex: 11 }}

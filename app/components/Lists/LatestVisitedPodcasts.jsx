@@ -11,8 +11,8 @@ const LatestVisitedPodcasts = () => {
 		return (
 			<div className='section'>
 				<div className='sectionInner'>
-					<div className='sectionSubTitle'>Your</div>
-					<div className='sectionTitle'>Latest podcasts</div>
+					<div className='sectionSubTitle'>Continue</div>
+					<div className='sectionTitle'>Listening</div>
 				</div>
 				<PodcastMatrix type='scrollList' podcasts={lastVisitedPodcasts} showLoadMore={true} />
 			</div>
