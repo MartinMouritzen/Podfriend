@@ -15,7 +15,7 @@
 	align-items: center;
 }
 .starNormal, .starFilled {
-	font-size: 25px;
+	font-size: inherit;
 }
 .starNormal {
 	color: #75757e;
@@ -24,8 +24,10 @@
 .starFilled {
 	color: #ffcc48;
 }
+/*
 @media (min-width: 1200px) {
 	.starNormal, .starFilled {
-		font-size: 35px;
+		
 	}
 }
+*/

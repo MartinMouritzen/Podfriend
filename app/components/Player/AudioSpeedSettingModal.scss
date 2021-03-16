@@ -26,17 +26,13 @@
 }
 .speedButton {
 	background-color: #DDDDDD;
+	border-bottom: 4px solid #CCCCCC;
 	color: #999999;
 	width: 60px;
 	margin-right: 5px;
 	margin-bottom: 5px;
 	text-align: center;
 	padding: 10px;
-}
-@media (any-hover: hover) {
-	.speedButton:hover {
-		background-color: #EEEEEE;
-	}
 }
 .closeButtonContainer {
 	text-align: right;

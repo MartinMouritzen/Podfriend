@@ -12,13 +12,14 @@ class ReviewPane extends React.Component {
 	*/
 	constructor(props) {
 		super(props);
-		
-		console.log('ReviewPane constructor');
 	}
 	render() {
 		return (
 			<ReviewPaneUI
 				UI={ReviewPaneUI}
+				onSubmitReview={this.props.onSubmitReview}
+				podcastGuid={this.props.podcastGuid}
+				podcastName={this.props.podcastName}
 				reviews={this.props.reviews}
 				totalCountReviews={this.props.totalCountReviews}
 				totalScore={this.props.totalScore}

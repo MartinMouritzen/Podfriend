@@ -130,7 +130,7 @@ class PodCastPane extends Component {
 		// console.error('dcu: ' + prevProps.selectedPodcast.feedUrl);
 				
 		if (this.props.selectedPodcast.feedUrl !== prevProps.selectedPodcast.feedUrl) {
-			console.log('cdu2: ' + this.props.selectedPodcast.feedUrl);
+			// console.log('this.props.selectedPodcast.feedUrl: ' + this.props.selectedPodcast.feedUrl);
 			this.setState({
 				fetchingRSSFeed: false,
 				fetchedRSSFeed: false,
@@ -139,7 +139,7 @@ class PodCastPane extends Component {
 				this.retrieveOriginalPodcastFeed();
 			});
 		}
-		console.log('this.props.location.pathname: ' + this.props.location.pathname);
+		// console.log('this.props.location.pathname: ' + this.props.location.pathname);
 		if (podcastPath != prevPodcastPath) {
 			this.setState({
 				podcastLoading: true
