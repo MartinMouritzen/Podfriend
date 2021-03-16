@@ -1,13 +1,32 @@
 @import 'sass/variables.scss';
 
-/*****
-* This is so we can read the variables from javascript.
-*****/
 :root {
+	/*****
+	* This is so we can read the variables from javascript.
+	*****/
     --safeAreaTop: env(safe-area-inset-top);
     --safeAreaRight: env(safe-area-inset-right);
     --safeAreaBottom: env(safe-area-inset-bottom);
     --safeAreaLeft: env(safe-area-inset-left);
+
+	/*******************************************
+	* Podfriend theme
+	*******************************************/
+	--review-stars-color-five: #78bf70;
+	--review-stars-color-four: #9eda97;
+	--review-stars-color-three: #f8c86a;
+	--review-stars-color-two: #f79e67;
+	--review-stars-color-one: #ed5656;
+
+	--primary-color: #0176e5;
+	--primary-color-dark: #0065c5;
+}
+
+reach-portal div[data-rsbs-header="true"] h1 {
+	margin: 0px;
+	margin-top: 5px;
+	padding: 0px;
+	color: #000000;
 }
 
 html, body {
@@ -80,7 +99,7 @@ input[type=checkbox] {
 		/*
 		.podcastPage::-webkit-scrollbar {
 			width: 12px;
-			background-color: #0176e5;
+			background-color: var(--primary-color);
 		}
 		.podcastPage::-webkit-scrollbar-thumb {
 			background: #02489d;
@@ -173,10 +192,19 @@ input[type=checkbox] {
 	
 }
 :global {
-
-	div[data-rsbs-root] * {
+	/****
+	* To make our own player in open mode play nice with react-spring-bottom-sheet
+	****/
+	div[data-rsbs-backdrop="true"] {
 		z-Index: 10000;
 	}
+	div[data-rsbs-overlay="true"] {
+		z-Index: 10001;
+	}
+	div[data-rsbs-root]:after {
+		z-Index: 10000;
+	}
+	
 }
 :global {
 	.podcastPage {
@@ -191,11 +219,11 @@ input[type=checkbox] {
 		}
 	}
 	.landingPage {
-		background-color: #0176e5;
+		background-color: var(--primary-color);
 
 		.hero {
 			/* background-color: rgba(255,195,0,0.5); */
-			background-color: #0176e5;
+			background-color: var(--primary-color);
 			padding: 40px;
 		}
 		.hero * {
@@ -216,25 +244,49 @@ input[type=checkbox] {
 		
 	}
 
+	/******************************
+	* Alerts
+	******************************/
+	.errorMessage {
+		background-color: #d72828;
+		color: #FFFFFF;
+		padding: 10px;
+	}
+	.warningMessage {
+		background-color: #ffbb00;
+		color: #FFFFFF;
+		padding: 10px;
+	}
 
 
 	button, .button {
-		background-color: #0176e5;
+		background-color: var(--primary-color);
 		border: 0px;
+		border-bottom: 4px solid var(--primary-color-dark);
 		padding: 15px;
 		color: #FFFFFF;
 		font-size: 16px;
-		transition: all .2s;
+		transition: background-color .2s;
 		border-radius: 5px;
-		height: 50px;
+	}
+	button:active, .button:active {
+		background-color: #1487f4;
+		border-width: 0 !important;
+		margin-bottom: 4px;
+		transform: translate3d(0,4px,0) !important;
 	}
 	@media (any-hover: hover) {
-		button:hover, .button:hover {
-			background-color: #1180e7;
-			transform: scale(1.1);
+		button:hover, .button:hover, .button.active:hover {
+			background-color: #1487f4;
+			
 			color: #FFFFFF;
 		}
-		button:hover > span, .button:hover > span {
+		button.nonActive:hover, .button.nonActive:hover {
+			background-color: #EEEEEE;
+			
+			color: #999999 !important;
+		}
+		button:hover > span, .button:hover > span, button:hover > span > span {
 			color: #FFFFFF;
 		}
 	}
@@ -248,14 +300,15 @@ input[type=checkbox] {
 		top: 2px;
 	}
 	button.active, .button.active {
-		background-color: #0176e5;
+		background-color: var(--primary-color);
+		border-bottom: 4px solid var(--primary-color-dark);
 		color: #FFFFFF;
 	}
 
 	.podcastCover {
 		box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
 		border-radius: 15px;
-		border: 3px solid #FFFFFF;
+		/* border: 3px solid #FFFFFF; */
 		background-color: #c5d5e5;
 		display: flex;
 		justify-content: center;
@@ -276,13 +329,17 @@ input[type=checkbox] {
 		position: relative;
 		background-color: #f0f0f0;
 
+		&:nth-of-type(odd){
+			background-color: #FFFFFF;
+		}
+
 		border-bottom: 1px solid #d5d5d5;
 
 		.sectionInner {
 			padding-top: 15px;
 			padding-left: 15px;
 
-			@media (any-hover: hover) {
+			@media (min-width: 550px) {
 				display: block;
 			}
 		}
@@ -317,12 +374,17 @@ input[type=checkbox] {
 		.progressBarLabel {
 			font-size: 12px;
 			margin-top: 5px;
+			text-align: center;
+			color: rgba(0,0,0,0.5);
 		}
 	}
-	@media (any-hover: none) {
+
 		.section:not(.waveSection) {
 			.sectionInner {
 				display: flex;
+
+				padding-top: 25px;
+				padding-bottom: 5px;
 
 				.sectionTitle {
 					text-transform: lowercase;
@@ -330,23 +392,22 @@ input[type=checkbox] {
 				}
 			}
 		}
-	}
 
 
 	.sectionTitle {
 		color: #024699;
 
-		font-size: 5.5vw;
+		font-size: 6.5vw;
 	}
 	.sectionSubTitle {
 		color: #0263e8;
-		font-size: 5.5vw;
+		font-size: 6.5vw;
 	}
 	.waveSection {
 		background-color: #ffffff;
 
 		.sectionInner {
-			background-color: #0176e5;
+			background-color: var(--primary-color);
 			padding-top: 15px;
 			padding-left: 15px;
 			padding-right: 46%;
@@ -364,6 +425,7 @@ input[type=checkbox] {
 			height: auto;
 		}
 		.sectionContentStart {
+			background-color: #FFFFFF;
 			background-repeat: no-repeat;
 			background-size: 100%;
 			min-height: calc(17vw);
@@ -415,7 +477,7 @@ input[type=checkbox] {
 	@media (min-width: 550px) {
 		.section {
 			.sectionTitle {
-				font-size: 32px;
+				font-size: 28px;
 			}
 			.sectionSubTitle {
 				font-size: 28px;
@@ -603,7 +665,7 @@ input[type=checkbox] {
 				background-size: contain;
 				background-repeat: no-repeat;
 				border-radius: 5px;
-				box-shadow: 0px 0px 22px -11px rgba(0,0,0,0.35);
+				box-shadow: 0px 0px 22px -11px rgba(0,0,0,0.45);
 			}
 			.content {
 				padding: 10px;

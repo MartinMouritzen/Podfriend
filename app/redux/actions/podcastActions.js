@@ -1,5 +1,7 @@
 import ConfigFile from 'podfriend-approot/podfriend.config.js';
 
+import { format } from 'date-fns';
+
 const environment = process.env.NODE_ENV || 'development';
 
 const config = ConfigFile[environment]['desktop'];
@@ -465,6 +467,9 @@ export function unsubscribeToPodcast(podcast) {
 /**********************
 * Reviews
 **********************/
+export function createReview() {
+	console.log('create review');
+};
 export function loadReviews(podcastGuid) {
 	console.log('loading reviews');
 	return (dispatch,getState) => {
@@ -485,6 +490,9 @@ export function loadReviews(podcastGuid) {
 		.then((podcastCache) => {
 			var shouldUpdate = false;
 
+			
+			shouldUpdate = true;
+
 			if (podcastCache) {
 				dispatch({
 					type: REVIEWS_LOADED,
@@ -492,7 +500,7 @@ export function loadReviews(podcastGuid) {
 				});
 				
 				if (!podcastCache.receivedFromServer) {
-					console.log('strange, no podcastCache.receivedFromServer. This should not happen.');
+					console.log('strange, no podcastCache.receivedFromServer in reviews. This should not happen.');
 					shouldUpdate = true;
 				}
 				else {
@@ -505,11 +513,12 @@ export function loadReviews(podcastGuid) {
 				}
 			}
 			else {
-				console.log('Did not have a cached version');
+				console.log('Reviews did not have a cached version');
 				shouldUpdate = true;
 			}
 
 			if (shouldUpdate) {
+				console.log('updating reviews');
 				var podcastAPIURL = "https://api.podfriend.com/podcast/reviews/?podcastGuid=" + podcastGuid;
 
 				fetchingPodcast = true;
@@ -541,7 +550,7 @@ export function loadReviews(podcastGuid) {
 						data.receivedFromServer = new Date();
 						
 						for (var i=0;i<data.reviews.length;i++) {
-							data.reviews[i].reviewDate = Date.parse(data.reviews[i].reviewDate);
+							data.reviews[i].reviewDate = format(data.reviews[i].reviewDate, 'YYYY-MM-DD HH-mm-ss'); // format(data.reviews[i].reviewDate);
 						}
 						
 						clientStorage.setItem('podcast_reviews_cache_' + podcastGuid,data);

@@ -225,7 +225,7 @@ class PodcastClient extends Component {
 	*
 	*/
 	scrollTo(pixels) {
-		// console.log('please scroll to: ' + pixels + ' thanks');
+		// console.log('podcastclient.scrollTo: please scroll to: ' + pixels + ' thanks');
 		if (this.mainArea && this.mainArea.current) {
 			this.mainArea.current.scrollTop = pixels;
 		}

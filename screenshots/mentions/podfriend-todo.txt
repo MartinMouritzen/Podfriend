@@ -1,0 +1,26 @@
+12/07/2020
+
+We need to make the rest of the Player component platform independent.
+
+A good idea would be to wrap the audiocomponent in an "AudioController" object, that can then be platform dependent, but with generic play, pause, seek etc. methods. The Player then doesn't need to know the platform to interact.
+
+
+ - Tomorrow I will try to create a player on the mobile with the Player parent, to abstract this logic away.
+
+
+
+
+
+Status:
+
+we need to find alternative to localforage (or set up driver in a cross environment way) - Right now I commented it out.
+	- One way of doing this could be to have the setup in another file, then have an alias for that, and import it - that way the file itself will be different for mobile/desktop
+
+
+127.0.0.1 doesn't work on emulator (since it's the phone itself). Maybe it's time to actually set up external api.podfriend.com or maybe better yet, push hosts file to emulator
+
+We need to find solution to height of navigator if we want the header to be able to be scrolled away.
+
+We want to find a way to make the statusbar transparent (looks like expo.json or app.json might be the way)
+
+beyond that, let's try to reuse as many components as possible. Maybe we need to separate a lot of logic to higher components and have desktop UI and mobile components that then use the logic - but maybe that's abstracted away a lot with redux now

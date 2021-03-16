@@ -1,61 +1,67 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import styles from 'podfriend-approot/components/Reviews/StarRating.css';
 
+import { FaStar } from "react-icons/fa";
+
+/*
 import FiveStar from 'podfriend-approot/images/review-5-star.png';
 import BlankStar from 'podfriend-approot/images/review-0-star.png';
+*/
 
-class ReviewStars extends Component {
-	constructor(props) {
-		super(props);
-		this.renderStars = this.renderStars.bind(this);
-	}
-	/**
-	*
-	*/
-	renderStars() {
+const ReviewStar = ({ full, size, rating, primaryColor, secondaryColor, onClick = false }) => {
+	return (
+		<div
+			key={'StarRating' + rating}
+			className={(full ? styles.starFilled : styles.starNormal)}
+			style={{ fontSize: size ? size : false }}
+			onClick={() => { if (onClick) { onClick(rating); } }}
+		>
+				<FaStar fill={(full ? primaryColor : secondaryColor)} />
+		</div>
+	);
+};
+
+const ReviewStars = ({ rating, size, primaryColor = '#ffcc48', secondaryColor = '#75757e', onClick = false }) => {
+	const renderStars = () => {
 		var stars = [];
 		for(var i=1;i<=5;i++) {
-			if (Math.round(this.props.rating) >= i) {
-				stars.push(<div key={'StarRating' + i} className={styles.starFilled} style={{ fontSize: this.props.size ? this.props.size : 30 }}>★</div>);
-			}
-			else {
-				stars.push(<div key={'StarRating' + i} className={styles.starNormal} style={{ fontSize: this.props.size ? this.props.size : 30 }}>★</div>);
-			}
+			stars.push(<ReviewStar full={(Math.round(rating) >= i)} rating={i} size={size} onClick={onClick} primaryColor={primaryColor} secondaryColor={secondaryColor} />);
 		}
 		return stars;
 	}
-	render() {
-		return (
-			<div className={styles.stars}>
-				{ this.renderStars() }
-			</div>
-		);
-	}
+	return (
+		<div className={styles.stars}>
+			{ renderStars() }
+		</div>
+	);
 }
 /**
 *
 */
-class ReviewStarsWithText extends Component {
-	render() {
-		return (
-			<div className={styles.starRating} style={this.props.style}>
-				<ReviewStars rating={this.props.rating} size={this.props.size} />
-				<div className={styles.reviewBasedOn}>
-					{ this.props.reviews > 0 && 
-						<>
-						{this.props.reviews} reviews
-						</>
-					}
-					{ !this.props.reviews &&
-						<>
-						No reviews yet
-						</>
-					}
-				</div>
+const ReviewStarsWithText = ({ rating, reviews, primaryColor, secondaryColor, style, onClick, size}) => {
+	return (
+		<div className={styles.starRating} style={style} onClick={onClick}>
+			<ReviewStars
+				primaryColor={primaryColor}
+				secondaryColor={secondaryColor}
+				rating={rating}
+				size={size}
+			/>
+			<div className={styles.reviewBasedOn}>
+				{ reviews > 0 && 
+					<>
+					{reviews} reviews
+					</>
+				}
+				{ !reviews &&
+					<>
+					No reviews yet
+					</>
+				}
 			</div>
-		);
-	}
+		</div>
+	);
 }
 export {
 	ReviewStars,

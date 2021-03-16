@@ -77,10 +77,12 @@ class SearchPane extends Component {
 	*
 	*/
 	componentDidMount() {
+		/*
 		console.log(this.props.query);
 		console.log(this.state.searchType);
 		console.log(this.props.authorName);
 		console.log(this.props.authorId);
+		*/
 		this.props.searchPodcasts(this.props.query,this.state.searchType,this.props.authorName,this.props.authorId);
 	}
 	/**

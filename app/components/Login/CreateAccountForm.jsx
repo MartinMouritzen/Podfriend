@@ -185,7 +185,7 @@ class CreateAccountForm extends Component {
 					<div className={styles.inputField}>
 						<div className={((this.state.submitted && !this.state.isUsernameValid || this.state.userExists) ? styles.errorInInput : '')}>
 							{ /* <input type="text" name="username" className={(this.state.isUsernameValid ? styles.usernameAvailable : '')} placeholder="Username" value={this.state.username} key={'username' + this.state.inputCounter} onChange={this.handleUsernameChange} /> */ }
-							<TextInput id="username" type="text" placeholder="Username" className={(this.state.isUsernameValid ? styles.usernameAvailable : '')} name="username" value={this.state.username} key={'username' + this.state.inputCounter} onChange={this.handleUsernameChange} />
+							<TextInput id="username" type="text" placeholder="Username" className={(this.state.isUsernameValid ? styles.usernameAvailable : '')} name="username" autocomplete='username' value={this.state.username} key={'username' + this.state.inputCounter} onChange={this.handleUsernameChange} />
 							{ ((this.state.submitted && !this.state.isUsernameValid) || this.state.userExists) &&
 								<div className={styles.error}>
 									<div className={styles.errorMessage}>
@@ -201,7 +201,7 @@ class CreateAccountForm extends Component {
 
 					<div className={styles.inputField}>
 						<div className={(this.state.submitted && !this.state.isPasswordValid ? styles.errorInInput : '')}>
-							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={this.passwordInputFocused} onBlur={this.passwordInputBlurred} />
+							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} autocomplete='current-password' key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={this.passwordInputFocused} onBlur={this.passwordInputBlurred} />
 							{ this.state.submitted && !this.state.isPasswordValid &&
 								<div className={styles.error}>
 									<div className={styles.errorMessage}>

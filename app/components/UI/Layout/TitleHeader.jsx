@@ -4,7 +4,9 @@ import styles from './TitleHeader.scss';
 
 const TitleHeader = ({children }) => {
 	return (
-		<h2>{children}</h2>
+		<div className={styles.titleHeader}>
+			<h2>{children}</h2>
+		</div>
 	);
 };
 

@@ -124,12 +124,13 @@ class PodCastPane extends Component {
 	*/
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		var podcastPath = this.props.match.params.podcastName;
+		var prevPodcastPath = prevProps.match.params.podcastName
 
 		// console.error('cdu: ' + this.props.selectedPodcast.feedUrl);
 		// console.error('dcu: ' + prevProps.selectedPodcast.feedUrl);
 				
 		if (this.props.selectedPodcast.feedUrl !== prevProps.selectedPodcast.feedUrl) {
-			console.log('cdu2: ' + this.props.selectedPodcast.feedUrl);
+			// console.log('this.props.selectedPodcast.feedUrl: ' + this.props.selectedPodcast.feedUrl);
 			this.setState({
 				fetchingRSSFeed: false,
 				fetchedRSSFeed: false,
@@ -138,7 +139,8 @@ class PodCastPane extends Component {
 				this.retrieveOriginalPodcastFeed();
 			});
 		}
-		if (this.props.location.pathname != prevProps.location.pathname) {
+		// console.log('this.props.location.pathname: ' + this.props.location.pathname);
+		if (podcastPath != prevPodcastPath) {
 			this.setState({
 				podcastLoading: true
 			},() => {

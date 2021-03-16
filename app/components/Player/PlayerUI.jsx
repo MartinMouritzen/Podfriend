@@ -39,8 +39,6 @@ import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/Episo
 import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
 import { showFullPlayer, showSpeedSettingWindow, showShareWindow, showSleepTimer, hideSleepTimer } from 'podfriend-approot/redux/actions/uiActions';
 
-import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
-
 import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.jsx';
 
 import ChatProvider from 'podfriend-approot/components/Chat/ChatProvider.jsx';
