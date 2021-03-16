@@ -106,7 +106,7 @@ class PasswordForm extends Component {
 				<form onSubmit={this.login}>
 					<div className={styles.inputField}>
 						<div className={(this.state.invalidPassword ? styles.errorInInput : '')}>
-							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={() => { this.setState({ passwordInputFocused: true }); } } onBlur={() => { this.setState({ passwordInputFocused: false }); } } />
+							<TextInput id="password" type="password" name="password" placeholder="Password" value={this.state.password} autocomplete='current-password' key={'password' + this.state.inputCounter} onChange={this.handlePasswordChange} onFocus={() => { this.setState({ passwordInputFocused: true }); } } onBlur={() => { this.setState({ passwordInputFocused: false }); } } />
 							{ this.state.invalidPassword &&
 								<div className={styles.error}>
 									<div className={styles.errorMessage}>

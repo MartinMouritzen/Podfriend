@@ -16,8 +16,6 @@ const LatestVisitedPodcasts = () => {
 			feedPaths.push(subscribedPodcasts[i].path);
 		}
 
-		console.log(feedPaths);
-
 		try {
 			var result = await fetch('https://api.podfriend.com/podcast/episodes/?feedPaths=' + feedPaths.join(',') + '&max=14');
 			var episodes = await result.json();

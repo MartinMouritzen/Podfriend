@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import SubscribeButtonUI from 'podfriend-ui/Podcast/SubscribeButtonUI.jsx';
+import SubscribeButtonUI from './SubscribeButtonUI.jsx';
 
 /*
 const mapStateToProps = (state) => ({

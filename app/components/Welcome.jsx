@@ -135,7 +135,7 @@ const CurrentlyPlaying = () => {
 					>
 						{episodeTitle}
 					</Link>
-					<div className='sectionBodyContainer'>
+					<div className='sectionBodyContainer' style={{ marginBottom: '15px' }}>
 						<div className='sectionBody' dangerouslySetInnerHTML={{__html: description }} />
 						{ activeEpisode !== false && isPlaying &&
 							<div className={'button ' + styles.playButton} onClick={() => { dispatch(audioPaused()); }}><PauseIcon /> Pause episode</div>

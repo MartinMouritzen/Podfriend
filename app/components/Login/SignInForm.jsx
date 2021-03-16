@@ -95,7 +95,7 @@ class SignInForm extends Component {
 					<div className={styles.inputField}>
 						<div className={(this.state.invalidEmail ? styles.errorInInput : '')}>
 							{ /* <input type="text" name="username" className={(this.state.isUsernameValid ? styles.usernameAvailable : '')} placeholder="Username" value={this.state.username} key={'username' + this.state.inputCounter} onChange={this.handleUsernameChange} /> */ }
-							<TextInput id="email" name="email" type="email" placeholder="Email address" value={this.state.email} key={'username' + this.state.emailCounter} onChange={this.handleEmailChange} />
+							<TextInput id="email" name="email" type="email" placeholder="Email address" value={this.state.email} autocomplete='email' key={'username' + this.state.emailCounter} onChange={this.handleEmailChange} />
 							{ this.props.emailErrorMessage &&
 								<div className={styles.error}>
 									<div className={styles.errorMessage}>

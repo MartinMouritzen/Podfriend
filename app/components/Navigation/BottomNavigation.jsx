@@ -4,7 +4,12 @@ import styles from 'podfriend-approot/components/Navigation/BottomNavigation.scs
 
 import { Link, matchPath, useLocation } from 'react-router-dom';
 
-import {FaHome, FaPodcast, FaHeart, FaSearch } from "react-icons/fa";
+import {
+	FaHome,
+	FaRegLightbulb, FaLightbulb,
+	FaThLarge,
+	FaSearch
+} from "react-icons/fa";
 /**
 *
 */
@@ -58,12 +63,18 @@ const BottomNavigation = () => {
 				Home
 			</Link>
 			<Link to='/podfrndr/' className={styles.menuItem + (iconSelected === 'podfrndr' ? ' ' + styles.menuItemSelected : '')}>
-				<FaHeart size="25" /><br />
+				{ iconSelected === 'podfrndr' &&
+					<FaLightbulb size="25" />
+				}
+				{ iconSelected !== 'podfrndr' &&
+					<FaRegLightbulb size="25" />
+				}
+				<br />
 				Podfrndr
 			</Link>
 			<Link to='/favorites/' className={styles.menuItem + (iconSelected === 'favorites' ? ' ' + styles.menuItemSelected : '')}>
-				<FaPodcast size="25" /><br />
-				Subscriptions
+				<FaThLarge size="25" /><br />
+				My Podcasts
 			</Link>
 			{/*
 			<Link to='/search/' className={styles.menuItem + (iconSelected === 'search' ? ' ' + styles.menuItemSelected : '')}>

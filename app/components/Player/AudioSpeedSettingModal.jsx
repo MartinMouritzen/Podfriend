@@ -113,7 +113,7 @@ const AudioSpeedSettingModal = ({ onClose }) => {
 					</div>
 					{ speedButtons.map((speed) => {
 						return (
-							<button key={speed} className={styles.speedButton + ' ' + (Number.parseFloat(speed) === Number.parseFloat(audioSpeed) ? 'active' : '')} onClick={() => { saveAudioSpeed(speed); }}>{speed}x</button>
+							<button key={speed} className={styles.speedButton + ' ' + (Number.parseFloat(speed) === Number.parseFloat(audioSpeed) ? 'active' : 'nonActive')} onClick={() => { saveAudioSpeed(speed); }}>{speed}x</button>
 						);
 					}) }
 				</div>

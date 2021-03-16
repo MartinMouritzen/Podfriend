@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import styles from './PodcastHeader.css';
+import styles from './PodcastHeader.scss';
 
 import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 
@@ -8,7 +8,7 @@ import { Link } from 'react-router-alias';
 
 import { FaMapMarkerAlt, FaGlobeAmericas, FaMicrophoneAlt } from "react-icons/fa";
 
-import { ReviewStarsWithText } from 'podfriend-approot/components/Reviews/StarRating.jsx';
+import { ReviewStars } from 'podfriend-approot/components/Reviews/StarRating.jsx';
 
 import isElectron from 'is-electron';
 
@@ -16,14 +16,17 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
 
+import ReviewPane from 'podfriend-approot/components/Reviews/ReviewPane.jsx';
+
 import PodcastMap from './PodcastMap.jsx';
 import PodcastPersons from './PodcastPersons.jsx';
 
 import Modal from 'podfriend-approot/components/Window/Modal';
 
-const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, title, author, website, description, podcastLoading, podcastLoadingError, categories = false, rssFeed = false }) => {
+const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, podcastGuid, path, title, author, website, description, reviewScore, reviewCount, podcastLoading, podcastLoadingError, categories = false, rssFeed = false }) => {
 	const [location,setLocation] = useState(false);
 	const [showLocation,setShowLocation] = useState(false);
+	const [showReviews,setShowReviews] = useState(false);
 
 	const [persons,setPersons] = useState(false);
 
@@ -55,6 +58,12 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 	const onDismissLocation = () => {
 		setShowLocation(false);
 	};
+	const onDismissReviews = () => {
+		setShowReviews(false);
+	};
+	const onSubmitReview = () => {
+		setShowReviews(false);
+	};
 
 	return (
 		<>
@@ -81,11 +90,6 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 						{ !coverImage &&
 							<div className={styles.podcastCover}><img className={styles.loadingIndicator} src={LoadingRings} /></div>
 						}
-						{/*
-						<div className={styles.starRating}>
-							<ReviewStarsWithText rating={4} reviews={0} />
-						</div>
-						*/}
 					</div>
 					<div className={styles.podcastInfo}>
 					{ author &&
@@ -111,6 +115,25 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 						<h1 className={styles.podcastName} title={title}>
 							{title}
 						</h1>
+						{ podcastLoading &&
+							<div className="loading-line loading-line-short">&nbsp;</div>
+						}
+						{ !podcastLoading &&
+							<div className={styles.starRating} onClick={() => { setShowReviews(true); } }>
+								<ReviewStars rating={reviewScore} reviews={reviewCount} primaryColor={'#ffcc48'} secondaryColor={'#FFFFFF'} />
+								<div className={styles.reviewCount}>
+									{ reviewCount == 0 &&
+										<>No ratings</>
+									}
+									{ reviewCount == 1 &&
+										<>{reviewCount} rating</>
+									}
+									{ reviewCount > 1 &&
+										<>{reviewCount} ratings</>
+									}
+								</div>
+							</div>
+						}
 						
 						{ !description && !podcastLoadingError && podcastLoading && 
 							<div className={styles.description}>
@@ -147,6 +170,11 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, path, titl
 			{ showLocation !== false &&
 				<Modal shown={showLocation} onClose={onDismissLocation}>
 					<PodcastMap location={location} />
+				</Modal>
+			}
+			{ showReviews !== false &&
+				<Modal header={<h1>Reviews</h1>} shown={showReviews} onClose={onDismissReviews} snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight - 20]}>
+					<ReviewPane podcastGuid={podcastGuid} podcastName={title} onSubmitReview={onSubmitReview} />
 				</Modal>
 			}
 			{ persons !== false &&

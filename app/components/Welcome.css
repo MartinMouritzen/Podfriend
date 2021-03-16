@@ -1,6 +1,12 @@
 .homePage {
 	background-color: #0176e5;
-	padding-bottom: 90px;
+	
+	height: calc(100% - 90px);
+}
+@media only screen and (max-width: 570px) {
+	.homePage {
+		height: calc(100% - 60px);
+	}
 }
 .logo {
 	float: right;
@@ -32,10 +38,8 @@
 	display: inline-block;
 	min-width: 200px;
 	height: auto;
-	margin-bottom: 15px;
 	padding: 15px;
 	overflow: hidden;
-	transition: all 0.4s;
 }
 @media (max-width: 480px) {
 	.homePage {
