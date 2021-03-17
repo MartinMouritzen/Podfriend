@@ -20,6 +20,22 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 
 	const [{ y, height }, set] = useSpring(() => ({ y: 0, height: heightWithoutDrag }))
 
+	const getOrientation = () => {
+		return window.screen.orientation.type;
+	}
+
+	const [orientation, setOrientation] = useState(getOrientation())
+
+	const updateOrientation = (event) => {
+		setOrientation(getOrientation())
+	}
+	useEffect(() => {
+		window.addEventListener('orientationchange',updateOrientation);
+		return () => {
+			window.removeEventListener('orientationchange',updateOrientation);
+		}
+	},[])
+
 	useEffect(() => {
 		try {
 			setSafeAreaTop(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--safeAreaTop"),10));
@@ -42,7 +58,7 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 				setHeightWithoutDrag(90);
 			}
 		}
-	},[open,windowWidth]);
+	},[open,orientation,windowWidth]);
 
 	useEffect(() => {
 		// Giving it a little time before calling, to prevent it being triggered before mouseup, otherwise we get weird sideeffects.
