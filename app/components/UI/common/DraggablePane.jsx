@@ -3,12 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
 
-import useWindowDimensions from 'podfriend-approot/library/hooks/useWindowDimensions.js';
-
 import styles from './DraggablePane.scss';
 
 const DraggablePane = ({ onHide = false, onOpen = false, open = false, children, className, style }) => {
-	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 	const [ heightWithoutDrag, setHeightWithoutDrag ] = useState(0);
 
 	const elementRef = useRef(null);
@@ -32,17 +29,17 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 		}
 
 		if (open) {
-			setHeightWithoutDrag(windowHeight - (safeAreaTop ? safeAreaTop : 24));
+			setHeightWithoutDrag(window.innerHeight - (safeAreaTop ? safeAreaTop : 24));
 		}
 		else {
-			if (windowWidth <= 570) {
+			if (window.innerWidth <= 570) {
 				setHeightWithoutDrag(60);
 			}
 			else {
 				setHeightWithoutDrag(90);
 			}
 		}
-	},[open,windowWidth]);
+	},[open,window.innerWidth]);
 
 	useEffect(() => {
 		// Giving it a little time before calling, to prevent it being triggered before mouseup, otherwise we get weird sideeffects.
@@ -96,7 +93,7 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 
 	let dragStyle = {
 		...style,
-		bottom: open ? 0 : windowWidth < 900 ? (60 + safeAreaBottom) : 0,
+		bottom: open ? 0 : window.innerWidth < 900 ? (60 + safeAreaBottom) : 0,
 		touchAction: 'none',
 		height: height,
 		y
