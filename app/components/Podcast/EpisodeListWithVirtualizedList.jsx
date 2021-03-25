@@ -164,6 +164,54 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes }) => {
 		});
 	}
 
+	const renderRow = ({ index, isVisible, isScrolling, key, parent, style }) => {
+		const episode = showEpisodes[index];
+
+		return (
+			<CellMeasurer
+				cache={cellCache}
+				columnIndex={0}
+				key={key}
+				parent={parent}
+				rowIndex={index}
+			>
+				<div key={key} style={style} className={styles.listEpisodeContainer}>
+				<EpisodeListItem
+					id={episode.id}
+					key={episode.url}
+					podcast={podcastInfo}
+					podcastPath={podcastInfo.path}
+					podcastTitle={podcastInfo.name}
+					title={episode.title}
+					description={episode.description}
+					episodeImage={episode.image ? episode.image : podcastInfo.artworkUrl600 ? podcastInfo.artworkUrl600 : podcastInfo.image}
+					episodeType={episode.episodeType}
+					date={episode.date}
+					listened={episode.listened}
+					duration={episode.duration}
+					currentTime={episode.currentTime}
+					url={episode.url}
+					episode={episode}
+					isPlaying={isPlaying}
+					isActiveEpisode={(activeEpisode && activeEpisode.url === episode.url)}
+					hideListenedEpisodes={hideListenedEpisodes}
+
+					
+
+					selectEpisodeAndPlay={selectEpisodeAndPlay}
+				/>
+				</div>
+			</CellMeasurer>
+		);
+	};
+
+	const [episodeListWidth,setEpisodeListWidth] = useState(1000);
+
+	const onResize = ({ width, height }) => {
+		// setEpisodeListWidth(width);
+		// setEpisodeListHeight(height);
+	};
+	
 	return (
 		<div className={styles.episodeList}>
 			<FilterBar
@@ -185,34 +233,32 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes }) => {
 					You listened to all the episodes in this podcast!
 				</div>
 			}
-			{ showEpisodes.map((episode,index) => {
-				return (
-					<EpisodeListItem
-						id={episode.id}
-						key={episode.url}
-						podcast={podcastInfo}
-						podcastPath={podcastInfo.path}
-						podcastTitle={podcastInfo.name}
-						title={episode.title}
-						description={episode.description}
-						episodeImage={episode.image ? episode.image : podcastInfo.artworkUrl600 ? podcastInfo.artworkUrl600 : podcastInfo.image}
-						episodeType={episode.episodeType}
-						date={episode.date}
-						listened={episode.listened}
-						duration={episode.duration}
-						currentTime={episode.currentTime}
-						url={episode.url}
-						episode={episode}
-						isPlaying={isPlaying}
-						isActiveEpisode={(activeEpisode && activeEpisode.url === episode.url)}
-						hideListenedEpisodes={hideListenedEpisodes}
-		
-						
-		
-						selectEpisodeAndPlay={selectEpisodeAndPlay}
-					/>
-				);
-			})}
+			{ podcastPane && podcastPane.current &&
+				<WindowScroller
+					onResize={onResize}
+					scrollElement={podcastPane.current}
+				>
+					{({height, isScrolling, onChildScroll, scrollTop  }) => (
+						<AutoSizer disableHeight>
+							{({ width }) => (
+								<List
+									autoHeight
+
+
+									scrollTop={scrollTop}
+
+									width={width}
+									height={height}
+									deferredMeasurementCache={cellCache}
+									rowHeight={cellCache.rowHeight}
+									rowRenderer={renderRow}
+									rowCount={showEpisodes.length}
+								/>
+							)}
+						</AutoSizer>
+					)}
+				</WindowScroller>
+			}
 		</div>
 	);
 }

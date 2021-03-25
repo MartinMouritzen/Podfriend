@@ -32,7 +32,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 	useEffect(() => {
 		setStatus(STATUS_PRELOAD);
 		setImageSource(src);
-	},[podcastPath]);
+	},[src]);
 
 	const onError = () => {
 		console.log('image error1: ' + imageSource + '||| (original: ' + src + ')');
@@ -85,7 +85,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 					key={imageSource}
 					src={imageSource}
 					style={{
-
+						contentVisibility: 'auto'
 					}}
 					alt={alt}
 					className={className}

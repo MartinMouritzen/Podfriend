@@ -43,6 +43,8 @@ ion-item-option {
 	background-color: #FFFFFF;
 	transition: all 1s;
 	border-bottom: 2px solid #EEEEEE;
+
+	content-visibility: auto;
 }
 @media (any-hover: hover) {
 	.episode:hover {
@@ -110,6 +112,14 @@ ion-item-option {
 	padding-left: 20px;
 }
 */
+.listEpisodeContainer {
+	transition: height 0.4s;
+}
+.play {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
 .icon {
 	border-radius: 50%;
 	background-color: #cccccc;

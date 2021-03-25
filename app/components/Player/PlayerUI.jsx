@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, Suspense, lazy } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -24,7 +24,7 @@ const ErrorIcon = () => <SVG src={require('podfriend-approot/images/design/playe
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
-import styles from './../Player.scss';
+import styles from './Player.scss';
 
 import PlayLoading from './../../images/play-button-loading.png';
 import PlayLoadingWhiteBG from './../../images/play-button-loading-whitebg.png';
@@ -50,11 +50,14 @@ import OpenPlayerUI from './OpenPlayerUI.jsx';
 import ProgressBarSlider from './ProgressBarSlider.jsx';
 import VolumeSlider from './VolumeSlider.jsx';
 
+const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/Value4ValueModal.jsx'));
+// import Value4ValueModal from 'podfriend-approot/components/Wallet/Value4ValueModal.jsx';
+
 /**
 *
 */
 
-const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged }) => {
+const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged, playingValuePodcast }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -409,6 +412,13 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	return (
 		<>
+			{ playingValuePodcast === true &&
+				<Suspense fallback={<>test</>}>
+					<Value4ValueModal
+					
+					/>
+				</Suspense>
+			}
 			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
 			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'flex' }}>
 				<div
@@ -434,6 +444,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
 								}
 								{ activeEpisode !== false &&
+									<>
 									<PodcastImage
 										podcastPath={activePodcast.path}
 										width={600}
@@ -442,7 +453,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 										fallBackImage={activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
 										src={activeEpisode.image ? activeEpisode.image : activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
 										className={styles.cover}
-									/>
+									/>{activeEpisode.image}
+									</>
 								}
 
 							</>

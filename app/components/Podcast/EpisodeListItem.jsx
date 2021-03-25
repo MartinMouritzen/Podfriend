@@ -27,7 +27,7 @@ import ShareButtons from './ShareButtons.jsx';
 
 import styles from './EpisodeList.css';
 
-const EpisodeListItem = ({ id, title, description, episodeImage, duration, currentTime, podcast, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
+const EpisodeListItem = ({ style, id, title, description, episodeImage, duration, currentTime, podcast, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
 	// const dispatch = useDispatch();
 	const [episodeTitle,setEpisodeTitle] = useState(title);
 	const [episodeDescription,setEpisodeDescription] = useState(description);
@@ -71,17 +71,8 @@ const EpisodeListItem = ({ id, title, description, episodeImage, duration, curre
 	};
 
 	return (
-		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay}>
-			<PodcastImage
-				podcastPath={podcastPath}
-				width={120}
-				height={120}
-				imageErrorText={title}
-				src={episodeImage}
-				fallBackImage={podcast.artworkUrl600}
-				className={styles.cover}
-				asBackground={true}
-			>
+		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay} style={style}>
+			{/*
 				<div className={styles.play}>
 					<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={onPlay}>
 						<FaPlay size="18px" />
@@ -93,7 +84,17 @@ const EpisodeListItem = ({ id, title, description, episodeImage, duration, curre
 						<FaCheck size="18px"  />
 					</div>
 				</div>
-			</PodcastImage>
+			*/}
+			<PodcastImage
+				podcastPath={podcastPath}
+				width={120}
+				height={120}
+				imageErrorText={title}
+				src={episodeImage}
+				fallBackImage={podcast.artworkUrl600}
+				className={styles.cover}
+				asBackground={true}
+			/>
 			<div className={styles.episodeInfo}>
 				<div className={styles.titleAndDescription}>
 					<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
