@@ -22,7 +22,7 @@ const SearchPaneUI = lazy(() => import('./Search/SearchPaneUI.jsx'));
 const PodCastPane = lazy(() => import('./Podcast/PodCastPane.jsx'));
 const PodcastPaneUI = lazy(() => import('./Podcast/PodcastPaneUI.jsx'));
 
-import Player from './Player';
+import Player from './Player/Player';
 import PlayerUI from './Player/PlayerUI.jsx';
 
 import Welcome from './Welcome';

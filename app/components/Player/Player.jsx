@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { connect } from "react-redux";
-import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../redux/actions/audioActions";
-import { updateEpisodeTime, updateEpisodeDuration, episodeFinished, playEpisode } from "../redux/actions/podcastActions";
-import { sendValue } from "../redux/actions/uiActions";
+import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../../redux/actions/audioActions";
+import { updateEpisodeTime, updateEpisodeDuration, episodeFinished, playEpisode } from "../../redux/actions/podcastActions";
+import { sendValue } from "../../redux/actions/uiActions";
 
 // import PodcastWallet from 'podfriend-approot/library/PodcastWallet/PodcastWallet.js';
 
@@ -546,6 +546,8 @@ class Player extends Component {
 			<PlayerUI
 				hasEpisode={hasEpisode}
 				audioController={this.props.audioController}
+
+				playingValuePodcast={this.props.activePodcast.value ? true : false}
 
 				playbackSpeed={this.props.playbackSpeed}
 

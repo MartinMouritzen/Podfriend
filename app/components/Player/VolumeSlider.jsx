@@ -3,7 +3,7 @@ import { Range, getTrackBackground } from 'react-range';
 import { FaVolumeMute, FaVolumeDown, FaVolumeUp } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './../Player.scss';
+import styles from './Player.scss';
 
 import { setConfigOption } from 'podfriend-approot/redux/actions/settingsActions';
 

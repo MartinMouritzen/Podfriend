@@ -38,7 +38,8 @@ const PodcastImageFallback = ({ podcastId, imageSource, imageErrorText, original
 				textAlign: 'center',
 				color: fontColor,
 				fontSize: fontSize > 18 ? 18 : fontSize,
-				height: elementWidth
+				height: elementWidth,
+				contentVisibility: 'auto'
 			}}
 			className={className} originalsource={originalSource}>
 			{imageErrorText}

@@ -35,6 +35,8 @@ import {
 	PODCAST_SYNC_COMPLETE
 } from '../constants/podcast-types';
 
+import PodcastUtil from 'podfriend-approot/library/PodcastUtil.js';
+
 const initialState = {
 	activePodcast: false,
 	activeEpisode: false,
@@ -137,6 +139,8 @@ const podcastReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === PODCAST_LOADED) {
+		var activeEpisode = state.activeEpisode;
+
 		// Update subscriptions
 		var subscribedPodcasts = [...state.subscribedPodcasts];
 		
@@ -146,46 +150,21 @@ const podcastReducer = (state = initialState, action) => {
 				subscribed = true;
 
 				action.payload.archived = subscribedPodcast.archived;
-				/*
-				var subscriptionObject = {
-					guid: action.payload.guid,
-					parentguid: action.payload.parentguid,
-					name: action.payload.name,
-					path: action.payload.path,
-					author: action.payload.author,
-					archived: subscribedPodcast.archived,
-					description: action.payload.description,
-					feedUrl: action.payload.feedUrl,
-					link: action.payload.link,
-					artworkUrl30: action.payload.artworkUrl30,
-					artworkUrl60: action.payload.artworkUrl60,
-					artworkUrl100: action.payload.artworkUrl100,
-					artworkUrl600: action.payload.artworkUrl600,
-					receivedFromServer: action.payload.receivedFromServer
-				};
-				*/
 				subscribedPodcasts[index] = action.payload;
 			}
 		});
+
+		var selectedPodcast = action.payload;
+
+		if (action.payload.episodes) {
+			console.log('resorting and reindexing after podcast load');
+			action.payload.episodes = PodcastUtil.sortEpisodes(action.payload.episodes,action.payload.sortBy,action.payload.sortType);
+			activeEpisode = PodcastUtil.reindexActiveEpisode(activeEpisode,action.payload.episodes);
+		}
 		
 		return Object.assign({}, state, {
 			podcastLoading: false,
-			selectedPodcast: action.payload, /*{
-				guid: action.payload.guid,
-				parentguid: action.payload.parentguid,
-				name: action.payload.name,
-				path: action.payload.path,
-				author: action.payload.author,
-				description: action.payload.description,
-				feedUrl: action.payload.feedUrl,
-				link: action.payload.link,
-				artworkUrl30: action.payload.artworkUrl30,
-				artworkUrl60: action.payload.artworkUrl60,
-				artworkUrl100: action.payload.artworkUrl100,
-				artworkUrl600: action.payload.artworkUrl600,
-				episodes: action.payload.episodes,
-				receivedFromServer: action.payload.receivedFromServer
-			},*/
+			selectedPodcast: action.payload,
 			selectedPodcastEpisodes: action.payload.episodes,
 			subscribedPodcasts: subscribedPodcasts
 		});
@@ -331,6 +310,8 @@ const podcastReducer = (state = initialState, action) => {
 
 		var activeEpisode = Object.assign({}, state.activeEpisode);
 		activeEpisode.duration = action.payload.duration;
+
+		console.log(activePodcast.episodes);
 		activePodcast.episodes[activeEpisode.episodeIndex].duration = action.payload.duration;
 
 		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
@@ -395,12 +376,25 @@ const podcastReducer = (state = initialState, action) => {
 	}
 	else if (action.type === PODCAST_SETTINGS_CHANGED) {
 		var selectedPodcast = state.selectedPodcast;
+		var activeEpisode = state.activeEpisode;
+
+		var newEpisodes = false;
+		if (selectedPodcast.episodes) {
+			if (action.payload.sortBy != selectedPodcast.sortBy || action.payload.sortType != selectedPodcast.sortType) {
+				newEpisodes = PodcastUtil.sortEpisodes(selectedPodcast.episodes,action.payload.sortBy,action.payload.sortType);
+				activeEpisode = PodcastUtil.reindexActiveEpisode(activeEpisode,selectedPodcast.episodes);
+			}
+		}
+
 		if (state.selectedPodcast.path == action.payload.podcastPath) {
 			selectedPodcast = Object.assign({}, state.selectedPodcast);
 			selectedPodcast.sortBy = action.payload.sortBy;
 			selectedPodcast.sortType = action.payload.sortType;
 			selectedPodcast.onlySeason = action.payload.onlySeason;
 			selectedPodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
+			if (newEpisodes) {
+				selectedPodcast.episodes = newEpisodes;
+			}
 		}
 		var activePodcast = state.activePodcast;
 		if (state.activePodcast.path == action.payload.podcastPath) {
@@ -409,6 +403,9 @@ const podcastReducer = (state = initialState, action) => {
 			activePodcast.sortType = action.payload.sortType;
 			activePodcast.onlySeason = action.payload.onlySeason;
 			activePodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
+			if (activePodcast) {
+				activePodcast.episodes = newEpisodes;
+			}
 		}
 		
 		// Save updates to the cache
