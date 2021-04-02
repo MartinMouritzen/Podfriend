@@ -1,0 +1,20 @@
+.informationModal {
+	text-align: center;
+	.informationImage {
+		max-width: calc(90vw - 40px);
+	}
+	h3 {
+		font-size: 28px;
+		font-weight: bold;
+	}
+	p {
+		font-size: 18px;
+	}
+}
+:global(.informationFooter) {
+	padding: 20px;
+	padding-top: 0px;
+}
+:global(div[data-rsbs-footer="true"] .informationFooter) {
+	padding: 0px;
+}

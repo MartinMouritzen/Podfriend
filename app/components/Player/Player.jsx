@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../../redux/actions/audioActions";
 import { updateEpisodeTime, updateEpisodeDuration, episodeFinished, playEpisode } from "../../redux/actions/podcastActions";
-import { sendValue } from "../../redux/actions/uiActions";
+import { synchronizeWallet, boostPodcast, sendValue } from "podfriend-approot/redux/actions/uiActions";
 
 // import PodcastWallet from 'podfriend-approot/library/PodcastWallet/PodcastWallet.js';
 
@@ -19,7 +19,10 @@ function mapStateToProps(state) {
 		isPlaying: state.audio.isPlaying,
 		canPlay: state.audio.canPlay,
 		isBuffering: state.audio.isBuffering,
-		playbackSpeed: state.settings.audioPlaybackSpeed
+		playbackSpeed: state.settings.audioPlaybackSpeed,
+		walletBalance: state.ui.walletBalance,
+		defaultBoost: state.settings.defaultBoost,
+		defaultStreamPerMinuteAmount: state.settings.defaultStreamPerMinuteAmount
 	};
 }
 function mapDispatchToProps(dispatch) {
@@ -33,7 +36,9 @@ function mapDispatchToProps(dispatch) {
 		audioCanPlay: () => { dispatch(audioCanPlay()); },
 		audioBuffering: () => { dispatch(audioBuffering()); },
 		audioPlayRequested: () => { dispatch(audioPlayRequested()); },
-		sendValue: (valueBlock) => { dispatch(sendValue(valueBlock)); }
+		sendValue: (valueBlock,totalAmount) => { return dispatch(sendValue(valueBlock,totalAmount)); },
+		boostPodcast: (valueBlock,totalAmount) => { return dispatch(boostPodcast(valueBlock,totalAmount)); },
+		synchronizeWallet: () => { dispatch(synchronizeWallet()); }
 	};
 }
 
@@ -57,8 +62,12 @@ class Player extends Component {
 			volume: 100,
 			sleepTimerEnabled: false,
 			sleepTimerEnding: false,
-			monetizeSegmentStart: false
+			monetizeSegmentStart: false,
+			boostAmount: this.props.defaultBoost,
+			streamPerMinuteAmount: this.props.defaultStreamPerMinuteAmount
 		};
+		console.log(this.props.defaultBoost);
+		console.log(this.props.defaultStreamPerMinute);
 		this.onCanPlay = this.onCanPlay.bind(this);
 		this.onBuffering = this.onBuffering.bind(this);
 		
@@ -81,6 +90,8 @@ class Player extends Component {
 		this.handleKeyDown = this.handleKeyDown.bind(this);
 
 		this.onAudioElementReady = this.onAudioElementReady.bind(this);
+
+		this.onBoost = this.onBoost.bind(this);
 		
 		this.props.audioController.player = this;
 	}
@@ -272,19 +283,23 @@ class Player extends Component {
 
 		segmentTimeoutId = setInterval(() => {
 			this.segmentTimeTrigger();
-		},5000);
-		// },60000);
+		// },5000);
+		},60000);
 	}
 	/**
 	*
 	*/
 	segmentTimeTrigger() {
+		var totalAmount = 0;
 		if (this.props.activePodcast.value) {
-			// PodcastWallet.sendValue(this.props.activePodcast.value);
+			// PodcastWallet.sendValue(this.props.activePodcast.value,totalAmount);
 			// console.log(this.props.activePodcast);
 			// console.log(this.props.activePodcast.value);
-			return false;
-			this.props.sendValue(this.props.activePodcast.value);
+			// return false;
+			this.props.sendValue(this.props.activePodcast.value,this.state.streamPerMinuteAmount)
+			.then(() => {
+				this.props.synchronizeWallet();
+			});
 		}
 		else {
 			console.log('Podcast has no value block, cannot send.');
@@ -328,7 +343,7 @@ class Player extends Component {
 	*/
 	onLoadedMetadata(event) {
 		let newDuration = this.props.audioController.getDuration();
-		console.log('OnloadedMetaData. duration: ' + newDuration + ', episodeid: ' + this.props.activeEpisode.id);
+		// console.log('OnloadedMetaData. duration: ' + newDuration + ', episodeid: ' + this.props.activeEpisode.id);
 
 		// alert(this.props.audioController.audioElement.current.currentTime);
 
@@ -532,6 +547,33 @@ class Player extends Component {
 	}
 	/**
 	*
+	**/
+	onBoost() {
+		if (this.props.activePodcast.value) {
+			if (this.props.walletBalance >= this.state.boostAmount) {
+				let overrideDestinations = false;
+				return this.props.boostPodcast(
+					this.props.activePodcast.value,
+					this.state.boostAmount,
+					overrideDestinations
+				);
+			}
+			else {
+				return Promise.resolve({
+					success: 0,
+					reason: 'Not enough Satoshis to boost'
+				});
+			}
+		}
+		else {
+			return Promise.resolve({
+				success: 0,
+				reason: 'Podcast does not have a value block'
+			});
+		}
+	}
+	/**
+	*
 	*/
 	render() {
 		var PlayerUI = this.props.UI;
@@ -548,6 +590,8 @@ class Player extends Component {
 				audioController={this.props.audioController}
 
 				playingValuePodcast={this.props.activePodcast.value ? true : false}
+
+				onBoost={this.onBoost}
 
 				playbackSpeed={this.props.playbackSpeed}
 
@@ -585,6 +629,8 @@ class Player extends Component {
 				playing={this.props.isPlaying}
 				volume={this.state.volume}
 				onTimeUpdate={this.onTimeUpdate}
+				boostAmount={this.state.boostAmount}
+				streamPerMinuteAmount={this.state.streamPerMinuteAmount}
 			/>
 		);
 	}

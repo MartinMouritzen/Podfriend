@@ -1,6 +1,36 @@
 .walletModal {
 	padding: 20px;
 	min-width: 320px;
+	max-width: 500px;
+
+	transition: all 0.4s;
+
+	.walletInvoiceAddressContainer {
+		display: flex;
+
+		width: 320px;
+		margin-left: auto;
+		margin-right: auto;
+
+		justify-content: center;
+		align-items: center;
+
+		margin-top: 10px;
+
+		.invoiceInput {
+			background-color: rgba(0,0,0,0.1);
+			border: 0px;
+			padding: 10px;
+			border-radius: 5px;
+			font-size: 18px;
+			flex: 1;
+			margin-right: 5px;
+		}
+		svg {
+			width: 24px;
+			height: 25px;
+		}
+	}
 }
 .errorMessage {
 	background-color: #980a0d;

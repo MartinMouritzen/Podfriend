@@ -5,7 +5,11 @@ import {
 
 const initialState = {
 	audioPlaybackSpeed: 1,
-	volumeLevel: 1
+	volumeLevel: 1,
+	value4ValueEnabled: false,
+	value4ValueOnboarded: false,
+	defaultBoost: 1000,
+	defaultStreamPerMinuteAmount: 10
 };
 
 const settingsReducer = (state = initialState, action) => {

@@ -15,7 +15,21 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 	const [safeAreaTop,setSafeAreaTop] = useState(0);
 	const [safeAreaBottom,setSafeAreaBottom] = useState(0);
 
+	const [windowWidth,setWindowWidth] = useState(window.innerWidth);
+
 	const [{ y, height }, set] = useSpring(() => ({ y: 0, height: heightWithoutDrag }))
+
+	const handleResize = () => {
+		setWindowWidth(window.innerWidth);
+	};
+
+	useEffect(() => {
+		window.addEventListener("resize", handleResize);
+		handleResize();
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	},[]);
 
 	useEffect(() => {
 		try {
@@ -39,7 +53,7 @@ const DraggablePane = ({ onHide = false, onOpen = false, open = false, children,
 				setHeightWithoutDrag(90);
 			}
 		}
-	},[open,window.innerWidth]);
+	},[open,windowWidth]);
 
 	useEffect(() => {
 		// Giving it a little time before calling, to prevent it being triggered before mouseup, otherwise we get weird sideeffects.

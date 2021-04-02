@@ -8,6 +8,10 @@ import styles from './SleepTimerModal.scss';
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
+import SVG from 'react-inlinesvg';
+// import SadPodfriend from 'podfriend-approot/images/design/flow-illustrations/podfriend-sad.svg';
+const SleepyPodfriend = () => <SVG src={require('podfriend-approot/images/design/flow-illustrations/podfriend-sleep.svg')} />;
+
 const SleepTimerModal = ({ shown, onDismiss, audioController }) => {
 	const [isActive,setIsActive] = useState(audioController.sleepTimerSeconds !== false);
 	const [secondsLeft,setSecondsLeft] = useState(audioController.getRemainingSleepTimerSeconds());
@@ -52,9 +56,12 @@ const SleepTimerModal = ({ shown, onDismiss, audioController }) => {
 	}, []);
 
 	return (
-		<Modal shown={shown} onClose={onDismiss}>
+		<Modal shown={shown} onClose={onDismiss} header={<h1>Sleep timer</h1>}>
 			<div style={{ backgroundColor: '#FFFFFF' }}>
-				<h1>Sleep timer</h1>
+				<div style={{ padding: 30, paddingBottom: 0 }}>
+					<SleepyPodfriend />
+				</div>
+				
 				{ isActive !== false &&
 					<div className={styles.currentTimer}>
 						<div>
@@ -68,12 +75,12 @@ const SleepTimerModal = ({ shown, onDismiss, audioController }) => {
 				}
 				{ isActive === false &&
 					<div>
-						<div onClick={() => { onTimerChanged(3600 * 2); }} className={styles.sleepTimerLine}>2 hours</div>
-						<div onClick={() => { onTimerChanged(3600 * 1); }} className={styles.sleepTimerLine}>1 hours</div>
-						<div onClick={() => { onTimerChanged(45 * 60); }} className={styles.sleepTimerLine}>45 minutes</div>
-						<div onClick={() => { onTimerChanged(30 * 60); }} className={styles.sleepTimerLine}>30 minutes</div>
-						<div onClick={() => { onTimerChanged(15 * 60); }} className={styles.sleepTimerLine}>15 minutes</div>
 						<div onClick={() => { onTimerChanged(5 * 60); }} className={styles.sleepTimerLine}>5 minutes</div>
+						<div onClick={() => { onTimerChanged(15 * 60); }} className={styles.sleepTimerLine}>15 minutes</div>
+						<div onClick={() => { onTimerChanged(30 * 60); }} className={styles.sleepTimerLine}>30 minutes</div>
+						<div onClick={() => { onTimerChanged(45 * 60); }} className={styles.sleepTimerLine}>45 minutes</div>
+						<div onClick={() => { onTimerChanged(3600 * 1); }} className={styles.sleepTimerLine}>1 hours</div>
+						<div onClick={() => { onTimerChanged(3600 * 2); }} className={styles.sleepTimerLine}>2 hours</div>
 					</div>
 				}
 			</div>

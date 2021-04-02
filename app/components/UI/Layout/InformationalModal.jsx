@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import Modal from 'podfriend-approot/components/Window/Modal';
 
-const InformationalModal = ({ title, text, image, button, shown, onClose }) => {
+import styles from './InformationModal.scss';
+
+const InformationalModal = ({ title, text, image, footer, shown, onClose }) => {
 	return (
 		<Modal
 			onClose={onClose}
 			header={image}
+			footer={footer}
 		>
-			<div>
-				<div>
-					{text}
-				</div>
+			<div className={styles.informationModal}>
+				{text}
 			</div>
 		</Modal>
 	);
