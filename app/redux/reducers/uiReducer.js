@@ -35,6 +35,7 @@ const initialState = {
 	showWalletModal: false,
 	walletInvoiceLoading: false,
 	walletInvoiceError: false,
+	walletInvoiceId: false,
 	walletInvoiceString: false,
 	walletInvoiceDate: false
 };
@@ -108,6 +109,7 @@ const uiReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			walletInvoiceLoading: true,
 			walletInvoiceError: false,
+			walletInvoiceId: false,
 			walletInvoiceString: false,
 			walletInvoiceDate: false
 		});
@@ -116,6 +118,7 @@ const uiReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			walletInvoiceLoading: false,
 			walletInvoiceError: false,
+			walletInvoiceId: action.payload['id'],
 			walletInvoiceString: action.payload['payment_request'],
 			walletInvoiceDate: new Date()
 		});
@@ -124,6 +127,7 @@ const uiReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			walletInvoiceLoading: false,
 			walletInvoiceError: action.payload,
+			walletInvoiceId: false,
 			walletInvoiceString: false,
 			walletInvoiceDate: false
 		});

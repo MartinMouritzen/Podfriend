@@ -157,7 +157,7 @@ const podcastReducer = (state = initialState, action) => {
 		var selectedPodcast = action.payload;
 
 		if (action.payload.episodes) {
-			console.log('resorting and reindexing after podcast load');
+			// console.log('resorting and reindexing after podcast load');
 			action.payload.episodes = PodcastUtil.sortEpisodes(action.payload.episodes,action.payload.sortBy,action.payload.sortType);
 			activeEpisode = PodcastUtil.reindexActiveEpisode(activeEpisode,action.payload.episodes);
 		}
@@ -305,13 +305,11 @@ const podcastReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === EPISODE_DURATION_UPDATE) {
-		console.log('Duration change: ' + action.payload.duration);
 		var activePodcast = Object.assign({}, state.activePodcast);
 
 		var activeEpisode = Object.assign({}, state.activeEpisode);
 		activeEpisode.duration = action.payload.duration;
 
-		console.log(activePodcast.episodes);
 		activePodcast.episodes[activeEpisode.episodeIndex].duration = action.payload.duration;
 
 		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
@@ -330,11 +328,18 @@ const podcastReducer = (state = initialState, action) => {
 	}
 	else if (action.type === EPISODE_TIME_UPDATED) {
 		var activePodcast = Object.assign({}, state.activePodcast);
-
 		var activeEpisode = Object.assign({}, state.activeEpisode);
 		activeEpisode.currentTime = action.payload;
-		
-		activePodcast.episodes[activeEpisode.episodeIndex].currentTime = action.payload;
+
+		try {
+			activePodcast.episodes[activeEpisode.episodeIndex].currentTime = action.payload;
+		}
+		catch (exception) {
+			console.log('exception while setting currentTime on episodes');
+			console.log(exception);
+			console.log(activePodcast);
+			console.log(activeEpisode);
+		}
 
 		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
 		
@@ -392,7 +397,7 @@ const podcastReducer = (state = initialState, action) => {
 			selectedPodcast.sortType = action.payload.sortType;
 			selectedPodcast.onlySeason = action.payload.onlySeason;
 			selectedPodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
-			if (newEpisodes) {
+			if (newEpisodes !== false) {
 				selectedPodcast.episodes = newEpisodes;
 			}
 		}
@@ -403,7 +408,7 @@ const podcastReducer = (state = initialState, action) => {
 			activePodcast.sortType = action.payload.sortType;
 			activePodcast.onlySeason = action.payload.onlySeason;
 			activePodcast.hideListenedEpisodes = action.payload.hideListenedEpisodes;
-			if (activePodcast) {
+			if (activePodcast && newEpisodes !== false) {
 				activePodcast.episodes = newEpisodes;
 			}
 		}

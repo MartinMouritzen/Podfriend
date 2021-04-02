@@ -19,7 +19,20 @@
 	--review-stars-color-one: #ed5656;
 
 	--primary-color: #0176e5;
+	--primary-color-light: #1487f4;
 	--primary-color-dark: #0065c5;
+
+	--secondary-color: #4c749a;
+	--secondary-color-light: #3474b1;
+	--secondary-color-dark: #25537f;
+
+	--danger-color: #b13435;
+	--danger-color-light: #c43a44;
+	--danger-color-dark: #942c2d;
+
+	--success-color: #29bd73;
+	--success-color-light: #2ddd85;
+	--success-color-dark: #229c5f;
 }
 
 reach-portal div[data-rsbs-header="true"] h1 {
@@ -95,6 +108,20 @@ input[type=checkbox] {
 	filter: blur(0px); /* hack for chrome to make backdrop-filter and scrolling work on childs */
 }
 :global {
+	.podfriendModal {
+		p {
+			a {
+				color: var(--primary-color-dark);
+			}
+		}
+		h4 {
+			margin: 0px;
+			margin-top: 30px;
+			padding: 0px;
+			font-size: 22px;
+			color: #0e3b80;
+		}
+	}
 	@media (any-hover: hover) {
 		/*
 		.podcastPage::-webkit-scrollbar {
@@ -258,6 +285,9 @@ input[type=checkbox] {
 		padding: 10px;
 	}
 
+	.fullWidth {
+		width: 100%;
+	}
 
 	button, .button {
 		background-color: var(--primary-color);
@@ -267,17 +297,74 @@ input[type=checkbox] {
 		color: #FFFFFF;
 		font-size: 16px;
 		transition: background-color .2s;
-		border-radius: 5px;
+		border-radius: 10px;
+		text-align: center;
+		overflow: hidden;
+	}
+	.multiAction {
+		padding: 0px;
+		display: flex;
+
+		.buttonPrimaryAction {
+			padding: 15px;
+			flex: 1;
+			color: #FFFFFF;
+		}
+		.buttonSecondaryAction {
+			background-color: rgba(0,0,0,0.1);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			padding-left: 10px;
+			padding-right: 10px;
+
+			svg {
+				margin-right: 0px;
+
+				max-width: 24px;
+				max-height: 24px;
+			}
+		}
 	}
 	button:active, .button:active {
-		background-color: #1487f4;
+		background-color: var(--primary-color-light);
 		border-width: 0 !important;
 		margin-bottom: 4px;
 		transform: translate3d(0,4px,0) !important;
 	}
+	.boostButton, button.success, .button.success {
+		background-color: var(--success-color);
+		border-bottom: 4px solid var(--success-color-dark);
+	}
+	.boostButton:active, button.success:active, .button.success:active {
+		background-color: var(--success-color-light);
+	}
+	.secondaryButton {
+		background-color: var(--secondary-color);
+		border-bottom: 4px solid var(--secondary-color-dark);
+	}
+	.secondaryButton:active {
+		background-color: var(--secondary-color-light);
+	}
+	.dangerousButton {
+		background-color: var(--danger-color);
+		border-bottom: 4px solid var(--danger-color-dark);
+	}
+	.dangerousButton:active {
+		background-color: var(--danger-color-light);
+	}
+	.pendingAction {
+		opacity: 0.8;
+		pointer-events: none;
+
+		svg {
+			display: inline !important;
+		}
+	}
 	@media (any-hover: hover) {
 		button:hover, .button:hover, .button.active:hover {
-			background-color: #1487f4;
+			background-color: var(--primary-color-light);
 			
 			color: #FFFFFF;
 		}
@@ -288,6 +375,15 @@ input[type=checkbox] {
 		}
 		button:hover > span, .button:hover > span, button:hover > span > span {
 			color: #FFFFFF;
+		}
+		.boostButton:hover, button.success:hover, .button.success:hover {
+			background-color: var(--success-color-light);
+		}
+		.secondaryButton:hover {
+			background-color: var(--secondary-color-light);
+		}
+		.dangerousButton:hover {
+			background-color: var(--danger-color-light);
 		}
 	}
 	button svg, .button svg {

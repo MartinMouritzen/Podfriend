@@ -6,7 +6,7 @@ import { initiateLogin } from "~/app/redux/actions/uiActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
-import { FaRegEnvelope, FaPlus, FaUser, FaHeart, FaHome, FaPodcast, FaFolder,FaRegClock } from "react-icons/fa";
+import { FaRegEnvelope, FaPlus, FaUser, FaHome, FaPodcast, FaRegLightbulb, FaLightbulb,  FaFolder, FaRegClock } from "react-icons/fa";
 
 import Toggle from 'react-toggle';
 
@@ -26,7 +26,8 @@ function mapStateToProps(state) {
 		isLoggedIn: state.user.isLoggedIn,
 		subscribedPodcasts: state.podcast.subscribedPodcasts,
 		selectedPodcast: state.podcast.selectedPodcast,
-		activePodcast: state.podcast.activePodcast
+		activePodcast: state.podcast.activePodcast,
+		value4ValueEnabled: state.settings.value4ValueEnabled
 	};
 }
 
@@ -91,7 +92,7 @@ class SideBar extends Component {
 								<FaHome size="20" /> Home
 							</Link>
 							<Link to="/podfrndr/" className={styles.mainNavigationButton}>
-								<FaHeart size="20" /> Podfrndr
+								<FaRegLightbulb size="20" /> Podfrndr
 							</Link>
 							{ this.props.isLoggedIn === false &&
 								<div className={styles.mainNavigationButton} onClick={this.props.initiateLogin}>
@@ -141,9 +142,9 @@ class SideBar extends Component {
 
 							*/ }
 						</div>
-						{ /*
-						<WalletBalance />
-						*/ }
+						{ this.props.isLoggedIn === true &&
+							<WalletBalance />
+						}
 					</div>
 					<div className={styles.podcasts}>
 						<div className={styles.podcastHeader}>Podcasts</div>

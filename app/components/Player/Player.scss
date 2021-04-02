@@ -270,9 +270,6 @@
 		/* width: 400px;*/
 		margin-right: 100px;
 	}
-	.audioButtons {
-		padding-left: 40px;
-	}
 	.coverContainer {
 		background-color: #000000;
 		position: absolute;
@@ -389,6 +386,9 @@
 		.playingText {
 			margin-left: 140px;
 		}
+		.audioButtons {
+			padding-left: 40px;
+		}
 	}
 	@media only screen and (max-width: 360px) {
 		.chatButton, .fastBackwardButton, .fastForwardButton {
@@ -498,7 +498,10 @@
 	overflow: auto;
 
 	.subtitleContainer {
-		margin-bottom: 20px;
+		position: absolute;
+		bottom: 10px;
+		z-Index: 15;
+		width: 100%;
 	}
 	.wave {
 		position: relative;

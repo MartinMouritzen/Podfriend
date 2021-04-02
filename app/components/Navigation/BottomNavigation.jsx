@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { showWalletModal } from 'podfriend-approot/redux/actions/uiActions.js';
+
 import styles from 'podfriend-approot/components/Navigation/BottomNavigation.scss';
 
 import { Link, matchPath, useLocation } from 'react-router-dom';
@@ -8,15 +11,24 @@ import {
 	FaHome,
 	FaRegLightbulb, FaLightbulb,
 	FaThLarge,
-	FaSearch
+	FaSearch,
+	FaWallet
 } from "react-icons/fa";
 /**
 *
 */
 const BottomNavigation = () => {
+	const dispatch = useDispatch();
 	let location = useLocation();
 	const [iconSelected,setIconSelected] = useState(false);
 
+	const walletBalance = useSelector((state) => state.ui.walletBalance);
+	const showingWalletModal = useSelector((state) => state.ui.showWalletModal);
+	const value4ValueEnabled = useSelector((state) => state.settings.value4ValueEnabled);
+
+	const onShowWalletModal = () => {
+		dispatch(showWalletModal());
+	};
 
 	useEffect(() => {
 		setIconSelected(false);
@@ -76,6 +88,22 @@ const BottomNavigation = () => {
 				<FaThLarge size="25" /><br />
 				My Podcasts
 			</Link>
+			{ value4ValueEnabled &&
+				<div
+					className={styles.menuItem + (iconSelected === 'wallet' ? ' ' + styles.menuItemSelected : '')}
+					onClick={onShowWalletModal}
+				>
+					<FaWallet size="25" /><br />
+					{ walletBalance === false &&
+						<>Loading</>
+					}
+					{ walletBalance !== false &&
+						<>
+							{(walletBalance).toLocaleString()}
+						</>
+					}
+				</div>
+			}
 			{/*
 			<Link to='/search/' className={styles.menuItem + (iconSelected === 'search' ? ' ' + styles.menuItemSelected : '')}>
 				<FaSearch size="25" /><br />

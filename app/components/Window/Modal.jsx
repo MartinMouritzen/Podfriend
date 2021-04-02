@@ -84,12 +84,12 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 					defaultSnap={defaultSnap}
 					snapPoints={snapPoints}
 				>
-					<div className="bottomSheet">
+					<div className="bottomSheet podfriendModal">
 						{childContent}
 					</div>
 				</BottomSheet>
 				{ !matches && !onlyBottomSheet &&
-					<div className={modalOuterClasses}
+					<div className={modalOuterClasses + ' podfriendModal'}
 						onClick={(event) => { event.stopPropagation(); startHidingModal();  } }
 						style={{ touchAction: 'none', backdropFilter: useBlur ? 'grayscale(50%) blur(2px)' : 'none', display: hidden ? 'none' : 'flex' }}
 						onTouchStart={(event) => { event.preventDefault(); event.stopPropagation(); }}
@@ -99,7 +99,8 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 						<div className={styles.modalInner} onClick={(event) => { event.stopPropagation(); }}>
 							<div className={styles.modal + ' modal'} onClick={(event) => { event.stopPropagation(); } } >
 								{ header }
-						{childContent}
+								{childContent}
+								{ footer }
 							</div>
 						</div>
 					</div>

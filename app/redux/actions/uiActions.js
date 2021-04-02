@@ -192,19 +192,22 @@ export function synchronizeWallet() {
 		});
 	};
 }
-export function sendValue(valueBlock) {
-	var recognizedMethod = false;
-	var validDestinations = false;
+export function boostPodcast(valueBlock,boostAmount,overrideDestinations = false) {
+	return sendValue(valueBlock,boostAmount,overrideDestinations);
+}
+export function sendValue(valueBlock,totalAmount,overrideDestinations = false) {
+	return (dispatch,getState) => {
+		var recognizedMethod = false;
+		var validDestinations = false;
 
-	if (valueBlock.model && valueBlock.model.method === 'keysend' && valueBlock.model.type === 'lightning') {
-		recognizedMethod = true;
-	}
-	if (valueBlock.destinations && valueBlock.destinations.length > 0) {
-		validDestinations = true;
-	}
+		if (valueBlock.model && valueBlock.model.method === 'keysend' && valueBlock.model.type === 'lightning') {
+			recognizedMethod = true;
+		}
+		if (valueBlock.destinations && valueBlock.destinations.length > 0) {
+			validDestinations = true;
+		}
 
-	if (recognizedMethod && validDestinations) {
-		return (dispatch,getState) => {
+		if (recognizedMethod && validDestinations) {
 			console.log('sending value');
 			console.log(valueBlock);
 
@@ -213,11 +216,9 @@ export function sendValue(valueBlock) {
 			const valueData = {
 				valueType: valueBlock.model.type,
 				valueMethod: valueBlock.model.method,
-				amount: 5,
+				amount: totalAmount,
 				destinations: valueBlock.destinations
 			};
-
-			console.log(valueData);
 
 			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/';
 			return fetch(walletInvoiceURL, {
@@ -235,15 +236,22 @@ export function sendValue(valueBlock) {
 			.then((response) => {
 				console.log('sent value!');
 				console.log(response);
+				return Promise.resolve({
+					success: 1
+				});
 			})
 			.catch((error) => {
 				console.log('error sending value');
 				console.log(error);
+
+				return Promise.resolve({
+					success: 0
+				});
 			});
-		};
-	}
+		}
+	};
 }
-export function getInvoice() {
+export function getInvoice(amount) {
 	return (dispatch,getState) => {
 
 		dispatch({
@@ -253,7 +261,7 @@ export function getInvoice() {
 
 		var { authToken } = getState().user;
 
-		const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/invoice/';
+		const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/invoice/?amount=' + amount;
 		return fetch(walletInvoiceURL, {
 			method: "GET",
 			headers: {

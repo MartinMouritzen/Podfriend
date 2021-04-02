@@ -26,7 +26,7 @@ const ReviewStars = ({ rating, size, primaryColor = '#ffcc48', secondaryColor = 
 	const renderStars = () => {
 		var stars = [];
 		for(var i=1;i<=5;i++) {
-			stars.push(<ReviewStar full={(Math.round(rating) >= i)} rating={i} size={size} onClick={onClick} primaryColor={primaryColor} secondaryColor={secondaryColor} />);
+			stars.push(<ReviewStar key={'star' + i} full={(Math.round(rating) >= i)} rating={i} size={size} onClick={onClick} primaryColor={primaryColor} secondaryColor={secondaryColor} />);
 		}
 		return stars;
 	}

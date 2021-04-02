@@ -21,6 +21,7 @@ const ChromecastIcon = () => <SVG src={require('podfriend-approot/images/design/
 const SkipForwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-forward.svg')} />;
 const SkipBackwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-backward.svg')} />;
 const ErrorIcon = () => <SVG src={require('podfriend-approot/images/design/player/error.svg')} />;
+const SearchIcon = () => <SVG src={require('podfriend-approot/images/design/icons/search.svg')} />;
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
@@ -57,7 +58,7 @@ const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/
 *
 */
 
-const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged, playingValuePodcast }) => {
+const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged, playingValuePodcast, streamPerMinuteAmount, boostAmount, onBoost }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -78,13 +79,22 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [rssFeed,setRSSFeed] = useState(false);
 	const [rssFeedCurrentEpisode,setRssFeedCurrentEpisode] = useState(false);
 
+	const [transcriptSearchOpen,setTranscriptSearchOpen] = useState(false);
+	
+
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
 	const showSleepTimerWindow = useSelector((state) => state.ui.showSleepTimerWindow);
+	const value4ValueOnboarded = useSelector((state) => state.settings.value4ValueOnboarded);
+	const value4ValueEnabled = useSelector((state) => state.settings.value4ValueEnabled);
 
 	useEffect(() => {
 		audioController.setAudioElement(audioElement);
 		onAudioElementReady();
 	},[audioElement]);
+
+	const onTranscriptSearchClose = () => {
+		setTranscriptSearchOpen(false);
+	};
 
 	const openEpisode = (event) => {
 		if (!hasEpisode) {
@@ -288,7 +298,6 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	useEffect(() => {
 		if (rssFeedCurrentEpisode !== false) {
-			console.log(rssFeedCurrentEpisode);
 			var description = DOMPurify.sanitize(rssFeedCurrentEpisode['description'], {
 				ALLOWED_TAGS: [
 					'a','p','br','ol','ul','li','b'
@@ -304,10 +313,11 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				setChaptersLoading(false);
 			}
 			if (rssFeedCurrentEpisode.transcript) {
+				// console.log('Episode has transcript');
 				var useTranscript = rssFeedCurrentEpisode.transcript;
 				if (useTranscript && useTranscript.length) {
 					for (var i=0;i< rssFeedCurrentEpisode.transcript.length;i++) {
-						if (rssFeedCurrentEpisode.transcript[i].type === 'application/srt') {
+						if (rssFeedCurrentEpisode.transcript[i].type === 'application/srt' || rssFeedCurrentEpisode.transcript[i].type === 'text/srt') {
 							useTranscript = rssFeedCurrentEpisode.transcript[i];
 							break;
 						}
@@ -412,7 +422,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	return (
 		<>
-			{ playingValuePodcast === true &&
+			{ value4ValueOnboarded !== true && playingValuePodcast === true &&
 				<Suspense fallback={<>test</>}>
 					<Value4ValueModal
 					
@@ -459,11 +469,13 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 							</>
 						}
+						<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
+							{ fullPlayerOpen &&
+								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} searchOpen={transcriptSearchOpen} onTranscriptSearchClose={onTranscriptSearchClose} />
+							}
+						</div>
 					</div>
 					<div className={styles.playingText}>
-							<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
-								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} />
-							</div>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: title}} />
 						<div className={styles.author}>
 							{activePodcast.name}
@@ -498,6 +510,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						<div className={styles.audioButtons}>
 							{ false && 
 								<div className={styles.chatButton} onClick={toggleChat}><ChatIcon /></div>
+							}
+							{ true &&
+								<div className={styles.chatButton}>&nbsp;</div>
 							}
 							<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
 							<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
@@ -550,6 +565,11 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						chaptersLoading={chaptersLoading}
 						chapters={chapters}
 						currentChapter={currentChapter}
+						playingValuePodcast={playingValuePodcast}
+						value4ValueEnabled={value4ValueEnabled}
+						boostAmount={boostAmount}
+						streamPerMinuteAmount={streamPerMinuteAmount}
+						onBoost={onBoost}
 					/>
 
 				}
@@ -563,6 +583,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				</div>
 			}
 			<ContextMenu element={moreIconElement} showTrigger="click" position='top'>
+				{ subtitleFileURL !== false &&
+					<ContextMenuItem onClick={() => { setTranscriptSearchOpen(true); }}><SearchIcon /> Search in transcript</ContextMenuItem>
+				}
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showSleepTimer()); }}><ClockIcon /> Set sleep timer</ContextMenuItem>
