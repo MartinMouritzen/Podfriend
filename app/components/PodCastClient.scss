@@ -231,7 +231,14 @@ input[type=checkbox] {
 	div[data-rsbs-root]:after {
 		z-Index: 10000;
 	}
-	
+}
+/****
+* Overrides to Material UI
+****/
+:global {
+	.MuiAlert-message {
+		padding: 10px 0 !important;
+	}
 }
 :global {
 	.podcastPage {

@@ -35,6 +35,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 
 	const [boostPending,setBoostPending] = useState(false);
 
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 	const walletBalance = useSelector((state) => state.ui.walletBalance);
 
 	const handleTabChange = (event, newValue) => {
@@ -81,7 +82,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 	return (
 		<div className={styles.episodeInfo}>
 			<div style={{ position: 'relative' }} >
-				{ playingValuePodcast && value4ValueEnabled &&
+				{ isLoggedIn && playingValuePodcast && value4ValueEnabled &&
 					<div
 						className={styles.valueBar}
 						style={{

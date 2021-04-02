@@ -11,6 +11,9 @@ import { FaCopy, FaCheck } from 'react-icons/fa';
 
 import logo from 'podfriend-approot/images/logo/podfriend_logo.svg';
 
+import { Snackbar } from '@material-ui/core/';
+import { Alert } from  '@material-ui/lab/';
+
 import EmptyWallet from 'podfriend-approot/images/design/onboarding/value4value-wallet.png';
 import WalletAmount from 'podfriend-approot/images/design/onboarding/value4value-amount.png';
 import WalletError from 'podfriend-approot/images/design/onboarding/value4value-amount.png';
@@ -30,6 +33,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 	const [transferAmount,setTransferAmount] = useState(false);
 
 	const [invoiceStatus,setInvoiceStatus] = useState(false);
+	const [showCopySuccessMessage,setShowCopySuccessMessage] = useState(false);
 
 	const dispatch = useDispatch();
 	const walletBalance = useSelector((state) => state.ui.walletBalance);
@@ -153,6 +157,11 @@ const WalletModal = ({ shown, onDismiss }) => {
 
 	const copyInvoiceString = () => {
 		navigator.clipboard.writeText(walletInvoiceString);
+		setShowCopySuccessMessage(true);
+	};
+
+	const onHideCopySuccessMessage = () => {
+		setShowCopySuccessMessage(false);
 	};
 
 	return (
@@ -172,7 +181,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 					<div style={{ maxWidth: 400 }}>
 						{ value4ValueOnboarded === true &&
 							<div className="button" onClick={restartOnboarding}>
-								Reset the value for value tutorial
+								Turn on the &quot;Podcast Wallet&quot; tutorial
 							</div>
 						}
 						{ value4ValueOnboarded === false &&
@@ -220,7 +229,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 								</p>
 								<h4>Recommended ways of buying Bitcoin</h4>
 								<p>
-									In the US <a href="https://www.stripe.com" target="_blank">Stripe</a> or Cash App are quite well known and easy.
+									In the US <a href="https://beta.strike.me/" target="_blank">Strike</a> or <a href="https://cash.app/" target="_blank">Cash App</a> are quite well known and easy.
 								</p>
 								<p>
 									In other countries, where Stripe is not available, you can buy Bitcoin on exchanges and move to a 3rd party wallet. Just remember that the wallet need to have Lightning support.
@@ -300,34 +309,41 @@ const WalletModal = ({ shown, onDismiss }) => {
 								}
 								{ invoiceStatus !== 'paid' &&
 									<>
-									<p>
-										To transfer Bitcoin to your Podfriend Wallet you can either scan the QR code, or use the &quot;Lightning invoice address&quot;. Please be aware, that this is not a Bitcoin Address.
-									</p>
-									{ walletInvoiceString !== false &&
-										<>
-
-												<div style={{ textAlign: 'center' }}>
-													<div>
-														<QRCode logoImage={logo} size="320" value={walletInvoiceString} />
-													</div>
-													<div style={{ width: '320px', marginTop: 10, textAlign: 'left', marginLeft: 'auto', marginRight: 'auto' }}>
-														Lightning invoice address
-													</div>
-													<div className={styles.walletInvoiceAddressContainer}>
-														<input className={styles.invoiceInput} value={walletInvoiceString} /> <FaCopy onClick={copyInvoiceString} />
-													</div>
-													<div className={styles.statusText}>
-
-													</div>
+										<p>
+											To transfer Bitcoin to your Podfriend Wallet you can either scan the QR code, or use the &quot;Lightning invoice address&quot;. Please be aware, that this is not a Bitcoin Address.
+										</p>
+										{ walletInvoiceString !== false &&
+											<div style={{ textAlign: 'center' }}>
+												<div>
+													<QRCode logoImage={logo} size="320" value={walletInvoiceString} />
 												</div>
-											}
-										</>
-									}
-									{ walletInvoiceString === false &&
-										<div>
-											Loading...
-										</div>
-									}
+												<div style={{ width: '320px', marginTop: 10, textAlign: 'left', marginLeft: 'auto', marginRight: 'auto' }}>
+													Lightning invoice address
+												</div>
+												<div className={styles.walletInvoiceAddressContainer}>
+													<input className={styles.invoiceInput} value={walletInvoiceString} /> <FaCopy onClick={copyInvoiceString} />
+													<Snackbar
+														anchorOrigin={{
+															vertical: 'bottom',
+															horizontal: 'center',
+														}}
+														open={showCopySuccessMessage}
+														autoHideDuration={3000}
+														onClose={onHideCopySuccessMessage}
+													>
+														<Alert severity="info">Lightning invoice address copied</Alert>
+													</Snackbar>
+												</div>
+												<div className={styles.statusText}>
+
+												</div>
+											</div>
+										}
+										{ walletInvoiceString === false &&
+											<div>
+												Loading...
+											</div>
+										}
 									</>
 								}
 							</div>
