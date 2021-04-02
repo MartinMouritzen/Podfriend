@@ -1,15 +1,5 @@
 .informationModal {
 	text-align: center;
-	.informationImage {
-		max-width: calc(90vw - 40px);
-	}
-	h3 {
-		font-size: 28px;
-		font-weight: bold;
-	}
-	p {
-		font-size: 18px;
-	}
 }
 :global(.informationFooter) {
 	padding: 20px;

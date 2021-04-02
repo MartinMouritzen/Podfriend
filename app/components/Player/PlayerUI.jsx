@@ -22,6 +22,9 @@ const SkipForwardIcon = () => <SVG src={require('podfriend-approot/images/design
 const SkipBackwardIcon = () => <SVG src={require('podfriend-approot/images/design/player/skip-backward.svg')} />;
 const ErrorIcon = () => <SVG src={require('podfriend-approot/images/design/player/error.svg')} />;
 const SearchIcon = () => <SVG src={require('podfriend-approot/images/design/icons/search.svg')} />;
+const BoostIcon = () => <SVG src={require('podfriend-approot/images/design/player/boost.svg')} />;
+
+import Reward from 'react-rewards';
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
@@ -38,7 +41,7 @@ import PodcastFeed from 'podfriend-approot/library/PodcastFeed.js';
 
 import EpisodeChapters from 'podfriend-approot/components/Episode/Chapters/EpisodeChapters.jsx';
 import PodcastSubtitles from 'podfriend-approot/components/Episode/Subtitles/PodcastSubtitles.jsx';
-import { showFullPlayer, showSpeedSettingWindow, showShareWindow, showSleepTimer, hideSleepTimer } from 'podfriend-approot/redux/actions/uiActions';
+import { synchronizeWallet, showFullPlayer, showSpeedSettingWindow, showShareWindow, showSleepTimer, hideSleepTimer } from 'podfriend-approot/redux/actions/uiActions';
 
 import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.jsx';
 
@@ -64,6 +67,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const history = useHistory();
 	const audioElement = useRef(null);
 	const moreIconElement = useRef(null);
+	const rewardElement = useRef(null);
+
 	const [errorRetries,setErrorRetries] = useState(0);
 	const [isVideo,setIsVideo] = useState(false);
 	const [episodeOpen,setEpisodeOpen] = useState(false);
@@ -81,7 +86,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	const [transcriptSearchOpen,setTranscriptSearchOpen] = useState(false);
 	
-
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
 	const showSleepTimerWindow = useSelector((state) => state.ui.showSleepTimerWindow);
 	const value4ValueOnboarded = useSelector((state) => state.settings.value4ValueOnboarded);
@@ -94,6 +99,28 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	const onTranscriptSearchClose = () => {
 		setTranscriptSearchOpen(false);
+	};
+
+	const [boostPending,setBoostPending] = useState(false);
+	const onBoostClick = () => {
+		setBoostPending(true);
+
+		onBoost()
+		.then((status) => {
+			if (status.success === 1) {
+				setBoostPending(false);
+				rewardElement.current.rewardMe();
+				dispatch(synchronizeWallet());
+			}
+			else {
+				setBoostPending(false);
+				console.log(status);
+				rewardElement.current.punishMe();
+			}
+		})
+		.catch((error) => {
+			console.log('Error boosting');
+		});
 	};
 
 	const openEpisode = (event) => {
@@ -422,8 +449,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	return (
 		<>
-			{ value4ValueOnboarded !== true && playingValuePodcast === true &&
-				<Suspense fallback={<>test</>}>
+			{ isLoggedIn === true && value4ValueOnboarded !== true && playingValuePodcast === true &&
+				<Suspense fallback={<></>}>
 					<Value4ValueModal
 					
 					/>
@@ -470,9 +497,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							</>
 						}
 						<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
-							{ fullPlayerOpen &&
-								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} searchOpen={transcriptSearchOpen} onTranscriptSearchClose={onTranscriptSearchClose} />
-							}
+							<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} searchOpen={transcriptSearchOpen} onTranscriptSearchClose={onTranscriptSearchClose} />
 						</div>
 					</div>
 					<div className={styles.playingText}>
@@ -511,7 +536,21 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							{ false && 
 								<div className={styles.chatButton} onClick={toggleChat}><ChatIcon /></div>
 							}
-							{ true &&
+							{ false &&
+								<div className={styles.boostButton} onClick={onBoostClick}>
+									<Reward
+										ref={rewardElement}
+										type='confetti'
+										config={{
+											zIndex: 1000,
+											lifeTime: 800
+										}}
+									>
+										<BoostIcon />
+									</Reward>
+									</div>
+							}
+							{ true && 
 								<div className={styles.chatButton}>&nbsp;</div>
 							}
 							<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>

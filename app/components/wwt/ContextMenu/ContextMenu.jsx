@@ -103,10 +103,10 @@ const ContextMenu = ({ showType = 'auto', position = 'auto', showTrigger, elemen
 }
 const ContextMenuItem = ({ style = {}, icon = null, children, onClick }) => {
 	const Icon = icon;
-	const isLink = children && children.type && children.type.displayName === 'Link' ? true : false;
+	const isLink = children && children.props && children.props.to ? true : false;
 	
 	var innerMenuItem = (
-		<div className={styles.contextMenuItem + ' ' + (isLink ? styles.isLink : '')} style={style} onClick={onClick}>
+		<div className={styles.contextMenuItem + (isLink ? ' ' + styles.isLink : '')} style={style} onClick={onClick}>
 			{children}
 		</div>
 	);

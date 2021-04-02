@@ -15,7 +15,8 @@ import { setConfigOption } from 'podfriend-approot/redux/actions/settingsActions
 
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
-import styles from 'podfriend-approot/components/UI/Layout/InformationModal.scss';
+// import styles from 'podfriend-approot/components/UI/Layout/InformationModal.scss';
+import styles from './Value4ValueModal.scss';
 
 const Value4ValueModal = () => {
 	const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Value4ValueModal = () => {
 				onClose={onClose}
 				shown={shown}
 				text={
-					<div style={{ maxWidth: '600px', padding: '40px' }}>
+					<div className={styles.valueForValueModal} style={{ maxWidth: '600px', padding: '40px' }}>
 						{ section === 1 &&
 							<section className={styles.informationSection}>
 								<img src={ValueInfographic} className={styles.informationImage} />
