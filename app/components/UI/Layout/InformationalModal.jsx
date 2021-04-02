@@ -10,6 +10,7 @@ const InformationalModal = ({ title, text, image, footer, shown, onClose }) => {
 			onClose={onClose}
 			header={image}
 			footer={footer}
+			defaultSnap={({ maxHeight }) => maxHeight - 30}
 		>
 			<div className={styles.informationModal}>
 				{text}
