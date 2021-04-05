@@ -8,8 +8,8 @@ const initialState = {
 	volumeLevel: 1,
 	value4ValueEnabled: false,
 	value4ValueOnboarded: false,
-	defaultBoost: 1000,
-	defaultStreamPerMinuteAmount: 10
+	defaultBoost: 500,
+	defaultStreamPerMinuteAmount: 50
 };
 
 const settingsReducer = (state = initialState, action) => {
