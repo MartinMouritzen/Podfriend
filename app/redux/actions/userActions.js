@@ -39,7 +39,7 @@ export function authTokenReceived(authToken) {
 		payload: authToken
 	}
 }
-export function authenticateUser() {
+export function authenticateUser(preserveLoginForm = false) {
 	return (dispatch,getState) => {
 		var { authToken } = getState().user;
 
@@ -66,6 +66,7 @@ export function authenticateUser() {
 					dispatch(userNotLoggedIn())
 				}
 				else {
+					data.preserveLoginForm = preserveLoginForm;
 					dispatch(userLoggedIn(data))
 				}
 			})

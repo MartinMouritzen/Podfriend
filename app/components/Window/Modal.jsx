@@ -71,7 +71,12 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 		</>
 	);
 
+	const defaultSnapFunction = (maxHeight) => {
+		return maxHeight - 30;
+	};
+
 	if (isReadyToDisplay) {
+
 		return ReactDOM.createPortal(
 			<>
 				<BottomSheet
@@ -81,7 +86,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 					style={{ zIndex: 11 }}
 					header={header}
 					footer={footer}
-					defaultSnap={defaultSnap}
+					defaultSnap={defaultSnap ? defaultSnap : defaultSnapFunction}
 					snapPoints={snapPoints}
 				>
 					<div className="bottomSheet podfriendModal">

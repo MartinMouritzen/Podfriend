@@ -39,8 +39,12 @@ const CurrentlyPlaying = () => {
 	const dispatch = useDispatch();
 	const activePodcast = useSelector(state => state.podcast.activePodcast);
 	const activeEpisode = useSelector(state => state.podcast.activeEpisode);
+
+	const hasPodcast = activePodcast.path !== undefined;
+	const hasEpisode = activeEpisode.guid !== undefined;
+
 	const isPlaying = useSelector(state => state.audio.isPlaying);
-	const [description,setDescription] = useState(activeEpisode ? activeEpisode.description : welcomeText);
+	const [description,setDescription] = useState(hasEpisode ? activeEpisode.description : welcomeText);
 
 	const [progressPercentage,setProgressPercentage] = useState(0);
 
@@ -62,13 +66,13 @@ const CurrentlyPlaying = () => {
 		}
 	},[activeEpisode.id]);
 
-	const headerSubTitle = activePodcast ? 'Continue your' : 'Welcome to your';
-	const headerTitle = activePodcast ? 'Current episode' : 'Podfriend Podcast Player';
-	const episodeTitle = activeEpisode ? activeEpisode.title : 'Nice to meet you!';
-	const podcastTitle = activePodcast ? activePodcast.name : 'Hello';
-	const podcastImage = activeEpisode ? activeEpisode.image : logo;
-	const showBorder = activePodcast ? true : false;
-	const podcastFallbackImage = activePodcast ? (activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image) : logo;
+	const headerSubTitle = hasPodcast ? 'Continue your' : 'Welcome to your';
+	const headerTitle = hasPodcast ? 'Current episode' : 'Podfriend Podcast Player';
+	const episodeTitle = hasEpisode ? activeEpisode.title : 'Nice to meet you!';
+	const podcastTitle = hasPodcast ? activePodcast.name : 'Hello';
+	const podcastImage = hasEpisode ? activeEpisode.image : logo;
+	const showBorder = hasPodcast ? true : false;
+	const podcastFallbackImage = hasPodcast ? (activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image) : logo;
 
 	return (
 		<div className='section waveSection'>
@@ -83,7 +87,7 @@ const CurrentlyPlaying = () => {
 									podcast: activePodcast
 								}
 							}}
-							style={{ pointerEvents: activeEpisode === false ? 'none' : 'auto' }}
+							style={{ pointerEvents: hasEpisode === false ? 'none' : 'auto' }}
 						>
 							<PodcastImage
 								imageErrorText={activePodcast.name}
@@ -97,7 +101,7 @@ const CurrentlyPlaying = () => {
 								loadingComponent={() => { return ( <LoadingPodcastCover /> ) }}
 							/>
 						</Link>
-						{ activeEpisode !== false &&
+						{ hasEpisode !== false &&
 							<div>
 								<div className='progressBar'>
 									<div className='progressBarInner' style={{ width: progressPercentage + '%' }} />
@@ -119,7 +123,7 @@ const CurrentlyPlaying = () => {
 							}
 						}}
 						className='sectionContentSubTitle'
-						style={{ pointerEvents: activeEpisode === false ? 'none' : 'auto' }}
+						style={{ pointerEvents: hasEpisode === false ? 'none' : 'auto' }}
 					>
 						{podcastTitle}
 					</Link>
@@ -131,16 +135,16 @@ const CurrentlyPlaying = () => {
 							}
 						}}
 						className='sectionContentTitle'
-						style={{ pointerEvents: activeEpisode === false ? 'none' : 'auto' }}
+						style={{ pointerEvents: hasEpisode === false ? 'none' : 'auto' }}
 					>
 						{episodeTitle}
 					</Link>
 					<div className='sectionBodyContainer' style={{ marginBottom: '15px' }}>
 						<div className='sectionBody' dangerouslySetInnerHTML={{__html: description }} />
-						{ activeEpisode !== false && isPlaying &&
+						{ hasEpisode !== false && isPlaying &&
 							<div className={'button ' + styles.playButton} onClick={() => { dispatch(audioPaused()); }}><PauseIcon /> Pause episode</div>
 						}
-						{ activeEpisode !== false && !isPlaying &&
+						{ hasEpisode !== false && !isPlaying &&
 							<div className={'button ' + styles.playButton} onClick={() => { dispatch(audioPlayRequested()); }}><PlayIcon /> Continue episode</div>
 						}
 					</div>
@@ -187,7 +191,7 @@ const Welcome = () => {
 
 			<LatestEpisodes />
 
-			{ activePodcast !== false &&
+			{ activePodcast.path !== undefined &&
 				<LatestVisitedPodcasts />
 			}
 

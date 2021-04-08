@@ -192,10 +192,10 @@ export function synchronizeWallet() {
 		});
 	};
 }
-export function boostPodcast(valueBlock,boostAmount,overrideDestinations = false) {
-	return sendValue(valueBlock,boostAmount,overrideDestinations);
+export function boostPodcast(valueBlock,boostAmount,overrideDestinations = false,podcastData = false) {
+	return sendValue(valueBlock,boostAmount,overrideDestinations,'boost',podcastData);
 }
-export function sendValue(valueBlock,totalAmount,overrideDestinations = false) {
+export function sendValue(valueBlock,totalAmount,overrideDestinations = false,actionType = 'stream',podcastData = false) {
 	return (dispatch,getState) => {
 		var recognizedMethod = false;
 		var validDestinations = false;
@@ -212,15 +212,38 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false) {
 			console.log(valueBlock);
 
 			var { authToken } = getState().user;
+			var { activePodcast, activeEpisode } = getState().podcast;
+
+			// console.log(activePodcast);
+			// console.log(activeEpisode);
+
+			var debug = false;
+			var async = true;
+			if (debug) {
+				async = false;
+				totalAmount = 10;
+			}
 
 			const valueData = {
 				valueType: valueBlock.model.type,
 				valueMethod: valueBlock.model.method,
 				amount: totalAmount,
-				destinations: valueBlock.destinations
+				destinations: valueBlock.destinations,
+				actionType: actionType,
+				async: async,
+				podcastInfo: {
+					name: activePodcast.name,
+					path: activePodcast.path,
+					feedUrl: activePodcast.feedUrl,
+					feedId: activePodcast.id,
+					episodeGuid: activeEpisode.guid,
+					episodeId: activeEpisode.id,
+					currentTime: activeEpisode.currentTime
+				}
 			};
+			// console.log(valueData);
 
-			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/';
+			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/?debug=true';
 			return fetch(walletInvoiceURL, {
 				method: "POST",
 				headers: {

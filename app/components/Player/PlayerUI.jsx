@@ -427,7 +427,9 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			}
 			*/
 		}
-		fetchEpisodeData();
+		if (activeEpisode && activeEpisode.id) {
+			fetchEpisodeData();
+		}
 	},[activeEpisode.id]);
 
 	const showEpisodePane = () => {
@@ -446,6 +448,14 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const generateTimeHash = () => {
 		return '#t=' + Math.round(activeEpisode.currentTime ? activeEpisode.currentTime : 0);
 	};
+
+	if (activeEpisode.guid === undefined) {
+		return (
+			<div className={styles.noEpisodePlayer + ' ' + styles.episodeClosed + ' ' + styles.player}>
+				When you start a podcast it will appear here.
+			</div>
+		);
+	}
 
 	return (
 		<>
@@ -480,7 +490,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 								{ chapters !== false &&
 									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
 								}
-								{ activeEpisode !== false &&
+								{ activeEpisode &&
 									<>
 									<PodcastImage
 										podcastPath={activePodcast.path}

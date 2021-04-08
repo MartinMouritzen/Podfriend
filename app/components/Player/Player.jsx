@@ -66,8 +66,6 @@ class Player extends Component {
 			boostAmount: this.props.defaultBoost,
 			streamPerMinuteAmount: this.props.defaultStreamPerMinuteAmount
 		};
-		console.log(this.props.defaultBoost);
-		console.log(this.props.defaultStreamPerMinute);
 		this.onCanPlay = this.onCanPlay.bind(this);
 		this.onBuffering = this.onBuffering.bind(this);
 		
@@ -100,16 +98,18 @@ class Player extends Component {
 	*/
 	onAudioElementReady() {
 		this.props.audioController.setPlaybackRate(this.props.playbackSpeed);
-		this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
+		if (this.props.activeEpisode.guid !== undefined) {
+			this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
+		}
 	}
 	/**
 	*
 	*/
 	componentDidMount() {
-		if (this.props.activePodcast && this.props.activeEpisode) {
+		if (this.props.activePodcast && this.props.activeEpisode && this.props.activeEpisode.guid !== undefined) {
 			this.props.audioController.setEpisode(this.props.activePodcast,this.props.activeEpisode);
 		}
-		if (this.props.activeEpisode && this.props.activeEpisode.currentTime) {
+		if (this.props.activeEpisode && this.props.activeEpisode.currentTime && this.props.activeEpisode.guid !== undefined) {
 			this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
 		}
 		this.props.audioController.setPlaybackRate(this.props.playbackSpeed);

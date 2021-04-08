@@ -40,14 +40,19 @@ class SubscribeButton extends Component {
 				isSubscribed = true;
 			}
 		});
-		
-		return (
-			<SubscribeButtonUI
-				isSubscribed={isSubscribed}
-				subscribeToPodcast={this.__subscribeToPodcast}
-				unsubscribeToPodcast={this.__unsubscribeToPodcast}
-			/>
-		);
+
+		if (this.props.selectedPodcast.path) {
+			return (
+				<SubscribeButtonUI
+					isSubscribed={isSubscribed}
+					subscribeToPodcast={this.__subscribeToPodcast}
+					unsubscribeToPodcast={this.__unsubscribeToPodcast}
+				/>
+			);
+		}
+		else {
+			return null;
+		}
 	}
 }
 

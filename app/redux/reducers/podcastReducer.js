@@ -422,7 +422,7 @@ const podcastReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === PODCAST_SYNC_COMPLETE) {
-		console.log('PODCAST_SYNC_COMPLETE');
+		// console.log('PODCAST_SYNC_COMPLETE');
 		// console.log(action.payload);
 
 		var subscribedPodcasts = [...state.subscribedPodcasts];
