@@ -41,7 +41,7 @@ class SubscribeButton extends Component {
 			}
 		});
 
-		if (this.props.selectedPodcast.path) {
+		if (this.props.selectedPodcast && this.props.selectedPodcast.path) {
 			return (
 				<SubscribeButtonUI
 					isSubscribed={isSubscribed}

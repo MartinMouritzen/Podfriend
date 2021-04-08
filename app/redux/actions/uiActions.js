@@ -243,7 +243,7 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 			};
 			// console.log(valueData);
 
-			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/?debug=true';
+			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/' + (debug ? '?debug=true' : '');
 			return fetch(walletInvoiceURL, {
 				method: "POST",
 				headers: {
