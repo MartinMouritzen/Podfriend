@@ -57,7 +57,7 @@ class SignInForm extends Component {
 		return (
 			<div className={styles.loginForm}>
 				<h2 style={{ display: 'none' }}>Sign in or register with</h2>
-				<h2>Sign in</h2>
+				<h2>Sign in or register</h2>
 				<div style={{ display: 'none' }}>
 					<div className={styles.socialMediaButton}>
 						<img src={FacebookLogo} />

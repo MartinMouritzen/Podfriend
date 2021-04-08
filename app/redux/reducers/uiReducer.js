@@ -67,9 +67,16 @@ const uiReducer = (state = initialState, action) => {
 		});
 	}
 	else if (action.type === UI_HIDE_LOGIN || action.type === USER_LOGGED_IN) {
-		return Object.assign({}, state, {
-			showLogin: false
-		});
+		if (action.payload.preserveLoginForm) {
+			return Object.assign({}, state, {
+				showLogin: true
+			});
+		}
+		else {
+			return Object.assign({}, state, {
+				showLogin: false
+			});
+		}
 	}
 	else if (action.type === UI_SHOW_FULLPLAYER) {
 		return Object.assign({}, state, {

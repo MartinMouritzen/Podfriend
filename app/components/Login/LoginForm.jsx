@@ -19,7 +19,7 @@ import GoogleLogo from './../../images/social/google-logo.png';
 function mapDispatchToProps(dispatch) {
 	return {
 		authTokenReceived: (token) => { dispatch(authTokenReceived(token)); },
-		authenticateUser: () => { dispatch(authenticateUser()); }
+		authenticateUser: (preserveLoginForm) => { dispatch(authenticateUser(preserveLoginForm)); }
 	};
 }
 
@@ -71,9 +71,12 @@ class LoginForm extends Component {
 	/**
 	*
 	*/
-	onUserLogin(token) {
+	onUserLogin(token,fromCreateForm = false) {
+		console.log('token: ' + token);
 		this.props.authTokenReceived(token);
-		this.props.authenticateUser();
+		setTimeout(() => {
+			this.props.authenticateUser(fromCreateForm);
+		},100);
 	}
 	/**
 	*
@@ -133,7 +136,7 @@ class LoginForm extends Component {
 		});
 	}
 	onCreateUser(username,password,email) {
-		console.log('HELL YEAH - Tid til at sende en email man skal klikke på. Så checker vi på et endpoint om man har trykket på linket. (Kan man fortsætte anonymt imellemtiden?)');
+		// console.log('HELL YEAH - Tid til at sende en email man skal klikke på. Så checker vi på et endpoint om man har trykket på linket. (Kan man fortsætte anonymt imellemtiden?)');
 		this.setState({
 			creatingAccount: true,
 			createdAccount: false,
@@ -141,13 +144,17 @@ class LoginForm extends Component {
 		},() => {
 			this.__createUser(username,password,email)
 			.then((response) => {
-			setTimeout(() => {
-				this.setState({
-					creatingAccount: true,
-					createdAccount: true,
-					checkingEmail: false,
-				});
-			},100);
+				setTimeout(() => {
+					this.setState({
+						creatingAccount: true,
+						createdAccount: true,
+						checkingEmail: false,
+					},() => {
+						console.log(response);
+						// Let's log the user in now they've created an account
+						this.onUserLogin(response.authToken,true);	
+					});
+				},100);
 			});
 		});
 	}
@@ -175,6 +182,7 @@ class LoginForm extends Component {
 			}
 			else {
 				console.log(data);
+				return data;
 			}
 		})
 		.catch((error) => {
