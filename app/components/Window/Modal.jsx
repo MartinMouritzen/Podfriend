@@ -71,7 +71,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 		</>
 	);
 
-	const defaultSnapFunction = (maxHeight) => {
+	const defaultSnapFunction = ({ maxHeight }) => {
 		return maxHeight - 30;
 	};
 
