@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Modal from 'podfriend-approot/components/Window/Modal';
 
@@ -42,18 +42,15 @@ const ShareModal = ({ onClose }) => {
 	};
 
 	return (
-		<Modal onClose={onClose} title='Share episode'>
+		<Modal onClose={onClose} header={<h1>Share episode</h1>}>
 			<div className={'modalPage ' + styles.shareModal}>
 				<div>
 					<div className={styles.episodeTitle}>{activeEpisode.title}</div>
 					<div className={styles.instructionLabel}>Link: </div>
 					<div><input readonly className={styles.shareUrlInput} type="text" value={shareUrl} /></div>
 					<div>
-						<input type="checkbox" checked={includeTime} onClick={changeIncludeTime} /> Start at <input type="text" value={timeStamp} onChange={changeTimeStamp} className={styles.timeStampInput} name={activeEpisode.currentTime} />
+						<input type="checkbox" checked={includeTime} onClick={changeIncludeTime} className={styles.timeCheckbox} /> Start at <input type="text" value={timeStamp} onChange={changeTimeStamp} className={styles.timeStampInput} name={activeEpisode.currentTime} />
 					</div>
-					<div className={styles.instructionLabel}>Easy text to copy & paste: </div>
-					<textarea value={shareMessage} />
-
 					<ShareButtons
 						shareUrl={shareUrl}
 						podcastTitle={activePodcast.name}
@@ -63,6 +60,9 @@ const ShareModal = ({ onClose }) => {
 						episodeDescription={activeEpisode.description}
 						timeStamp={timeStamp}
 					/>
+
+					<div className={styles.instructionLabel}>Easy text to copy & paste: </div>
+					<textarea value={shareMessage} />
 				</div>
 			</div>
 		</Modal>

@@ -24,13 +24,14 @@ const PodcastPersons = ({ persons }) => {
 	return (
 		<div className={styles.persons}>
 			{ persons.map && persons.map((person) => {
+				const personName = person.name ? person.name : person['#text'];
 				return (
-					<div key={person.name} className={styles.person} onClick={() => { goToWebsite(person.href); }}>
+					<div key={personName} className={styles.person} onClick={() => { goToWebsite(person.href); }}>
 						{ person.img && 
 							<img src={person.img} className={styles.photo} />
 						}
 						<div className={styles.name}>
-							{person.name ? person.name : person['#text'] }
+							{personName}
 						</div>
 						{ person.role &&
 							<div className={styles.role}>

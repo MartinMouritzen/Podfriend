@@ -20,6 +20,8 @@ import WalletError from 'podfriend-approot/images/design/onboarding/value4value-
 
 import Reward from 'react-rewards';
 
+import CreditCard from './CreditCard.jsx';
+
 import Modal from 'podfriend-approot/components/Window/Modal';
 
 import styles from './WalletModal.scss';
@@ -201,13 +203,10 @@ const WalletModal = ({ shown, onDismiss }) => {
 						{ status === false &&
 							<>
 								<div style={{ marginBottom: 20 }}>
-									Your current balance is: {(walletBalance).toLocaleString()} Satoshis.
+									<CreditCard walletBalance={walletBalance} />
 								</div>
 								{ walletBalance === 0 &&
 									<div>
-										<div style={{ textAlign: 'center' }}>
-											<img src={EmptyWallet} style={{ width: '200px' }} />
-										</div>
 										<p>
 											Before you can start supporting podcasts you will have to put some bitcoins in your wallet. Don't worry we will guide you how best to do it, if you are not familiar with the process.
 										</p>

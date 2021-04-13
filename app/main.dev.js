@@ -13,7 +13,7 @@
  
 console.log('Starting Podfriend in environment: ' + process.env.NODE_ENV);
 
-import { app, screen, BrowserWindow, globalShortcut, ipcMain, Tray, Menu } from 'electron';
+import { app, shell, screen, BrowserWindow, globalShortcut, ipcMain, Tray, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
@@ -275,6 +275,12 @@ app.on('ready', async () => {
 		console.log('Failed to load url!');
 		console.log(event);
 		mainWindow.loadURL(`file://${__dirname}/app.html`);
+	});
+
+	mainWindow.webContents.on('new-window',(e, url) => {
+		// let newWindow = new BrowserWindow({ width: 800, height: 600 });
+		// newWindow.loadURL(url);
+		shell.openExternal(url);
 	});
 	
 	mainWindow.on('app-command',(e,cmd) => {

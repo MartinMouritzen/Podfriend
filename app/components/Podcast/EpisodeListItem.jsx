@@ -14,21 +14,26 @@ import { IonList, IonIcon, IonItem, IonLabel, IonInput, IonToggle, IonRadio, Ion
 import { archive } from 'ionicons/icons';
 */
 
+import { useDispatch } from 'react-redux';
+
 import { format, distanceInWordsToNow } from 'date-fns';
 import DOMPurify from 'dompurify';
 
-import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
+import SVG from 'react-inlinesvg';
+const ShareIcon = () => <SVG src={require('podfriend-approot/images/design/player/share.svg')} />;
+
+import { showShareWindow } from 'podfriend-approot/redux/actions/uiActions';
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
-import ShareButtons from './ShareButtons.jsx';
+// import ShareButtons from './ShareButtons.jsx';
 
 import styles from './EpisodeList.css';
 
 const EpisodeListItem = ({ style, id, title, description, episodeImage, duration, currentTime, podcast, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const [episodeTitle,setEpisodeTitle] = useState(title);
 	const [episodeDescription,setEpisodeDescription] = useState(description);
 
@@ -70,60 +75,55 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 		// dispatch(showFullPlayer(true));
 	};
 
+	const onShareEpisode = (event) => {
+		event.stopPropagation();
+		dispatch(showShareWindow());
+	};
+
 	return (
 		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay} style={style}>
-			{/*
-				<div className={styles.play}>
-					<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={onPlay}>
-						<FaPlay size="18px" />
-					</div>
-					<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>
-						<FaPause size="18px" />
-					</div>
-					<div className={[styles.checkIcon,styles.icon].join(' ')}>
-						<FaCheck size="18px"  />
-					</div>
-				</div>
-			*/}
-			<PodcastImage
-				podcastPath={podcastPath}
-				width={120}
-				height={120}
-				imageErrorText={title}
-				src={episodeImage}
-				fallBackImage={podcast.artworkUrl600}
-				className={styles.cover}
-				asBackground={true}
-			/>
-			<div className={styles.episodeInfo}>
-				<div className={styles.titleAndDescription}>
-					<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
-					{ episodeType && episodeType != 'full' && episodeType !== '' &&
-						<span type={episodeType} className={styles.episodeType}>{episodeType}</span>
-					}
-					<div className={styles.date}>
-						{format(date,'MMM D, YYYY')}
-						<span className={styles.agoText}>({distanceInWordsToNow(date)} ago)</span>
-					</div>
-					<div className={styles.description} dangerouslySetInnerHTML={{__html:episodeDescription}} />
-				</div>
-				<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(duration))}>
-					<div className={styles.progressBarOuter}>
-						<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
-					</div>
-					
-					<span className={styles.duration}>
-						{ minutesLeft == totalMinutes && 
-							<span>{totalMinutes} minutes</span>
+			<div className={styles.episodeInner}>
+				<PodcastImage
+					podcastPath={podcastPath}
+					width={120}
+					height={120}
+					imageErrorText={title}
+					src={episodeImage}
+					fallBackImage={podcast.artworkUrl600}
+					className={styles.cover}
+					asBackground={true}
+				/>
+				<div className={styles.episodeInfo}>
+					<div className={styles.titleAndDescription}>
+						<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
+						{ episodeType && episodeType != 'full' && episodeType !== '' &&
+							<span type={episodeType} className={styles.episodeType}>{episodeType}</span>
 						}
-						{ minutesLeft != totalMinutes && 
-							<span>{Math.round((duration - currentTime) / 60)} of {totalMinutes} minutes left</span>
-						}
+						<div className={styles.date}>
+							{format(date,'MMM D, YYYY')}
+							<span className={styles.agoText}>({distanceInWordsToNow(date)} ago)</span>
+						</div>
+						<div className={styles.description} dangerouslySetInnerHTML={{__html:episodeDescription}} />
+					</div>
+					<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(duration))}>
+						<div className={styles.progressBarOuter}>
+							<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
+						</div>
+						
+						<span className={styles.duration}>
+							{ minutesLeft == totalMinutes && 
+								<span>{totalMinutes} minutes</span>
+							}
+							{ minutesLeft != totalMinutes && 
+								<span>{Math.round((duration - currentTime) / 60)} of {totalMinutes} minutes left</span>
+							}
+						</span>
 					</span>
-				</span>
-				<div className={styles.ShareButtons}>
-					<ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} />
 				</div>
+			</div>
+			<div className={styles.extraButtons}>
+				<button onClick={onShareEpisode} style={{ width: '150px', marginTop: '5px', marginLeft: '20px' }}><ShareIcon /> Share</button>
+				{ /* <ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} /> */ } 
 			</div>
 		</div>
 	);

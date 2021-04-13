@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import ShareF from './../../images/social/share-f.jpg';
 import ShareT from './../../images/social/share-t.jpg';
 
+import { Snackbar } from '@material-ui/core/';
+import { Alert } from  '@material-ui/lab/';
+
 import styles from './ShareButtons.css';
 
 const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescription = false, episodeId, timeStamp = false, shareUrl = false}) => {
+	const [showCopySuccessMessage,setShowCopySuccessMessage] = useState(false);
+
 	const shareTitle = 'Check out this episode: ' + episodeTitle + ', from the podcast ' + podcastTitle;
 	const shareTitleEncoded = encodeURI(shareTitle).replace('#','%23','g');
 
@@ -17,10 +22,11 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 
 		var dummy = document.createElement("textarea");
 		document.body.appendChild(dummy);
-		dummy.value = shareTitle + ': ' + shareURL;
+		dummy.value = shareURL;
 		dummy.select();
 		document.execCommand("copy");
 		document.body.removeChild(dummy);
+		setShowCopySuccessMessage(true);
 	};
 
 	const navigatorShare = () => {
@@ -31,12 +37,17 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 		});
 	};
 
+	
+	const onHideCopySuccessMessage = () => {
+		setShowCopySuccessMessage(false);
+	};
+
 	return (
 		<div className={styles.shareButtons}>
 			<a href={'https://twitter.com/intent/tweet?text=' + shareTitleEncoded + '&url=' + shareURLEncoded} target="_blank" className={styles.shareButton} onClick={(event) => { event.stopPropagation(); }}>
 			<img src={ShareT} width="200" height="60" alt="Share on Twitter" /></a>
 			&nbsp;
-			{ navigator.share &&
+			{ navigator.share && typeof window.process !== 'object' &&
 				<>
 					<div className={styles.clipBoardButton} onClick={(event) => { event.stopPropagation(); event.preventDefault(); navigatorShare(); }}>
 						Share
@@ -45,8 +56,19 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 				</>
 			}
 			<div className={styles.clipBoardButton} onClick={copyToClipBoard}>
-				Copy
+				Copy link
 			</div>
+			<Snackbar
+				anchorOrigin={{
+					vertical: 'bottom',
+					horizontal: 'center',
+				}}
+				open={showCopySuccessMessage}
+				autoHideDuration={3000}
+				onClose={onHideCopySuccessMessage}
+			>
+				<Alert severity="info">Lightning invoice address copied</Alert>
+			</Snackbar>
 		</div>
 	);
 	/*
