@@ -38,13 +38,15 @@ ion-item-option {
 }
 .episode, .episodePlaying {
 	min-height: 50px;
-	display: flex;
 	flex: 1;
 	background-color: #FFFFFF;
 	transition: all 1s;
 	border-bottom: 2px solid #EEEEEE;
 
 	content-visibility: auto;
+}
+.episodeInner {
+	display: flex;
 }
 @media (any-hover: hover) {
 	.episode:hover {
@@ -59,12 +61,14 @@ ion-item-option {
 	/* border: 1px solid #bdd7ef; */
 	background-color: #0176e5 !important;
 }
-.ShareButtons {
+.extraButtons {
 	height: 0px;
 	overflow: hidden;
 	transition: all 0.4s;
+
+	background-color: var(--primary-color-dark);
 }
-.episodePlaying .ShareButtons {
+.episodePlaying .extraButtons {
 	height: 60px;
 }
 .episodeInfo {
@@ -330,7 +334,7 @@ ion-item-option {
 	color: #FFFFFF;
 	max-height: 250px;
 	display: -webkit-box;
-	-webkit-line-clamp: 16;
+	-webkit-line-clamp: 10;
 	-webkit-box-orient: vertical; 
 	text-overflow: ellipsis;
 	overflow: hidden;

@@ -30,10 +30,26 @@
 	background-color: #EEEEEE;
 	border-radius: 5px;
 }
+.timeCheckbox {
+	background-color: #EEEEEE;
+
+	width: 25px;
+	height: 25px;
+	position: relative;
+	top: 6px;
+
+	border: 1px solid #000000;
+	border-radius: 10px;
+}
+.timeCheckbox:checked {
+
+}
 .timeStampInput {
+	text-align: center;
 	width: 80px;
 	padding: 10px;
 	font-size: 14px;
 	border-width: 0px;
-	border-bottom: 1px solid #000000;
+	border-radius: 5px;
+	background-color: #EEEEEE;
 }
