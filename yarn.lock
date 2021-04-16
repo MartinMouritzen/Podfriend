@@ -1252,6 +1252,20 @@
   dependencies:
     fast-deep-equal "^3.1.3"
 
+"@ionic-native/core@^5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.32.0.tgz#7cca1157ef7ac2de480d58ae6baa32cd2122adb8"
+  integrity sha512-4/+HaZniaMyr/fSobTAflKkrgDFvrzK+eZKk3hxalyvg00FQFmT8lu0gt5fQwiHfjn970FOaIh5USJqTwpplbQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/media@^5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/media/-/media-5.32.0.tgz#ab7f90dc0ed896b3ca666fad71cde389d281e85a"
+  integrity sha512-CeB8LpHtu5uwbIYMGrtNnsmsP6X4SnfuAtstmwB3pp00l/75V4VM/7j+C8kgGNf9TpHmOB6UL8OHI7G13kpivA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/core@5.5.3":
   version "5.5.3"
   resolved "https://registry.yarnpkg.com/@ionic/core/-/core-5.5.3.tgz#1ce3e15a30dd754196162a4d37267311e6c49841"
@@ -1607,6 +1621,11 @@
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/cordova@latest":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
+  integrity sha1-6nrd907Ow9dimCegw54smt3HPQQ=
 
 "@types/debug@^4.1.5":
   version "4.1.5"
@@ -4134,6 +4153,21 @@ copy-webpack-plugin@^5.0.4:
     schema-utils "^1.0.0"
     serialize-javascript "^2.1.2"
     webpack-log "^2.0.0"
+
+cordova-plugin-file@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
+  integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
+
+cordova-plugin-media@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-media/-/cordova-plugin-media-5.0.3.tgz#366188bd4f8472651c1e8304be649af6333b0e36"
+  integrity sha512-UQPFlpk1zL4BY44zGi8RVmYCvcKBCN4Dyf8ovxqGYCC8zR1yhbTRWYDdO9vJdERwbfgWV7+z7FMWiSUfqWm9bQ==
+
+cordova-plugin-music-controls2@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-music-controls2/-/cordova-plugin-music-controls2-3.0.5.tgz#20066d08101428713d77643d03a763e20aa396ac"
+  integrity sha512-vg6flAXsTwveXZ27V/IxJ5pK8GDoR2HZ7Stjwx+FyJQAsyAmuqThGs9j8vPKuCrhABpXNW/Oqpq2VnNSybitcA==
 
 cordova-res@^0.15.3:
   version "0.15.3"

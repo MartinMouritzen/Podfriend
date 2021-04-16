@@ -14,6 +14,13 @@ import Events from './library/Events.js';
 import WebContainer from './components/Window/WebContainer';
 
 import ConfigFile from './podfriend.config.js';
+/*
+import { getPlatforms } from '@ionic/react';
+
+var platforms = getPlatforms();
+console.log(platforms);
+console.error(platforms);
+*/
 
 const environment = process.env.NODE_ENV || 'development';
 
@@ -26,11 +33,12 @@ window.podfriend.config = config;
 
 window.Events = Events;
 
-import AudioController from './library/AudioController.js';
+import AudioController from './library/AudioController/WebAudioController.js';
 
 const audioController = new AudioController();
 audioController.startService();
 audioController.init();
+
 
 /*
 history.listen((location) => {

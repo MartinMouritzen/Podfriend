@@ -52,7 +52,6 @@ import AudioSpeedSettingModal from 'podfriend-approot/components/Player/AudioSpe
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css'
 
-
 /* Core CSS required for Ionic components to work properly */
 // import '@ionic/react/css/core.css';
 
