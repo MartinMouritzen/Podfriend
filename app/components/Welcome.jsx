@@ -32,7 +32,7 @@ const LoadingPodcastCover = () => {
 	);
 };
 
-const welcomeText = 'I am so happy you are here! Let\'s get you started listening.<br /><br />You can search for a podcast in the search field in the top, go to Podfrndr to find random podcasts or find a trending podcast below!';
+const welcomeText = 'I\'m so happy you are here! Let\'s get you started listening.<br /><br />You can search for a podcast in the search field in the top, go to Podfrndr to find random podcasts or find a trending podcast below!';
 
 
 const CurrentlyPlaying = () => {
