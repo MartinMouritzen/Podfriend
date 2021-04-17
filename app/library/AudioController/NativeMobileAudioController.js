@@ -160,30 +160,23 @@ class NativeMobileAudioController extends AudioController {
 		this.media = Media.create(episode.url);
 
 		this.musicControls.create({
-			track			 : episode.title,		// optional, default : ''
-			artist			: podcast.author,						// optional, default : ''
-			album			 : podcast.name,		 // optional, default: ''
-			cover			 : coverUrl,		// optional, default : nothing
-			// cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
-			//			 or a remote url ('http://...', 'https://...', 'ftp://...')
-			isPlaying	 : true,							// optional, default : true
-			dismissable : true,							// optional, default : false
-
-			// hide previous/next/close buttons:
-			hasPrev	 : true,		// show previous button, optional, default: true
-			hasNext	 : true,		// show next button, optional, default: true
-			hasClose	: true,		// show close button, optional, default: false
+			track: episode.title,
+			artist: podcast.author,
+			album: podcast.name,
+			cover: coverUrl,
+			isPlaying: true,
+			dismissable: true,
+			hasPrev: true,
+			hasNext: true,
+			hasClose: true,
 			// iOS only, optional
-			duration : this.getDuration(), // optional, default: 0
-			elapsed : this.getCurrentTime(), // optional, default: 0
-			hasSkipForward : true, //optional, default: false. true value overrides hasNext.
-			hasSkipBackward : true, //optional, default: false. true value overrides hasPrev.
-			skipForwardInterval : 15, //optional. default: 0.
-			skipBackwardInterval : 15, //optional. default: 0.
-			hasScrubbing : false, //optional. default to false. Enable scrubbing from control center progress bar 
-
-			// Android only, optional
-			// text displayed in the status bar when the notification (and the ticker) are updated
+			duration: this.getDuration(),
+			elapsed: this.getCurrentTime(),
+			hasSkipForward: true, // true value overrides hasNext.
+			hasSkipBackward: true, // true value overrides hasPrev.
+			skipForwardInterval : 15,
+			skipBackwardInterval : 15,
+			hasScrubbing : true,
 			ticker: 'Now playing ' + episode.title,
 		}, () => {
 			console.log('MusicControls success!');
@@ -191,7 +184,9 @@ class NativeMobileAudioController extends AudioController {
 			console.log('MusicControls error!');
 		});
 
-		this.musicControls.subscribe().subscribe((action) => {
+		this.musicControls
+		// .subscribe()
+		.subscribe((action) => {
 			const message = JSON.parse(action).message;
 			
 			switch(message) {

@@ -6,12 +6,12 @@ import styles from './CreditCard.scss';
 /**
 Your current balance is: {(walletBalance).toLocaleString()} Satoshis.
 */
-const CreditCard = ({ walletBalance }) => {
+const CreditCard = ({ walletBalance, userName }) => {
 	return (
 		<div className={styles.card}>
 			<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
-			<div className={styles.bankName} title="PodBank">PodFriend</div>
-			<a href="https://lnpay.co" target="_blank" className={styles.poweredBy}>lnpay.co</a>
+			<div className={styles.bankName}>PodFriend</div>
+			<a className={styles.poweredBy}>{userName}</a>
 			<div className={styles.chip}>
 				<div className={styles.side + ' ' + styles.left}></div>
 				<div className={styles.side + ' ' + styles.right}></div>
