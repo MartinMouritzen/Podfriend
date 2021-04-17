@@ -37,16 +37,30 @@ class AudioController {
 	*
 	*/
 	setSleepTimer(seconds) {
-		
+		clearTimeout(this.sleepTimerId);
+		this.sleepTimerStartedTimeStamp = new Date();
+		this.sleepTimerSeconds = seconds;
+		this.sleepTimerId = setTimeout(() => {
+			this.sleepTimerSeconds = false;
+			this.sleepTimerStartedTimeStamp = false;
+			this.player.pause();
+		},(this.sleepTimerSeconds * 1000));
 	}
 	cancelSleepTimer() {
-		
+		this.sleepTimerStartedTimeStamp = false;
+		this.sleepTimerSeconds = false;
+		clearTimeout(this.sleepTimerId);
 	}
 	/**
 	*
 	*/
 	getRemainingSleepTimerSeconds() {
-		
+		var timeStarted = this.sleepTimerStartedTimeStamp;
+		if (timeStarted) {
+			var dif = (new Date().getTime() - timeStarted.getTime()) / 1000;
+			return this.sleepTimerSeconds - dif
+		}
+		return timeStarted;
 	}
 	/**
 	*
@@ -61,7 +75,10 @@ class AudioController {
 		
 	}
 	retry() {
-		
+		var currentTime = this.getCurrentTime();
+		this.load();
+		this.setCurrentTime(currentTime);
+		this.play();
 	}
 	/**
 	*
@@ -91,16 +108,24 @@ class AudioController {
 		
 	}
 	forward() {
-		
+		if (this.player) {
+			this.player.onForward();
+		}
 	}
 	rewind() {
-		
+		if (this.player) {
+			this.player.onBackward();
+		}
 	}
 	nextTrack() {
-		
+		if (this.player) {
+			this.player.onNextEpisode();
+		}
 	}
 	previousTrack() {
-		
+		if (this.player) {
+			this.player.onPrevEpisode();
+		}
 	}
 	setEpisode(podcast,episode) {
 		

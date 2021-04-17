@@ -22,7 +22,7 @@ window.podfriend.config = config;
 
 window.Events = Events;
 
-import AudioController from './library/AudioController.js';
+import AudioController from './library/AudioController/WebAudioController.js';
 
 const audioController = new AudioController();
 audioController.startService();

@@ -57,35 +57,6 @@ class WebAudioController extends AudioController {
 	/**
 	*
 	*/
-	setSleepTimer(seconds) {
-		clearTimeout(this.sleepTimerId);
-		this.sleepTimerStartedTimeStamp = new Date();
-		this.sleepTimerSeconds = seconds;
-		this.sleepTimerId = setTimeout(() => {
-			this.sleepTimerSeconds = false;
-			this.sleepTimerStartedTimeStamp = false;
-			this.player.pause();
-		},(this.sleepTimerSeconds * 1000));
-	}
-	cancelSleepTimer() {
-		this.sleepTimerStartedTimeStamp = false;
-		this.sleepTimerSeconds = false;
-		clearTimeout(this.sleepTimerId);
-	}
-	/**
-	*
-	*/
-	getRemainingSleepTimerSeconds() {
-		var timeStarted = this.sleepTimerStartedTimeStamp;
-		if (timeStarted) {
-			var dif = (new Date().getTime() - timeStarted.getTime()) / 1000;
-			return this.sleepTimerSeconds - dif
-		}
-		return timeStarted;
-	}
-	/**
-	*
-	*/
 	setPlaybackRate(playbackRate) {
 		if (this.audioElement && this.audioElement.current) {
 			if (!playbackRate || Number.isNaN(playbackRate)) {
@@ -106,12 +77,6 @@ class WebAudioController extends AudioController {
 			this.audioElement.current.currentTime = newTime;
 		}
 		return Promise.resolve(true);
-	}
-	retry() {
-		var currentTime = this.getCurrentTime();
-		this.load();
-		this.setCurrentTime(currentTime);
-		this.play();
 	}
 	/**
 	*
@@ -151,26 +116,6 @@ class WebAudioController extends AudioController {
 	}
 	getVolume() {
 		return this.audioComponent.current.volume;
-	}
-	forward() {
-		if (this.player) {
-			this.player.onForward();
-		}
-	}
-	rewind() {
-		if (this.player) {
-			this.player.onBackward();
-		}
-	}
-	nextTrack() {
-		if (this.player) {
-			this.player.onNextEpisode();
-		}
-	}
-	previousTrack() {
-		if (this.player) {
-			this.player.onPrevEpisode();
-		}
 	}
 	setEpisode(podcast,episode) {
 		const coverPath = 'https://podcastcovers.podfriend.com/' + podcast.path + '/';
