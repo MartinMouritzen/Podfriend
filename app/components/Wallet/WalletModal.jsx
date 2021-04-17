@@ -46,6 +46,8 @@ const WalletModal = ({ shown, onDismiss }) => {
 	const value4ValueEnabled = useSelector((state) => state.settings.value4ValueEnabled);
 	const value4ValueOnboarded = useSelector((state) => state.settings.value4ValueOnboarded);
 
+	const userName = useSelector((state) => state.user.profileData.username);
+
 	const authToken = useSelector((state) => state.user.authToken);
 
 	const rewardElement = useRef(null);
@@ -203,7 +205,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 						{ status === false &&
 							<>
 								<div style={{ marginBottom: 20 }}>
-									<CreditCard walletBalance={walletBalance} />
+									<CreditCard walletBalance={walletBalance} userName={userName} />
 								</div>
 								{ walletBalance === 0 &&
 									<div>
