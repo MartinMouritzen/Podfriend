@@ -29,7 +29,8 @@ window.podfriend.config = config;
 window.Events = Events;
 
 import WebAudioController from './library/AudioController/WebAudioController.js';
-import NativeMobileAudioController from './library/AudioController/NativeMobileAudioController.js';
+// import NativeMobileAudioController from './library/AudioController/NativeMobileAudioController.js';
+import NativeMobileAudioController from './library/AudioController/HybridMobileAudioController.js';
 
 var platforms = getPlatforms();
 

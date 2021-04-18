@@ -195,7 +195,8 @@ const productionConfig = merge.smart(baseConfig, {
 
 	plugins: [
 		new CopyPlugin([
-			{ from: './app/web/assets/', to: path.join(__dirname, '..', 'release/web/') }
+			{ from: './app/web/assets/', to: path.join(__dirname, '..', 'release/web/') },
+			{ from: './app/images/', to: path.join(__dirname, '..', 'release/web/app/images/') }
 		]),
 		/**
 		 * Create global constants which can be configured at compile time.

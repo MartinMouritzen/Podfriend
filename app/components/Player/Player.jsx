@@ -92,6 +92,8 @@ class Player extends Component {
 		this.onBoost = this.onBoost.bind(this);
 		
 		this.props.audioController.player = this;
+		this.props.audioController.onBuffering = this.onBuffering;
+		this.props.audioController.onCanPlay = this.onCanPlay;
 	}
 	/**
 	*
