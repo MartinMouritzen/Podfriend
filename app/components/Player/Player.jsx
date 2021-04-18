@@ -317,9 +317,6 @@ class Player extends Component {
 	*
 	*/
 	onCanPlay(event) {
-		// alert('set time: ' + this.props.activeEpisode.currentTime);
-		// this.setCurrentTime(this.props.activeEpisode.currentTime);
-
 		this.props.audioCanPlay();
 	}
 	/**

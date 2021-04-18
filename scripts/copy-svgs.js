@@ -4,8 +4,8 @@
 
 const fse = require('fs-extra');
 
-const srcDir = __dirname + '\\..\\app\\images';
-const destDir = __dirname + '\\..\\release\\web\\app\\images';
+const srcDir = __dirname + '/../app/images';
+const destDir = __dirname + '/../release/web/app/images';
                               
 // To copy a folder or file  
 
