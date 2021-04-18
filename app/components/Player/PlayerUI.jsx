@@ -473,7 +473,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					onClick={openEpisode}
 				>
 					<div className={styles.coverContainer} onDoubleClick={videoFullscreen}>
-						{ isVideo !== false &&
+						{ audioController.useBrowserAudioElement && isVideo !== false &&
 							<>
 								<div className={styles.fullscreenIcon} onClick={videoFullscreen}><FullScreenIcon /></div>
 								<video {...audioElementProps}>
@@ -483,9 +483,11 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						}
 						{ isVideo === false &&
 							<>
-								<audio {...audioElementProps}>
-									<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
-								</audio>
+								{ audioController.useBrowserAudioElement === true &&
+									<audio {...audioElementProps}>
+										<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
+									</audio>
+								}
 
 								{ chapters !== false &&
 									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />

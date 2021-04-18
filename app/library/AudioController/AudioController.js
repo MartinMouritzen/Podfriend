@@ -1,8 +1,4 @@
 class AudioController {
-	STATE_LOADING = 1;
-	STATE_PLAYING = 2;
-	STATE_PAUSED = 3;
-
 	sleepTimerStartedTimeStamp = false;
 	sleepTimerSeconds = false;
 	sleepTimerId = false;

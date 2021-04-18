@@ -1,3 +1,7 @@
+/***********************************************************************************************
+* This script is needed for the cordova platforms, so the svgs etc. gets copied over
+************************************************************************************************/
+
 const fse = require('fs-extra');
 
 const srcDir = __dirname + '\\..\\app\\images';

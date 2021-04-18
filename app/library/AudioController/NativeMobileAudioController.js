@@ -1,49 +1,34 @@
+// We need to see if https://github.com/Rolamix/cordova-plugin-playlist is a better alternative
 import { Media, MediaObject } from '@ionic-native/media';
 
 import { MusicControls } from '@ionic-native/music-controls';
 
 import AudioController from 'podfriend-approot/library/AudioController/AudioController.js';
 
-/*
-const onDeviceReady = () => {
-	console.log('DEVICE READY');
-	console.log(Media);
-};
-console.log(Media);
-
-var media = Media.create('https://hwcdn.libsyn.com/p/6/0/e/60e240a1beba94de/07_The_Iceberg.mp3?c_id=63603521&cs_id=63603521&destination_id=1171880&expiration=1618437398&hwt=f44cfade617bc2defee8b27b237fd44d');
-console.log(media);
-
-setTimeout(() => {
-	console.log('after 5 secs');
-	media.play();
-	console.log('after media play');
-},5000);
- console.log('after media play init');
-
- media.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
-
-	media.onStatus = (id, msgType, value) => {
-		console.log('media onStatus!!!');
-		console.log(id);
-		console.log(msgType);
-		console.log(value);
-	}
-
- media.onSuccess.subscribe(() => console.log('Action is successful'));
- 
- media.onError.subscribe(error => console.log('Error!', error));
-
-
-document.addEventListener("deviceready", onDeviceReady, false);
-
-console.log('platforms');
-*/
 class NativeMobileAudioController extends AudioController {
+	useBrowserAudioElement = false;
+
+	STATUS_NONE = 0;
+	STATUS_STARTING = 1;
+	STATUS_RUNNING = 2;
+	STATUS_PAUSED = 3;
+	STATUS_STOPPED = 4;
+
+	ERROR_ABORTED = 1;
+	ERROR_NETWORK = 2;
+	ERROR_DECODE = 3;
+	ERROR_SUPPORTED = 4;
+
+	status = 0;
+	error = false;
+
 	constructor() {
 		super();
 		this.musicControls = MusicControls;
 		console.log('NativeMobileAudioController');
+
+
+		this.__onAudioStatusChanged = this.__onAudioStatusChanged.bind(this);
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
@@ -104,6 +89,7 @@ class NativeMobileAudioController extends AudioController {
 		if (!this.media) { return; }
 		this.media.pause();
 		console.log('NativeMobileAudioController:pause');
+		this.musicControls.updateIsPlaying(false);
 		return Promise.resolve(true);
 	}
 	load() {
@@ -116,7 +102,7 @@ class NativeMobileAudioController extends AudioController {
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
 		});
-
+		this.musicControls.updateIsPlaying(true);
 	}
 	setVolume(newVolume) {
 		if (!this.media) { return; }
@@ -157,6 +143,10 @@ class NativeMobileAudioController extends AudioController {
 			this.media.release();
 		}
 
+		if (this.onBuffering) {
+			this.onBuffering();
+		}
+
 		this.media = Media.create(episode.url);
 
 		this.musicControls.create({
@@ -164,7 +154,7 @@ class NativeMobileAudioController extends AudioController {
 			artist: podcast.author,
 			album: podcast.name,
 			cover: coverUrl,
-			isPlaying: true,
+			isPlaying: this.player.props.isPlaying,
 			dismissable: true,
 			hasPrev: true,
 			hasNext: true,
@@ -185,67 +175,121 @@ class NativeMobileAudioController extends AudioController {
 		});
 
 		this.musicControls
-		// .subscribe()
+		.subscribe()
 		.subscribe((action) => {
 			const message = JSON.parse(action).message;
 			
 			switch(message) {
 				case 'music-controls-next':
+					console.log('music-controls-next');
 					this.nextTrack();
 					break;
 				case 'music-controls-previous':
-					this.prevTrack();
+					console.log('music-controls-previous');
+					this.previousTrack();
 					break;
 				case 'music-controls-pause':
+					console.log('music-controls-pause');
 					this.pause();
 					break;
 				case 'music-controls-play':
-					// Do something
+					console.log('music-controls-play');
+					this.play();
 					break;
 				case 'music-controls-destroy':
-					// Do something
+					console.log('music-controls-destroy - the user probably swiped it away!');
 					break;
 		
 				// External controls (iOS only)
 				case 'music-controls-toggle-play-pause' :
-						// Do something
-						break;
+					console.log('music-controls-toggle-play-pause');
+					// if (this.media
+					break;
 				case 'music-controls-seek-to':
+					console.log('music-controls-seek-to');
 					const seekToInSeconds = JSON.parse(action).position;
 					this.musicControls.updateElapsed({
 						elapsed: seekToInSeconds,
 						isPlaying: true
 					});
-					// Do something
 					break;
-					case 'music-controls-skip-forward':
-					// Do something
+				case 'music-controls-skip-forward':
+					console.log('music-controls-skip-forward');
+					this.forward();
 					break;
 				case 'music-controls-skip-backward':
-					// Do something
+					console.log('music-controls-skip-backward');
+					this.rewind();
 					break;
-		
 				// Headset events (Android only)
 				// All media button events are listed below
-				case 'music-controls-media-button' :
+				case 'music-controls-media-button':
+					console.log('music-controls-media-button');
 					// Do something
 					break;
 				case 'music-controls-headset-unplugged':
+					console.log('music-controls-headset-unplugged');
 					// Do something
 					break;
 				case 'music-controls-headset-plugged':
+					console.log('music-controls-headset-plugged');
 					// Do something
 					break;
 				default:
 					break;
 			}
 		});
-		 
-		this.musicControls.listen(); // activates the observable above
-		 
-		this.musicControls.updateIsPlaying(true);
+		this.musicControls.listen();
+
+		this.media.onStatusUpdate.subscribe(this.__onAudioStatusChanged);
+		this.media.onSuccess.subscribe(() => console.log('NativeMobileAudioController success!'));
+		this.media.onError.subscribe((error) => {
+			console.log('Error in NativeMobileAudioController: ');
+			console.log(error);
+		});
+
+		console.log('callback functions: ');
+		console.log(this.onBuffering);
+		console.log(this.onCanPlay);
 
 		return Promise.resolve(true);
+	}
+	/**
+	*
+	*/
+	__onAudioStatusChanged(newStatus) {
+		if (newStatus === this.STATUS_NONE) {
+			console.log('STATUS_NONE');
+			if (this.onBuffering) {
+				this.onBuffering();
+			}
+		}
+		else if (newStatus === this.STATUS_STARTING) {
+			console.log('STATUS_STARTING');
+			if (this.onBuffering) {
+				this.onBuffering();
+			}
+		}
+		else if (newStatus === this.STATUS_RUNNING) {
+			console.log('STATUS_RUNNING');
+			if (this.onCanPlay) {
+				this.onCanPlay();
+			}
+		}
+		else if (newStatus === this.STATUS_PAUSED) {
+			console.log('STATUS_PAUSED');
+			if (this.onCanPlay) {
+				this.onCanPlay();
+			}
+		}
+		else if (newStatus === this.STATUS_STOPPED) {
+			console.log('STATUS_STOPPED');
+			if (this.onCanPlay) {
+				this.onCanPlay();
+			}
+		}
+		console.log('Audio status changed: ' + newStatus);
+		this.status = newStatus;
 	}
 	destroy() {
 		console.log('NativeMobileAudioController:destroy');
