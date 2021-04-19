@@ -335,10 +335,13 @@ const podcastReducer = (state = initialState, action) => {
 			activePodcast.episodes[activeEpisode.episodeIndex].currentTime = action.payload;
 		}
 		catch (exception) {
+			// Seen example where this happens on iphone, where activePodcast.episodes is false
+			/*
 			console.log('exception while setting currentTime on episodes');
 			console.log(exception);
 			console.log(activePodcast);
 			console.log(activeEpisode);
+			*/
 		}
 
 		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);

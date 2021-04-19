@@ -1,5 +1,5 @@
 // We need to see if https://github.com/Rolamix/cordova-plugin-playlist is a better alternative
-import { Media, MediaObject } from '@ionic-native/media';
+import { Media } from '@ionic-native/media';
 
 import { MusicControls } from '@ionic-native/music-controls';
 
@@ -143,8 +143,10 @@ class NativeMobileAudioController extends AudioController {
 			this.media.release();
 		}
 
-		if (this.onBuffering) {
-			this.onBuffering();
+		if (this.onCanPlay) {
+			// Workaround
+			this.onCanPlay();
+			// this.onBuffering();
 		}
 
 		this.media = Media.create(episode.url);
@@ -247,10 +249,6 @@ class NativeMobileAudioController extends AudioController {
 			console.log('Error in NativeMobileAudioController: ');
 			console.log(error);
 		});
-
-		console.log('callback functions: ');
-		console.log(this.onBuffering);
-		console.log(this.onCanPlay);
 
 		return Promise.resolve(true);
 	}

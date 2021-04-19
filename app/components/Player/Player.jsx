@@ -168,7 +168,7 @@ class Player extends Component {
 								currentTime = this.props.activeEpisode.currentTime;
 							}
 						}
-						console.log('setting time: ' + currentTime);
+						// console.log('setting time: ' + currentTime);
 
 						this.props.audioController.setPlaybackRate(this.props.playbackSpeed);
 
@@ -479,7 +479,7 @@ class Player extends Component {
 		
 		if (episode) {
 			if (startFromBeginning) {
-				console.log(episode);
+				// console.log(episode);
 			}
 			this.props.playEpisode(this.props.activePodcast,episode);
 			
