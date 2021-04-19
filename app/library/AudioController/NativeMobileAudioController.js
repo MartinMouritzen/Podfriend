@@ -65,7 +65,7 @@ class NativeMobileAudioController extends AudioController {
 	*/
 	setCurrentTime(newTime) {
 		if (!this.media) { return; }
-		this.media.seekTo(newTime);
+		this.media.seekTo(newTime * 1000);
 		console.log('NativeMobileAudioController:setCurrentTime');
 		return Promise.resolve(true);
 	}
@@ -74,7 +74,7 @@ class NativeMobileAudioController extends AudioController {
 	*/
 	getCurrentTime() {
 		if (!this.media) { return; }
-		this.media.getCurrentPosition();
+		return this.media.getCurrentPosition();
 		console.log('NativeMobileAudioController:getCurrentTime');
 	}
 	/**
@@ -82,7 +82,7 @@ class NativeMobileAudioController extends AudioController {
 	*/
 	getDuration() {
 		if (!this.media) { return; }
-		this.media.getDuration();
+		return this.media.getDuration();
 		console.log('NativeMobileAudioController:getDuration');
 	}
 	pause() {
@@ -213,6 +213,7 @@ class NativeMobileAudioController extends AudioController {
 				case 'music-controls-seek-to':
 					console.log('music-controls-seek-to');
 					const seekToInSeconds = JSON.parse(action).position;
+					console.log('seekToInSeconds: ' + seekToInSeconds);
 					this.musicControls.updateElapsed({
 						elapsed: seekToInSeconds,
 						isPlaying: true
