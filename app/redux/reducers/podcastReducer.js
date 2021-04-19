@@ -336,21 +336,20 @@ const podcastReducer = (state = initialState, action) => {
 		}
 		catch (exception) {
 			// Seen example where this happens on iphone, where activePodcast.episodes is false
-			/*
 			console.log('exception while setting currentTime on episodes');
 			console.log(exception);
 			console.log(activePodcast);
 			console.log(activeEpisode);
-			*/
 		}
+		localForage.setItem('podcast_cache_' + activePodcast.path,activePodcast);
 
-		localForage.setItem('podcast_cache_' + state.activePodcast.path,activePodcast);
-		
 		var selectedPodcast = state.selectedPodcast;
 		if (selectedPodcast && (selectedPodcast.path == activePodcast.path)) {
 			selectedPodcast = Object.assign({}, state.selectedPodcast);
 			selectedPodcast.episodes[activeEpisode.episodeIndex].currentTime = action.payload;
 		}
+
+		
 		
 		return Object.assign({}, state, {
 			activePodcast: activePodcast,

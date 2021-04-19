@@ -22,9 +22,12 @@ class NativeMobileAudioController extends AudioController {
 	status = 0;
 	error = false;
 
+	progress = 0;
+
 	constructor() {
 		super();
 		this.musicControls = MusicControls;
+
 		console.log('NativeMobileAudioController');
 
 
@@ -32,6 +35,8 @@ class NativeMobileAudioController extends AudioController {
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
+
+		this._timer = setInterval(this._updateProgress.bind(this), 1000);
 	}
 	init() {
 		console.log('NativeMobileAudioController:init');
@@ -61,11 +66,29 @@ class NativeMobileAudioController extends AudioController {
 		console.log('NativeMobileAudioController:setPlaybackRate');
 	}
 	/**
+	 * Updates the progress state
+	 * @private
+	 */
+	 async _updateProgress() {
+		try {
+			var currentTime = await this.media.getCurrentPosition();
+			if (currentTime != this.progress) {
+				this.progress = currentTime;
+				this.player.onTimeUpdate();
+			}
+		}
+		catch (exception) {
+			console.error('Exception in _updateProgress');
+			console.error(exception);
+		}
+	}
+	/**
 	*
 	*/
 	setCurrentTime(newTime) {
 		if (!this.media) { return; }
 		this.media.seekTo(newTime * 1000);
+		this.progress = newTime * 1000;
 		console.log('NativeMobileAudioController:setCurrentTime');
 		return Promise.resolve(true);
 	}
@@ -75,7 +98,8 @@ class NativeMobileAudioController extends AudioController {
 	getCurrentTime() {
 		if (!this.media) { return; }
 		console.log('NativeMobileAudioController:getCurrentTime');
-		return this.media.getCurrentPosition();
+		// return this.media.getCurrentPosition();
+		return this.progress;
 	}
 	/**
 	*
