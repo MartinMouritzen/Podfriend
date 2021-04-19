@@ -339,7 +339,10 @@ const podcastReducer = (state = initialState, action) => {
 			console.log('exception while setting currentTime on episodes');
 			console.log(exception);
 			console.log(activePodcast);
+			console.log(activePodcast.episodes);
+			console.log(activeEpisode.episodeIndex);
 			console.log(activeEpisode);
+			
 		}
 		localForage.setItem('podcast_cache_' + activePodcast.path,activePodcast);
 

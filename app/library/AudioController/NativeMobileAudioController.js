@@ -90,6 +90,11 @@ class NativeMobileAudioController extends AudioController {
 		this.media.seekTo(newTime * 1000);
 		this.progress = newTime * 1000;
 		console.log('NativeMobileAudioController:setCurrentTime');
+
+		this.musicControls.updateElapsed({
+			elapsed: newTime,
+			isPlaying: this.player.props.isPlaying
+		});
 		return Promise.resolve(true);
 	}
 	/**
@@ -232,18 +237,13 @@ class NativeMobileAudioController extends AudioController {
 				// External controls (iOS only)
 				case 'music-controls-toggle-play-pause' :
 					console.log('music-controls-toggle-play-pause');
-					// if (this.media
+					this.player.playOrPause();
 					break;
 				case 'music-controls-seek-to':
 					console.log('music-controls-seek-to');
 					const seekToInSeconds = JSON.parse(action).position;
 
-					this.player.setCurrentTime(seekToInSeconds * 1000);
-
-					this.musicControls.updateElapsed({
-						elapsed: seekToInSeconds,
-						isPlaying: true
-					});
+					this.player.setCurrentTime(seekToInSeconds);
 					break;
 				case 'music-controls-skip-forward':
 					console.log('music-controls-skip-forward');
