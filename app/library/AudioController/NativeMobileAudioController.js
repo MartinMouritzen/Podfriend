@@ -74,16 +74,16 @@ class NativeMobileAudioController extends AudioController {
 	*/
 	getCurrentTime() {
 		if (!this.media) { return; }
-		return this.media.getCurrentPosition();
 		console.log('NativeMobileAudioController:getCurrentTime');
+		return this.media.getCurrentPosition();
 	}
 	/**
 	*
 	*/
 	getDuration() {
 		if (!this.media) { return; }
-		return this.media.getDuration();
 		console.log('NativeMobileAudioController:getDuration');
+		return this.media.getDuration();
 	}
 	pause() {
 		if (!this.media) { return; }
@@ -100,7 +100,7 @@ class NativeMobileAudioController extends AudioController {
 		if (!this.media) { return; }
 		console.log('NativeMobileAudioController:play');
 
-		this.onBuffering();
+		// this.onBuffering();
 
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
@@ -187,19 +187,19 @@ class NativeMobileAudioController extends AudioController {
 			switch(message) {
 				case 'music-controls-next':
 					console.log('music-controls-next');
-					this.nextTrack();
+					this.player.onNextEpisode();
 					break;
 				case 'music-controls-previous':
 					console.log('music-controls-previous');
-					this.previousTrack();
+					this.player.onPrevEpisode();
 					break;
 				case 'music-controls-pause':
 					console.log('music-controls-pause');
-					this.pause();
+					this.player.pause();
 					break;
 				case 'music-controls-play':
 					console.log('music-controls-play');
-					this.play();
+					this.player.play();
 					break;
 				case 'music-controls-destroy':
 					console.log('music-controls-destroy - the user probably swiped it away!');
@@ -213,7 +213,9 @@ class NativeMobileAudioController extends AudioController {
 				case 'music-controls-seek-to':
 					console.log('music-controls-seek-to');
 					const seekToInSeconds = JSON.parse(action).position;
-					console.log('seekToInSeconds: ' + seekToInSeconds);
+
+					this.player.setCurrentTime(seekToInSeconds * 1000);
+
 					this.musicControls.updateElapsed({
 						elapsed: seekToInSeconds,
 						isPlaying: true
@@ -221,11 +223,11 @@ class NativeMobileAudioController extends AudioController {
 					break;
 				case 'music-controls-skip-forward':
 					console.log('music-controls-skip-forward');
-					this.forward();
+					this.player.onForward();
 					break;
 				case 'music-controls-skip-backward':
 					console.log('music-controls-skip-backward');
-					this.rewind();
+					this.player.onBackward();
 					break;
 				// Headset events (Android only)
 				// All media button events are listed below
@@ -260,6 +262,7 @@ class NativeMobileAudioController extends AudioController {
 	*
 	*/
 	__onAudioStatusChanged(newStatus) {
+		console.log('__onAudioStatusChanged: ' + newStatus);
 		if (newStatus === this.STATUS_NONE) {
 			console.log('STATUS_NONE');
 			if (this.onBuffering) {

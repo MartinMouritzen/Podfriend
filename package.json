@@ -17,6 +17,8 @@
 		"dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
 		"dev-web": "cross-env NODE_ENV=development webpack-dev-server --config ./configs/webpack.config.web.dev.babel.js",
 		"deploy-web": "OLD OLD OLD: gsutil rsync -R ./app/web/dist gs://podfriend",
+		"generate-icons-ios": "cordova-res ios --skip-config --copy",
+		"generate-icons-android": "cordova-res android --skip-config --copy",
 		"package": "yarn build && electron-builder build --publish never",
 		"package-all": "yarn build && electron-builder build -mwl",
 		"package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
