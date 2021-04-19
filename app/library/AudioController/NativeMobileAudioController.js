@@ -99,6 +99,9 @@ class NativeMobileAudioController extends AudioController {
 	play() {
 		if (!this.media) { return; }
 		console.log('NativeMobileAudioController:play');
+
+		this.onBuffering();
+
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
 		});
