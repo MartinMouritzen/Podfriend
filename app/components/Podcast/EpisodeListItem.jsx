@@ -77,7 +77,16 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 
 	const onShareEpisode = (event) => {
 		event.stopPropagation();
-		dispatch(showShareWindow());
+		if (navigator.share && typeof window.process !== 'object') {
+			navigator.share({
+				title: shareTitle,
+				text: shareTitle,
+				url: shareURL
+			});
+		}
+		else {
+			dispatch(showShareWindow());
+		}
 	};
 
 	return (

@@ -263,6 +263,8 @@
 		"axios": "^0.18.0",
 		"axios-jsonp": "^1.0.2",
 		"cordova-plugin-background-mode": "^0.7.3",
+		"cordova-plugin-cors": "^1.2.1",
+		"cordova-plugin-device": "^2.0.3",
 		"cordova-plugin-file": "^6.0.2",
 		"cordova-plugin-media": "^5.0.3",
 		"cordova-plugin-music-controls2": "^3.0.5",
