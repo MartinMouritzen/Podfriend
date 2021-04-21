@@ -1,5 +1,5 @@
 // We need to see if https://github.com/Rolamix/cordova-plugin-playlist is a better alternative
-import { Media } from '@ionic-native/media';
+// import { Media } from '@ionic-native/media';
 
 import { MusicControls } from '@ionic-native/music-controls';
 
@@ -19,10 +19,16 @@ class NativeMobileAudioController extends AudioController {
 	ERROR_DECODE = 3;
 	ERROR_SUPPORTED = 4;
 
+	__audioHasLoaded = false;
+	__audioIsLoading = false;
+
 	status = 0;
 	error = false;
 
-	progress = 0;
+	loadPromise = false;
+	__loadCheckId = false;
+
+	currentPosition = 0;
 
 	constructor() {
 		super();
@@ -35,8 +41,6 @@ class NativeMobileAudioController extends AudioController {
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
-
-		this._timer = setInterval(this._updateProgress.bind(this), 1000);
 	}
 	init() {
 		console.log('NativeMobileAudioController:init');
@@ -66,33 +70,43 @@ class NativeMobileAudioController extends AudioController {
 		console.log('NativeMobileAudioController:setPlaybackRate');
 	}
 	/**
-	 * Updates the progress state
+	 * Updates the currentPosition state
 	 * @private
 	 */
-	 async _updateProgress() {
-		try {
-			var currentTime = await this.media.getCurrentPosition();
-			if (currentTime != this.progress) {
-				this.progress = currentTime;
-				this.player.onTimeUpdate();
-			}
-		}
-		catch (exception) {
-			console.error('Exception in _updateProgress');
-			console.error(exception);
-		}
+	 _updateCurrentPosition() {
+		// return new Promise((resolve,reject) => {
+			this.media.getCurrentPosition((currentPosition) => {
+				//console.log('hasLoaded: ' + (this.hasLoaded ? 'YES' : 'NO') + ', isLoading: ' + (this.isLoading() ? 'YES' : 'NO') + ', _updateCurrentPosition: ' + currentPosition);
+				if (currentPosition != this.currentPosition) {
+					this.currentPosition = currentPosition;
+					this.player.onTimeUpdate();
+				}
+			},(error) => {
+				console.log('Error while updating the current position');
+				console.log(error);
+			});
+
+		// });
 	}
 	/**
 	*
 	*/
-	setCurrentTime(newTime) {
-		if (!this.media) { return; }
-		this.media.seekTo(newTime * 1000);
-		this.progress = newTime * 1000;
-		console.log('NativeMobileAudioController:setCurrentTime');
+	setCurrentTime(timeInSeconds) {
+		if (!this.media || !this.hasLoaded()) {
+			return Promise.resolve(true);
+		}
+		if (timeInSeconds < 0) {
+			timeInSeconds = 0;
+		}
+		console.log('setCurrentTime: ' + timeInSeconds);
+		this.media.seekTo(timeInSeconds * 1000);
+		this.currentPosition = timeInSeconds * 1000;
+
+		// console.log('NativeMobileAudioController:setCurrentTime: ');
+		// console.log(timeInSeconds);
 
 		this.musicControls.updateElapsed({
-			elapsed: newTime,
+			elapsed: timeInSeconds,
 			isPlaying: this.player.props.isPlaying
 		});
 		return Promise.resolve(true);
@@ -101,35 +115,70 @@ class NativeMobileAudioController extends AudioController {
 	*
 	*/
 	getCurrentTime() {
-		if (!this.media) { return; }
-		console.log('NativeMobileAudioController:getCurrentTime');
+		if (!this.media) { return false; }
+		console.log('NativeMobileAudioController:getCurrentTime: ' + this.currentPosition);
 		// return this.media.getCurrentPosition();
-		return this.progress;
+		return this.currentPosition < 0 ? 0 : this.currentPosition;
 	}
 	/**
 	*
 	*/
 	getDuration() {
-		if (!this.media) { return; }
-		console.log('NativeMobileAudioController:getDuration');
-		return this.media.getDuration();
+		if (!this.media || !this.hasLoaded()) { return false; }
+		var duration = this.media.getDuration();
+		console.log('NativeMobileAudioController:getDuration: ' + duration + ', ' + this.media.duration);
+		if (duration < 0) {
+			return 0;
+		}
+		return duration;
 	}
 	pause() {
-		if (!this.media) { return; }
+		if (!this.media || !this.hasLoaded()) { return Promise.resolve(true); }
 		this.media.pause();
 		console.log('NativeMobileAudioController:pause');
 		this.musicControls.updateIsPlaying(false);
 		return Promise.resolve(true);
 	}
 	load() {
-		console.log('NativeMobileAudioController:load');
-		return Promise.resolve(true);
+		if (this.hasLoaded()) {
+			return Promise.resolve();
+		}
+		else {
+			console.log('NativeAudioController: Creating a new load() promise');
+
+			if (this.loadPromise === false) {
+				this.loadPromise = new Promise((resolve,reject) => {
+					this.__loadCheckId = setInterval(() => {
+						const duration = this.media.getDuration();
+						console.log('Load-Check: 1!!!!!');
+						if (duration !== -1) {
+							console.log('Load-Done 1!!!!!');
+							this.__audioIsLoading = false;
+							this.__audioHasLoaded = true;
+
+							clearInterval(this._currentPositionTimerId);
+							this._currentPositionTimerId = setInterval(this._updateCurrentPosition.bind(this), 1000);
+
+							this.onCanPlay();
+
+							if (this.player.props.shouldPlay) {
+								this.play();
+							}
+
+							clearInterval(this.__loadCheckId);
+							this.__loadCheckId = false;
+
+							return resolve(true);
+						}
+					},300);
+				});
+			}
+			return this.loadPromise;
+		}
 	}
 	play() {
-		if (!this.media) { return; }
+		if (!this.media || !this.hasLoaded()) { console.log('test123: ' + this.hasLoaded() + ', ' + this.media); return; }
 		console.log('NativeMobileAudioController:play');
-
-		// this.onBuffering();
 
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
@@ -137,150 +186,198 @@ class NativeMobileAudioController extends AudioController {
 		this.musicControls.updateIsPlaying(true);
 	}
 	setVolume(newVolume) {
-		if (!this.media) { return; }
+		if (!this.media || !this.hasLoaded()) { return; }
 		this.media.setVolume(newVolume);
 		console.log('NativeMobileAudioController:setVolume');
 	}
 	getVolume() {
 		console.log('NativeMobileAudioController:getVolume');
 	}
+	hasLoaded() {
+		return this.__audioHasLoaded;
+	}
+	isLoading() {
+		return this.__audioIsLoading;
+	}
 	setEpisode(podcast,episode) {
 		console.log('NativeMobileAudioController:setEpisode');
-		const coverPath = 'https://podcastcovers.podfriend.com/' + podcast.path + '/';
 
-		/*
-		var sizes = [20,120,400,600,800];
+		return new Promise((resolve,reject) => {
+			const coverPath = 'https://podcastcovers.podfriend.com/' + podcast.path + '/';
 
-		var coverSizes = [];
+			/*
+			var sizes = [20,120,400,600,800];
 
-		for(var i=0;i<sizes.length;i++) {
-			coverSizes.push({
-				src: (coverPath + sizes[i] + 'x' + sizes[i] + '/' + encodeURI(episode.image ? episode.image : podcast.image)),
-				sizes: sizes[i] + 'x' + sizes[i],
-				type: 'image/jpg'
-			});
-		}
-		*/
+			var coverSizes = [];
 
-		var coverUrl = coverPath + '600x600/' + encodeURI(episode.image ? episode.image : podcast.image);
-
-		this.playingTrack = {
-			title: episode.title,
-			artist: podcast.author,
-			album: podcast.name,
-			artwork: coverUrl
-		};
-
-		if (this.media) {
-			this.media.release();
-		}
-
-		if (this.onCanPlay) {
-			// Workaround
-			this.onCanPlay();
-			// this.onBuffering();
-		}
-
-		this.media = Media.create(episode.url);
-
-		this.musicControls.create({
-			track: episode.title,
-			artist: podcast.author,
-			album: podcast.name,
-			cover: coverUrl,
-			isPlaying: this.player.props.isPlaying,
-			dismissable: true,
-			hasPrev: true,
-			hasNext: true,
-			hasClose: true,
-			// iOS only, optional
-			duration: this.getDuration(),
-			elapsed: this.getCurrentTime(),
-			hasSkipForward: true, // true value overrides hasNext.
-			hasSkipBackward: true, // true value overrides hasPrev.
-			skipForwardInterval : 15,
-			skipBackwardInterval : 15,
-			hasScrubbing : true,
-			ticker: 'Now playing ' + episode.title,
-		}, () => {
-			console.log('MusicControls success!');
-		},() => {
-			console.log('MusicControls error!');
-		});
-
-		this.musicControls
-		.subscribe()
-		.subscribe((action) => {
-			const message = JSON.parse(action).message;
-			
-			switch(message) {
-				case 'music-controls-next':
-					console.log('music-controls-next');
-					this.player.onNextEpisode();
-					break;
-				case 'music-controls-previous':
-					console.log('music-controls-previous');
-					this.player.onPrevEpisode();
-					break;
-				case 'music-controls-pause':
-					console.log('music-controls-pause');
-					this.player.pause();
-					break;
-				case 'music-controls-play':
-					console.log('music-controls-play');
-					this.player.play();
-					break;
-				case 'music-controls-destroy':
-					console.log('music-controls-destroy - the user probably swiped it away!');
-					break;
-		
-				// External controls (iOS only)
-				case 'music-controls-toggle-play-pause' :
-					console.log('music-controls-toggle-play-pause');
-					this.player.playOrPause();
-					break;
-				case 'music-controls-seek-to':
-					console.log('music-controls-seek-to');
-					const seekToInSeconds = JSON.parse(action).position;
-
-					this.player.setCurrentTime(seekToInSeconds);
-					break;
-				case 'music-controls-skip-forward':
-					console.log('music-controls-skip-forward');
-					this.player.onForward();
-					break;
-				case 'music-controls-skip-backward':
-					console.log('music-controls-skip-backward');
-					this.player.onBackward();
-					break;
-				// Headset events (Android only)
-				// All media button events are listed below
-				case 'music-controls-media-button':
-					console.log('music-controls-media-button');
-					// Do something
-					break;
-				case 'music-controls-headset-unplugged':
-					console.log('music-controls-headset-unplugged');
-					// Do something
-					break;
-				case 'music-controls-headset-plugged':
-					console.log('music-controls-headset-plugged');
-					// Do something
-					break;
-				default:
-					break;
+			for(var i=0;i<sizes.length;i++) {
+				coverSizes.push({
+					src: (coverPath + sizes[i] + 'x' + sizes[i] + '/' + encodeURI(episode.image ? episode.image : podcast.image)),
+					sizes: sizes[i] + 'x' + sizes[i],
+					type: 'image/jpg'
+				});
 			}
-		});
-		this.musicControls.listen();
+			*/
 
-		this.media.onStatusUpdate.subscribe(this.__onAudioStatusChanged);
-		this.media.onSuccess.subscribe(() => console.log('NativeMobileAudioController success!'));
-		this.media.onError.subscribe((error) => {
-			console.log('Error in NativeMobileAudioController: ');
-			console.log(error);
-		});
+			var coverUrl = coverPath + '600x600/' + encodeURI(episode.image ? episode.image : podcast.image);
 
-		return Promise.resolve(true);
+			this.playingTrack = {
+				title: episode.title,
+				artist: podcast.author,
+				album: podcast.name,
+				artwork: coverUrl
+			};
+
+			if (this.media) {
+				console.log('media release?');
+				this.media.release();
+			}
+			// If we load a new media object, then stop loading any previous ones
+			clearInterval(this.__loadCheckId);
+			this.__loadCheckId = false;
+			this.loadPromise = false;
+
+			this.currentPosition = 0; // should this be false? (as well as the original value in the class)
+
+			this.onBuffering();
+
+			console.log('Creating a new Media object');
+
+			this.__audioIsLoading = true;
+			this.__audioHasLoaded = false;
+
+			// this.media = Media.create(episode.url);
+			this.media = new Media(episode.url, (success) => {
+				return resolve(true);
+			},(error) => {
+				return reject(error);
+			},(newStatus) => {
+				if (!this.hasLoaded()) {
+					this.load();
+				}
+
+				console.log('AYAYAYAY: ' + newStatus);
+				console.log('media duration after status update: ' + this.media.getDuration());
+				/*
+				this.__audioIsLoading = false;
+				this.__audioHasLoaded = true;
+				*/
+			});
+
+			console.log('media duration before play: ' + this.media.getDuration());
+
+			/*
+			setInterval(() => {
+				var duration = this.media.getDuration();
+				console.log('Duration test: ' + duration);
+			}, 1000);
+			*/
+
+			// this.media.play();
+
+			// console.log('media duration after play: ' + this.media.getDuration());
+
+			// this.media.onStatusUpdate.subscribe(this.__onAudioStatusChanged);
+
+			/*
+			console.log('STATUSUPDATE METHODS');
+			console.log(typeof this.media._objectInstance);
+			console.log('123');
+			console.log(typeof this.media.onStatusUpdate);
+			console.log('ABC');
+			console.log(typeof this.media.onStatusUpdate.subscribe);
+			console.log('DEF');
+	*/
+			this.musicControls.create({
+				track: episode.title,
+				artist: podcast.author,
+				album: podcast.name,
+				cover: coverUrl,
+				isPlaying: this.player.props.isPlaying,
+				dismissable: true,
+				hasPrev: true,
+				hasNext: true,
+				hasClose: true,
+				// iOS only, optional
+				duration: this.getDuration(),
+				elapsed: this.getCurrentTime(),
+				hasSkipForward: true, // true value overrides hasNext.
+				hasSkipBackward: true, // true value overrides hasPrev.
+				skipForwardInterval : 15,
+				skipBackwardInterval : 15,
+				hasScrubbing : true,
+				ticker: 'Now playing ' + episode.title,
+			}, () => {
+				console.log('MusicControls success!');
+			},() => {
+				console.log('MusicControls error!');
+			});
+
+			this.musicControls
+			.subscribe()
+			.subscribe((action) => {
+				const message = JSON.parse(action).message;
+				
+				switch(message) {
+					case 'music-controls-next':
+						console.log('music-controls-next');
+						this.player.onNextEpisode();
+						break;
+					case 'music-controls-previous':
+						console.log('music-controls-previous');
+						this.player.onPrevEpisode();
+						break;
+					case 'music-controls-pause':
+						console.log('music-controls-pause');
+						this.player.pause();
+						break;
+					case 'music-controls-play':
+						console.log('music-controls-play');
+						this.player.play();
+						break;
+					case 'music-controls-destroy':
+						console.log('music-controls-destroy - the user probably swiped it away!');
+						break;
+			
+					// External controls (iOS only)
+					case 'music-controls-toggle-play-pause' :
+						console.log('music-controls-toggle-play-pause');
+						this.player.playOrPause();
+						break;
+					case 'music-controls-seek-to':
+						console.log('music-controls-seek-to');
+						const seekToInSeconds = JSON.parse(action).position;
+
+						this.player.setCurrentTime(seekToInSeconds);
+						break;
+					case 'music-controls-skip-forward':
+						console.log('music-controls-skip-forward');
+						this.player.onForward();
+						break;
+					case 'music-controls-skip-backward':
+						console.log('music-controls-skip-backward');
+						this.player.onBackward();
+						break;
+					// Headset events (Android only)
+					// All media button events are listed below
+					case 'music-controls-media-button':
+						console.log('music-controls-media-button');
+						// Do something
+						break;
+					case 'music-controls-headset-unplugged':
+						console.log('music-controls-headset-unplugged');
+						// Do something
+						break;
+					case 'music-controls-headset-plugged':
+						console.log('music-controls-headset-plugged');
+						// Do something
+						break;
+					default:
+						break;
+				}
+			});
+			this.musicControls.listen();
+		});
 	}
 	/**
 	*
