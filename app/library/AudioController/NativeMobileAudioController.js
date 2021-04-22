@@ -37,6 +37,7 @@ class NativeMobileAudioController extends AudioController {
 		console.log('NativeMobileAudioController');
 
 		this.__onAudioStatusChanged = this.__onAudioStatusChanged.bind(this);
+		this.load = this.load.bind(this);
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
@@ -98,6 +99,7 @@ class NativeMobileAudioController extends AudioController {
 			timeInSeconds = 0;
 		}
 		console.log('setCurrentTime: ' + timeInSeconds);
+
 		this.media.seekTo(timeInSeconds * 1000);
 		this.currentPosition = timeInSeconds * 1000;
 
@@ -253,6 +255,7 @@ class NativeMobileAudioController extends AudioController {
 			});
 			this.load()
 			.then(() => {
+				console.log('Finished loading! Wuuuuiii!!!')
 				this.__audioIsLoading = false;
 				this.__audioHasLoaded = true;
 
