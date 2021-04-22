@@ -502,6 +502,9 @@ class Player extends Component {
 	*/
 	onForward() {
 		var currentTime = this.props.audioController.getCurrentTime();
+
+		console.log('onForward test: ' + currentTime + ':' + this.props.audioController.getDuration());
+
 		if (currentTime + 15 > this.props.audioController.getDuration()) {
 			this.onNextEpisode();
 		}
