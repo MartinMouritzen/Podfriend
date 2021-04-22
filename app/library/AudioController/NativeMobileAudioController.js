@@ -36,7 +36,6 @@ class NativeMobileAudioController extends AudioController {
 
 		console.log('NativeMobileAudioController');
 
-
 		this.__onAudioStatusChanged = this.__onAudioStatusChanged.bind(this);
 	}
 	startService() {
@@ -135,6 +134,7 @@ class NativeMobileAudioController extends AudioController {
 	pause() {
 		if (!this.media || !this.hasLoaded()) { return Promise.resolve(true); }
 		this.media.pause();
+		clearInterval(this._currentPositionTimerId);
 		console.log('NativeMobileAudioController:pause');
 		this.musicControls.updateIsPlaying(false);
 		return Promise.resolve(true);
@@ -151,19 +151,8 @@ class NativeMobileAudioController extends AudioController {
 					this.__loadCheckId = setInterval(() => {
 						const duration = this.media.getDuration();
 						console.log('Load-Check: 1!!!!!');
-						if (duration !== -1) {
+						if (duration !== -1 && duration !== 0) {
 							console.log('Load-Done 1!!!!!');
-							this.__audioIsLoading = false;
-							this.__audioHasLoaded = true;
-
-							clearInterval(this._currentPositionTimerId);
-							this._currentPositionTimerId = setInterval(this._updateCurrentPosition.bind(this), 1000);
-
-							this.onCanPlay();
-
-							if (this.player.props.shouldPlay) {
-								this.play();
-							}
 
 							clearInterval(this.__loadCheckId);
 							this.__loadCheckId = false;
@@ -183,6 +172,9 @@ class NativeMobileAudioController extends AudioController {
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
 		});
+		clearInterval(this._currentPositionTimerId);
+		this._currentPositionTimerId = setInterval(this._updateCurrentPosition.bind(this), 1000);
+
 		this.musicControls.updateIsPlaying(true);
 	}
 	setVolume(newVolume) {
@@ -252,10 +244,6 @@ class NativeMobileAudioController extends AudioController {
 			},(error) => {
 				return reject(error);
 			},(newStatus) => {
-				if (!this.hasLoaded()) {
-					this.load();
-				}
-
 				console.log('AYAYAYAY: ' + newStatus);
 				console.log('media duration after status update: ' + this.media.getDuration());
 				/*
@@ -263,8 +251,20 @@ class NativeMobileAudioController extends AudioController {
 				this.__audioHasLoaded = true;
 				*/
 			});
+			this.load()
+			.then(() => {
+				this.__audioIsLoading = false;
+				this.__audioHasLoaded = true;
 
-			console.log('media duration before play: ' + this.media.getDuration());
+				this.__createMusicControls(podcast,episode);
+				this.onCanPlay();
+
+				if (this.player.props.shouldPlay) {
+					this.play();
+				}
+			});
+
+			// console.log('media duration before play: ' + this.media.getDuration());
 
 			/*
 			setInterval(() => {
@@ -288,96 +288,98 @@ class NativeMobileAudioController extends AudioController {
 			console.log(typeof this.media.onStatusUpdate.subscribe);
 			console.log('DEF');
 	*/
-			this.musicControls.create({
-				track: episode.title,
-				artist: podcast.author,
-				album: podcast.name,
-				cover: coverUrl,
-				isPlaying: this.player.props.isPlaying,
-				dismissable: true,
-				hasPrev: true,
-				hasNext: true,
-				hasClose: true,
-				// iOS only, optional
-				duration: this.getDuration(),
-				elapsed: this.getCurrentTime(),
-				hasSkipForward: true, // true value overrides hasNext.
-				hasSkipBackward: true, // true value overrides hasPrev.
-				skipForwardInterval : 15,
-				skipBackwardInterval : 15,
-				hasScrubbing : true,
-				ticker: 'Now playing ' + episode.title,
-			}, () => {
-				console.log('MusicControls success!');
-			},() => {
-				console.log('MusicControls error!');
-			});
-
-			this.musicControls
-			.subscribe()
-			.subscribe((action) => {
-				const message = JSON.parse(action).message;
-				
-				switch(message) {
-					case 'music-controls-next':
-						console.log('music-controls-next');
-						this.player.onNextEpisode();
-						break;
-					case 'music-controls-previous':
-						console.log('music-controls-previous');
-						this.player.onPrevEpisode();
-						break;
-					case 'music-controls-pause':
-						console.log('music-controls-pause');
-						this.player.pause();
-						break;
-					case 'music-controls-play':
-						console.log('music-controls-play');
-						this.player.play();
-						break;
-					case 'music-controls-destroy':
-						console.log('music-controls-destroy - the user probably swiped it away!');
-						break;
-			
-					// External controls (iOS only)
-					case 'music-controls-toggle-play-pause' :
-						console.log('music-controls-toggle-play-pause');
-						this.player.playOrPause();
-						break;
-					case 'music-controls-seek-to':
-						console.log('music-controls-seek-to');
-						const seekToInSeconds = JSON.parse(action).position;
-
-						this.player.setCurrentTime(seekToInSeconds);
-						break;
-					case 'music-controls-skip-forward':
-						console.log('music-controls-skip-forward');
-						this.player.onForward();
-						break;
-					case 'music-controls-skip-backward':
-						console.log('music-controls-skip-backward');
-						this.player.onBackward();
-						break;
-					// Headset events (Android only)
-					// All media button events are listed below
-					case 'music-controls-media-button':
-						console.log('music-controls-media-button');
-						// Do something
-						break;
-					case 'music-controls-headset-unplugged':
-						console.log('music-controls-headset-unplugged');
-						// Do something
-						break;
-					case 'music-controls-headset-plugged':
-						console.log('music-controls-headset-plugged');
-						// Do something
-						break;
-					default:
-						break;
-				}
-			});
-			this.musicControls.listen();
 		});
+	}
+	__createMusicControls() {
+		this.musicControls.create({
+			track: episode.title,
+			artist: podcast.author,
+			album: podcast.name,
+			cover: coverUrl,
+			isPlaying: this.player.props.isPlaying,
+			dismissable: true,
+			hasPrev: true,
+			hasNext: true,
+			hasClose: true,
+			// iOS only, optional
+			duration: this.getDuration(),
+			elapsed: this.getCurrentTime(),
+			hasSkipForward: true, // true value overrides hasNext.
+			hasSkipBackward: true, // true value overrides hasPrev.
+			skipForwardInterval : 15,
+			skipBackwardInterval : 15,
+			hasScrubbing : true,
+			ticker: 'Now playing ' + episode.title,
+		}, () => {
+			console.log('MusicControls success!');
+		},() => {
+			console.log('MusicControls error!');
+		});
+
+		this.musicControls
+		.subscribe()
+		.subscribe((action) => {
+			const message = JSON.parse(action).message;
+			
+			switch(message) {
+				case 'music-controls-next':
+					console.log('music-controls-next');
+					this.player.onNextEpisode();
+					break;
+				case 'music-controls-previous':
+					console.log('music-controls-previous');
+					this.player.onPrevEpisode();
+					break;
+				case 'music-controls-pause':
+					console.log('music-controls-pause');
+					this.player.pause();
+					break;
+				case 'music-controls-play':
+					console.log('music-controls-play');
+					this.player.play();
+					break;
+				case 'music-controls-destroy':
+					console.log('music-controls-destroy - the user probably swiped it away!');
+					break;
+		
+				// External controls (iOS only)
+				case 'music-controls-toggle-play-pause' :
+					console.log('music-controls-toggle-play-pause');
+					this.player.playOrPause();
+					break;
+				case 'music-controls-seek-to':
+					console.log('music-controls-seek-to');
+					const seekToInSeconds = JSON.parse(action).position;
+
+					this.player.setCurrentTime(seekToInSeconds);
+					break;
+				case 'music-controls-skip-forward':
+					console.log('music-controls-skip-forward');
+					this.player.onForward();
+					break;
+				case 'music-controls-skip-backward':
+					console.log('music-controls-skip-backward');
+					this.player.onBackward();
+					break;
+				// Headset events (Android only)
+				// All media button events are listed below
+				case 'music-controls-media-button':
+					console.log('music-controls-media-button');
+					// Do something
+					break;
+				case 'music-controls-headset-unplugged':
+					console.log('music-controls-headset-unplugged');
+					// Do something
+					break;
+				case 'music-controls-headset-plugged':
+					console.log('music-controls-headset-plugged');
+					// Do something
+					break;
+				default:
+					break;
+			}
+		});
+		this.musicControls.listen();
 	}
 	/**
 	*
