@@ -4,6 +4,7 @@
 	height: calc(100% - 90px);
 
 	overflow: auto;
+	overflow-x: hidden;
 
 	background-color: #0176e5;
 
