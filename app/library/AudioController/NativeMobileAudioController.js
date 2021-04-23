@@ -37,7 +37,11 @@ class NativeMobileAudioController extends AudioController {
 		console.log('NativeMobileAudioController');
 
 		this.__onAudioStatusChanged = this.__onAudioStatusChanged.bind(this);
+		this.__createMusicControls = this.__createMusicControls.bind(this);
+		this.__refreshCurrentPosition = this.__refreshCurrentPosition.bind(this);
+		this.__setInternalCurrentPosition = this.__setInternalCurrentPosition.bind(this);
 		this.load = this.load.bind(this);
+		this.play = this.play.bind(this);
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
@@ -73,13 +77,14 @@ class NativeMobileAudioController extends AudioController {
 	 * Updates the currentPosition state
 	 * @private
 	 */
-	 _updateCurrentPosition() {
+	__refreshCurrentPosition() {
 		// return new Promise((resolve,reject) => {
 			this.media.getCurrentPosition((currentPosition) => {
 				//console.log('hasLoaded: ' + (this.hasLoaded ? 'YES' : 'NO') + ', isLoading: ' + (this.isLoading() ? 'YES' : 'NO') + ', _updateCurrentPosition: ' + currentPosition);
 				if (currentPosition != this.currentPosition) {
-					this.currentPosition = currentPosition;
-					this.player.onTimeUpdate();
+					console.log('Updating Current position: ' + currentPosition);
+
+					this.__setInternalCurrentPosition(currentPosition)
 				}
 			},(error) => {
 				console.log('Error while updating the current position');
@@ -87,6 +92,10 @@ class NativeMobileAudioController extends AudioController {
 			});
 
 		// });
+	}
+	__setInternalCurrentPosition(timeInSeconds) {
+		this.currentPosition = timeInSeconds;
+		this.player.onTimeUpdate();
 	}
 	/**
 	*
@@ -101,7 +110,8 @@ class NativeMobileAudioController extends AudioController {
 		console.log('setCurrentTime: ' + timeInSeconds);
 
 		this.media.seekTo(timeInSeconds * 1000);
-		this.currentPosition = timeInSeconds * 1000;
+
+		this.__setInternalCurrentPosition(timeInSeconds)
 
 		// console.log('NativeMobileAudioController:setCurrentTime: ');
 		// console.log(timeInSeconds);
@@ -175,7 +185,7 @@ class NativeMobileAudioController extends AudioController {
 			playAudioWhenScreenIsLocked : true
 		});
 		clearInterval(this._currentPositionTimerId);
-		this._currentPositionTimerId = setInterval(this._updateCurrentPosition.bind(this), 1000);
+		this._currentPositionTimerId = setInterval(this.__refreshCurrentPosition.bind(this), 1000);
 
 		this.musicControls.updateIsPlaying(true);
 	}
@@ -259,8 +269,10 @@ class NativeMobileAudioController extends AudioController {
 				this.__audioIsLoading = false;
 				this.__audioHasLoaded = true;
 
-				this.__createMusicControls(podcast,episode);
 				this.onCanPlay();
+				console.log('before controls');
+				this.__createMusicControls(podcast,episode);
+				console.log('after controls');
 
 				if (this.player.props.shouldPlay) {
 					this.play();
