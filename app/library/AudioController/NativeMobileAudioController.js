@@ -28,10 +28,17 @@ class NativeMobileAudioController extends AudioController {
 	loadPromise = false;
 	__loadCheckId = false;
 
+	musicControlsInitialized = false;
+
 	currentPosition = 0;
+
+	coverServerURL = false;
 
 	constructor() {
 		super();
+
+		this.coverServerURL = 'https://podcastcovers.podfriend.com/';
+
 		this.musicControls = MusicControls;
 
 		console.log('NativeMobileAudioController');
@@ -116,10 +123,12 @@ class NativeMobileAudioController extends AudioController {
 		// console.log('NativeMobileAudioController:setCurrentTime: ');
 		// console.log(timeInSeconds);
 
-		this.musicControls.updateElapsed({
-			elapsed: timeInSeconds,
-			isPlaying: this.player.props.isPlaying
-		});
+		if (this.musicControlsInitialized) {
+			this.musicControls.updateElapsed({
+				elapsed: timeInSeconds,
+				isPlaying: this.player.props.isPlaying
+			});
+		}
 		return Promise.resolve(true);
 	}
 	/**
@@ -148,7 +157,9 @@ class NativeMobileAudioController extends AudioController {
 		this.media.pause();
 		clearInterval(this._currentPositionTimerId);
 		console.log('NativeMobileAudioController:pause');
-		this.musicControls.updateIsPlaying(false);
+		if (this.musicControlsInitialized) {
+			this.musicControls.updateIsPlaying(false);
+		}
 		return Promise.resolve(true);
 	}
 	load() {
@@ -156,19 +167,13 @@ class NativeMobileAudioController extends AudioController {
 			return Promise.resolve();
 		}
 		else {
-			console.log('NativeAudioController: Creating a new load() promise');
-
 			if (this.loadPromise === false) {
 				this.loadPromise = new Promise((resolve,reject) => {
 					this.__loadCheckId = setInterval(() => {
 						const duration = this.media.getDuration();
-						console.log('Load-Check: 1!!!!!');
 						if (duration !== -1 && duration !== 0) {
-							console.log('Load-Done 1!!!!!');
-
 							clearInterval(this.__loadCheckId);
 							this.__loadCheckId = false;
-
 							return resolve(true);
 						}
 					},300);
@@ -187,7 +192,9 @@ class NativeMobileAudioController extends AudioController {
 		clearInterval(this._currentPositionTimerId);
 		this._currentPositionTimerId = setInterval(this.__refreshCurrentPosition.bind(this), 1000);
 
-		this.musicControls.updateIsPlaying(true);
+		if (this.musicControlsInitialized) {
+			this.musicControls.updateIsPlaying(true);
+		}
 	}
 	setVolume(newVolume) {
 		if (!this.media || !this.hasLoaded()) { return; }
@@ -207,8 +214,6 @@ class NativeMobileAudioController extends AudioController {
 		console.log('NativeMobileAudioController:setEpisode');
 
 		return new Promise((resolve,reject) => {
-			const coverPath = 'https://podcastcovers.podfriend.com/' + podcast.path + '/';
-
 			/*
 			var sizes = [20,120,400,600,800];
 
@@ -223,14 +228,7 @@ class NativeMobileAudioController extends AudioController {
 			}
 			*/
 
-			var coverUrl = coverPath + '600x600/' + encodeURI(episode.image ? episode.image : podcast.image);
-
-			this.playingTrack = {
-				title: episode.title,
-				artist: podcast.author,
-				album: podcast.name,
-				artwork: coverUrl
-			};
+			this.__createMusicControls(podcast,episode);
 
 			if (this.media) {
 				console.log('media release?');
@@ -243,7 +241,7 @@ class NativeMobileAudioController extends AudioController {
 
 			this.currentPosition = 0; // should this be false? (as well as the original value in the class)
 
-			this.onBuffering();
+			this.player.onBuffering();
 
 			console.log('Creating a new Media object');
 
@@ -256,25 +254,38 @@ class NativeMobileAudioController extends AudioController {
 			},(error) => {
 				return reject(error);
 			},(newStatus) => {
-				console.log('AYAYAYAY: ' + newStatus);
-				console.log('media duration after status update: ' + this.media.getDuration());
-				/*
-				this.__audioIsLoading = false;
-				this.__audioHasLoaded = true;
-				*/
+				if (newStatus === this.STATUS_NONE) {
+					console.log('Media Status: STATUS_NONE');
+				}
+				else if (newStatus === this.STATUS_STARTING) {
+					console.log('Media Status: STATUS_STARTING');
+				}
+				else if (newStatus === this.STATUS_RUNNING) {
+					console.log('Media Status: STATUS_RUNNING');
+				}
+				else if (newStatus === this.STATUS_PAUSED) {
+					console.log('Media Status: STATUS_PAUSED');
+				}
+				else if (newStatus === this.STATUS_STOPPED) {
+					console.log('Media Status: STATUS_STOPPED');
+				}
 			});
+
 			this.load()
 			.then(() => {
 				console.log('Finished loading! Wuuuuiii!!!')
 				this.__audioIsLoading = false;
 				this.__audioHasLoaded = true;
 
-				this.onCanPlay();
+				this.player.onLoadedMetadata();
+				this.player.onCanPlay();
 				console.log('before controls');
 				this.__createMusicControls(podcast,episode);
 				console.log('after controls');
 
+				console.log('should play?: ' + this.player.props.shouldPlay);
 				if (this.player.props.shouldPlay) {
+					console.log('should play?: ' + this.player.props.shouldPlay);
 					this.play();
 				}
 			});
@@ -305,7 +316,22 @@ class NativeMobileAudioController extends AudioController {
 	*/
 		});
 	}
-	__createMusicControls() {
+	__createMusicControls(podcast,episode) {
+		console.log('Creating music controls');
+
+		var coverUrl = this.coverServerURL + podcast.path + '/' + '600x600/' + encodeURI(episode.image ? episode.image : podcast.image);
+
+		this.playingTrack = {
+			title: episode.title,
+			artist: podcast.author,
+			album: podcast.name,
+			artwork: coverUrl
+		};
+
+		if (this.musicControls) {
+			// this.musicControls.destroy();
+		}
+
 		this.musicControls.create({
 			track: episode.title,
 			artist: podcast.author,
@@ -330,6 +356,8 @@ class NativeMobileAudioController extends AudioController {
 		},() => {
 			console.log('MusicControls error!');
 		});
+
+		this.musicControlsInitialized = true;
 
 		this.musicControls
 		.subscribe()
@@ -403,32 +431,32 @@ class NativeMobileAudioController extends AudioController {
 		console.log('__onAudioStatusChanged: ' + newStatus);
 		if (newStatus === this.STATUS_NONE) {
 			console.log('STATUS_NONE');
-			if (this.onBuffering) {
-				this.onBuffering();
+			if (this.player.onBuffering) {
+				this.player.onBuffering();
 			}
 		}
 		else if (newStatus === this.STATUS_STARTING) {
 			console.log('STATUS_STARTING');
-			if (this.onBuffering) {
-				this.onBuffering();
+			if (this.player.onBuffering) {
+				this.player.onBuffering();
 			}
 		}
 		else if (newStatus === this.STATUS_RUNNING) {
 			console.log('STATUS_RUNNING');
-			if (this.onCanPlay) {
-				this.onCanPlay();
+			if (this.player.onCanPlay) {
+				this.player.onCanPlay();
 			}
 		}
 		else if (newStatus === this.STATUS_PAUSED) {
 			console.log('STATUS_PAUSED');
-			if (this.onCanPlay) {
-				this.onCanPlay();
+			if (this.player.onCanPlay) {
+				this.player.onCanPlay();
 			}
 		}
 		else if (newStatus === this.STATUS_STOPPED) {
 			console.log('STATUS_STOPPED');
-			if (this.onCanPlay) {
-				this.onCanPlay();
+			if (this.player.onCanPlay) {
+				this.player.onCanPlay();
 			}
 		}
 		console.log('Audio status changed: ' + newStatus);
