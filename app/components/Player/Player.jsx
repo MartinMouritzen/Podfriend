@@ -22,7 +22,8 @@ function mapStateToProps(state) {
 		playbackSpeed: state.settings.audioPlaybackSpeed,
 		walletBalance: state.ui.walletBalance,
 		defaultBoost: state.settings.defaultBoost,
-		defaultStreamPerMinuteAmount: state.settings.defaultStreamPerMinuteAmount
+		defaultStreamPerMinuteAmount: state.settings.defaultStreamPerMinuteAmount,
+		value4ValueEnabled: state.settings.value4ValueEnabled
 	};
 }
 function mapDispatchToProps(dispatch) {
@@ -265,7 +266,7 @@ class Player extends Component {
 	resetSegmentTime() {
 		// console.log('this.props.activePodcast');
 		// console.log(this.props.activePodcast);
-		if (this.props.activePodcast.value) {
+		if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
 			var currentTime = this.props.audioController.getCurrentTime();
 			this.setState({
 				monetizeSegmentStart: currentTime
@@ -293,7 +294,7 @@ class Player extends Component {
 	*/
 	segmentTimeTrigger() {
 		var totalAmount = 0;
-		if (this.props.activePodcast.value) {
+		if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
 			// PodcastWallet.sendValue(this.props.activePodcast.value,totalAmount);
 			// console.log(this.props.activePodcast);
 			// console.log(this.props.activePodcast.value);
@@ -430,39 +431,50 @@ class Player extends Component {
 	*
 	*/
 	onNextEpisode(startFromBeginning = false) {
+		console.log('onNextEpisode');
 		var percentage = (100 * this.props.audioController.getCurrentTime()) / this.props.audioController.getDuration();
 		
 		if (percentage > 75) {
+			console.log('onNextEpisode:episodeFinished');
 			this.props.episodeFinished(this.props.activePodcast,this.props.activeEpisode);
 		}
 		
 		var nextEpisodeIndex = this.props.activeEpisode.episodeIndex + 1;
 		
+		console.log('onNextEpisode:nextEpisodeIndex: ' + nextEpisodeIndex + ', shouldPlay: ' + this.props.shouldPlay + ', isPlaying: ' + this.props.isPlaying);
 		this.changeEpisode(nextEpisodeIndex,startFromBeginning);
 	}
 	/**
 	*
 	*/
 	onPrevEpisode() {
+		console.log('onPrevEpisode');
 		// If you press previous but are far ahead in the track, let's just scroll back to the start first.
 		var percentage = (100 * this.props.audioController.getCurrentTime()) / this.props.audioController.getDuration();
+
+		console.log('onPrevEpisode: percentage: ' + percentage);
 		
 		if (percentage > 10) {
+			console.log('onPrevEpisode: resetting');
 			this.props.audioController.pause()
 			.then(() => {
 				this.props.audioController.setCurrentTime(0);
 			})
 			.then(() => {
+				console.log('onPrevEpisode: reset-play');
 				this.props.audioController.play();
 			});
 		}
 		else {
 			var prevEpisodeIndex = this.props.activeEpisode.episodeIndex - 1;
+			console.log('onPrevEpisode: prevEpisodeIndex: '+ prevEpisodeIndex);
 
 			if (this.props.activePodcast.episodes[prevEpisodeIndex]) {
+				console.log('onPrevEpisode: changeEpisode: ' + prevEpisodeIndex);
 				this.changeEpisode(prevEpisodeIndex);
 			}
 			else {
+				console.log('onPrevEpisode: changeEpisode but first episode so cannot do more');
 				this.props.audioController.setCurrentTime(0);
 				if (this.props.shouldPlay) {
 					this.props.audioController.play();
@@ -522,14 +534,15 @@ class Player extends Component {
 	*/
 	onBackward() {
 		var currentTime = this.props.audioController.getCurrentTime();
-		if (currentTime - 15 < 0) {
-			// this.onPrevEpisode();
-			currentTime = 0;
+
+		var backwardTime = currentTime - 15;
+		if (backwardTime < 0) {
+			backwardTime = 0;
 		}
 
 		this.props.audioController.pause()
 		.then(() => {
-			this.props.audioController.setCurrentTime(currentTime - 15);
+			return this.props.audioController.setCurrentTime(backwardTime);
 		})
 		.then(() => {
 			if (this.props.shouldPlay) {
