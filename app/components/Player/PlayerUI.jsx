@@ -459,7 +459,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	return (
 		<>
-			{ isLoggedIn === true && value4ValueOnboarded !== true && playingValuePodcast === true &&
+			{ isLoggedIn === true && value4ValueOnboarded !== true && playingValuePodcast === false && value4ValueEnabled !== true &&
 				<Suspense fallback={<></>}>
 					<Value4ValueModal
 					
