@@ -103,6 +103,13 @@ class NativeMobileAudioController extends AudioController {
 	__setInternalCurrentPosition(timeInSeconds) {
 		this.currentPosition = timeInSeconds;
 		this.player.onTimeUpdate();
+
+		if (this.musicControlsInitialized) {
+			this.musicControls.updateElapsed({
+				elapsed: timeInSeconds,
+				isPlaying: this.player.props.isPlaying
+			});
+		}
 	}
 	/**
 	*
@@ -123,12 +130,6 @@ class NativeMobileAudioController extends AudioController {
 		// console.log('NativeMobileAudioController:setCurrentTime: ');
 		// console.log(timeInSeconds);
 
-		if (this.musicControlsInitialized) {
-			this.musicControls.updateElapsed({
-				elapsed: timeInSeconds,
-				isPlaying: this.player.props.isPlaying
-			});
-		}
 		return Promise.resolve(true);
 	}
 	/**
