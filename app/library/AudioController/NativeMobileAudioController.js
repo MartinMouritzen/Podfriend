@@ -49,6 +49,7 @@ class NativeMobileAudioController extends AudioController {
 		this.__setInternalCurrentPosition = this.__setInternalCurrentPosition.bind(this);
 		this.load = this.load.bind(this);
 		this.play = this.play.bind(this);
+		this.pause = this.pause.bind(this);
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
@@ -159,7 +160,11 @@ class NativeMobileAudioController extends AudioController {
 		clearInterval(this._currentPositionTimerId);
 		console.log('NativeMobileAudioController:pause');
 		if (this.musicControlsInitialized) {
-			this.musicControls.updateIsPlaying(false);
+			// this.musicControls.updateIsPlaying(false);
+			this.musicControls.updateElapsed({
+				elapsed: this.currentPosition,
+				isPlaying: this.player.props.isPlaying
+			});
 		}
 		return Promise.resolve(true);
 	}
@@ -194,7 +199,11 @@ class NativeMobileAudioController extends AudioController {
 		this._currentPositionTimerId = setInterval(this.__refreshCurrentPosition.bind(this), 1000);
 
 		if (this.musicControlsInitialized) {
-			this.musicControls.updateIsPlaying(true);
+			// this.musicControls.updateIsPlaying(true);
+			this.musicControls.updateElapsed({
+				elapsed: this.currentPosition,
+				isPlaying: this.player.props.isPlaying
+			});
 		}
 	}
 	setVolume(newVolume) {
