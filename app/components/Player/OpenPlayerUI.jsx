@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { synchronizeWallet, showWalletModal } from "podfriend-approot/redux/actions/uiActions";
@@ -28,7 +28,7 @@ const TabPanel = ({ children }) => {
 	);
 };
 
-const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost }) => {
+const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime }) => {
 	const dispatch = useDispatch();
 
 	const [tabIndex, setTabIndex] = useState('description');
@@ -78,6 +78,65 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 			return number.toLocaleString();
 		}
 	};
+
+	const descriptionElement = useRef(null);
+
+	const handleDescriptionClicks = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		event.nativeEvent.stopImmediatePropagation();
+		event.nativeEvent.preventDefault();
+
+		console.log(event.target);
+
+		if (event.target.tagName.toLowerCase() === 'a') {
+			if (event.target.classList.contains('timestampLink')) {
+				var timeStamp = event.target.innerHTML;
+				console.log(timeStamp);
+
+				var timeSplit = timeStamp.split(':'); // split it at the colons
+				var seconds = 0, m = 1;
+		
+				while (timeSplit.length > 0) {
+					seconds += m * parseInt(timeSplit.pop(), 10);
+					m *= 60;
+				}
+				if (!isNaN(seconds)) {
+					setCurrentTime(seconds);
+				}
+			}
+			else {
+				if (event.target.href) {
+					window.open(event.target.href,'_blank','noopener');
+				}
+			}
+		}
+	};
+/*
+	const handleLinkClicks = useCallback((event) => {
+		var source = event.target || event.srcElement;
+
+		console.log(event);
+
+		if (descriptionElement.current && descriptionElement.current.contains(source)) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			event.stopPropagation();
+			event.cancelBubble = true;
+			console.log('should be stopped');
+		}
+	},[]);
+
+	useEffect(() => {
+		console.log('adding event listener');
+		document.getElementById('root').addEventListener('mouseup', handleLinkClicks);
+
+		return () => {
+			console.log('removing event listener');
+			document.getElementById('root').removeEventListener('mouseup', handleLinkClicks);
+		};
+	},[handleLinkClicks]);
+*/
 
 	return (
 		<div className={styles.episodeInfo}>
@@ -170,7 +229,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, chaptersLoadi
 					<div className={styles.episodeMasterData}>
 						Episode published: { activeEpisodeTime }
 					</div>
-					<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} /> 
+					<div onClick={handleDescriptionClicks} ref={descriptionElement} className={styles.description} dangerouslySetInnerHTML={{__html:showNotes ? showNotes : description}} /> 
 				</TabPanel>
 			}
 			{ tabIndex === 'chapters' &&

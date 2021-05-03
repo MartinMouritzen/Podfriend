@@ -10,6 +10,11 @@ import isElectron from 'is-electron';
 
 import { BrowserRouter as BrowserRouter } from 'react-router-dom';
 import { MemoryRouter as MemoryRouter } from 'react-router-dom';
+
+import { Capacitor } from '@capacitor/core'
+
+// import { getPlatforms } from '@ionic/react';
+
 // import { Router } from 'react-router-dom'; // We need to try more with this. Right now it doesn't work because the path is including D:/ etc. - But maybe we should always use memoryrouter in the SPA and browserrouter on the web?
 
 // import { ConnectedRouter } from 'react-router-redux';
@@ -21,9 +26,11 @@ import styles from '~/app/components/Window/WindowFrame.css';
 
 let Router = BrowserRouter;
 
+// var platforms = getPlatforms();
+
 let appType = 'browser';
 const mediaQueryStandAlone = '(display-mode: standalone)';
-if (navigator.standalone || window.matchMedia(mediaQueryStandAlone).matches) {
+if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQueryStandAlone).matches) {
 	appType = 'standalone';
 	Router = MemoryRouter;
 }

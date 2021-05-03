@@ -67,7 +67,7 @@ const ShareButtons = ({ podcastTitle, podcastPath, episodeTitle, episodeDescript
 				autoHideDuration={3000}
 				onClose={onHideCopySuccessMessage}
 			>
-				<Alert severity="info">Lightning invoice address copied</Alert>
+				<Alert severity="info">Copied link</Alert>
 			</Snackbar>
 		</div>
 	);

@@ -100,7 +100,7 @@ class SearchResult extends Component {
 					}} className='podcastItem'>
 					<PodcastImage
 						podcastPath={this.props.result.path}
-						imageErrorText={this.props.result.name}
+						imageErrorText={this.props.result.title}
 						width={600}
 						height={600}
 						src={this.props.result.image ? this.props.result.image : this.props.result.feedImage}

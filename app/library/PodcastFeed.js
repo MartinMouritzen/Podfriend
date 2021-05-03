@@ -157,7 +157,9 @@ class PodcastFeed {
 					episodes.push({
 						uid: Math.random() * 99999999999, // We just use this to generate keys in React
 						title: this.decodeXMLString(episode.title),
-						description: this.decodeXMLString(episode['itunes:summary'] ? episode['itunes:summary'] : episode['itunes:subtitle'] ? episode['itunes:subtitle'] : episode['description'] ? episode['description'] : ''),
+						summary: this.decodeXMLString(episode['itunes:summary'] ? episode['itunes:summary'] : episode['itunes:subtitle'] ? episode['itunes:subtitle'] : episode['description'] ? episode['description'] : ''),
+						description: this.decodeXMLString(episode['description'] ? episode['description'] : episode['itunes:summary'] ? episode['itunes:summary'] : episode['subtitle'] ? episode['subtitle'] : ''),
+						showNotes: episode['content:encoded'] ? this.decodeXMLString(episode['content:encoded']) : false,
 						author: this.decodeXMLString(episode.author ? episode.author : episode['itunes:author'] ? episode['itunes:author'] : false),
 						imageUrl: episode['itunes:image'] ? episode['itunes:image']['href'] : false,
 						explicit: episode['itunes:explicit'],
