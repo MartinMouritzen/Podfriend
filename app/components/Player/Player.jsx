@@ -87,6 +87,7 @@ class Player extends Component {
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
 		this.handleKeyDown = this.handleKeyDown.bind(this);
+		this.setCurrentTime = this.setCurrentTime.bind(this);
 
 		this.onAudioElementReady = this.onAudioElementReady.bind(this);
 
@@ -299,10 +300,12 @@ class Player extends Component {
 			// console.log(this.props.activePodcast);
 			// console.log(this.props.activePodcast.value);
 			// return false;
-			this.props.sendValue(this.props.activePodcast.value,this.state.streamPerMinuteAmount)
-			.then(() => {
-				this.props.synchronizeWallet();
-			});
+			if (this.props.isPlaying) {
+				this.props.sendValue(this.props.activePodcast.value,this.state.streamPerMinuteAmount)
+				.then(() => {
+					this.props.synchronizeWallet();
+				});
+			}
 		}
 		else {
 			console.log('Podcast has no value block, cannot send.');
@@ -646,6 +649,7 @@ class Player extends Component {
 				onTimeUpdate={this.onTimeUpdate}
 				boostAmount={this.state.boostAmount}
 				streamPerMinuteAmount={this.state.streamPerMinuteAmount}
+				setCurrentTime={this.setCurrentTime}
 			/>
 		);
 	}

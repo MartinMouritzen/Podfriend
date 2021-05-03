@@ -53,8 +53,9 @@ import { BottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css'
 
 /* Core CSS required for Ionic components to work properly */
-// import '@ionic/react/css/core.css';
+import '@ionic/react/css/core.css';
 
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
 /* Basic CSS for apps built with Ionic */
 // import '@ionic/react/css/normalize.css';
@@ -249,6 +250,7 @@ class PodcastClient extends Component {
 	*/
 	render() {
 		return (
+			
 			<div className={[styles.podCastClient,'themeLight'].join(' ')} onScroll={this.onScroll}>
 				<div className={styles.top}>
 					<SideBar />
@@ -299,6 +301,7 @@ class PodcastClient extends Component {
 					<ShareModal onClose={this.props.hideShareWindow} />
 				}
 			</div>
+			
 		);
 	}
 	/**

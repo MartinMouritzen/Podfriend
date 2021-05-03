@@ -1,0 +1,133 @@
+.searchHintsContainer {
+	background-color: #FFFFFF;
+	position: absolute;
+
+	border-radius: 3px;
+
+	width: 100%;
+	min-width: 100px;
+	max-width: 390px;
+	max-height: 90%;
+
+	overflow: hidden;
+
+	@media (max-height: 660px) {
+		overflow: auto;
+	}
+
+	@media (max-width: 900px) {
+		max-width: none;
+		left: 0px !important;
+	}
+
+	height: 0px;
+
+	transition: all 0.4s;
+
+	z-index: 1;
+
+	.searchHintPodcastTitle {
+		font-size: 12px;
+		color: #91939d;
+		margin-top: 15px;
+		height: 25px;
+		display: flex;
+		margin-left: 20px;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	&.searchHintsContainerFocused {
+		/*
+		-webkit-animation: slide 0.5s forwards;
+		animation: slide 0.5s forwards;
+		*/
+		/*
+		opacity: 1;
+		transform: translateY(10px);
+		*/
+		-webkit-box-shadow: 4px 4px 26px 5px rgba(0,0,0,0.53); 
+		box-shadow: 4px 4px 26px 5px rgba(0,0,0,0.53);
+
+		transform: scale(1);
+		transition: all 0.4s;
+	}
+	&.searchHintsContainerNotFocused {
+		/*
+		opacity: 0;
+		transform: translateY(40px);
+		transition: all 0.4s;
+		*/
+		transform: scale(0.5);
+		height: 0px !important;
+	}
+}
+.searchHintResults {
+	.searchHintResult {
+		height: 50px;
+		padding: 5px;
+
+		display: flex;
+		flex-direction: row;
+
+		justify-content: flex-start;
+		align-items: center;
+
+		@media (any-hover: hover) {
+			&:hover {
+				background-color: var(--primary-color);
+				cursor: pointer;
+				color: #FFFFFF;
+
+				.searchHintLabel {
+					background-color: #FFFFFF;
+					color: var(--primary-color);
+				}
+				.searchHintText {
+					color: #FFFFFF;
+				}
+			}
+		}
+	
+		.searchHintLabel {
+			background-color: var(--primary-color);
+			color: #FFFFFF;
+			display: inline-block;
+			padding: 5px;
+			font-size: 11px;
+			border-radius: 3px;
+
+			margin-right: 10px;
+			padding-left: 10px;
+			padding-right: 10px;
+
+			margin-left: 10px;
+
+			text-transform: uppercase;
+		}
+		.searchHintText {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+
+			margin-right: 10px;
+		}
+	}
+}
+@-webkit-keyframes slide {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes slide {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
