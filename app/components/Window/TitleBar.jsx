@@ -6,10 +6,8 @@ import { FaWindowMinimize, FaWindowRestore, FaRegWindowMaximize, FaWindowClose, 
 
 import { Link, withRouter } from 'react-router-dom';
 
-import SearchField from './../SearchField.jsx';
-import UserTitleBar from './../user/userTitleBar.jsx';
-
-import logo from './../../images/logo/podfriend_logo_128x128.png';
+import SearchField from 'podfriend-approot/components/Search/SearchField.jsx';
+import UserTitleBar from 'podfriend-approot/components/user/userTitleBar.jsx';
 
 import SVG from 'react-inlinesvg';
 

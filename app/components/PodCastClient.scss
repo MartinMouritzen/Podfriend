@@ -124,6 +124,9 @@ input[type=checkbox] {
 			color: #0e3b80;
 		}
 	}
+	.timestampLink {
+		color: var(--primary-color-dark);
+	}
 	@media (any-hover: hover) {
 		/*
 		.podcastPage::-webkit-scrollbar {

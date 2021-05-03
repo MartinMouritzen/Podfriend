@@ -6,6 +6,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import DOMPurify from 'dompurify';
 
+import { FaListAlt } from 'react-icons/fa';
+
 import SVG from 'react-inlinesvg';
 const FullScreenIcon = () => <SVG src={require('podfriend-approot/images/design/player/fullscreen.svg')} />;
 const PlayIcon = () => <SVG src={require('podfriend-approot/images/design/player/play.svg')} />;
@@ -54,6 +56,8 @@ import OpenPlayerUI from './OpenPlayerUI.jsx';
 import ProgressBarSlider from './ProgressBarSlider.jsx';
 import VolumeSlider from './VolumeSlider.jsx';
 
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonLabel, IonIcon } from '@ionic/react';
+
 const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/Value4ValueModal.jsx'));
 // import Value4ValueModal from 'podfriend-approot/components/Wallet/Value4ValueModal.jsx';
 
@@ -61,7 +65,7 @@ const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/
 *
 */
 
-const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged, playingValuePodcast, streamPerMinuteAmount, boostAmount, onBoost }) => {
+const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progress, duration, playing, hasEpisode, pause, play, canPlay, isBuffering, onCanPlay, onBuffering, onLoadedMetadata, onLoadedData, onPlay, onPause, onSeek, onTimeUpdate, onEnded, onPrevEpisode, onBackward, onNextEpisode, onForward, onProgressSliderChange, onAudioElementReady, onTimerChanged, playingValuePodcast, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -69,10 +73,13 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const moreIconElement = useRef(null);
 	const rewardElement = useRef(null);
 
+	const [episodeTitle,setEpisodeTitle] = useState(title);
+
 	const [errorRetries,setErrorRetries] = useState(0);
 	const [isVideo,setIsVideo] = useState(false);
 	const [episodeOpen,setEpisodeOpen] = useState(false);
 	const [description,setDescription] = useState('');
+	const [showNotes,setShowNotes] = useState(false);
 	const [chapters,setChapters] = useState(false);
 	const [chaptersLoading,setChaptersLoading] = useState(true);
 	const [currentChapter,setCurrentChapter] = useState(false);
@@ -140,9 +147,51 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				}
 			});
 			// setEpisodeOpen(false);
-			showFullPlayer(false);
+			dispatch(showFullPlayer(false));
 		}
 	}
+
+	const removeSeasonInfoFromString = (string) => {
+		// This function should also see if it can grab season and episode data, so that if it's not defined in rss we can show it still
+		console.log('String 1: ' + string);
+		const regex = /([Ss])([0-9]{1,2}) /i;
+		string = string.replace(regex,'');
+
+		const regex2 = /([Ee])([Pp])([0-9]{1,2}) /i;
+		string = string.replace(regex2,'');
+
+		const regex3 = /([Ee])([0-9]{1,2}) /i;
+		string = string.replace(regex3,'');
+
+		string.trim();
+
+		if (string.substring(0,2) === '- ') {
+			string = string.substring(2);
+		}
+
+		console.log('String 2: ' + string);
+
+		return string;
+	};
+
+	useEffect(() => {
+		var useEpisodeTitle = '';
+		if (activeEpisode.season) {
+			useEpisodeTitle += 'S' + activeEpisode.season;
+		}
+		if (activeEpisode.episodeNumber) {
+			if (activeEpisode.season) {
+				useEpisodeTitle += ':';
+			}
+			useEpisodeTitle += 'E' + activeEpisode.episodeNumber;
+		}
+		if (activeEpisode.season || activeEpisode.episodeNumber) {
+			useEpisodeTitle += ' - ';
+		}
+		useEpisodeTitle += removeSeasonInfoFromString(title);
+
+		setEpisodeTitle(useEpisodeTitle);
+	},[title]);
 
 	useEffect(() => {
 		setError(false);
@@ -330,8 +379,21 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					'a','p','br','ol','ul','li','b'
 					]
 			});
+			// console.log(rssFeedCurrentEpisode['description']);
+			// console.log(description);
 			description = description.replace(/(?:\r\n|\r|\n)/g, '<br />');
 			setDescription(description);
+
+			if (rssFeedCurrentEpisode.showNotes) {
+				var showNotes = DOMPurify.sanitize(rssFeedCurrentEpisode.showNotes, {
+					ALLOWED_TAGS: [
+						'a','p','br','ol','ul','li','b'
+						]
+				});
+				const regex = /(([0-9]{1,2}):([0-9]{1,2}):?([0-9]{1,2})?)/gs;
+				showNotes = showNotes.replace(regex,'<a href=\'#\' class="timestampLink">$1</a>');
+				setShowNotes(showNotes);
+			}
 
 			if (rssFeedCurrentEpisode.chaptersUrl) {
 				loadChapters(rssFeedCurrentEpisode.chaptersUrl);
@@ -472,6 +534,19 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					className={styles.playingPreview}
 					onClick={openEpisode}
 				>
+					{ fullPlayerOpen && false && 
+<IonSegment onIonChange={e => console.log('Segment selected', e.detail.value)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
+          <IonSegmentButton value="friends">
+            <IonLabel>Episode</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="enemies">
+            <IonLabel>Info</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="zenemies">
+            <IonLabel>Social</IonLabel>
+          </IonSegmentButton>
+        </IonSegment>
+}
 					<div className={styles.coverContainer} onDoubleClick={videoFullscreen}>
 						{ audioController.useBrowserAudioElement && isVideo !== false &&
 							<>
@@ -513,7 +588,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						</div>
 					</div>
 					<div className={styles.playingText}>
-						<div className={styles.title} dangerouslySetInnerHTML={{__html: title}} />
+						<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
 						<div className={styles.author}>
 							{activePodcast.name}
 						</div>
@@ -611,6 +686,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				{ fullPlayerOpen &&
 					<OpenPlayerUI
 						description={description}
+						showNotes={showNotes}
 						activePodcast={activePodcast}
 						activeEpisode={activeEpisode}
 						chaptersLoading={chaptersLoading}
@@ -621,6 +697,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						boostAmount={boostAmount}
 						streamPerMinuteAmount={streamPerMinuteAmount}
 						onBoost={onBoost}
+						setCurrentTime={setCurrentTime}
 					/>
 
 				}
@@ -640,6 +717,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showSleepTimer()); }}><ClockIcon /> Set sleep timer</ContextMenuItem>
+				<ContextMenuItem onClick={openEpisode}><FaListAlt />Go to podcast</ContextMenuItem>
+				
 				{ /* <ContextMenuItem onClick={() => { enableChromeCast(); } }><ChromecastIcon /> Chromecast</ContextMenuItem> */ }
 			</ContextMenu>
 			{ showSleepTimerWindow &&

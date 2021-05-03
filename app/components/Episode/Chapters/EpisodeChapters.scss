@@ -92,18 +92,28 @@
 	text-align: center;
 	flex: 1;
 }
-.chapterImage {
+.chapterImageOuter {
 	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-}
-.chapterImage img {
-	max-width: calc(100% - 30px);
-	max-height: calc(100% - 30px);
-}
 
-@media (min-width: 900px) {
-	
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.chapterImageInner {
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(60px);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
 }

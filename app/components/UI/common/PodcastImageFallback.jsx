@@ -30,9 +30,8 @@ const PodcastImageFallback = ({ podcastId, imageSource, imageErrorText, original
 			ref={fallbackElement}
 			style={{
 				backgroundColor: randomColor,
-				padding: fontSize,
+				padding: '30px',
 				overflow: 'hidden',
-				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
 				textAlign: 'center',

@@ -35,8 +35,10 @@ const EpisodeChapter = ({ title, image, url, isActive, fadeOut }) => {
 				</div>
 			}
 			{ image && 
-				<div className={styles.chapterImage}>
-					<img src={image} />
+				<div className={styles.chapterImageOuter} style={{ backgroundImage: 'url("' + image + '")' }}>
+					<div className={styles.chapterImageInner} style={{ backgroundImage: 'url("' + image + '")' }}>
+						&nbsp;
+					</div>
 				</div>
 			}
 		</div>

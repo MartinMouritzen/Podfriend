@@ -69,6 +69,8 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 		episodeClass += ' ' + styles.hidden;
 	}
 
+	const shareURL = 'https://web.podfriend.com/podcast/' + podcastPath + '/' + id;
+
 	const onPlay = (event) => {
 		event.stopPropagation();
 		selectEpisodeAndPlay(episode);
@@ -79,8 +81,8 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 		event.stopPropagation();
 		if (navigator.share && typeof window.process !== 'object') {
 			navigator.share({
-				title: shareTitle,
-				text: shareTitle,
+				title: episodeTitle,
+				text: episodeTitle,
 				url: shareURL
 			});
 		}

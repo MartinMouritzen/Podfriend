@@ -160,10 +160,10 @@ class NativeMobileAudioController extends AudioController {
 		clearInterval(this._currentPositionTimerId);
 		console.log('NativeMobileAudioController:pause');
 		if (this.musicControlsInitialized) {
-			// this.musicControls.updateIsPlaying(false);
+			this.musicControls.updateIsPlaying(false);
 			this.musicControls.updateElapsed({
 				elapsed: this.currentPosition,
-				isPlaying: this.player.props.isPlaying
+				isPlaying: false
 			});
 		}
 		return Promise.resolve(true);
@@ -199,10 +199,10 @@ class NativeMobileAudioController extends AudioController {
 		this._currentPositionTimerId = setInterval(this.__refreshCurrentPosition.bind(this), 1000);
 
 		if (this.musicControlsInitialized) {
-			// this.musicControls.updateIsPlaying(true);
+			this.musicControls.updateIsPlaying(true);
 			this.musicControls.updateElapsed({
 				elapsed: this.currentPosition,
-				isPlaying: this.player.props.isPlaying
+				isPlaying: true
 			});
 		}
 	}
