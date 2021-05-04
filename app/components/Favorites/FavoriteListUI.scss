@@ -51,7 +51,7 @@
 	}
 }
 
-.podcast, .podcastPlaying, .podcastSelected, .podcastArchived {
+.podcast, .podcastPlaying, .podcastSelected, .podcastHidden {
 	text-decoration: none;
 	font-size: 12px;
 	display: flex;
@@ -73,7 +73,14 @@
 		background-color: #E0E0E0;
 	}
 }
+/*
 .podcastArchived {
+	img {
+		filter: grayscale(60%);
+	}
+}
+*/
+.podcastHidden {
 	height: 0px;
 	padding: 0px;
 	border: 0px;
@@ -127,10 +134,10 @@
 .podcastPlaying .episodesInfo, .podcastSelected .episodesInfo {
 	color: #EEEEEE;
 }
-.podcastArchived {
+.podcastHidden {
 	overflow: hidden;
 }
-.podcastArchived .podcastDetails {
+.podcastHidden .podcastDetails {
 	height: 0px;
 }
 

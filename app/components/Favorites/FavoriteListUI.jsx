@@ -57,12 +57,16 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 					// console.log(podcast);
 
 					return (
-						<Link to={{
+						<Link
+							to={{
 								pathname: '/podcast/' + podcast.path,
 								state: {
 									podcast: podcast
 								}
-							}} className={isArchived ? styles.podcastArchived : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast} key={podcast.name}>
+							}}
+							className={(podcast.archived ? styles.podcastArchived + ' ' : '') + (isArchived ? styles.podcastHidden : isSelected ? styles.podcastSelected : isPlaying ? styles.podcastPlaying : styles.podcast)}
+							key={podcast.name}
+						>
 								<PodcastImage
 									podcastPath={podcast.path}
 									imageErrorText={podcast.name}
