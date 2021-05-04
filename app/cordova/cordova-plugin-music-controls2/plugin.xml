@@ -51,6 +51,7 @@
 		<source-file src="src/android/MusicControlsNotification.java" target-dir="src/com/homerours/musiccontrols" />
 		<source-file src="src/android/MusicControlsNotificationKiller.java" target-dir="src/com/homerours/musiccontrols" />
 		<source-file src="src/android/MusicControlsInfos.java" target-dir="src/com/homerours/musiccontrols" />
+		<source-file src="src/android/MusicControlsServiceConnection.java" target-dir="src/com/homerours/musiccontrols" />
 		<source-file src="src/android/KillBinder.java" target-dir="src/com/homerours/musiccontrols" />
 	</platform>
 
