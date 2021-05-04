@@ -67,12 +67,14 @@ class NativeMobileAudioController extends AudioController {
 	*
 	*/
 	setCoverImage(src) {
+		this.__createMusicControls(false,false,src);
 		console.log('NativeMobileAudioController:setCoverImage');
 	}
 	/**
 	*
 	*/
 	restoreCoverImage() {
+		this.__createMusicControls(false,false,false);
 		console.log('NativeMobileAudioController:restoreCoverImage');
 	}
 	/**
@@ -90,7 +92,7 @@ class NativeMobileAudioController extends AudioController {
 			this.media.getCurrentPosition((currentPosition) => {
 				//console.log('hasLoaded: ' + (this.hasLoaded ? 'YES' : 'NO') + ', isLoading: ' + (this.isLoading() ? 'YES' : 'NO') + ', _updateCurrentPosition: ' + currentPosition);
 				if (currentPosition != this.currentPosition) {
-					console.log('Updating Current position: ' + currentPosition);
+					// console.log('Updating Current position: ' + currentPosition);
 
 					this.__setInternalCurrentPosition(currentPosition)
 				}
@@ -326,15 +328,23 @@ class NativeMobileAudioController extends AudioController {
 	*/
 		});
 	}
-	__createMusicControls(podcast,episode) {
+	__createMusicControls(podcast = false,episode = false,overrideAlbumArt = false) {
+
+		if (podcast) {
+			this.currentPodcast = podcast;
+		}
+		if (episode) {
+			this.currentEpisode = episode;
+		}
+
 		console.log('Creating music controls');
 
-		var coverUrl = this.coverServerURL + podcast.path + '/' + '600x600/' + encodeURI(episode.image ? episode.image : podcast.image);
+		var coverUrl = overrideAlbumArt ? overrideAlbumArt : this.coverServerURL + this.currentPodcast.path + '/' + '600x600/' + encodeURI(this.currentEpisode.image ? this.currentEpisode.image : this.currentPodcast.image);
 
 		this.playingTrack = {
-			title: episode.title,
-			artist: podcast.author,
-			album: podcast.name,
+			title: this.currentEpisode.title,
+			artist: this.currentPodcast.author,
+			album: this.currentPodcast.name,
 			artwork: coverUrl
 		};
 
@@ -343,9 +353,9 @@ class NativeMobileAudioController extends AudioController {
 		}
 
 		this.musicControls.create({
-			track: episode.title,
-			artist: podcast.author,
-			album: podcast.name,
+			track: this.currentEpisode.title,
+			artist: this.currentPodcast.author,
+			album: this.currentPodcast.name,
 			cover: coverUrl,
 			isPlaying: this.player.props.isPlaying,
 			dismissable: true,
@@ -360,7 +370,7 @@ class NativeMobileAudioController extends AudioController {
 			skipForwardInterval : 15,
 			skipBackwardInterval : 15,
 			hasScrubbing : true,
-			ticker: 'Now playing ' + episode.title,
+			ticker: 'Now playing ' + this.currentEpisode.title,
 		}, () => {
 			console.log('MusicControls success!');
 		},() => {
@@ -418,6 +428,7 @@ class NativeMobileAudioController extends AudioController {
 				// All media button events are listed below
 				case 'music-controls-media-button':
 					console.log('music-controls-media-button');
+					this.player.playOrPause();
 					// Do something
 					break;
 				case 'music-controls-headset-unplugged':
@@ -428,7 +439,21 @@ class NativeMobileAudioController extends AudioController {
 					console.log('music-controls-headset-plugged');
 					// Do something
 					break;
+				case 'music-controls-media-button-play':
+					this.player.play();
+					// Do something
+					break;
+				case 'music-controls-media-button-pause':
+					this.player.pause();
+					// Do something
+					break;
+				case 'music-controls-media-button-play-pause':
+					this.player.playOrPause();
+					break;
 				default:
+					console.log('unhandled music-controls event');
+					console.log(message);
+					// alert(message);
 					break;
 			}
 		});

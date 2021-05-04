@@ -8,18 +8,28 @@ import { Link, withRouter } from 'react-router-alias';
 
 import { FaRegEnvelope, FaPlus, FaUser, FaHome, FaPodcast, FaRegLightbulb, FaLightbulb,  FaFolder, FaRegClock } from "react-icons/fa";
 
-import Toggle from 'react-toggle';
+import { IonToggle } from '@ionic/react';
+
+
+/*
+import Switch from '@material-ui/core/Switch';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+*/
+
+// import Toggle from 'react-toggle';
+// import "react-toggle/style.css";
 
 import PodcastList from 'podfriend-approot/components/PodcastList/PodcastList.jsx';
 
 /* import CategoryList from './CategoryList/CategoryList.jsx'; */
 
-import FavoriteList from './Favorites/FavoriteList.jsx';
-import FavoriteListUI from './Favorites/FavoriteListUI.jsx';
+import FavoriteList from '../Favorites/FavoriteList.jsx';
+import FavoriteListUI from '../Favorites/FavoriteListUI.jsx';
 
 import WalletBalance from 'podfriend-approot/components/Wallet/WalletBalance.jsx';
 
-import styles from './SideBar.css';
+import styles from './SideBar.scss';
 
 function mapStateToProps(state) {
 	return {
@@ -151,18 +161,12 @@ class SideBar extends Component {
 						<div className={styles.podcastList}>
 							<FavoriteList UI={FavoriteListUI} showArchived={this.state.showArchived} setHasArchived={this.setHasArchived} />
 						</div>
-						{ this.state.hasArchivedPodcasts &&
-							<div className={styles.filter}>
-								<div>
-									<Toggle
-										id='archived-status'
-										defaultChecked={this.state.showArchived}
-										icons={{ checked: null, unchecked: null }}
-										onChange={this.handleShowArchivedChange} />
-									<label htmlFor='cheese-status'>Show archived podcasts</label>
-								</div>
+						<div className={styles.filter + ' ' + (this.state.hasArchivedPodcasts ?  styles.filterTrue : styles.filterFalse)}>
+							<IonToggle checked={this.state.showArchived} onIonChange={this.handleShowArchivedChange} />
+							<div className={styles.filterLabel}>
+								Show archived podcasts
 							</div>
-						}
+						</div>
 					</div>
 				</div>
 			</div>

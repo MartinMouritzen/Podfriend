@@ -91,6 +91,8 @@
 	width: 250px;
 	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
 	border-radius: 10px 0px 0px 0px;
+
+	padding-bottom: 90px;
 }
 .podcastHeader {
 	padding: 10px;
@@ -105,16 +107,31 @@
 .filter {
 	background-color: #EEEEEE;
 	border-top: 1px solid #CCCCCC;
-	padding: 6px;
-	padding-bottom: 3px;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	justify-content: center;
+	align-items: center;
 	font-size: 12px;
+
+	overflow: hidden;
+
+	transition: 0.3s all ease;
+
+	ion-toggle {
+		height: 20px;
+		width: 40px;
+
+		--handle-width: 15px;
+	}
 }
-.filter label {
-	position: relative;
-	bottom: 4px;
+
+.filterTrue {
+	height: 40px;
+}
+.filterFalse {
+	height: 0px;
+}
+.filterLabel {
 	margin-left: 10px;
 }
 .podcastList {
@@ -122,7 +139,6 @@
 	background-color: #f5f9fb;
 	overflow: auto;
 	padding-top: 6px;
-	padding-bottom: 90px;
 }
 
 @media only screen and (max-width: 899px) {

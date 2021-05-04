@@ -6,7 +6,15 @@ import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 import styles from './ProgressBarSlider.scss';
 
 const ProgressBarSlider = ({progress,duration,fullPlayerOpen,onProgressSliderChange}) => {
-	const [sliderValue,setSliderValue] = useState((100 * progress) / duration);
+	var sliderInitial = (100 * progress) / duration;
+	if (sliderInitial < 0) {
+		sliderInitial = 0;
+	}
+	else if (sliderInitial > 100) {
+		sliderInitial = 100;
+	}
+
+	const [sliderValue,setSliderValue] = useState(sliderInitial);
 	const [dragValue,setDragValue] = useState(false);
 	const [useDragValue,setUseDragValue] = useState(sliderValue);
 
@@ -19,6 +27,12 @@ const ProgressBarSlider = ({progress,duration,fullPlayerOpen,onProgressSliderCha
 		if (isDraggingSlider) {
 			newValue = dragValue;
 		}
+		if (newValue < 0) {
+			newValue = 0;
+		}
+		else if (newValue > 100) {
+			newValue = 100;
+		}
 		setSliderValue(newValue);
 	},[progress,duration,dragValue,isDraggingSlider]);
 
@@ -28,6 +42,14 @@ const ProgressBarSlider = ({progress,duration,fullPlayerOpen,onProgressSliderCha
 
 	const sliderDragStopped = (values) => {
 		setIsDraggingSlider(false);
+
+		if (values[0] < 0) {
+			values[0] = 0;
+		}
+		else if (values[0] > 100) {
+			values[0] = 100;
+		}
+
 		onProgressSliderChange(values[0],false);
 		setSliderValue(values[0]);
 	};
