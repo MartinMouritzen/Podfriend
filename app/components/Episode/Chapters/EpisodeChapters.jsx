@@ -31,13 +31,11 @@ const EpisodeChapters = ({ audioController, chapters, progress }) => {
 			return;
 		}
 
-		if ('mediaSession' in navigator) {
-			if (currentChapter.img && audioController) {
-				audioController.setCoverImage(currentChapter.img);
-			}
-			else if (audioController) {
-				audioController.restoreCoverImage();
-			}
+		if (currentChapter.img && audioController) {
+			audioController.setCoverImage(currentChapter.img);
+		}
+		else if (audioController) {
+			audioController.restoreCoverImage();
 		}
 
 		// console.log('new current Chapter: ');

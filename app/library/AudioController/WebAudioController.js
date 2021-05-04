@@ -37,24 +37,28 @@ class WebAudioController extends AudioController {
 	*
 	*/
 	setCoverImage(src) {
-		var trackClone = {...this.playingTrack};
-		trackClone.artwork = [{
-			src: src,
-			sizes: '200x200',
-			type: 'image/png'
-		}];
+		if ('mediaSession' in navigator) {
+			var trackClone = {...this.playingTrack};
+			trackClone.artwork = [{
+				src: src,
+				sizes: '200x200',
+				type: 'image/png'
+			}];
 
-		// console.log('setting cover image');
-		// console.log(trackClone);
+			// console.log('setting cover image');
+			// console.log(trackClone);
 
-		navigator.mediaSession.metadata = new MediaMetadata(trackClone);
+			navigator.mediaSession.metadata = new MediaMetadata(trackClone);
+		}
 	}
 	/**
 	*
 	*/
 	restoreCoverImage() {
-		console.log('restoring cover image');
-		navigator.mediaSession.metadata = new MediaMetadata(this.playingTrack);
+		if ('mediaSession' in navigator) {
+			console.log('restoring cover image');
+			navigator.mediaSession.metadata = new MediaMetadata(this.playingTrack);
+		}
 	}
 	/**
 	*

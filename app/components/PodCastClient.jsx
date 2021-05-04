@@ -10,7 +10,7 @@ import styles from './PodCastClient.scss';
 
 import PodcastWallet from './../library/PodcastWallet/PodcastWallet.js';
 import PodCastService from './../library/PodCastService.js';
-import SideBar from './SideBar';
+import SideBar from './UI/SideBar';
 
 // import SearchPane from './Search/SearchPane';
 // import SearchPaneUI from './Search/SearchPaneUI.jsx';
@@ -250,7 +250,6 @@ class PodcastClient extends Component {
 	*/
 	render() {
 		return (
-			
 			<div className={[styles.podCastClient,'themeLight'].join(' ')} onScroll={this.onScroll}>
 				<div className={styles.top}>
 					<SideBar />
@@ -301,7 +300,6 @@ class PodcastClient extends Component {
 					<ShareModal onClose={this.props.hideShareWindow} />
 				}
 			</div>
-			
 		);
 	}
 	/**
