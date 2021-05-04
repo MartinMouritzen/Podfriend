@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import android.app.Notification;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -19,6 +20,8 @@ import android.support.v4.media.session.PlaybackStateCompat;
 
 import android.util.Log;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.Intent;
@@ -32,6 +35,9 @@ import android.os.Build;
 import android.R;
 import android.content.BroadcastReceiver;
 import android.media.AudioManager;
+
+import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -50,9 +56,57 @@ public class MusicControls extends CordovaPlugin {
 	private boolean mediaButtonAccess=true;
 
   	private Activity cordovaActivity;
+  	
+  	private String channelId = "cordova-plugin-music-controls2";
 
 	private MediaSessionCallback mMediaSessionCallback = new MediaSessionCallback();
+	
+	public NotificationCompat.Builder nb;
 
+
+	/**
+	*
+	*/
+	// @RequiresApi(Build.VERSION_CODES.O)
+	private void createChannel(Context context) {
+		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		NotificationChannel mChannel = new NotificationChannel(channelId, "Media playback", NotificationManager.IMPORTANCE_DEFAULT);
+		mChannel.setDescription("Media playback controls");
+		mChannel.setShowBadge(false);
+		mChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+		mChannel.enableLights(true);
+		mChannel.setLightColor(Color.BLUE);
+
+		mNotificationManager.createNotificationChannel(mChannel);
+	}
+	
+	/*
+	private void createChannel() {
+        if (mNotificationManager.getNotificationChannel(CHANNEL_ID) == null) {
+            // The user-visible name of the channel.
+            CharSequence name = "MediaSession";
+            // The user-visible description of the channel.
+            String description = "MediaSession and MediaPlayer";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            // Configure the notification channel.
+            mChannel.setDescription(description);
+            mChannel.enableLights(true);
+            // Sets the notification light color for notifications posted to this
+            // channel, if the device supports this feature.
+            mChannel.setLightColor(Color.RED);
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(
+                    new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mNotificationManager.createNotificationChannel(mChannel);
+            Log.d(TAG, "createChannel: New channel created");
+        } else {
+            Log.d(TAG, "createChannel: Existing channel reused");
+        }
+    }
+    */
 
 	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
 		final Context context = this.cordova.getActivity().getApplicationContext();
@@ -100,7 +154,12 @@ public class MusicControls extends CordovaPlugin {
 		final MusicControlsServiceConnection mConnection = new MusicControlsServiceConnection(activity);
 
 		this.cordovaActivity = activity;
-		this.notification = new MusicControlsNotification(this.cordovaActivity, this.notificationID) {
+		
+		
+		this.mediaSessionCompat = new MediaSessionCompat(context, "cordova-music-controls-media-session", null, this.mediaButtonPendingIntent);
+		this.mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+		
+		this.notification = new MusicControlsNotification(this.cordovaActivity, this.notificationID, this.mediaSessionCompat) {
 			@Override
 			protected void onNotificationUpdated(Notification notification) {
 				mConnection.setNotification(notification, this.infos.isPlaying);
@@ -116,15 +175,19 @@ public class MusicControls extends CordovaPlugin {
 		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		this.registerBroadcaster(mMessageReceiver);
 
-		
-		this.mediaSessionCompat = new MediaSessionCompat(context, "cordova-music-controls-media-session", null, this.mediaButtonPendingIntent);
-		this.mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
 
 		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 		this.mediaSessionCompat.setActive(true);
 
 		this.mediaSessionCompat.setCallback(this.mMediaSessionCallback);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel(context);
+        }
+        
+		nb = new NotificationCompat.Builder(context, channelId);
+		nb.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+		nb.setPriority(NotificationCompat.PRIORITY_HIGH);
 		
 		// Register media (headset) button event receiver
 		try {
@@ -132,7 +195,8 @@ public class MusicControls extends CordovaPlugin {
 			Intent headsetIntent = new Intent("music-controls-media-button");
 			this.mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			this.registerMediaButtonEvent();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			this.mediaButtonAccess=false;
 			e.printStackTrace();
 		}
@@ -217,9 +281,10 @@ public class MusicControls extends CordovaPlugin {
 		}
 		else if (action.equals("watch")) {
 			this.registerMediaButtonEvent();
-      			this.cordova.getThreadPool().execute(new Runnable() {
+
+  			this.cordova.getThreadPool().execute(new Runnable() {
 				public void run() {
-          				mMediaSessionCallback.setCallback(callbackContext);
+          			mMediaSessionCallback.setCallback(callbackContext);
 					mMessageReceiver.setCallback(callbackContext);
 				}
 			});
