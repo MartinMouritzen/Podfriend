@@ -23,26 +23,35 @@ import android.os.Bundle;
 import android.os.Build;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 
+import android.support.v4.media.session.MediaSessionCompat;
+
 import android.app.NotificationChannel;
+
+import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
 public class MusicControlsNotification {
 	private Activity cordovaActivity;
 	private NotificationManager notificationManager;
-	private Notification.Builder notificationBuilder;
+	private NotificationCompat.Builder notificationBuilder;
 	private int notificationID;
 	protected MusicControlsInfos infos;
 	private Bitmap bitmapCover;
 	private String CHANNEL_ID;
+	
+	private MediaSessionCompat mediaSessionCompat;
 
 	// Public Constructor
-	public MusicControlsNotification(Activity cordovaActivity,int id){
+	public MusicControlsNotification(Activity cordovaActivity,int id,MediaSessionCompat mediaSessionCompat){
 		this.CHANNEL_ID ="cordova-music-channel-id";
 		this.notificationID = id;
 		this.cordovaActivity = cordovaActivity;
 		Context context = cordovaActivity;
 		this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		this.mediaSessionCompat = mediaSessionCompat;
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
@@ -74,7 +83,42 @@ public class MusicControlsNotification {
 		Notification noti = this.notificationBuilder.build();
 		this.notificationManager.notify(this.notificationID, noti);
 		this.onNotificationUpdated(noti);
+		
+		// updateNotificationMediaStyle();
 	}
+	/*
+   private void updateNotificationMediaStyle() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            MediaStyle style = new MediaStyle();
+            
+            // MediaSession session = MediaSessionCompat.getMediaSession();
+            style.setMediaSession(this.mediaSessionCompat.getSessionToken());
+
+            int controlCount = 0;
+            if(hasControl(PlaybackStateCompat.ACTION_PLAY) || hasControl(PlaybackStateCompat.ACTION_PAUSE) || hasControl(PlaybackStateCompat.ACTION_PLAY_PAUSE)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_SKIP_TO_NEXT)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_FAST_FORWARD)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_REWIND)) {
+                controlCount += 1;
+            }
+            int[] actions = new int[controlCount];
+            for(int i=0; i<actions.length; i++) {
+                actions[i] = i;
+            }
+            style.setShowActionsInCompactView(actions);
+            nb.setStyle(style);
+        }
+    }
+    */
 
 	// Toggle the play/pause button
 	public void updateIsPlaying(boolean isPlaying){
@@ -152,12 +196,18 @@ public class MusicControlsNotification {
 
 	private void createBuilder(){
 		Context context = cordovaActivity;
-		Notification.Builder builder = new Notification.Builder(context);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
 		// use channelid for Oreo and higher
 		if (Build.VERSION.SDK_INT >= 26) {
 			builder.setChannelId(this.CHANNEL_ID);
 		}
+		
+		int podfriendBlueRaw = Color.parseColor("#0176e5");
+		// Color podfriendBlue =Color.valueOf(podfriendBlueRaw);
+		builder.setColor(podfriendBlueRaw);
+		
+		builder.setColorized(true);
 
 		//Configure builder
 		builder.setContentTitle(infos.track);
@@ -225,6 +275,12 @@ public class MusicControlsNotification {
 			PendingIntent previousPendingIntent = PendingIntent.getBroadcast(context, 1, previousIntent, 0);
 			builder.addAction(this.getResourceId(infos.prevIcon, android.R.drawable.ic_media_previous), "", previousPendingIntent);
 		}
+		
+		nbControls++;
+		Intent backwardIntent = new Intent("music-controls-backward");
+		PendingIntent backwardPendingIntent = PendingIntent.getBroadcast(context, 1, backwardIntent, 0);
+		builder.addAction(this.getResourceId(infos.nextIcon, android.R.drawable.ic_media_rew), "", backwardPendingIntent);
+		
 		if (infos.isPlaying){
 			/* Pause  */
 			nbControls++;
@@ -238,6 +294,12 @@ public class MusicControlsNotification {
 			PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
 			builder.addAction(this.getResourceId(infos.playIcon, android.R.drawable.ic_media_play), "", playPendingIntent);
 		}
+		
+		nbControls++;
+		Intent forwardIntent = new Intent("music-controls-forward");
+		PendingIntent forwardPendingIntent = PendingIntent.getBroadcast(context, 1, forwardIntent, 0);
+		builder.addAction(this.getResourceId(infos.nextIcon, android.R.drawable.ic_media_ff), "", forwardPendingIntent);
+		
 		/* Next */
 		if (infos.hasNext){
 			nbControls++;
@@ -245,6 +307,8 @@ public class MusicControlsNotification {
 			PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
 			builder.addAction(this.getResourceId(infos.nextIcon, android.R.drawable.ic_media_next), "", nextPendingIntent);
 		}
+		
+	
 		/* Close */
 		if (infos.hasClose){
 			nbControls++;
@@ -259,12 +323,54 @@ public class MusicControlsNotification {
 			for (int i = 0; i < nbControls; ++i) {
 				args[i] = i;
 			}
-			builder.setStyle(new Notification.MediaStyle().setShowActionsInCompactView(args));
+			
+			// new Notification.MediaStyle();
+			MediaStyle mediaStyle = new MediaStyle();
+			mediaStyle.setMediaSession(this.mediaSessionCompat.getSessionToken());
+			mediaStyle.setShowActionsInCompactView(args);
+			
+			builder.setStyle(mediaStyle);
 		}
+		
+		/*
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            MediaStyle style = new MediaStyle();
+            
+            // MediaSession session = MediaSessionCompat.getMediaSession();
+            style.setMediaSession(this.mediaSessionCompat.getSessionToken());
+
+            int controlCount = 0;
+            if(hasControl(PlaybackStateCompat.ACTION_PLAY) || hasControl(PlaybackStateCompat.ACTION_PAUSE) || hasControl(PlaybackStateCompat.ACTION_PLAY_PAUSE)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_SKIP_TO_NEXT)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_FAST_FORWARD)) {
+                controlCount += 1;
+            }
+            if(hasControl(PlaybackStateCompat.ACTION_REWIND)) {
+                controlCount += 1;
+            }
+            int[] actions = new int[controlCount];
+            for(int i=0; i<actions.length; i++) {
+                actions[i] = i;
+            }
+            style.setShowActionsInCompactView(actions);
+            nb.setStyle(style);
+        }
+        */
+		
+		
 		this.notificationBuilder = builder;
 	}
 
 	private int getResourceId(String name, int fallback){
+		return fallback;
+		/*
 		try{
 			if(name.isEmpty()){
 				return fallback;
@@ -276,6 +382,7 @@ public class MusicControlsNotification {
 		catch(Exception ex){
 			return fallback;
 		}
+		*/
 	}
 
 	public void destroy(){
