@@ -82,11 +82,17 @@ const BottomNavigation = () => {
 					<FaRegLightbulb size="25" />
 				}
 				<br />
-				Podfrndr
+				Discover
 			</Link>
+			{/*
 			<Link to='/favorites/' className={styles.menuItem + (iconSelected === 'favorites' ? ' ' + styles.menuItemSelected : '')}>
 				<FaThLarge size="25" /><br />
-				My Podcasts
+				Queue
+			</Link>
+			*/}
+			<Link to='/favorites/' className={styles.menuItem + (iconSelected === 'favorites' ? ' ' + styles.menuItemSelected : '')}>
+				<FaThLarge size="25" /><br />
+				Podcasts
 			</Link>
 			{ value4ValueEnabled &&
 				<div

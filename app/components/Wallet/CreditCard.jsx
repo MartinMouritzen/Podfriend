@@ -11,7 +11,7 @@ const CreditCard = ({ walletBalance, userName }) => {
 		<div className={styles.card}>
 			<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
 			<div className={styles.bankName}>PodFriend</div>
-			<a className={styles.poweredBy}>{userName}</a>
+			<a className={styles.username}>{userName}</a>
 			<div className={styles.chip}>
 				<div className={styles.side + ' ' + styles.left}></div>
 				<div className={styles.side + ' ' + styles.right}></div>

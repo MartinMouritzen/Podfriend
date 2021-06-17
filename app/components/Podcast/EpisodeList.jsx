@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { playEpisode, updatePodcastSettings } from "podfriend-approot/redux/actions/podcastActions";
 
-import { AutoSizer, WindowScroller , CellMeasurer, CellMeasurerCache, List } from "react-virtualized";
+// import { AutoSizer, WindowScroller , CellMeasurer, CellMeasurerCache, List } from "react-virtualized";
 
 import { FaCheck } from 'react-icons/fa';
 
@@ -12,15 +12,17 @@ import FilterBar from './FilterBar.jsx';
 
 import EpisodeListItem from './EpisodeListItem.jsx';
 
-import styles from './EpisodeList.css';
+import styles from './EpisodeList.scss';
 
-const EpisodeList = ({ podcastPane, podcastInfo, episodes }) => {
+const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true }) => {
 	const dispatch = useDispatch();
 
+	/*
 	const cellCache = new CellMeasurerCache({
 		fixedWidth: true,
 		minHeight: 160
 	});
+	*/
 
 	const selectedPodcast = useSelector((state) => state.podcast.selectedPodcast);
 	const activeEpisode = useSelector((state) => state.podcast.activeEpisode);
@@ -166,17 +168,19 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes }) => {
 
 	return (
 		<div className={styles.episodeList}>
-			<FilterBar
-				seasons={seasons}
-				sortBy={sortBy}
-				sortType={sortType}
-				changeSortBy={changeSortBy}
-				onlySeason={onlySeason}
-				changeOnlySeason={changeOnlySeason}
-				hideListenedEpisodes={hideListenedEpisodes}
-				onHideListenedEpisodes={handleHideListenedEpisodesFilter}
-				episodesListened={episodesListened}
-			/>
+			{ showFilterBar &&
+				<FilterBar
+					seasons={seasons}
+					sortBy={sortBy}
+					sortType={sortType}
+					changeSortBy={changeSortBy}
+					onlySeason={onlySeason}
+					changeOnlySeason={changeOnlySeason}
+					hideListenedEpisodes={hideListenedEpisodes}
+					onHideListenedEpisodes={handleHideListenedEpisodesFilter}
+					episodesListened={episodesListened}
+				/>
+			}
 			{ episodes && episodes.length == episodesListened &&
 				<div style={{ padding: 60, textAlign: 'center' }} className={styles.listenedToAll}>
 					<div style={{ backgroundColor: '#28bd72', width: 100, height: 100, borderRadius: '50%', display: 'flex', alignItems: 'center',justifyContent: 'center',marginLeft: 'auto',marginRight: 'auto', marginBottom: '20px' }}>

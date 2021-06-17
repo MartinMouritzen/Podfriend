@@ -45,8 +45,12 @@ import {
 	PODCAST_SEARCH_ERROR,
 	REVIEWS_LOADING,
 	REVIEWS_LOADED,
-	REVIEWS_LOAD_ERROR
+	REVIEWS_LOAD_ERROR	
 } from "../constants/action-types";
+
+import {
+	PODCAST_CONFIG_UPDATE
+} from '../constants/podcast-types.js';
 
 /**
 *
@@ -129,6 +133,18 @@ export function episodeFinished(podcast,episode) {
 		payload: {
 			podcast: podcast,
 			episode: episode
+		}
+	};
+}
+/**
+*
+*/
+export function updatePodcastConfig(key,value) {
+	return {
+		type: PODCAST_CONFIG_UPDATE,
+		payload: {
+			key: key,
+			value: value
 		}
 	};
 }

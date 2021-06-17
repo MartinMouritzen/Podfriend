@@ -33,6 +33,10 @@
 	--success-color: #29bd73;
 	--success-color-light: #2ddd85;
 	--success-color-dark: #229c5f;
+
+
+	--primary-text-color: #000000;
+	--secondary-text-color: #75757e;
 }
 
 reach-portal div[data-rsbs-header="true"] h1 {
@@ -81,7 +85,7 @@ input[type=checkbox] {
 	font-family: 'Roboto';
 	font-weight: 400;
 
-	color: #75757e;
+	/* color: var(--secondary-text-color); */
 	box-sizing: border-box;
 
 	-moz-user-select: none;
@@ -91,6 +95,9 @@ input[type=checkbox] {
 	-webkit-user-drag: none;
 	user-drag: none;
 	-webkit-touch-callout: none;
+}
+p {
+	color: var(--secondary-text-color);
 }
 .top {
 	display: flex;

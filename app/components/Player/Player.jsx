@@ -44,7 +44,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 let progressTimeoutId = false;
-let segmentTimeoutId = false;
+let segmentIntervalId = false;
 
 /**
 *
@@ -63,9 +63,7 @@ class Player extends Component {
 			volume: 100,
 			sleepTimerEnabled: false,
 			sleepTimerEnding: false,
-			monetizeSegmentStart: false,
-			boostAmount: this.props.defaultBoost,
-			streamPerMinuteAmount: this.props.defaultStreamPerMinuteAmount
+			monetizeSegmentStart: false
 		};
 		this.onCanPlay = this.onCanPlay.bind(this);
 		this.onBuffering = this.onBuffering.bind(this);
@@ -135,6 +133,8 @@ class Player extends Component {
 	componentWillUnmount() {
 		Events.removeListenersInGroup('Player');
 		document.removeEventListener("keydown",this.handleKeyDown);
+
+		clearInterval(segmentIntervalId);
 	}
 	/**
 	*
@@ -277,15 +277,15 @@ class Player extends Component {
 		}
 	}
 	stopSegmentTimer() {
-		clearTimeout(segmentTimeoutId);
+		clearInterval(segmentIntervalId);
 	}
 	/**
 	*
 	*/
 	startNewSegmentTimer() {
-		clearTimeout(segmentTimeoutId);
+		clearInterval(segmentIntervalId);
 
-		segmentTimeoutId = setInterval(() => {
+		segmentIntervalId = setInterval(() => {
 			this.segmentTimeTrigger();
 		// },5000);
 		},60000);
@@ -300,8 +300,9 @@ class Player extends Component {
 			// console.log(this.props.activePodcast);
 			// console.log(this.props.activePodcast.value);
 			// return false;
-			if (this.props.isPlaying) {
-				this.props.sendValue(this.props.activePodcast.value,this.state.streamPerMinuteAmount)
+			if (this.props.isPlaying === true) {
+				console.log(this.props);
+				this.props.sendValue(this.props.activePodcast.value,this.props.activePodcast.streamAmount ? this.props.activePodcast.streamAmount : this.props.defaultStreamPerMinuteAmount)
 				.then(() => {
 					this.props.synchronizeWallet();
 				});
@@ -568,11 +569,11 @@ class Player extends Component {
 	**/
 	onBoost() {
 		if (this.props.activePodcast.value) {
-			if (this.props.walletBalance >= this.state.boostAmount) {
+			if (this.props.walletBalance >= (this.props.activePodcast.boostAmount ? this.props.activePodcast.boostAmount : this.props.defaultBoost)) {
 				let overrideDestinations = false;
 				return this.props.boostPodcast(
 					this.props.activePodcast.value,
-					this.state.boostAmount,
+					(this.props.activePodcast.boostAmount ? this.props.activePodcast.boostAmount : this.props.defaultBoost),
 					overrideDestinations
 				);
 			}
@@ -647,8 +648,8 @@ class Player extends Component {
 				playing={this.props.isPlaying}
 				volume={this.state.volume}
 				onTimeUpdate={this.onTimeUpdate}
-				boostAmount={this.state.boostAmount}
-				streamPerMinuteAmount={this.state.streamPerMinuteAmount}
+				boostAmount={(this.props.activePodcast.boostAmount ? this.props.activePodcast.boostAmount : this.props.defaultBoost)}
+				streamPerMinuteAmount={this.props.activePodcast.streamAmount ? this.props.activePodcast.streamAmount : this.props.defaultStreamPerMinuteAmount}
 				setCurrentTime={this.setCurrentTime}
 			/>
 		);

@@ -14,12 +14,29 @@
 	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(12,40,80,1)  100%);
 	height: 90px;
 	
+	z-index: 9999;
 
 	transition: width 0.7s;
 
 	position: absolute;
 	bottom: 60px;
 	right: 0px;
+
+	ion-segment {
+		--background: #054072;
+		margin-top: 15px;
+
+		ion-segment-button {
+			--indicator-color: #FFFFFF;
+
+			--color: rgba(255,255,255,0.6);
+			--color-checked: #054072 !important;
+		}
+	}
+	.segment {
+		width: 100%;
+		display: flex;
+	}
 }
 .controls {
 	white-space:nowrap;
@@ -39,7 +56,6 @@
 	flex-direction: column;
 	justify-content: center;
 	height: 90px;
-	max-width: 400px;
 }
 .coverContainer {
 	transition: all 0.7s;
@@ -357,6 +373,7 @@
 			display: flex;
 			justify-content: center;
 			height: 60px;
+			max-width: 400px;
 		}
 		.playingText .author, .playingText .title {
 			white-space: nowrap;
@@ -386,6 +403,10 @@
 	background-color: #27bd72;
 }
 .episodeClosed {
+	.segmentHidden {
+		display: none;
+	}
+
 	.coverContainer {
 		overflow: hidden;
 	}
@@ -507,6 +528,44 @@
 	z-Index: 9999;
 	overflow: auto;
 
+	.coverContainer {
+		transform: scale(1);
+	}
+	&.playing {
+		.coverContainer {
+			transform: scale(1.05);
+
+			box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
+		}
+	}
+
+	.segment {
+		transition: all 0.4s;
+		position: absolute;
+		opacity: 0;
+		top: 65px;
+	}
+	.segmentPlaying {
+		flex-direction: column;
+	}
+	.segmentEpisodeList {
+
+	}
+	.segmentChapterList {
+		background-color: #FFFFFF;
+		flex-direction: column;
+	}
+	.segmentVisible {
+		opacity: 1;
+	}
+	.segmentHidden {
+		opacity: 0;
+		pointer-events: none;
+		max-height: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
 	.subtitleContainer {
 		position: absolute;
 		bottom: 10px;
@@ -544,6 +603,7 @@
 	.coverContainer {
 		position: relative;
 		top: 0px;
+		left: 0px;
 
 		width: 90vw;
 		height: 90vw;
@@ -551,7 +611,7 @@
 		border-radius: 10px;
 		overflow: hidden;
 
-		margin-top: 20px;
+		margin-top: 15px;
 
 		margin-left: auto;
 		margin-right: auto;
@@ -563,6 +623,8 @@
 		border: 2px solid #FFFFFF;
 
 		z-index: 10;
+
+		transition: top 0.4s ease-in, box-shadow 0.4s ease-in, transform 0.4s ease-in;
 	}
 	.fillerButton {
 		width: 25px;
@@ -573,7 +635,9 @@
 		margin-top: 5px;
 	}
 	.author {
-		margin-top: 3px;
+		margin-top: 6px;
+		margin-bottom: 3px;
+		font-size: 16px;
 	}
 	.playButton, .pauseButton {
 		background-color: #FFFFFF;
