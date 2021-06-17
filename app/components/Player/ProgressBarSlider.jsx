@@ -54,6 +54,30 @@ const ProgressBarSlider = ({progress,duration,fullPlayerOpen,onProgressSliderCha
 		setSliderValue(values[0]);
 	};
 
+	/*
+	// Note: doesn't work, because react-range wants to make a mark per step interval, not custom values. 
+	// We could experiment with putting divs on top of the progress bar, but it would really only work for hover-enabled
+	// devices like destop, and is not reaaaally needed.
+
+	const STEP = 10;
+
+	renderMark={({ props, index }) => {
+		if (index > 40 && index < 151) {
+			return (
+				<div
+					{...props}
+					style={{
+						...props.style,
+						height: '16px',
+						width: '5px',
+						backgroundColor: index * STEP < sliderValue ? '#29bd73' : '#0b1c2c'
+					}}
+				/>
+			);
+		}
+	}}
+	*/
+
 	return (
 		<Range
 			step={0.1}

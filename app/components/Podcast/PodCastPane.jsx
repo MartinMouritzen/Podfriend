@@ -79,8 +79,17 @@ class PodCastPane extends Component {
 		};
 
 		this.adjustScrollOffsetOnLoad = this.adjustScrollOffsetOnLoad.bind(this);
+		this.rssFeedUpdated = this.rssFeedUpdated.bind(this);
 	}
+	rssFeedUpdated(feed) {
+		console.log(feed);
 
+		this.setState({
+			fetchingRSSFeed: false,
+			fetchedRSSFeed: true,
+			rssFeed: feed
+		});	
+	}
 	retrieveOriginalPodcastFeed() {
 		// console.error('wa1');
 		if (!this.state.fetchedRSSFeed && !this.state.fetchingRSSFeed) {
@@ -89,17 +98,17 @@ class PodCastPane extends Component {
 				fetchingRSSFeed: true,
 				rssFeed: false
 			},async () => {
-				// console.error('wa3');
 				var podcastFeed = new PodcastFeed(this.props.selectedPodcast.feedUrl);
+				console.log('before parsing feed');
 				podcastFeed.parse()
 				.then((feed) => {
-					// console.error('wa4');
+					console.log('after parsing feed');
+					// console.log('wa4');
 					// console.error(feed);
-					this.setState({
-						fetchingRSSFeed: false,
-						fetchedRSSFeed: true,
-						rssFeed: feed
-					});	
+
+					this.rssFeedUpdated(feed);
+
+
 				})
 				.catch((error) => {
 					console.error('Error parsing RSS feed: ');

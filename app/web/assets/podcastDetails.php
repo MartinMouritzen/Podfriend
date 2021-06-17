@@ -53,7 +53,7 @@ if($debug || !$cache->get($podcastPath, $return)) {
 		$description = $podcast["description"] ? $podcast["description"] : $description;
 		$image = $podcast["artworkUrl600"];
 		
-		$title = $podcastName ? $podcastName." - Podfriend" : $title;
+		$title = $podcastName ? $podcastName." podcast" : $title;
 		
 		if ($episodeId) {
 			require_once($_SERVER["DOCUMENT_ROOT"]."../library/class.podcastservice.php");
@@ -66,8 +66,11 @@ if($debug || !$cache->get($podcastPath, $return)) {
 				$episodeTitle = $episodeInfo["episode"]["title"];
 				$audioUrl = $episodeInfo["episode"]["enclosureUrl"];
 				$image = $episodeInfo["episode"]["image"] ? $episodeInfo["episode"]["image"] : $image;
+
+				$title = $title." : ".$episodeTitle;
 			}
 		}
+		$title = $title." on Podfriend Podcast Player App.";
 	}
 }
 if ($podcast["path"]) {

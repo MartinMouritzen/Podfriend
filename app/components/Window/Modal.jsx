@@ -11,7 +11,7 @@ import styles from './Modal.scss';
 /**
 *
 */
-const Modal = ({ shown = true, pageModal = false, onClose, title, children, useBlur, hideModalCallback, defaultSnap, snapPoints, header, footer, onlyBottomSheet }) => {
+const Modal = ({ shown = true, pageModal = false, onClose, title, children, useBlur, hideModalCallback, defaultSnap, snapPoints, header, footer, onlyBottomSheet, initialFocusRef = false }) => {
 	const portalElement = useRef(null);
 	const [isReadyToDisplay, setIsReadyToDisplay] = useState(false);
 	const matches = useMediaQuery('(max-width:600px)');
@@ -88,6 +88,7 @@ const Modal = ({ shown = true, pageModal = false, onClose, title, children, useB
 					footer={footer}
 					defaultSnap={defaultSnap ? defaultSnap : defaultSnapFunction}
 					snapPoints={snapPoints}
+					initialFocusRef={initialFocusRef}
 				>
 					<div className="bottomSheet podfriendModal">
 						{childContent}

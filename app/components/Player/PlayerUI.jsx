@@ -47,6 +47,8 @@ import { synchronizeWallet, showFullPlayer, showSpeedSettingWindow, showShareWin
 
 import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.jsx';
 
+import ValueConfigModal from 'podfriend-approot/components/Wallet/ValueConfigModal/ValueConfigModal.jsx';
+
 import ChatProvider from 'podfriend-approot/components/Chat/ChatProvider.jsx';
 import ChatModal from 'podfriend-approot/components/Chat/ChatModal.jsx';
 import SleepTimerModal from './SleepTimerModal.jsx';
@@ -56,7 +58,12 @@ import OpenPlayerUI from './OpenPlayerUI.jsx';
 import ProgressBarSlider from './ProgressBarSlider.jsx';
 import VolumeSlider from './VolumeSlider.jsx';
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonLabel, IonIcon } from '@ionic/react';
+import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import PlayerEpisodeList from './PlayerEpisodeList/PlayerEpisodeList.jsx';
+import EpisodeList from 'podfriend-approot/components/Podcast/EpisodeList.jsx';
+
+import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
+import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/EpisodeChapterList.jsx';
 
 const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/Value4ValueModal.jsx'));
 // import Value4ValueModal from 'podfriend-approot/components/Wallet/Value4ValueModal.jsx';
@@ -87,6 +94,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [chatShown,setChatShown] = useState(false);
 	const [error,setError] = useState(false);
 	const [errorText,setErrorText] = useState(false);
+
+	const [segmentVisible,setSegmentVisible] = useState('playing');
 
 	const [rssFeed,setRSSFeed] = useState(false);
 	const [rssFeedCurrentEpisode,setRssFeedCurrentEpisode] = useState(false);
@@ -130,6 +139,16 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		});
 	};
 
+	const openPodcast = (event) => {
+		history.push({
+			pathname: '/podcast/' + activePodcast.path + '/',
+			state: {
+				podcast: activePodcast
+			}
+		});
+		dispatch(showFullPlayer(false));
+	}
+
 	const openEpisode = (event) => {
 		if (!hasEpisode) {
 			return;
@@ -140,12 +159,14 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			dispatch(showFullPlayer(true));
 		}
 		else {
+			/*
 			history.push({
 				pathname: '/podcast/' + activePodcast.path + '/',
 				state: {
 					podcast: activePodcast
 				}
 			});
+			*/
 			// setEpisodeOpen(false);
 			dispatch(showFullPlayer(false));
 		}
@@ -247,6 +268,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				return fileUrl;
 			}
 		}
+	};
+
+	const [valueConfigShown,setValueConfigShown] = useState(false);
+
+	const showValueConfigModal = () => {
+		setValueConfigShown(true);
+	};
+	const hideValueConfigModal = () => {
+		setValueConfigShown(false);
 	};
 
 	const enableChromeCast = () => {
@@ -530,178 +560,222 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			}
 			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
 			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'flex' }}>
-				<div
-					className={styles.playingPreview}
-					onClick={openEpisode}
-				>
-					{ fullPlayerOpen && false && 
-<IonSegment onIonChange={e => console.log('Segment selected', e.detail.value)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
-          <IonSegmentButton value="friends">
-            <IonLabel>Episode</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="enemies">
-            <IonLabel>Info</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="zenemies">
-            <IonLabel>Social</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-}
-					<div className={styles.coverContainer} onDoubleClick={videoFullscreen}>
-						{ audioController.useBrowserAudioElement && isVideo !== false &&
-							<>
-								<div className={styles.fullscreenIcon} onClick={videoFullscreen}><FullScreenIcon /></div>
-								<video {...audioElementProps}>
-									<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
-								</video>
-							</>
-						}
-						{ isVideo === false &&
-							<>
-								{ audioController.useBrowserAudioElement === true &&
-									<audio {...audioElementProps}>
-										<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
-									</audio>
-								}
 
-								{ chapters !== false &&
-									<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
+				{ fullPlayerOpen && chapters !== false &&
+					<div style={{ width: '100%', paddingLeft: 20, paddingRight: 20, maxWidth: 440 }}>
+						<IonSegment value={segmentVisible} onIonChange={(e) => { setSegmentVisible(e.detail.value); console.log(e.detail.value); }} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
+							<IonSegmentButton value="playing">
+								<IonLabel>
+									Playing
+								</IonLabel>
+							</IonSegmentButton>
+							{ chapters !== false &&
+								<IonSegmentButton value="chapterList">
+									<IonLabel>Chapters</IonLabel>
+								</IonSegmentButton>
+							}
+							{/*
+							<IonSegmentButton value="social">
+								<IonLabel>Social</IonLabel>
+							</IonSegmentButton>
+							*/}
+						</IonSegment>
+					</div>
+				}
+				<div className={styles.segment + ' ' + styles.segmentPlaying + ' ' + (segmentVisible === 'playing' || !fullPlayerOpen ? styles.segmentVisible : styles.segmentHidden) }>
+					<div
+						className={styles.playingPreview}
+						onClick={openEpisode}
+					>
+						<div className={styles.coverContainer} onDoubleClick={videoFullscreen}>
+							{ audioController.useBrowserAudioElement && isVideo !== false &&
+								<>
+									<div className={styles.fullscreenIcon} onClick={videoFullscreen}><FullScreenIcon /></div>
+									<video {...audioElementProps}>
+										<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
+									</video>
+								</>
+							}
+							{ isVideo === false &&
+								<>
+									{ audioController.useBrowserAudioElement === true &&
+										<audio {...audioElementProps}>
+											<source src={addUserAgentToUrl(activeEpisode.url) + generateTimeHash()} type={activeEpisode.type ? activeEpisode.type : 'audio/mpeg'} />
+										</audio>
+									}
+
+									{ chapters !== false &&
+										<EpisodeChapters audioController={audioController} chapters={chapters} progress={activeEpisode.currentTime} />
+									}
+									{ activeEpisode &&
+										<PodcastImage
+											podcastPath={activePodcast.path}
+											width={600}
+											height={600}
+											imageErrorText={activePodcast.name}
+											fallBackImage={activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
+											src={activeEpisode.image ? activeEpisode.image : activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
+											className={styles.cover}
+										/>
+									}
+
+								</>
+							}
+							<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
+								<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} searchOpen={transcriptSearchOpen} onTranscriptSearchClose={onTranscriptSearchClose} />
+							</div>
+						</div>
+						<div className={styles.playingText}>
+							<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
+							<div className={styles.author} onClick={openPodcast}>
+								{activePodcast.name}
+							</div>
+						</div>
+					</div>
+					{ hasEpisode && 
+						<div className={styles.controls + ' ' + (error ? styles.errorPlaying : '')}>
+							<div className={styles.progress}>
+								<div className={styles.progressText}>
+									{TimeUtil.formatPrettyDurationText(progress)}
+								</div>
+								<div className={styles.progressBarOuter}>
+									<ProgressBarSlider
+										progress={progress}
+										duration={duration}
+										fullPlayerOpen={fullPlayerOpen}
+										onProgressSliderChange={onProgressSliderChange}
+									/>
+
+									{/*
+									<ProgressBar
+										progress={progress}
+										duration={duration}
+										onProgressSliderChange={onProgressSliderChange}
+									/>*/}
+								</div>
+								<div className={styles.durationText} title={TimeUtil.formatPrettyDurationText(duration - progress) + ' left.'}>
+									{TimeUtil.formatPrettyDurationText(duration)}
+								</div>
+							</div>
+							<div className={styles.audioButtons}>
+								{ false && 
+									<div className={styles.chatButton} onClick={toggleChat}><ChatIcon /></div>
 								}
-								{ activeEpisode &&
+								{ false &&
+									<div className={styles.boostButton} onClick={onBoostClick}>
+										<Reward
+											ref={rewardElement}
+											type='confetti'
+											config={{
+												zIndex: 1000,
+												lifeTime: 800
+											}}
+										>
+											<BoostIcon />
+										</Reward>
+										</div>
+								}
+								{ true && 
+									<div className={styles.chatButton}>&nbsp;</div>
+								}
+								<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
+								<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
+
+								{ error === true &&
 									<>
-									<PodcastImage
-										podcastPath={activePodcast.path}
-										width={600}
-										height={600}
-										imageErrorText={activePodcast.name}
-										fallBackImage={activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
-										src={activeEpisode.image ? activeEpisode.image : activePodcast.artworkUrl600 ? activePodcast.artworkUrl600 : activePodcast.image}
-										className={styles.cover}
-									/>{activeEpisode.image}
+										<div key="playButton" className={styles.playButton + ' ' + styles.errorButton} onClick={startRetry}>
+											<ErrorIcon />
+										</div>
+										<div className={styles.errorText}>
+											{errorText ? errorText : 'Could not load audio.'}
+										</div>
 									</>
 								}
+								{ error === false &&
+									<>
+										{ isBuffering &&
+											<div key="playButton" className={styles.playButton} onClick={pause}>
+												{ fullPlayerOpen && 
+													<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
+												}
+												{ fullPlayerOpen === false && 
+													<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
+												}
+											</div>
+										}
+										{ canPlay && !playing &&
+											<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
+										}
+										{ canPlay && playing &&
+											<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
+										}
+									</>
+								}
+								
+								<div className={styles.forwardButton} onClick={onForward}><ForwardIcon /></div>
+								<div className={styles.fastForwardButton} onClick={onNextEpisode}><SkipForwardIcon /></div>
+								<div className={styles.moreControlsButton} ref={moreIconElement}><MoreIcon /></div>
+							</div>
+						</div>
+					}
+					{ audioElement.current && 
+						<VolumeSlider audioElement={audioElement.current} />
+					}
+					{ fullPlayerOpen &&
+						<OpenPlayerUI
+							description={description}
+							showNotes={showNotes}
+							activePodcast={activePodcast}
+							activeEpisode={activeEpisode}
+							chaptersLoading={chaptersLoading}
+							chapters={chapters}
+							currentChapter={currentChapter}
+							playingValuePodcast={playingValuePodcast}
+							value4ValueEnabled={value4ValueEnabled}
+							boostAmount={boostAmount}
+							streamPerMinuteAmount={streamPerMinuteAmount}
+							onBoost={onBoost}
+							setCurrentTime={setCurrentTime}
+							showValueConfigModal={showValueConfigModal}
+						/>
 
-							</>
-						}
-						<div className={styles.subtitleContainer} style={{ display: (fullPlayerOpen && subtitleFileURL !== false) ? 'block' : 'none' }}>
-							<PodcastSubtitles subtitleFileURL={subtitleFileURL} progress={activeEpisode.currentTime} episodeOpen={fullPlayerOpen} searchOpen={transcriptSearchOpen} onTranscriptSearchClose={onTranscriptSearchClose} />
-						</div>
-					</div>
-					<div className={styles.playingText}>
-						<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
-						<div className={styles.author}>
-							{activePodcast.name}
-						</div>
-					</div>
+					}
 				</div>
-				{ hasEpisode && 
-					<div className={styles.controls + ' ' + (error ? styles.errorPlaying : '')}>
-						<div className={styles.progress}>
-							<div className={styles.progressText}>
-								{TimeUtil.formatPrettyDurationText(progress)}
-							</div>
-							<div className={styles.progressBarOuter}>
-								<ProgressBarSlider
-									progress={progress}
-									duration={duration}
-									fullPlayerOpen={fullPlayerOpen}
-									onProgressSliderChange={onProgressSliderChange}
-								/>
-
-								{/*
-								<ProgressBar
-									progress={progress}
-									duration={duration}
-									onProgressSliderChange={onProgressSliderChange}
-								/>*/}
-							</div>
-							<div className={styles.durationText} title={TimeUtil.formatPrettyDurationText(duration - progress) + ' left.'}>
-								{TimeUtil.formatPrettyDurationText(duration)}
-							</div>
-						</div>
-						<div className={styles.audioButtons}>
-							{ false && 
-								<div className={styles.chatButton} onClick={toggleChat}><ChatIcon /></div>
-							}
-							{ false &&
-								<div className={styles.boostButton} onClick={onBoostClick}>
-									<Reward
-										ref={rewardElement}
-										type='confetti'
-										config={{
-											zIndex: 1000,
-											lifeTime: 800
-										}}
-									>
-										<BoostIcon />
-									</Reward>
-									</div>
-							}
-							{ true && 
-								<div className={styles.chatButton}>&nbsp;</div>
-							}
-							<div className={styles.fastBackwardButton} onClick={onPrevEpisode}><SkipBackwardIcon /></div>
-							<div className={styles.backwardButton} onClick={onBackward}><RewindIcon /></div>
-
-							{ error === true &&
-								<>
-									<div key="playButton" className={styles.playButton + ' ' + styles.errorButton} onClick={startRetry}>
-										<ErrorIcon />
-									</div>
-									<div className={styles.errorText}>
-										{errorText ? errorText : 'Could not load audio.'}
-									</div>
-								</>
-							}
-							{ error === false &&
-								<>
-									{ isBuffering &&
-										<div key="playButton" className={styles.playButton} onClick={pause}>
-											{ fullPlayerOpen && 
-												<img src={PlayLoadingWhiteBG} style={{ width: '70px', height: '70px' }}/>
-											}
-											{ fullPlayerOpen === false && 
-												<img src={PlayLoading} style={{ width: '70px', height: '70px' }}/>
-											}
-										</div>
-									}
-									{ canPlay && !playing &&
-										<div key="playButton" className={styles.playButton} onClick={play}><PlayIcon /></div>
-									}
-									{ canPlay && playing &&
-										<div key="playButton" className={styles.pauseButton} onClick={pause}><PauseIcon /></div>
-									}
-								</>
-							}
-							
-							<div className={styles.forwardButton} onClick={onForward}><ForwardIcon /></div>
-							<div className={styles.fastForwardButton} onClick={onNextEpisode}><SkipForwardIcon /></div>
-							<div className={styles.moreControlsButton} ref={moreIconElement}><MoreIcon /></div>
-						</div>
+				{ fullPlayerOpen && false &&
+					<div className={styles.segment + ' ' + styles.segmentEpisodeList + ' ' + ((segmentVisible === 'episodeList' && fullPlayerOpen) ? styles.segmentVisible : styles.segmentHidden) }>
+						<PlayerEpisodeList episodes={activePodcast.episodes} activeEpisode={activeEpisode} />
+						{/*
+						<EpisodeList
+							showFilterBar={false}
+							currentPodcastPlaying={activePodcast}
+							podcastInfo={activePodcast}
+							episodes={activePodcast.episodes}
+						/>
+						*/}
 					</div>
-				}
-				{ audioElement.current && 
-					<VolumeSlider audioElement={audioElement.current} />
 				}
 				{ fullPlayerOpen &&
-					<OpenPlayerUI
-						description={description}
-						showNotes={showNotes}
-						activePodcast={activePodcast}
-						activeEpisode={activeEpisode}
-						chaptersLoading={chaptersLoading}
-						chapters={chapters}
-						currentChapter={currentChapter}
-						playingValuePodcast={playingValuePodcast}
-						value4ValueEnabled={value4ValueEnabled}
-						boostAmount={boostAmount}
-						streamPerMinuteAmount={streamPerMinuteAmount}
-						onBoost={onBoost}
-						setCurrentTime={setCurrentTime}
-					/>
-
+					<div className={styles.segment + ' ' + styles.segmentChapterList + ' ' + ((segmentVisible === 'chapterList' && fullPlayerOpen) ? styles.segmentVisible : styles.segmentHidden) }>
+						<div style={{ height: '80px', bottom: '1px', overflow: 'hidden' }} >
+							<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
+								<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
+							</svg>
+						</div>
+						<div style={{ maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
+								<h2>Chapters</h2>
+								{ chaptersLoading === true &&
+									<div>
+										Fetching chapters for episode
+									</div>
+								}
+							</div>
+							{ chapters !== false &&
+								<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
+							}
+						</div>
+					</div>
 				}
-
 			</DraggablePane>
 			{ fullPlayerOpen === false && 
 				<div className={styles.bottomProgressBar}>
@@ -717,12 +791,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 				<ContextMenuItem onClick={() => { dispatch(showSpeedSettingWindow()); }}><SpeedIcon /> Set audio speed</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showShareWindow()); }}><ShareIcon /> Share episode</ContextMenuItem>
 				<ContextMenuItem onClick={() => { dispatch(showSleepTimer()); }}><ClockIcon /> Set sleep timer</ContextMenuItem>
-				<ContextMenuItem onClick={openEpisode}><FaListAlt />Go to podcast</ContextMenuItem>
+				<ContextMenuItem onClick={openPodcast}><FaListAlt />Go to podcast</ContextMenuItem>
 				
 				{ /* <ContextMenuItem onClick={() => { enableChromeCast(); } }><ChromecastIcon /> Chromecast</ContextMenuItem> */ }
 			</ContextMenu>
 			{ showSleepTimerWindow &&
 				<SleepTimerModal audioController={audioController} shown={showSleepTimerWindow} onDismiss={() => { dispatch(hideSleepTimer()); }} />
+			}
+			{ valueConfigShown &&
+				<ValueConfigModal shown={valueConfigShown} onDismiss={hideValueConfigModal} />
 			}
 			{ chatShown &&
 				<ChatProvider roomId={activePodcast.guid} chatModal={(props) => <ChatModal {...props} shown={chatShown} onDismiss={() => { setChatShown(false); }} activePodcast={activePodcast} activeEpisode={activeEpisode} />} />

@@ -34,11 +34,11 @@ const Chapter = ({ startTime, image, title, isActive }) => {
 					<img src={image} />
 				}
 			</div>
-			<div className={styles.chapterTime}>
-				{fancyTimeFormat(startTime)}
-			</div>
 			<div className={styles.chapterTitle}>
 				{title}
+			</div>
+			<div className={styles.chapterTime}>
+				{fancyTimeFormat(startTime)}
 			</div>
 		</div>
 	)

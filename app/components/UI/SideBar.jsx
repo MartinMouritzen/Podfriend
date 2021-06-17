@@ -6,7 +6,7 @@ import { initiateLogin } from "~/app/redux/actions/uiActions";
 
 import { Link, withRouter } from 'react-router-alias';
 
-import { FaRegEnvelope, FaPlus, FaUser, FaHome, FaPodcast, FaRegLightbulb, FaLightbulb,  FaFolder, FaRegClock } from "react-icons/fa";
+import { FaRegEnvelope, FaPlus, FaUser, FaHome, FaPodcast, FaRegLightbulb, FaLightbulb,  FaFolder, FaRegClock, FaHandsHelping } from "react-icons/fa";
 
 import { IonToggle } from '@ionic/react';
 
@@ -122,6 +122,11 @@ class SideBar extends Component {
 							{ true && 
 								<Link to="/contact/" className={styles.mainNavigationButton}>
 									<FaRegEnvelope size="20" /> Contact us
+								</Link>
+							}
+							{ false && 
+								<Link to="/contribute/" className={styles.mainNavigationButton}>
+									<FaHandsHelping size="20" /> Support Podfriend
 								</Link>
 							}
 							<hr />

@@ -314,7 +314,7 @@ class PodcastClient extends Component {
 	*/
 	onSearch(query) {
 		this.props.history.push({
-			pathname: '/search/' + encodeURIComponent(query)
+			pathname: '/search/' + query
 		});
 	}
 }

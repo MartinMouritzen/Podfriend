@@ -31,6 +31,115 @@ let podfriendTrayIcon = __dirname + '/images/logo/podfriend_logo_18x18.png';
 
 var autoUpdatesEnabled = process.env.NODE_ENV === 'production' ? true : false;
 
+let mediaKeysEnabled = true;
+
+const disableMediaKeys = () => {
+	mediaKeysEnabled = false;
+	globalShortcut.unregister('VolumeUp');
+	globalShortcut.unregister('VolumeDown');
+	globalShortcut.unregister('VolumeMute');
+	globalShortcut.unregister('MediaPlayPause');
+	globalShortcut.unregister('MediaStop');
+	globalShortcut.unregister('MediaNextTrack');
+	globalShortcut.unregister('MediaPreviousTrack');
+
+};
+const enableMediaKeys = () => {
+	mediaKeysEnabled = true;
+	globalShortcut.register('VolumeUp', () => {
+		console.log('VolumeUp');
+		// console.log(audio.getVolume());
+
+		var volume = audio.getVolume();
+		
+		if (volume.then) {
+			volume.then((volume) => {
+				audio.setVolume(volume + 2);
+			});
+		}
+		else {
+			audio.setVolume(volume + 2);
+		}
+		
+		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeUp\',false)');
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeUp\',false)');
+	});
+	
+	globalShortcut.register('VolumeDown', () => {
+		console.log('VolumeDown');
+
+		var volume = audio.getVolume();
+		
+		if (volume.then) {
+			volume.then((existingVolume) => {
+				audio.setVolume(existingVolume - 2);
+			});
+		}
+		else {
+			audio.setVolume(volume - 2);
+		}
+		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeDown\',false)');
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeDown\',false)');
+	});
+	
+	globalShortcut.register('VolumeMute', () => {
+		console.log('VolumeMute');
+		
+		var mutedStatus = audio.isMuted();
+		
+		if (mutedStatus.then) {
+			mutedStatus.then((existingMutedStatus) => {
+				audio.setMuted(!existingMutedStatus);
+			});
+		}
+		else {
+			audio.setMuted(!mutedStatus);
+		}
+
+		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeMute\',false)');
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeMute\',false)');
+	});
+	
+	globalShortcut.register('MediaPlayPause', () => {
+		// console.log('MediaPlayPause');
+		// playPause();
+		
+		if (mediaKeysEnabled) {
+			mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+		}
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+	});
+	
+	globalShortcut.register('MediaStop', () => {
+		console.log('MediaStop - BUT - we are sending playpause for now.');
+		// playPause();
+		// mainWindow.webContents.executeJavaScript('Events.emit(\'MediaStop\',false)');
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaStop\',false)');
+		if (mediaKeysEnabled) {
+			mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+		}
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+	});
+	
+	globalShortcut.register('MediaNextTrack', () => {
+		console.log('MediaNextTrack');
+		if (mediaKeysEnabled) {
+			mainWindow.webContents.executeJavaScript('Events.emit(\'MediaNextTrack\',false)');
+		}
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaNextTrack\',false)');
+		// next();
+	});
+	
+	globalShortcut.register('MediaPreviousTrack', () => {
+		if (mediaKeysEnabled) {
+			mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPreviousTrack\',false)');
+		}
+		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPreviousTrack\',false)');
+		console.log('MediaPreviousTrack');
+		// previous();
+	});
+};
+
 var systemTray;
 
 var miniWindows = [
@@ -102,7 +211,9 @@ ipcMain.on('miniWindowLayoutChange', () => {
 });
 
 ipcMain.on('requestPlay', () => {
-	mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+	if (mediaKeysEnabled) {
+		mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
+	}
 });
 
 ipcMain.on('PFMessageToMiniWindow',(event,message) => {
@@ -128,96 +239,12 @@ app.on('window-all-closed', () => {
 
 app.on('ready', async () => {
 	app.setAppUserModelId('com.podfriend.win');
-	globalShortcut.register('VolumeUp', () => {
-		console.log('VolumeUp');
-		// console.log(audio.getVolume());
 
-		var volume = audio.getVolume();
-		
-		if (volume.then) {
-			volume.then((volume) => {
-				audio.setVolume(volume + 2);
-			});
-		}
-		else {
-			audio.setVolume(volume + 2);
-		}
-		
-		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeUp\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeUp\',false)');
-	});
-	
 	globalShortcut.register('CommandOrControl+Shift+K', () => {
 		mainWindow.webContents.openDevTools()
 	})
-	
-	globalShortcut.register('VolumeDown', () => {
-		console.log('VolumeDown');
 
-		var volume = audio.getVolume();
-		
-		if (volume.then) {
-			volume.then((existingVolume) => {
-				audio.setVolume(existingVolume - 2);
-			});
-		}
-		else {
-			audio.setVolume(volume - 2);
-		}
-		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeDown\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeDown\',false)');
-	});
-	
-	globalShortcut.register('VolumeMute', () => {
-		console.log('VolumeMute');
-		
-		var mutedStatus = audio.isMuted();
-		
-		if (mutedStatus.then) {
-			mutedStatus.then((existingMutedStatus) => {
-				audio.setMuted(!existingMutedStatus);
-			});
-		}
-		else {
-			audio.setMuted(!mutedStatus);
-		}
-
-		// mainWindow.webContents.executeJavaScript('Events.emit(\'VolumeMute\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'VolumeMute\',false)');
-	});
-	
-	globalShortcut.register('MediaPlayPause', () => {
-		// console.log('MediaPlayPause');
-		// playPause();
-		
-		mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
-	});
-	
-	globalShortcut.register('MediaStop', () => {
-		console.log('MediaStop - BUT - we are sending playpause for now.');
-		// playPause();
-		// mainWindow.webContents.executeJavaScript('Events.emit(\'MediaStop\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaStop\',false)');
-		
-		mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPlayPause\',false)');
-	});
-	
-	globalShortcut.register('MediaNextTrack', () => {
-		console.log('MediaNextTrack');
-		mainWindow.webContents.executeJavaScript('Events.emit(\'MediaNextTrack\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaNextTrack\',false)');
-		// next();
-	});
-	
-	globalShortcut.register('MediaPreviousTrack', () => {
-		mainWindow.webContents.executeJavaScript('Events.emit(\'MediaPreviousTrack\',false)');
-		// quickViewWindow.webContents.executeJavaScript('Events.emit(\'MediaPreviousTrack\',false)');
-		console.log('MediaPreviousTrack');
-		// previous();
-	});
-	
+	enableMediaKeys();	
 	
 	if (
 		process.env.NODE_ENV === 'development' ||
@@ -349,9 +376,26 @@ app.on('ready', async () => {
 		systemTray = new Tray(podfriendTrayIcon);
 		// systemTray.setHighlightMode('on');
 		const trayContextMenu = Menu.buildFromTemplate([
-			{ label: 'Show Podfriend window', click: () => {
-				mainWindow.show();
-			}},
+			{
+				label: 'Show Podfriend window',
+				click: () => {
+					mainWindow.show();
+				}
+			},
+			{
+				label: 'Use media keys',
+				type: 'checkbox',
+				checked: mediaKeysEnabled,
+				click: () => {
+					if (mediaKeysEnabled) {
+						disableMediaKeys();
+					}
+					else {
+						enableMediaKeys();
+					}
+					trayContextMenu.items[1].checked = mediaKeysEnabled;
+				}
+			},
 			/*
 			{ label: 'Item2', type: 'radio' },
 			{ label: 'Item3', type: 'radio', checked: true },
@@ -363,6 +407,10 @@ app.on('ready', async () => {
 		]);
 		systemTray.setContextMenu(trayContextMenu);
 		systemTray.setToolTip('Podfriend');
+
+		systemTray.on('double-click',(event) => {
+			mainWindow.show();
+		});
 	});
 
 	// const menuBuilder = new MenuBuilder(mainWindow);
