@@ -24,13 +24,15 @@ const ShareIcon = () => <SVG src={require('podfriend-approot/images/design/playe
 
 import { showShareWindow } from 'podfriend-approot/redux/actions/uiActions';
 
+import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
+
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
 // import ShareButtons from './ShareButtons.jsx';
 
-import styles from './EpisodeList.css';
+import styles from './EpisodeList.scss';
 
 const EpisodeListItem = ({ style, id, title, description, episodeImage, duration, currentTime, podcast, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
 	const dispatch = useDispatch();
@@ -91,28 +93,64 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 		}
 	};
 
+	const onMarkAsListened = () => {
+
+	};
+
 	return (
 		<div id={'episode-' + id} key={episode.url} className={episodeClass} onClick={onPlay} style={style}>
 			<div className={styles.episodeInner}>
-				<PodcastImage
-					podcastPath={podcastPath}
-					width={120}
-					height={120}
-					imageErrorText={title}
-					src={episodeImage}
-					fallBackImage={podcast.artworkUrl600}
-					className={styles.cover}
-					asBackground={true}
-				/>
+				<div>
+					<div style={{ position: 'relative' }}>
+						<PodcastImage
+							podcastPath={podcastPath}
+							width={120}
+							height={120}
+							imageErrorText={title}
+							src={episodeImage}
+							fallBackImage={podcast.artworkUrl600}
+							className={styles.cover}
+							asBackground={true}
+						/>
+						{/*
+						<div className={styles.play}>
+							<div className={[styles.playIcon,styles.icon].join(' ')}  onClick={onPlay}>
+								<FaPlay size="18px" />
+							</div>
+							<div className={[styles.pauseIcon,styles.icon].join(' ')} onClick={(event) => { Events.emit('podcastPauseRequested',false); event.stopPropagation(); }}>
+								<FaPause size="18px" />
+							</div>
+							<div className={[styles.checkIcon,styles.icon].join(' ')}>
+								<FaCheck size="18px"  />
+							</div>
+						</div>
+						*/}
+					</div>
+					{ (episode.season || episode.episodeNumber) &&
+						<div className={styles.seasonInfo}>
+							{episode.season &&
+								<>S{episode.season}</>
+							}
+							{ episode.season && episode.episodeNumber &&
+								<> &middot; </>
+							}
+							{episode.episodeNumber &&
+								<>EP{episode.episodeNumber}</>
+							}
+						</div>
+					}
+				</div>
 				<div className={styles.episodeInfo}>
 					<div className={styles.titleAndDescription}>
 						<div className={styles.title} dangerouslySetInnerHTML={{__html: episodeTitle}} />
 						{ episodeType && episodeType != 'full' && episodeType !== '' &&
 							<span type={episodeType} className={styles.episodeType}>{episodeType}</span>
 						}
-						<div className={styles.date}>
-							{format(date,'MMM D, YYYY')}
-							<span className={styles.agoText}>({distanceInWordsToNow(date)} ago)</span>
+						<div className={styles.subLine}>
+							<div className={styles.date}>
+								{format(date,'MMM D, YYYY')}
+								<span className={styles.agoText}>({distanceInWordsToNow(date)} ago)</span>
+							</div>
 						</div>
 						<div className={styles.description} dangerouslySetInnerHTML={{__html:episodeDescription}} />
 					</div>
@@ -133,7 +171,10 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 				</div>
 			</div>
 			<div className={styles.extraButtons}>
-				<button onClick={onShareEpisode} style={{ width: '150px', marginTop: '5px', marginLeft: '20px' }}><ShareIcon /> Share</button>
+				<button onClick={onShareEpisode} style={{ width: '150px', marginTop: '15px', marginLeft: '15px' }}><ShareIcon /> Share</button>
+				{/*
+				<button onClick={onMarkAsListened} style={{ width: '150px', marginTop: '15px', marginLeft: '15px' }}>Mark as listened</button>
+				*/}
 				{ /* <ShareButtons podcastTitle={podcastTitle} episodeTitle={title} episodeId={id} podcastPath={podcastPath} /> */ } 
 			</div>
 		</div>

@@ -1,0 +1,393 @@
+ion-item {
+	--padding-start: 0px;
+	--padding-end: 0px;
+	--inner-padding-end: 0px;
+}
+ion-item-options {
+	background-color: #ff23aa;
+}
+ion-item-option {
+	color: #FFFFFF;
+	background-color: #ffcc00;
+}
+.episodeListLoading {
+	padding: 10px;
+	background-color: #FFFFFF;
+}
+.episodeList {
+	flex: 1;
+	background-color: #FFFFFF;
+}
+.episodeList .episode label {
+	display: block;
+	padding: 20px;
+}
+.listenedToAll svg {
+	fill: #FFFFFF;
+}
+.seasonHeader {
+	background-color: #DDDDDD;
+	border-top: 1px solid #D6D6D6;
+	border-bottom: 1px solid #D6D6D6;
+	color: #000000;
+	padding: 20px;
+}
+.seasonHeader .seasonEpisodes {
+	color: #888888;
+	font-size: 14px;
+}
+.episode, .episodePlaying {
+	min-height: 50px;
+	flex: 1;
+	background-color: #FFFFFF;
+	transition: all 1s;
+	/*border-bottom: 2px solid #EEEEEE;*/
+
+	content-visibility: auto;
+}
+.episodeInner {
+	display: flex;
+}
+@media (any-hover: hover) {
+	.episode:hover {
+		/* border: 1px solid #DDDDDD; */
+		background-color: #F0F0F0;
+	}
+}
+.episode.listened {
+	background-color: #FFFFFF;
+}
+.episodePlaying, .episodePlaying:hover {
+	/* border: 1px solid #bdd7ef; */
+	background-color: #0176e5 !important;
+}
+.extraButtons {
+	height: 0px;
+	overflow: hidden;
+	background-color: var(--primary-color-dark);
+	transition: all 0.4s;
+}
+.episodePlaying .extraButtons {
+	height: 80px;
+	border-top: 1px solid rgba(0,0,0,0.2);
+}
+.episodeInfo {
+	padding: 20px;
+	flex: 1;
+}
+.mobileHeader {
+	font-size: 16px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+	color: #000000;
+}
+.header {
+	display: none;
+	flex: 1;
+	margin-bottom: 5px;
+}
+.playHeader {
+	width: 35px;
+}
+.titleAndDescriptionHeader {
+	width: 500px;
+	padding-left: 20px;
+}
+.progressHeader {
+	width: 120px;
+	padding-left: 20px;
+	color: #BBBBBB;
+}
+.dateHeader {
+	width: 200px;
+	padding-left: 20px;
+	color: #BBBBBB;
+}
+.durationHeader {
+	width: 100px;
+	padding-left: 20px;
+	color: #BBBBBB;
+}
+/*
+.play {
+	min-width: 55px;
+	max-width: 55px;
+	padding-top: 15px;
+	padding-left: 20px;
+}
+*/
+.listEpisodeContainer {
+	transition: height 0.4s;
+}
+/*
+.play {
+	position: absolute;
+	top: calc(50% - 20px);
+    left: calc(50% - 10px);
+}
+.icon {
+	border-radius: 10px;
+	background-color: #cccccc;
+	width: 40px;
+	height: 40px;
+	transition: all 0.4s;
+	padding: 10px;
+
+	opacity: 0.9;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+@media (any-hover: hover) {
+	.icon:hover {
+		transform: scale(1.2);
+	}
+}
+.playIcon, .pauseIcon {
+	background-color: #0176e5;
+	border: 2px solid #FFFFFF;
+}
+.playIcon svg, .pauseIcon svg {
+	fill: #FFFFFF;
+}
+.episode.listened .icon {
+	background-color: #28bd72;
+	border: 2px solid #28bd72;
+}
+.episode.listened .checkIcon svg {
+	fill: #FFFFFF;
+}
+
+.checkIcon svg {
+	position: relative;
+	bottom: 4px;
+	right: 3px;
+}
+.playIcon svg {
+	position: relative;
+	left: 2px;
+}
+.pauseIcon svg {
+	position: relative;
+	bottom: 1px;
+	right: 1px;
+}
+
+.checkIcon svg {
+	fill: #95959e;
+}
+*/
+
+.episode.hidden {
+	display: none;
+}
+
+.episode .checkIcon, .episode .pauseIcon {
+	display: none;
+}
+
+.episode.episodePlaying.isPlaying .checkIcon {
+	display: none;
+}
+.episode.episodePlaying.isPlaying .playIcon {
+	display: none;
+}
+.episode.episodePlaying.isPlaying .pauseIcon {
+	display: block;
+}
+
+.titleAndDescription {
+	
+}
+.title {
+	color: #1f335e;
+	font-weight: bold;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+.episodeType {
+	display: inline-block;
+	background-color: #a601e5;
+	padding: 4px;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-size: 10px;
+	text-transform: uppercase;
+	color: #FFFFFF;
+	margin-left: 10px;
+	border-radius: 5px;
+	
+	position: relative;
+	bottom: 1px;
+}
+.episodeType[type="bonus"] {
+	background-color: #28bd72;
+	color: rgba(255,255,255,1);
+}
+.episodeType[type="trailer"] {
+	background-color: #4c749a;
+	color: rgba(255,255,255,1);
+}
+/*
+.listenedIcon {
+	position: relative;
+	top: 1px;
+	width: 20px;
+	height: 17px;
+	
+	margin-left: 7px;
+}
+*/
+.titleAndDescriptionHeader .title {
+	font-weight: normal;
+	margin-bottom: 0px;
+	color: #BBBBBB;
+}
+.progress {
+	margin-top: 10px;
+	display: flex;
+}
+.progressBarOuter {
+	background-color: #CCCCCC;
+	height: 10px;
+	width: 100px;
+	margin-top: 2px;
+}
+.progressBarInner {
+	background-color: #0176e5; /* rgba(75,205,14,0.7); */
+	height: 10px;
+}
+.duration {
+	font-size: 13px;
+	margin-left: 10px;
+}
+.subLine {
+	display: flex;
+	flex-direction: row;
+}
+.date {
+	font-size: 12px;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+}
+.agoText {
+	color: #BBBBBB;
+	font-size: 12px;
+	margin-left: 10px;
+}
+.description {
+	font-size: 16px;
+	line-height: 1.5;
+	
+	display: -webkit-box;
+	
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+
+	word-break : break-word;
+	overflow-wrap: anywhere;
+	
+	transition: all 2s;
+
+	-webkit-line-clamp: 2;
+}
+.cover {
+	margin-left: 20px;
+	margin-top: 20px;
+	width: 120px;
+	height: 120px;
+	max-width: 120px;
+	max-height: 120px;
+
+	background-size: cover;
+	border-radius: 5px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.25);
+}
+.seasonInfo {
+	max-width: 120px;
+	font-size: 12px;
+	text-transform: uppercase;
+	margin-left: 20px;
+	padding: 5px;
+}
+@media only screen and (max-width: 460px) {
+	.cover {
+		width: 60px;
+		height: 60px;
+		max-width: 60px;
+		max-height: 60px;
+	}
+}
+
+
+.episodePlaying .date {
+	color: #FFFFFF;
+}
+.episodePlaying .agoText {
+	color: #EEEEEE;
+}
+.episodePlaying .title {
+	color: #FFFFFF;
+}
+
+.episodePlaying .playIcon, .episodePlaying .pauseIcon {
+	border: 2px solid #FFFFFF;
+}
+.episodePlaying .playIcon svg, .episodePlaying .pauseIcon svg {
+	fill: #FFFFFF;
+}
+
+.episodePlaying .description {
+	color: #FFFFFF;
+	max-height: 250px;
+	display: -webkit-box;
+	-webkit-line-clamp: 10;
+	-webkit-box-orient: vertical; 
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.episodePlaying .progressBarOuter {
+	background-color: #FFFFFF;
+}
+.episodePlaying .progressBarInner {
+	background-color: #5cb85c;
+}
+.episodePlaying .duration span {
+	color: #FFFFFF;
+}
+@media only screen and (min-width: 1550px) {
+	.description {
+		max-width: 650px;
+	}
+}
+@media only screen and (min-width: 1300px) {
+	.description {
+		max-width: 55%;
+	}
+}
+@media only screen and (max-width: 450px) {
+	/*
+	.episode .play {
+		display: none;
+	}
+	*/
+}
+@media only screen and (max-width: 600px) {
+	.episode {
+		position: relative;
+	}
+	.episodeType {
+		position: absolute;
+		display: block;
+		height: 21px;
+		top: 6px;
+		right: 6px;
+	}
+}

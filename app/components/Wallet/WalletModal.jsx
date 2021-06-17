@@ -377,6 +377,12 @@ const WalletModal = ({ shown, onDismiss }) => {
 								<div className="button dangerousButton" onClick={disableWallet}>
 									I want to turn off the Podcast Wallet
 								</div>
+
+
+								<div style={{ marginTop: 20, textAlign: 'right' }}>
+									<div style={{ textTransform: 'uppercase', fontSize: 12, marginBottom: 5 }}>Powered by</div>
+									<a href="https://lnpay.co/" target="_blank"><img src='https://lnpay.co/frontend-resources/assets/logo_full.svg' style={{ height: 20 }} /></a>
+								</div>
 							</div>
 						}
 					</>

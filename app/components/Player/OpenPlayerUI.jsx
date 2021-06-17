@@ -28,7 +28,7 @@ const TabPanel = ({ children }) => {
 	);
 };
 
-const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime }) => {
+const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime, showValueConfigModal }) => {
 	const dispatch = useDispatch();
 
 	const [tabIndex, setTabIndex] = useState('description');
@@ -191,7 +191,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 											<LoadingIcon /> BOOSTING
 										</div>
 									}
-									<div className="buttonSecondaryAction" onClick={() => { alert('Sorry, the config of the value numbers are not ready yet. It\'s coming very very soon!'); }}>
+									<div className="buttonSecondaryAction" onClick={showValueConfigModal}>
 										<FaCog size="26" style={{ fill: '#FFFFFF', opacity: '0.5' }} />
 									</div>
 								</div>
@@ -199,12 +199,33 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 						</div>
 					</div>
 				}
+				{/*
+				<div
+					style={{
+						backgroundColor: 'var(--primary-color)',
+						padding: '10px'
+					}}
+				>
+						<div style={{
+							backgroundColor: 'rgba(0,0,0,0.4)',
+							padding: '5px',
+							borderRadius: '5px'
+						}}>
+							Bar of controls
+						</div>
+				</div>
+				*/}
 				<div style={{ height: '80px', bottom: '1px', overflow: 'hidden' }} >
 					<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
 						<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
 					</svg>
 				</div>
 			</div>
+			<div className={styles.episodeMasterData}>
+				Episode published: { activeEpisodeTime }
+			</div>
+			<div onClick={handleDescriptionClicks} ref={descriptionElement} className={styles.description} dangerouslySetInnerHTML={{__html:showNotes ? showNotes : description}} /> 
+			{/*
 			<Tabs
 				style={{ position: 'relative', bottom: '2px' }}
 				value={tabIndex}
@@ -244,6 +265,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 					}
 				</TabPanel>
 			}
+			*/}
 		</div>
 	);
 };

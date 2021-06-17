@@ -32,7 +32,8 @@ import {
 } from "../constants/action-types";
 
 import {
-	PODCAST_SYNC_COMPLETE
+	PODCAST_SYNC_COMPLETE,
+	PODCAST_CONFIG_UPDATE
 } from '../constants/podcast-types';
 
 import PodcastUtil from 'podfriend-approot/library/PodcastUtil.js';
@@ -122,6 +123,31 @@ const podcastReducer = (state = initialState, action) => {
 		return Object.assign({}, state, {
 			searching: false,
 			searchError: action.payload.errorText			
+		});
+	}
+	else if (action.type === PODCAST_CONFIG_UPDATE) {
+		activePodcast = Object.assign({}, state.activePodcast);
+
+		if (Array.isArray(action.payload.key)) {
+			console.log('PODCAST_CONFIG_UPDATE array not supported yet. But get working slacker!');
+		}
+		else {
+			console.log('Podcast updated: ' + action.payload.key + ': ' + action.payload.value);
+			activePodcast[action.payload.key] = action.payload.value;
+		}
+		localForage.setItem('podcast_cache_' + activePodcast.path,activePodcast);
+
+		/*
+		if (action.payload.boostAmount) {
+			activePodcast.boostAmount = action.payload.boostAmount;
+		}
+		if (action.payload.streamAmount) {
+			activePodcast.streamAmount = action.payload.streamAmount;
+		}
+		*/
+
+		return Object.assign({}, state, {
+			activePodcast: activePodcast
 		});
 	}
 	else if (action.type === PODCAST_LOADING) {

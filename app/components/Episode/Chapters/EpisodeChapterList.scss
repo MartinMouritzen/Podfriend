@@ -1,11 +1,11 @@
 .chapterList {
-	padding-top: 20px;
-
 	.chapter {
 		display: flex;
+		padding: 5px;
+		border-bottom: 1px solid #EEEEEE;
 	}
 	.activeChapter {
-		background-color: #EEEEEE;
+		background-color: #DDDDDD;
 	}
 	.chapterImage {
 		width: 40px;
@@ -32,6 +32,7 @@
 		
 	}
 	.chapterTitle {
+		flex: 1;
 		color: #000000;
 		display: flex;
 		align-items: center;

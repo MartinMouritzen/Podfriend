@@ -1,0 +1,32 @@
+.splitRange {
+	margin-top: 30px;
+	margin-bottom: 30px;
+
+	.splitLabel {
+		display: flex;
+
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 5px;
+
+		.splitLabelText {
+			color: var(--primary-text-color);
+			flex: 2;
+			text-align: center;
+		}
+		.splitLabel2Text {
+			color: var(--primary-text-color);
+			flex: 2;
+			text-align: center;
+		}
+
+		input[type="number"] {
+			border: 0px;
+			font-size: 28px;
+			text-align: center;
+			width: 70px;
+			outline: 0px;
+			color: var(--primary-color-dark);
+		}
+	}
+}

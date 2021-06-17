@@ -1,0 +1,102 @@
+.playerEpisodeListContainer {
+	width: 100%;
+
+	border-radius: 5px;
+	background-color: #FFFFFF;
+
+	h2 {
+		color: #1f335e;
+		margin-left: 10px;
+	}
+	.activeEpisodeInformation {
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-bottom: 30px;
+	}
+}
+.list {
+	.episode {
+		padding: 10px;
+		padding-left: 15px;
+		padding-right: 15px;
+		background-color: #efefef;
+		border-top: 1px solid #c8c7cc;
+
+		display: flex;
+
+		.cover {
+			width: 60px;
+			height: 60px;
+			margin-right: 15px;
+			border-radius: 5px;
+		}
+		.titleContainer {
+			flex: 1;
+
+			flex-direction: column;
+
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+
+			.title {
+
+			}
+			.date {
+				font-size: 14px;
+				color: #999999;
+				margin-bottom: 3px;
+			}
+		}
+		.iconContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.icon {
+				padding: 5px;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				background-color: #d2d2d2;
+				
+				svg {
+					fill: #999999;
+				}
+			}
+		}
+	}
+	.activeEpisode {
+		background-color: var(--primary-color);
+
+		.titleContainer {
+			.title {
+				color: #FFFFFF;
+			}
+			.date {
+				color: #EEEEEE;
+			}
+			
+		}
+		.iconContainer {
+			.icon {
+				background-color: #FFFFFF;
+				svg {
+					fill: var(--primary-color);
+				}
+			}
+		}
+	}
+	.episodeListened {
+		.icon {
+			background-color: var(--success-color) !important;
+			svg {
+				fill: #FFFFFF  !important;
+			}
+		}
+	}
+}

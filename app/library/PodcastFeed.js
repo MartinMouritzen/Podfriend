@@ -48,7 +48,7 @@ class PodcastFeed {
 		if (!this.feedUrl) {
 			return;
 		}
-		// console.log('parsing feed: ' + this.feedUrl);
+		console.log('parsing feed: ' + this.feedUrl);
 
 		var response = false;
 		try {
@@ -73,7 +73,7 @@ class PodcastFeed {
 		try {
 			var podcast = xml.rss.channel;
 
-			// console.log(podcast);
+			console.log(podcast);
 			
 			var rssFeed = new RSSFeed();
 
@@ -119,6 +119,8 @@ class PodcastFeed {
 			rssFeed.ids = podcast['podcast:id'];
 			rssFeed.funding = podcast['podcast:funding'];
 			rssFeed.images = podcast['podcast:images'];
+
+			
 	
 			if (podcast['itunes:category']) {
 				var categories = [];
@@ -178,7 +180,8 @@ class PodcastFeed {
 						transcript: episode['podcast:transcript'],
 						transcriptUrl: episode['podcast:transcript'] ? Array.isArray(episode['podcast:transcript']) ? episode['podcast:transcript'][0]['url'] : episode['podcast:transcript']['url'] : false,
 						chaptersUrl: episode['podcast:chapters'] ? episode['podcast:chapters']['url'] : '',
-						chaptersType: episode['podcast:chapters'] ? episode['podcast:chapters']['type'] : ''
+						chaptersType: episode['podcast:chapters'] ? episode['podcast:chapters']['type'] : '',
+						alternateEnclosures: Array.isArray(episode['podcast:alternateEnclosure']) ? episode['podcast:alternateEnclosure'] : [ episode['podcast:alternateEnclosure'] ],
 					});
 				});
 				rssFeed.items = episodes;

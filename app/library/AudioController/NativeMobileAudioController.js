@@ -50,6 +50,35 @@ class NativeMobileAudioController extends AudioController {
 		this.load = this.load.bind(this);
 		this.play = this.play.bind(this);
 		this.pause = this.pause.bind(this);
+
+		this.intentMap = {
+			'music-controls-previous': [
+				'music-controls-media-button-previous'
+			],
+			'music-controls-next': [
+				'music-controls-media-button-next'
+			],
+			'music-controls-pause': [
+				'music-controls-media-button-pause',
+				'music-controls-media-button-stop'
+			],
+			'music-controls-play': [
+				'music-controls-media-button-play'
+			],
+			 'music-controls-toggle-play-pause': [
+				 'music-controls-media-button-play-pause'
+			],
+			'music-controls-skip-forward': [
+				'music-controls-media-button-fast-forward',
+				'music-controls-media-button-skip-forward',
+				'music-controls-media-button-step-forward'
+			],
+			'music-controls-skip-backward': [
+				'music-controls-media-button-rewind',
+				'music-controls-media-button-skip-backward',
+				'music-controls-media-button-step-backward'
+			]
+		};
 	}
 	startService() {
 		console.log('NativeMobileAudioController:startService');
@@ -371,6 +400,7 @@ class NativeMobileAudioController extends AudioController {
 			skipBackwardInterval : 15,
 			hasScrubbing : true,
 			ticker: 'Now playing ' + this.currentEpisode.title,
+			playIcon: 'ic_player_play'
 		}, () => {
 			console.log('MusicControls success!');
 		},() => {
@@ -383,6 +413,20 @@ class NativeMobileAudioController extends AudioController {
 		.subscribe()
 		.subscribe((action) => {
 			const message = JSON.parse(action).message;
+			
+			for (const [key, value] of Object.entries(this.intentMap)) {
+				var found = false;
+				for(var i=0;i<value.length;i++) {
+					if (value[i] === message) {
+						message = key;
+						found = true;
+						break;
+					}
+				}
+				if (found) {
+					break;
+				}
+			};
 			
 			switch(message) {
 				case 'music-controls-next':
