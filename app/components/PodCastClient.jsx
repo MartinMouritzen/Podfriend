@@ -54,8 +54,11 @@ import 'react-spring-bottom-sheet/dist/style.css'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
+import {setupConfig} from '@ionic/react'
 
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+setupConfig({mode: 'ios'})
+
+// import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
 /* Basic CSS for apps built with Ionic */
 // import '@ionic/react/css/normalize.css';
