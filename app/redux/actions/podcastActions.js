@@ -328,8 +328,12 @@ export function viewPodcast(podcastPath) {
 							for (var i=0;i<data.episodes.length;i++) {
 								for (var x=0;x<podcastCache.episodes.length;x++) {
 									if (data.episodes[i].url == podcastCache.episodes[x].url) {
-										data.episodes[i].currentTime = podcastCache.episodes[x].currentTime;
-										data.episodes[i].listened = podcastCache.episodes[x].listened ? true : false;
+										if (!data.episodes[i].currentTime) {
+											data.episodes[i].currentTime = podcastCache.episodes[x].currentTime;
+										}
+										if (!data.episodes[i].listened) {
+											data.episodes[i].listened = podcastCache.episodes[x].listened ? true : false;
+										}
 										break;
 									}
 								}

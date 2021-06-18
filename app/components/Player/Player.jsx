@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { audioPlayRequested, audioCanPlay, audioBuffering, audioPlaying, audioPaused } from "../../redux/actions/audioActions";
 import { updateEpisodeTime, updateEpisodeDuration, episodeFinished, playEpisode } from "../../redux/actions/podcastActions";
-import { synchronizeWallet, boostPodcast, sendValue } from "podfriend-approot/redux/actions/uiActions";
+import { synchronizeEpisodeState, synchronizeWallet, boostPodcast, sendValue } from "podfriend-approot/redux/actions/uiActions";
 
 // import PodcastWallet from 'podfriend-approot/library/PodcastWallet/PodcastWallet.js';
 
@@ -23,6 +23,7 @@ function mapStateToProps(state) {
 		walletBalance: state.ui.walletBalance,
 		defaultBoost: state.settings.defaultBoost,
 		defaultStreamPerMinuteAmount: state.settings.defaultStreamPerMinuteAmount,
+		isLoggedIn: state.user.isLoggedIn,
 		value4ValueEnabled: state.settings.value4ValueEnabled
 	};
 }
@@ -39,7 +40,8 @@ function mapDispatchToProps(dispatch) {
 		audioPlayRequested: () => { dispatch(audioPlayRequested()); },
 		sendValue: (valueBlock,totalAmount) => { return dispatch(sendValue(valueBlock,totalAmount)); },
 		boostPodcast: (valueBlock,totalAmount) => { return dispatch(boostPodcast(valueBlock,totalAmount)); },
-		synchronizeWallet: () => { dispatch(synchronizeWallet()); }
+		synchronizeWallet: () => { dispatch(synchronizeWallet()); },
+		synchronizeEpisodeState: () => { dispatch(synchronizeEpisodeState()); }
 	};
 }
 
@@ -134,7 +136,7 @@ class Player extends Component {
 		Events.removeListenersInGroup('Player');
 		document.removeEventListener("keydown",this.handleKeyDown);
 
-		clearInterval(segmentIntervalId);
+		this.stopSegmentTimer();
 	}
 	/**
 	*
@@ -267,14 +269,14 @@ class Player extends Component {
 	resetSegmentTime() {
 		// console.log('this.props.activePodcast');
 		// console.log(this.props.activePodcast);
-		if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
+		// if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
 			var currentTime = this.props.audioController.getCurrentTime();
 			this.setState({
 				monetizeSegmentStart: currentTime
 			},() => {
 				this.startNewSegmentTimer();
 			});
-		}
+		// }
 	}
 	stopSegmentTimer() {
 		clearInterval(segmentIntervalId);
@@ -294,22 +296,36 @@ class Player extends Component {
 	*
 	*/
 	segmentTimeTrigger() {
-		var totalAmount = 0;
-		if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
-			// PodcastWallet.sendValue(this.props.activePodcast.value,totalAmount);
-			// console.log(this.props.activePodcast);
-			// console.log(this.props.activePodcast.value);
-			// return false;
+		if (this.props.isLoggedIn) {
+			// Sync episode time
+
 			if (this.props.isPlaying === true) {
-				console.log(this.props);
-				this.props.sendValue(this.props.activePodcast.value,this.props.activePodcast.streamAmount ? this.props.activePodcast.streamAmount : this.props.defaultStreamPerMinuteAmount)
-				.then(() => {
-					this.props.synchronizeWallet();
-				});
+				this.props.synchronizeEpisodeState();
+
+				// Stream sats
+				var totalAmount = 0;
+				if (this.props.activePodcast.value && this.props.value4ValueEnabled) {
+					// PodcastWallet.sendValue(this.props.activePodcast.value,totalAmount);
+					// console.log(this.props.activePodcast);
+					// console.log(this.props.activePodcast.value);
+					// return false;
+					
+
+						if (this.props.walletBalance > 0) {
+							console.log(this.props);
+							this.props.sendValue(this.props.activePodcast.value,this.props.activePodcast.streamAmount ? this.props.activePodcast.streamAmount : this.props.defaultStreamPerMinuteAmount)
+							.then(() => {
+								this.props.synchronizeWallet();
+							});
+						}
+						else {
+							console.log('Streaming of sats aborted. There is less than zero satoshis in wallet.');
+						}
+				}
+				else {
+					console.log('Podcast has no value block, cannot send.');
+				}
 			}
-		}
-		else {
-			console.log('Podcast has no value block, cannot send.');
 		}
 	}
 	/**

@@ -33,6 +33,7 @@ import {
 
 import {
 	PODCAST_SYNC_COMPLETE,
+	EPISODE_SYNC_COMPLETE,
 	PODCAST_CONFIG_UPDATE
 } from '../constants/podcast-types';
 
@@ -451,6 +452,10 @@ const podcastReducer = (state = initialState, action) => {
 			selectedPodcast: selectedPodcast,
 			activePodcast: activePodcast
 		});
+	}
+	else if (action.type === EPISODE_SYNC_COMPLETE) {
+		console.log('episode sync');
+		console.log(action.payload);
 	}
 	else if (action.type === PODCAST_SYNC_COMPLETE) {
 		// console.log('PODCAST_SYNC_COMPLETE');
