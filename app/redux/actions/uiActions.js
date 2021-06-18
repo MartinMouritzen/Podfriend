@@ -16,7 +16,8 @@ import {
 } from "../constants/ui-types";
 
 import {
-	PODCAST_SYNC_COMPLETE
+	PODCAST_SYNC_COMPLETE,
+	EPISODE_SYNC_COMPLETE
 } from '../constants/podcast-types.js';
 
 export function showSpeedSettingWindow() {
@@ -76,7 +77,6 @@ export function showFullPlayer(showing = false) {
 }
 export function synchronizePodcasts() {
 	return (dispatch,getState) => {
-
 		var minTime = 2000;
 
 		var startTime = new Date();
@@ -109,14 +109,18 @@ export function synchronizePodcasts() {
 			if (timeLeft < 0) {
 				timeLeft = 10;
 			}
-
-			// console.log(response);
 			
 			setTimeout(() => {
 				if (response.podcasts) {
 					dispatch({
 						type: PODCAST_SYNC_COMPLETE,
 						payload: response.podcasts
+					});
+				}
+				if (response.episodes) {
+					dispatch({
+						type: EPISODE_SYNC_COMPLETE,
+						payload: response.episodes
 					});
 				}
 				dispatch({
@@ -133,6 +137,52 @@ export function synchronizePodcasts() {
 				type: USER_SYNCING,
 				payload: false
 			});
+		});
+	};
+}
+export function synchronizeEpisodeState() {
+	return (dispatch,getState) => {
+		var { authToken } = getState().user;
+		var { activePodcast } = getState().podcast;
+		var { activeEpisode } = getState().podcast;
+
+		var percentageListened = (100 * activeEpisode.currentTime) / activeEpisode.duration;
+
+		var listened = activeEpisode.listened ? true : percentageListened > 90 ? true : false;
+
+		const episodeData = {
+			podcastGuid: activePodcast.guid,
+			episodeGuid: activeEpisode.guid,
+			currentTime: activeEpisode.currentTime,
+			listened: listened
+		};
+		// console.log(activePodcast);
+		console.log(activeEpisode);
+		console.log(episodeData);
+
+		const episodeSynchronizationURL = 'https://api.podfriend.com/user/sync/episode/';
+		return fetch(episodeSynchronizationURL, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': `Bearer ${authToken}`
+			},
+			body: JSON.stringify(episodeData)
+		})
+		.then((resp) => {
+			console.log(resp);
+			return resp.json()
+		})
+		.then((response) => {
+			console.log('episode sync done');
+			console.log(response);
+		})
+		.catch((error) => {
+			console.log('error synchronizing episode data.');
+			console.log(error);
+			console.log(episodeSynchronizationURL);
+			console.log(episodeData);
 		});
 	};
 }
