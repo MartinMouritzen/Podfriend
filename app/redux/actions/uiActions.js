@@ -148,7 +148,13 @@ export function synchronizeEpisodeState() {
 
 		var percentageListened = (100 * activeEpisode.currentTime) / activeEpisode.duration;
 
+		console.log('activeEpisode.listened');
+		console.log(activeEpisode.listened);
+		console.log(percentageListened);
+
 		var listened = activeEpisode.listened ? true : percentageListened > 90 ? true : false;
+		
+		console.log(listened);
 
 		const episodeData = {
 			podcastGuid: activePodcast.guid,
