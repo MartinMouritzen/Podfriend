@@ -6,7 +6,12 @@
 
 :star: Please give us a Star here on GitHub — it's super motivating!
 
-[Podfriend](https://www.podfriend.com) is your friendly Podcast Player
+[Podfriend](https://www.podfriend.com) is your friendly Podcast Player.
+
+# Mission
+We want to provide a real open alternative to big apps like Spotify, where you can use seamlessly web, mobile and desktop to listen to your podcasts.
+
+We support the Podcasting 2.0 initiative, and we want to bring movies, chapters, locations, guests, interactive content and so much more to listeners in an open ecosystem that's not behind a walled garden.
 
 [![Podfriend Preview](https://www.podfriend.com/img/app-preview.png)](https://www.podfriend.com/)
 
