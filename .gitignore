@@ -1,4 +1,8 @@
-inspiration
+# Let's not add the public appstore keys to github
+resources/android keys
+resources/ios keys
+
+screenshots/inspiration
 .vscode
 
 

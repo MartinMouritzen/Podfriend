@@ -24,7 +24,7 @@ const ShareIcon = () => <SVG src={require('podfriend-approot/images/design/playe
 
 import { showShareWindow } from 'podfriend-approot/redux/actions/uiActions';
 
-import { FaPlay, FaPause, FaCheck } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
 
 import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
 
@@ -155,9 +155,14 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 						<div className={styles.description} dangerouslySetInnerHTML={{__html:episodeDescription}} />
 					</div>
 					<span className={styles.progress} title={('Exact episode length: ' + TimeUtil.formatPrettyDurationText(duration))}>
-						<div className={styles.progressBarOuter}>
-							<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
-						</div>
+						{ minutesLeft !== totalMinutes &&
+							<div className={styles.progressBarOuter}>
+								<div className={styles.progressBarInner} style={{ width: Math.round(progressPercentage) + '%' }}/>
+							</div>
+						}
+						{ minutesLeft == totalMinutes &&
+							<FaClock />
+						}
 						
 						<span className={styles.duration}>
 							{ minutesLeft == totalMinutes && 

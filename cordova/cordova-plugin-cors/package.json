@@ -1,0 +1,46 @@
+{
+  "name": "cordova-plugin-cors",
+  "version": "1.2.1",
+  "author": {
+    "email": "ddaeke-npmjs@yahoo.com",
+    "name": "Raphaël Calabro"
+  },
+  "contributors": [
+    {
+      "email": "rory.cn@gmail.com",
+      "name": "Rory Ye"
+    }
+  ],
+  "description": "Allow CORS requests on iOS with WKWebView.",
+  "keywords": [
+    "cordova",
+    "cors",
+    "ecosystem:cordova",
+    "cordova-ios"
+  ],
+  "cordova": {
+    "id": "cordova-plugin-cors",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "license": "LGPLv3",
+  "directories": {},
+  "maintainers": [
+    {
+      "email": "ddaeke-npmjs@yahoo.com",
+      "name": "Raphaël Calabro"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raphcal/cordova-plugin-cors"
+  },
+  "scripts": {
+    "prepare": "tsc"
+  },
+  "devDependencies": {
+      "typescript": "^2.6.2"
+  },
+  "readme": "ERROR: No README data found!"
+}

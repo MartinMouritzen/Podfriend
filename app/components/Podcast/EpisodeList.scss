@@ -247,12 +247,16 @@ ion-item-option {
 .progress {
 	margin-top: 10px;
 	display: flex;
+	
+	align-items: center;
+}
+.progress svg {
+	fill: #666666;
 }
 .progressBarOuter {
 	background-color: #CCCCCC;
 	height: 10px;
 	width: 100px;
-	margin-top: 2px;
 }
 .progressBarInner {
 	background-color: #0176e5; /* rgba(75,205,14,0.7); */
@@ -261,6 +265,14 @@ ion-item-option {
 .duration {
 	font-size: 13px;
 	margin-left: 10px;
+
+	margin-top: 1px;
+
+	color: #666666;
+}
+.subLine {
+	display: flex;
+	flex-direction: row;
 }
 .subLine {
 	display: flex;
@@ -327,40 +339,44 @@ ion-item-option {
 }
 
 
-.episodePlaying .date {
-	color: #FFFFFF;
-}
-.episodePlaying .agoText {
-	color: #EEEEEE;
-}
-.episodePlaying .title {
-	color: #FFFFFF;
-}
+.episodePlaying {
+	.date {
+		color: #FFFFFF;
+	}
+	.agoText {
+		color: #EEEEEE;
+	}
+	.title {
+		color: #FFFFFF;
+	}
 
-.episodePlaying .playIcon, .episodePlaying .pauseIcon {
-	border: 2px solid #FFFFFF;
-}
-.episodePlaying .playIcon svg, .episodePlaying .pauseIcon svg {
-	fill: #FFFFFF;
-}
-
-.episodePlaying .description {
-	color: #FFFFFF;
-	max-height: 250px;
-	display: -webkit-box;
-	-webkit-line-clamp: 10;
-	-webkit-box-orient: vertical; 
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-.episodePlaying .progressBarOuter {
-	background-color: #FFFFFF;
-}
-.episodePlaying .progressBarInner {
-	background-color: #5cb85c;
-}
-.episodePlaying .duration span {
-	color: #FFFFFF;
+	.playIcon, .pauseIcon {
+		border: 2px solid #FFFFFF;
+	}
+	.playIcon svg, .pauseIcon svg {
+		fill: #FFFFFF;
+	}
+	.progress svg {
+		fill: #FFFFFF;
+	}
+	.description {
+		color: #FFFFFF;
+		max-height: 250px;
+		display: -webkit-box;
+		-webkit-line-clamp: 10;
+		-webkit-box-orient: vertical; 
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+	.progressBarOuter {
+		background-color: #FFFFFF;
+	}
+	.progressBarInner {
+		background-color: #5cb85c;
+	}
+	.duration span {
+		color: #FFFFFF;
+	}
 }
 @media only screen and (min-width: 1550px) {
 	.description {

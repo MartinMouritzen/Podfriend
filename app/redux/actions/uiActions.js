@@ -148,7 +148,13 @@ export function synchronizeEpisodeState() {
 
 		var percentageListened = (100 * activeEpisode.currentTime) / activeEpisode.duration;
 
+		console.log('activeEpisode.listened');
+		console.log(activeEpisode.listened);
+		console.log(percentageListened);
+
 		var listened = activeEpisode.listened ? true : percentageListened > 90 ? true : false;
+		
+		console.log(listened);
 
 		const episodeData = {
 			podcastGuid: activePodcast.guid,
@@ -242,10 +248,10 @@ export function synchronizeWallet() {
 		});
 	};
 }
-export function boostPodcast(valueBlock,boostAmount,overrideDestinations = false,podcastData = false) {
-	return sendValue(valueBlock,boostAmount,overrideDestinations,'boost',podcastData);
+export function boostPodcast(valueBlock,boostAmount,overrideDestinations = false,senderName = false,message = false) {
+	return sendValue(valueBlock,boostAmount,overrideDestinations,'boost',senderName,message);
 }
-export function sendValue(valueBlock,totalAmount,overrideDestinations = false,actionType = 'stream',podcastData = false) {
+export function sendValue(valueBlock,totalAmount,overrideDestinations = false,actionType = 'stream',senderName = false,message = false) {
 	return (dispatch,getState) => {
 		var recognizedMethod = false;
 		var validDestinations = false;
@@ -253,7 +259,7 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 		if (valueBlock.model && valueBlock.model.method === 'keysend' && valueBlock.model.type === 'lightning') {
 			recognizedMethod = true;
 		}
-		if (valueBlock.destinations && valueBlock.destinations.length > 0) {
+		if (overrideDestinations || valueBlock.destinations && valueBlock.destinations.length > 0) {
 			validDestinations = true;
 		}
 
@@ -278,7 +284,7 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 				valueType: valueBlock.model.type,
 				valueMethod: valueBlock.model.method,
 				amount: totalAmount,
-				destinations: valueBlock.destinations,
+				destinations: overrideDestinations ? overrideDestinations : valueBlock.destinations,
 				actionType: actionType,
 				async: async,
 				podcastInfo: {
@@ -286,11 +292,18 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 					path: activePodcast.path,
 					feedUrl: activePodcast.feedUrl,
 					feedId: activePodcast.id,
+					episodeName: activeEpisode.title,
 					episodeGuid: activeEpisode.guid,
 					episodeId: activeEpisode.id,
 					currentTime: activeEpisode.currentTime
 				}
 			};
+			if (senderName) {
+				valueData.senderName = senderName;
+			}
+			if (message) {
+				valueData.message = message;
+			}
 			// console.log(valueData);
 
 			const walletInvoiceURL = 'https://api.podfriend.com/user/wallet/keysend/' + (debug ? '?debug=true' : '');

@@ -19,7 +19,7 @@ const loadImage = (src) => {
 	});
 }
 
-const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false, asBackground = false, children }) => {
+const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, width = 100, height = 100, alt = "", className = "", imageErrorText = "", fallBackImage = false, loadingComponent = false, asBackground = false, children, imageRef }) => {
 	const originalSource = src;
 
 	if (podcastPath) {
@@ -52,6 +52,7 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 	};
 
 	const onLoad = (event) => {
+		// console.log('Image loaded: ' + event.nativeEvent.srcElement);
 		/*
 		try {
 			var image = event.nativeEvent.srcElement;
@@ -77,10 +78,13 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 					className={className}
 					isError={(status === STATUS_ERROR)}
 					width={width}
+					imageRef={imageRef}
 				/>
 			}
 			{ status !== STATUS_ERROR &&
 				<img
+					ref={imageRef}
+					crossOrigin="anonymous"
 					loading="lazy"
 					key={imageSource}
 					src={imageSource}

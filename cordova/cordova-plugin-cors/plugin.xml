@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-plugin-cors"
+    version="1.2.1">
+    
+    <name>CORS</name>
+    
+    <engines>
+        <engine name="cordova-ios" version=">=4.0"/>
+    </engines>
+    
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CORS">
+                <param name="ios-package" value="RCAXMLHttpRequest" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <js-module src="www/ios/xhr.js" name="mobi-xhr">
+            <clobbers target="window.XMLHttpRequest" />
+        </js-module>
+
+        <header-file src="src/ios/RCAXMLHttpRequest.h" />
+	    <source-file src="src/ios/RCAXMLHttpRequest.m" />
+    </platform>
+</plugin>

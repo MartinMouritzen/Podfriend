@@ -1,0 +1,50 @@
+.postForm {
+	.userRow {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+
+		.avatarCell {
+			margin-right: 10px;
+		}
+		.usernameCell {
+			font-size: 18px;
+		}
+	}
+	.arrowUp {
+		width: 0; 
+		height: 0; 
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+
+		border-bottom: 15px solid rgba(0,0,0,0.1);
+
+		margin-left: 10px;
+	}
+	textarea {
+		display: block;
+		background-color: rgba(0,0,0,0.1);
+		border: 0px;
+		width: 100%;
+		height: 150px;
+		padding: 10px;
+		font-size: 16px;
+
+		border-radius: 5px;
+
+		outline: 1px solid rgba(0,0,0,0);
+
+		transition: 0.2s all;
+	}
+	textarea:focus {
+		outline: 1px solid rgba(0,0,0,0.3);
+	}
+	.buttonRow {
+		margin-top: 10px;
+		text-align: right;
+
+		button {
+
+		}
+	}
+}

@@ -332,7 +332,7 @@ export function viewPodcast(podcastPath) {
 											data.episodes[i].currentTime = podcastCache.episodes[x].currentTime;
 										}
 										if (!data.episodes[i].listened) {
-											data.episodes[i].listened = podcastCache.episodes[x].listened ? true : false;
+											data.episodes[i].listened = podcastCache.episodes[x].listened;
 										}
 										break;
 									}

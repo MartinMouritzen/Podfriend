@@ -255,7 +255,13 @@ p {
 :global {
 	.podcastPage {
 		overflow-y: auto;
-		height: 100%;
+
+		height: calc(100% - 90px);
+	}
+	@media only screen and (max-width: 570px) {
+		.podcastPage {
+			height: calc(100% - 60px);
+		}
 	}
 	.contentPage, .landingPage {
 		h1 {
@@ -289,7 +295,6 @@ p {
 		background-color: #FFFFFF;
 		
 	}
-
 	/******************************
 	* Alerts
 	******************************/

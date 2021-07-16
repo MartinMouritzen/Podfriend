@@ -10,8 +10,12 @@
 	width: 100vw;
 	border-top: 1px solid rgba(0,0,0,0.2);
 	/* background-color: $theme-light-player-background-color; */
-	background-color:  rgba(1,118,229,1);
-	background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(12,40,80,1)  100%);
+	/* background-color:  rgba(1,118,229,1); */
+	/* background: linear-gradient(90deg, rgba(1,118,229,1) 0%, rgba(12,40,80,1) 47%, rgba(12,40,80,1)  100%); */
+
+	background-color: var(--primary-color-dark);
+	background-color: #174ea1;
+
 	height: 90px;
 	
 	z-index: 9999;

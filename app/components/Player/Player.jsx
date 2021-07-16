@@ -350,6 +350,7 @@ class Player extends Component {
 	*
 	*/
 	onPause(event) {
+		this.props.synchronizeEpisodeState();
 		this.stopSegmentTimer();
 	}
 	/**
