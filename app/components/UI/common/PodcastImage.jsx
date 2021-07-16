@@ -84,7 +84,6 @@ const PodcastImage = React.memo(({ podcastId = false, podcastPath = false, src, 
 			{ status !== STATUS_ERROR &&
 				<img
 					ref={imageRef}
-					crossOrigin="anonymous"
 					loading="lazy"
 					key={imageSource}
 					src={imageSource}
