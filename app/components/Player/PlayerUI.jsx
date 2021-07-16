@@ -47,6 +47,9 @@ import { synchronizeWallet, showFullPlayer, showSpeedSettingWindow, showShareWin
 
 import DraggablePane from 'podfriend-approot/components/UI/common/DraggablePane.jsx';
 
+// const IndividualBoostModal = lazy(() => import('podfriend-approot/components/Wallet/IndividualBoostModal.jsx'));
+import IndividualBoostModal from 'podfriend-approot/components/Wallet/IndividualBoostModal.jsx';
+
 import ValueConfigModal from 'podfriend-approot/components/Wallet/ValueConfigModal/ValueConfigModal.jsx';
 
 import ChatProvider from 'podfriend-approot/components/Chat/ChatProvider.jsx';
@@ -101,6 +104,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [rssFeedCurrentEpisode,setRssFeedCurrentEpisode] = useState(false);
 
 	const [transcriptSearchOpen,setTranscriptSearchOpen] = useState(false);
+
+	const [showIndividualBoostModal,setShowIndividualBoostModal] = useState(false);
 	
 	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 	const fullPlayerOpen = useSelector((state) => state.ui.showFullPlayer);
@@ -137,6 +142,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		.catch((error) => {
 			console.log('Error boosting');
 		});
+	};
+
+	const onIndividualBoostModalToggle = () => {
+		console.log('setShowIndividualBoostModal');
+		setShowIndividualBoostModal(true);
+	};
+	const hideIndividualBoostModal = () => {
+		console.log('close');
+		setShowIndividualBoostModal(false);
 	};
 
 	const openPodcast = (event) => {
@@ -673,7 +687,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 										>
 											<BoostIcon />
 										</Reward>
-										</div>
+									</div>
 								}
 								{ true && 
 									<div className={styles.chatButton}>&nbsp;</div>
@@ -737,6 +751,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							onBoost={onBoost}
 							setCurrentTime={setCurrentTime}
 							showValueConfigModal={showValueConfigModal}
+							onIndividualBoostModalToggle={onIndividualBoostModalToggle}
 						/>
 
 					}
@@ -803,6 +818,12 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			}
 			{ chatShown &&
 				<ChatProvider roomId={activePodcast.guid} chatModal={(props) => <ChatModal {...props} shown={chatShown} onDismiss={() => { setChatShown(false); }} activePodcast={activePodcast} activeEpisode={activeEpisode} />} />
+			}
+			{ showIndividualBoostModal &&
+				<IndividualBoostModal
+					shown={showIndividualBoostModal}
+					onClose={hideIndividualBoostModal}
+				/>
 			}
 		</>
 	);

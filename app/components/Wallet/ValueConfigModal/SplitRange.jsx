@@ -7,9 +7,23 @@ import styles from './SplitRange.scss';
 
 const SplitRange = ({ label, label2 = false, min, max, value: startValue, onValueChange = false }) => {
 
-	const [value,setValue] = useState(startValue);
+	var useStartValue = startValue;
+	if (useStartValue < min) {
+		useStartValue = min;
+	}
+	else if (useStartValue > max) {
+		useStartValue = max;
+	}
+
+	const [value,setValue] = useState(useStartValue);
 
 	const onSplitSliderChange = (amount) => {
+		if (amount < min) {
+			amount = min;
+		}
+		else if (amount > max) {
+			amount = max;
+		}
 		setValue(amount);
 		if (onValueChange) {
 			onValueChange(amount);

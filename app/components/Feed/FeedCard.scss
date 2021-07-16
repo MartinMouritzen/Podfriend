@@ -1,0 +1,180 @@
+.card {
+	background-color: #FFFFFF;
+	margin-bottom: 10px;
+	width: 100%;
+
+	border: 1px solid #dadce1;
+	border-radius: 5px;
+	box-shadow: 0px 0px 15px -2px rgba(0,0,0,0.15);
+
+	.cardHeader {
+		padding: 15px;
+		display: flex;
+		flex-direction: row;
+
+		img {
+			width: 44px;
+			height: 44px;
+			border-radius: 5px;
+			margin-right: 10px;
+			/* box-shadow: 0px 0px 15px -2px rgba(0,0,0,0.15); */
+			border: 1px solid #EEEEEE;
+		}
+		.cardHeaderText {
+			display: flex;
+			flex-direction: column;
+
+			justify-content: center;
+			
+			.fromName {
+				color: #292f5d;
+				font-weight: 500;
+				font-size: 16px;
+			}
+			.whenDate {
+				margin-top: 3px;
+				color: #828282;
+				font-size: 13px;
+			}
+		}
+	}
+	.cardContent {
+
+		.contentText {
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			text-overflow: ellipsis;
+			overflow: hidden;
+
+			color: #75798f;
+
+			margin: 15px;
+			margin-top: 0px;
+
+			line-height: 22px;
+		}
+		.contentPreview {
+			min-height: 195px;
+			display: flex;
+			align-items: stretch;
+			background-size: cover;
+			background-position: center center;
+
+			.contentPreviewInner {
+				width: 100%;
+				background-color: rgba(41,121,255,0.3);
+				backdrop-filter: blur(10px);
+
+				transition: all 0.2s;
+
+				display: flex;
+
+				padding: 20px;
+
+				.contentPreviewInnerPodcastImage {
+					width: 200px;
+					height: 200px;
+					border-radius: 5px;
+					box-shadow: 0px 0px 15px -2px rgba(0,0,0,0.25);
+					margin-right: 30px;
+				}
+				.contentPreviewInnerText {
+					padding-top: 10px;
+
+					h3 {
+						color: #FFFFFF;
+						font-size: 36px;
+						font-weight: 800;
+
+						text-shadow: 1px 1px rgba(0,0,0,0.3);
+
+						margin-top: 10px;
+						margin-bottom: 10px;
+
+						display: -webkit-box;
+						-webkit-line-clamp: 3;
+						-webkit-box-orient: vertical;
+						text-overflow: ellipsis;
+						overflow: hidden;
+					}
+					.contentType {
+						text-transform: uppercase;
+						font-size: 18px;
+						font-weight: 800;
+						color: #FFFFFF;
+						text-shadow: 1px 1px rgba(0,0,0,0.3);
+					}
+					.author {
+						color: #FFFFFF;
+						text-shadow: 1px 1px rgba(0,0,0,0.3);
+						font-size: 18px;
+						font-weight: 400;
+
+						display: -webkit-box;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+						text-overflow: ellipsis;
+						overflow: hidden;
+					}
+				}
+			}
+		}
+	}
+	.cardFooter {
+		padding: 15px;
+		.footerTitle {
+			color: #292f5d;
+			margin-bottom: 10px;
+		}
+		.socialFooter {
+			border-top: 1px solid #dadcdf;
+
+			display: flex;
+			justify-content: center;
+
+			padding-top: 10px;
+
+
+			.likeButton, .commentButton, .shareButton {
+				padding: 5px;
+				min-width: 160px;
+				text-align: center;
+				color: #676b83;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				flex: 1;
+
+				border-radius: 3px;
+
+				svg {
+					width: 26px;
+					height: 26px;
+
+					margin-right: 10px;
+
+					fill: #676b83;
+				}
+				span {
+					position: relative;
+					top: 1px;
+				}
+				&:hover {
+					background-color: #EEEEEE;
+				}
+			}
+			.likeButton {
+
+			}
+			.commentButton {
+
+			}
+			.shareButton {
+
+			}
+		}
+	}
+}

@@ -22,10 +22,13 @@ const SearchPaneUI = lazy(() => import('./Search/SearchPaneUI.jsx'));
 const PodCastPane = lazy(() => import('./Podcast/PodCastPane.jsx'));
 const PodcastPaneUI = lazy(() => import('./Podcast/PodcastPaneUI.jsx'));
 
-import Player from './Player/Player';
+import Player from './Player/Player.jsx';
 import PlayerUI from './Player/PlayerUI.jsx';
 
-import Welcome from './Welcome';
+import Welcome from './Welcome.jsx';
+
+import FeedPage from 'podfriend-approot/components/Pages/FeedPage.jsx';
+
 // import SettingsPage from '~/app/components/user/SettingsPage';
 const SettingsPage = lazy(() => import('~/app/components/user/SettingsPage'));
 
@@ -48,6 +51,8 @@ const SwipeExplorer = lazy(() => import('./Explore/SwipeExplorer.jsx'));
 
 import ShareModal from 'podfriend-approot/components/Player/ShareModal.jsx';
 import AudioSpeedSettingModal from 'podfriend-approot/components/Player/AudioSpeedSettingModal.jsx';
+
+import PageError from 'podfriend-approot/components/Error/PageError.jsx';
 
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css'
@@ -257,28 +262,30 @@ class PodcastClient extends Component {
 				<div className={styles.top}>
 					<SideBar />
 					<div id="mainArea" onScroll={this.props.onScroll} className={styles.mainArea} ref={this.mainArea}>
-						<Suspense fallback={<div>Loading...</div>}>
-							<Switch>
-								<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
-								<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
-								<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
-								<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />
-								<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-								<Route exact path="/podcast/:podcastName/:episodeId" render={(props) => { return (<EpisodePane {...props} />); }} />
-								<Route exact path="/podcast/:podcastName/:episodeId/chapters/" render={(props) => { return (<EpisodePane {...props} />); }} />
-								<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />
-								<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
-								<Route path="/podcasters/" render={(props) => { return (<ForPodcasters />); }} />
-								<Route path="/contact/" render={(props) => { return (<ContactPage />); }} />
-								<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showResponsiveList={true} showArchived={false} setHasArchived={false} /> ); }} />
-								<Redirect to='/' />
-							</Switch>
-						</Suspense>
+						<PageError>
+							<Suspense fallback={<div>Loading...</div>}>
+								<Switch>
+									<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
+									<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
+									<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
+									<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />
+									<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/:episodeId" render={(props) => { return (<EpisodePane {...props} />); }} />
+									<Route exact path="/podcast/:podcastName/:episodeId/chapters/" render={(props) => { return (<EpisodePane {...props} />); }} />
+									<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />
+									<Route path="/settings/" render={(props) => { return (<SettingsPage />); }} />
+									<Route path="/podcasters/" render={(props) => { return (<ForPodcasters />); }} />
+									<Route path="/contact/" render={(props) => { return (<ContactPage />); }} />
+									<Route path="/favorites/" render={(props) => { return ( <FavoriteList UI={FavoriteListUI} showResponsiveList={true} showArchived={false} setHasArchived={false} /> ); }} />
+									<Redirect to='/' />
+								</Switch>
+							</Suspense>
+						</PageError>
 					</div>
 				</div>
 				<Player audioController={this.props.audioController} onEpisodeSelect={this.onEpisodeSelect} UI={PlayerUI} />

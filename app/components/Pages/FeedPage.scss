@@ -1,0 +1,15 @@
+.page {
+	background-color: #FFFFFF;
+	display: flex;
+	justify-content: center;
+	padding-top: 20px;
+	padding-bottom: 60px;
+
+	.postColumn {
+		margin-right: 20px;
+		width: 300px;
+	}
+	.rightColumn {
+		width: 300px;
+	}
+}

@@ -136,7 +136,7 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true 
 				}
 			}
 
-			if (hideListenedEpisodes && episode.listened) {
+			if (hideListenedEpisodes && episode.listened && !(activeEpisode && activeEpisode.url === episode.url)) {
 				return false;
 			}
 			

@@ -160,8 +160,13 @@ const WalletModal = ({ shown, onDismiss }) => {
 	};
 
 	const copyInvoiceString = () => {
-		navigator.clipboard.writeText(walletInvoiceString);
-		setShowCopySuccessMessage(true);
+		if (window.isSecureContext) {
+			navigator.clipboard.writeText(walletInvoiceString);
+			setShowCopySuccessMessage(true);
+		}
+		else {
+			console.log('Copying of clipboard only works on a secure context (HTTPS)');
+		}
 	};
 
 	const onHideCopySuccessMessage = () => {

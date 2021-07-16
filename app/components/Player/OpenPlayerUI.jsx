@@ -8,6 +8,8 @@ import Reward from 'react-rewards';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import { useLongPress } from 'react-use';
+
 import { FaRocket, FaCog, FaRegTimesCircle } from 'react-icons/fa';
 
 import { format } from 'date-fns';
@@ -28,11 +30,12 @@ const TabPanel = ({ children }) => {
 	);
 };
 
-const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime, showValueConfigModal }) => {
+const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, chaptersLoading, chapters, currentChapter, playingValuePodcast, value4ValueEnabled, streamPerMinuteAmount, boostAmount, onBoost, setCurrentTime, showValueConfigModal, onIndividualBoostModalToggle }) => {
 	const dispatch = useDispatch();
 
 	const [tabIndex, setTabIndex] = useState('description');
 
+	const [isLongBoost,setIsLongBoost] = useState(false);
 	const [boostPending,setBoostPending] = useState(false);
 
 	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -47,6 +50,11 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 	};
 
 	const onBoostClick = () => {
+		if (isLongBoost) {
+			setIsLongBoost(false);
+		//	onIndividualBoostModalToggle(true);
+			return;
+		}
 		setBoostPending(true);
 		onBoost()
 		.then((status) => {
@@ -63,8 +71,18 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 		})
 		.catch((error) => {
 			console.log('Error boosting');
+			console.log(error);
 		});
 	};
+
+	const onLongBoost = () => {
+		onIndividualBoostModalToggle(true);
+		setIsLongBoost(true);
+	};
+	const longPressEvent = useLongPress(onLongBoost, {
+		isPreventDefault: false,
+		delay: 500,
+	});
 
 	const activeEpisodeTime = activeEpisode.date ? format(new Date(activeEpisode.date),'MMM D, YYYY') : false;
 
@@ -175,7 +193,7 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 									{ boostPending === false &&
 										<>
 											{ walletBalance >= boostAmount &&
-												<div className="buttonPrimaryAction" onClick={onBoostClick}>
+												<div className="buttonPrimaryAction" onClick={onBoostClick} {...longPressEvent}>
 													<FaRocket style={{ fill: '#FFFFFF', opacity: '0.8'}} /> BOOST {formatAmount(boostAmount)}
 												</div>
 											}
@@ -196,6 +214,9 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 									</div>
 								</div>
 							</Reward>
+							<span
+								style={{ fontSize: '12px', textAlign: 'center', color: '#FFFFFF' }}
+							>Hold for message & individual boost</span>
 						</div>
 					</div>
 				}
