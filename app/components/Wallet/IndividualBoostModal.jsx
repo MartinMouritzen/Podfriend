@@ -4,7 +4,7 @@ import Modal from 'podfriend-approot/components/Window/Modal.jsx';
 
 import { IonList, IonListHeader, IonItem, IonLabel, IonThumbnail, IonImg, IonInput, IonToggle, IonRadio, IonCheckbox, IonItemSliding, IonItemOption, IonItemOptions, IonContent } from '@ionic/react';
 
-import { boostPodcast } from "podfriend-approot/redux/actions/uiActions";
+import { boostPodcast, synchronizeWallet } from "podfriend-approot/redux/actions/uiActions";
 
 import TextField from '@material-ui/core/TextField';
 
@@ -64,7 +64,24 @@ const IndividualBoostModal = ({ shown, onClose }) => {
 		}
 		else if (destination === 'podfriend') {
 			console.log('Want to boost: ' + destination);
-			setSelectedDestination(destination);
+
+			/*
+			$destinations[] = [
+				"name" => "Podfriend",
+				"address" => "03437da0f1e006bb118a43fad3cf2fb7e05b12319a090358928e4a85d11f14ec67",
+				"type" => "node",
+				"split" => 1,
+				"calculatedPercentage" => 1,
+				"calculatedAmount" => round(($satoshiAmount * 1) / 100)
+			];
+			*/
+
+			setSelectedDestination({
+				name: 'Podfriend',
+				address: '03437da0f1e006bb118a43fad3cf2fb7e05b12319a090358928e4a85d11f14ec67',
+				type: 'node',
+				split: 100
+			});
 		}
 		else if (Array.isArray(destination)) {
 			setSelectedDestination(destination);
@@ -112,6 +129,7 @@ const IndividualBoostModal = ({ shown, onClose }) => {
 		})
 		.catch((error) => {
 			console.log('Error boosting');
+			console.log(error);
 		});
 	};
 

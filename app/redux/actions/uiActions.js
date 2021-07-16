@@ -259,7 +259,7 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 		if (valueBlock.model && valueBlock.model.method === 'keysend' && valueBlock.model.type === 'lightning') {
 			recognizedMethod = true;
 		}
-		if (valueBlock.destinations && valueBlock.destinations.length > 0) {
+		if (overrideDestinations || valueBlock.destinations && valueBlock.destinations.length > 0) {
 			validDestinations = true;
 		}
 
@@ -284,7 +284,7 @@ export function sendValue(valueBlock,totalAmount,overrideDestinations = false,ac
 				valueType: valueBlock.model.type,
 				valueMethod: valueBlock.model.method,
 				amount: totalAmount,
-				destinations: valueBlock.destinations,
+				destinations: overrideDestinations ? overrideDestinations : valueBlock.destinations,
 				actionType: actionType,
 				async: async,
 				podcastInfo: {
