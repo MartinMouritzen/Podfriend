@@ -259,7 +259,7 @@
 		"@material-ui/core": "^4.11.2",
 		"@material-ui/lab": "^4.0.0-alpha.57",
 		"@redux-offline/redux-offline": "^2.6.0",
-		"axios": "^0.18.0",
+		"axios": "^0.21.1",
 		"axios-jsonp": "^1.0.2",
 		"cordova-plugin-background-mode": "^0.7.3",
 		"cordova-plugin-cors": "^1.2.1",
