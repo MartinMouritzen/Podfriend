@@ -20,7 +20,7 @@
 		"@react-native-community/slider": "^3.0.3",
 		"@react-native-community/toolbar-android": "^0.1.0-rc.2",
 		"@redux-offline/redux-offline": "^2.6.0-native.0",
-		"axios": "^0.21.1",
+		"axios": "^0.21.2",
 		"date-fns": "^2.14.0",
 		"fast-xml-parser": "^3.17.4",
 		"localforage": "^1.7.4",
