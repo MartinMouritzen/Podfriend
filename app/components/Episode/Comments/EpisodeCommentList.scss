@@ -1,0 +1,50 @@
+.commentList {
+	min-height: 100vh;
+
+	.writeCommentContainer {
+		margin-top: 30px;
+
+		textarea {
+			display: block;
+			background-color: rgba(0,0,0,0.1);
+			border: 0px;
+			width: 100%;
+			height: 150px;
+			padding: 10px;
+			font-size: 16px;
+
+			margin-bottom: 10px;
+
+			border-radius: 5px;
+
+			outline: 1px solid rgba(0,0,0,0);
+
+			transition: 0.2s all;
+		}
+		textarea:focus {
+			outline: 1px solid rgba(0,0,0,0.3);
+		}
+		button {
+			width: 100%;
+		}
+	}
+}
+.comment {
+	display: flex;
+
+	.avatar {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
+	.username {
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+	.commentContent {
+		.commentText {
+
+		}
+	}
+}

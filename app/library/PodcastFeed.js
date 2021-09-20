@@ -7,6 +7,8 @@ import XMLParser from 'fast-xml-parser';
 class PodcastFeed {
 	feedUrl = this;
 
+	__parsed = false;
+
 	constructor (feedUrl) {
 		this.feedUrl = feedUrl;
 	}
@@ -23,7 +25,7 @@ class PodcastFeed {
 	/**
 	* Converts itunes duration to seconds
 	*/
-	convertDurationToSeconds(duration) {
+	__convertDurationToSeconds(duration) {
 		if (Number.isInteger(duration)) {
 			return duration;
 		}
@@ -88,6 +90,8 @@ class PodcastFeed {
 			else {
 				rssFeed.link = podcast['link'];
 			}
+
+			rssFeed.guid = podcast['podcast:guid'] ? podcast['podcast:guid'] : false;
 			
 			rssFeed.docs = podcast['docs'];
 			rssFeed.generator = podcast['generator'];
@@ -120,8 +124,6 @@ class PodcastFeed {
 			rssFeed.funding = podcast['podcast:funding'];
 			rssFeed.images = podcast['podcast:images'];
 
-			
-	
 			if (podcast['itunes:category']) {
 				var categories = [];
 				if (Array.isArray(podcast['itunes:category'])) {
@@ -176,16 +178,18 @@ class PodcastFeed {
 						enclosureType: episode.enclosure ? episode.enclosure.type : '',
 						enclosureLength: episode.enclosure ? episode.enclosure.length : '',
 						enclosureUrl: episode.enclosure ? episode.enclosure.url : '',
-						duration: this.convertDurationToSeconds(episode['itunes:duration']),
+						duration: this.__convertDurationToSeconds(episode['itunes:duration']),
 						transcript: episode['podcast:transcript'],
 						transcriptUrl: episode['podcast:transcript'] ? Array.isArray(episode['podcast:transcript']) ? episode['podcast:transcript'][0]['url'] : episode['podcast:transcript']['url'] : false,
 						chaptersUrl: episode['podcast:chapters'] ? episode['podcast:chapters']['url'] : '',
 						chaptersType: episode['podcast:chapters'] ? episode['podcast:chapters']['type'] : '',
 						alternateEnclosures: Array.isArray(episode['podcast:alternateEnclosure']) ? episode['podcast:alternateEnclosure'] : [ episode['podcast:alternateEnclosure'] ],
+						commentURL: episode['podcast:comments'] ? episode['podcast:comments'] : false
 					});
 				});
 				rssFeed.items = episodes;
 			}
+			this.__parsed = true;
 			return rssFeed;
 		}
 		catch(error) {

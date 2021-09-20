@@ -68,6 +68,8 @@ import EpisodeList from 'podfriend-approot/components/Podcast/EpisodeList.jsx';
 import Wave from 'podfriend-approot/images/design/blue-wave-1.svg';
 import EpisodeChapterList from 'podfriend-approot/components/Episode/Chapters/EpisodeChapterList.jsx';
 
+import EpisodeCommentList from 'podfriend-approot/components/Episode/Comments/EpisodeCommentList.jsx';
+
 const Value4ValueModal = lazy(() => import('podfriend-approot/components/Wallet/Value4ValueModal.jsx'));
 // import Value4ValueModal from 'podfriend-approot/components/Wallet/Value4ValueModal.jsx';
 
@@ -98,6 +100,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	const [error,setError] = useState(false);
 	const [errorText,setErrorText] = useState(false);
 
+	const [supportsComments,setSupportsComments] = useState(false);
+
 	const [segmentVisible,setSegmentVisible] = useState('playing');
 
 	const [rssFeed,setRSSFeed] = useState(false);
@@ -117,6 +121,15 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		audioController.setAudioElement(audioElement);
 		onAudioElementReady();
 	},[audioElement]);
+
+	useEffect(() => {
+		if (rssFeed && rssFeed.supportsComments()) {
+			setSupportsComments(true);
+		}
+		else {
+			setSupportsComments(false);
+		}
+	},[rssFeed]);
 
 	const onTranscriptSearchClose = () => {
 		setTranscriptSearchOpen(false);
@@ -445,6 +458,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			else {
 				setChaptersLoading(false);
 			}
+
 			if (rssFeedCurrentEpisode.transcript) {
 				// console.log('Episode has transcript');
 				var useTranscript = rssFeedCurrentEpisode.transcript;
@@ -469,6 +483,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		setRSSFeed(false);
 		setRssFeedCurrentEpisode(false);
 		setDescription('');
+		setShowNotes(false);
 
 		const fetchEpisodeData = async() => {
 			var podcastFeed = new PodcastFeed(activePodcast.feedUrl);
@@ -574,28 +589,6 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			}
 			<div className={styles.openPlayerBackground} style={{ display: (fullPlayerOpen ? 'block' : 'none') }} onClick={() => { dispatch(showFullPlayer(false)); }} />
 			<DraggablePane onOpen={showEpisodePane} onHide={hideEpisodePane} open={fullPlayerOpen} className={(fullPlayerOpen ? styles.episodeOpen : styles.episodeClosed) + ' ' + styles.player + (playing ? ' ' + styles.playing : ' ' + styles.notPlaying)} style={{ display: hasEpisode ? 'flex' : 'flex' }}>
-
-				{ fullPlayerOpen && chapters !== false &&
-					<div style={{ width: '100%', paddingLeft: 20, paddingRight: 20, maxWidth: 440 }}>
-						<IonSegment value={segmentVisible} onIonChange={(e) => { setSegmentVisible(e.detail.value); console.log(e.detail.value); }} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
-							<IonSegmentButton value="playing">
-								<IonLabel>
-									Playing
-								</IonLabel>
-							</IonSegmentButton>
-							{ chapters !== false &&
-								<IonSegmentButton value="chapterList">
-									<IonLabel>Chapters</IonLabel>
-								</IonSegmentButton>
-							}
-							{/*
-							<IonSegmentButton value="social">
-								<IonLabel>Social</IonLabel>
-							</IonSegmentButton>
-							*/}
-						</IonSegment>
-					</div>
-				}
 				<div className={styles.segment + ' ' + styles.segmentPlaying + ' ' + (segmentVisible === 'playing' || !fullPlayerOpen ? styles.segmentVisible : styles.segmentHidden) }>
 					<div
 						className={styles.playingPreview}
@@ -737,6 +730,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 					}
 					{ fullPlayerOpen &&
 						<OpenPlayerUI
+							rssFeed={rssFeed}
 							description={description}
 							showNotes={showNotes}
 							activePodcast={activePodcast}
@@ -756,6 +750,32 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 					}
 				</div>
+				{ fullPlayerOpen && (chapters !== false || supportsComments !== false) &&
+					<div style={{ width: '100%', paddingLeft: 20, paddingRight: 20, maxWidth: 440 }}>
+						<IonSegment value={segmentVisible} onIonChange={(e) => { setSegmentVisible(e.detail.value); console.log(e.detail.value); }} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}>
+							<IonSegmentButton value="playing">
+								<IonLabel>
+									Playing
+								</IonLabel>
+							</IonSegmentButton>
+							{ chapters !== false &&
+								<IonSegmentButton value="chapterList">
+									<IonLabel>Chapters</IonLabel>
+								</IonSegmentButton>
+							}
+							{ supportsComments !== false &&
+								<IonSegmentButton value="commentList">
+									<IonLabel>Comments</IonLabel>
+								</IonSegmentButton>
+							}
+							{/*
+							<IonSegmentButton value="social">
+								<IonLabel>Social</IonLabel>
+							</IonSegmentButton>
+							*/}
+						</IonSegment>
+					</div>
+				}
 				{ fullPlayerOpen && false &&
 					<div className={styles.segment + ' ' + styles.segmentEpisodeList + ' ' + ((segmentVisible === 'episodeList' && fullPlayerOpen) ? styles.segmentVisible : styles.segmentHidden) }>
 						<PlayerEpisodeList episodes={activePodcast.episodes} activeEpisode={activeEpisode} />
@@ -788,6 +808,20 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 							{ chapters !== false &&
 								<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
 							}
+						</div>
+					</div>
+				}
+				{ fullPlayerOpen && supportsComments !== false &&
+					<div className={styles.segment + ' ' + styles.segmentCommentsList + ' ' + ((segmentVisible === 'commentList' && fullPlayerOpen) ? styles.segmentVisible : styles.segmentHidden) }>
+						<div style={{ height: '80px', bottom: '1px', overflow: 'hidden' }} >
+							<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
+								<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
+							</svg>
+						</div>
+						<div style={{ width: '100%', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
+								<EpisodeCommentList rootType='episode' commentURL={rssFeedCurrentEpisode.commentURL} />
+							</div>
 						</div>
 					</div>
 				}

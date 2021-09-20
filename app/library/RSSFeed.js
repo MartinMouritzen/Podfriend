@@ -176,6 +176,17 @@ class RSSFeed {
 	/**
 	*
 	*/
+	supportsComments() {
+		for (var i=0;i<this.items.length;i++) {
+			if (this.items[i].commentURL) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	*
+	*/
 	generatePodcastItemsXML(preview) {
 		return this.items.map((item,index) => {
 			return this.generatePodcastItemXML(item,preview);

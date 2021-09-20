@@ -68,6 +68,7 @@ const VolumeSlider = ({ audioElement }) => {
 							style={{
 								height: '6px',
 								width: '100%',
+								borderRadius: '3px',
 								alignSelf: 'center',
 								background: getTrackBackground({
 									values: [volumeLevel],
