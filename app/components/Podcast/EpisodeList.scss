@@ -338,8 +338,20 @@ ion-item-option {
 	}
 }
 
+.locationLine {
+	display: flex;
+	font-size: 13px;
+	margin-left: 10px;
+	align-items: center;
+	svg {
+		height: 20px;
+	}
+}
 
 .episodePlaying {
+	.locationLine {
+		color: #FFFFFF;
+	}
 	.date {
 		color: #FFFFFF;
 	}

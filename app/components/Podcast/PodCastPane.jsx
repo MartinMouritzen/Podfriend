@@ -82,6 +82,7 @@ class PodCastPane extends Component {
 		this.rssFeedUpdated = this.rssFeedUpdated.bind(this);
 	}
 	rssFeedUpdated(feed) {
+		console.log('RSS Feed was updated');
 		console.log(feed);
 
 		this.setState({
@@ -99,10 +100,10 @@ class PodCastPane extends Component {
 				rssFeed: false
 			},async () => {
 				var podcastFeed = new PodcastFeed(this.props.selectedPodcast.feedUrl);
-				console.log('before parsing feed');
+				console.log('before parsing feed: ' + this.props.selectedPodcast.feedUrl);
 				podcastFeed.parse()
 				.then((feed) => {
-					console.log('after parsing feed');
+					console.log('after parsing feed: ' + this.props.selectedPodcast.feedUrl);
 					// console.log('wa4');
 					// console.error(feed);
 

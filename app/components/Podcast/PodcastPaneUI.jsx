@@ -84,7 +84,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 
 			<div className={styles.podcastContent}>
 								
-				<EpisodeList podcastPane={podcastPane} currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} />
+				<EpisodeList podcastPane={podcastPane} currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} rssFeed={rssFeed} />
 								
 {/*
 				<Tabs

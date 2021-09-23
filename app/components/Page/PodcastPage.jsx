@@ -1,12 +1,12 @@
 import React from 'react';
 
+import PageHeader from './PageHeader.jsx';
+
 const PodcastPage = ({title, children, pageType = 'contentPage'}) => {
 	return (
 		<div className={'podcastPage ' + pageType }>
 			{ pageType === 'contentPage' &&
-				<div>
-					<h1>{title}</h1>
-				</div>
+				<PageHeader title={title} />
 			}
 			{children}
 		</div>

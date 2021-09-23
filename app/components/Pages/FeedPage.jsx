@@ -1,7 +1,5 @@
 import React from 'react';
 
-
-
 import PodcastPage from 'podfriend-approot/components/Page/PodcastPage.jsx';
 
 import SVG from 'react-inlinesvg';
@@ -28,7 +26,7 @@ const FeedPage = () => {
 
 
 	return (
-		<PodcastPage title="For Podcasters" pageType="landingPage">
+		<PodcastPage title="Inbox">
 			<div style={{ backgroundColor: '#FFFFFF', minHeight: '100%' }}>
 				{/*
 				<div style={{ backgroundColor: '#FFFFFF', minHeight: '100%' }}>

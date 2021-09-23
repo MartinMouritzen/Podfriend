@@ -42,6 +42,8 @@ const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, podcastGui
 
 	useEffect(() => {
 		if (rssFeed.location) {
+			console.log('Feed has location');
+			console.log(rssFeed.location);
 			setLocation(rssFeed.location);
 		}
 		else {

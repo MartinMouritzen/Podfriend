@@ -66,7 +66,7 @@ export default merge.smart(baseConfig, {
       options: {
         context: path.join(__dirname, '..', 'app'),
         output: {
-          path: path.join(__dirname, '..', 'dll')
+          path: path.join(__dirname, '..', 'internals/dll')
         }
       }
     })

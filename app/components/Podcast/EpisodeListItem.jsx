@@ -30,14 +30,23 @@ import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.js
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 
+import { FaMapMarkerAlt } from "react-icons/fa";
+
+import PodcastMap from './PodcastMap.jsx';
+import Modal from 'podfriend-approot/components/Window/Modal';
+
 // import ShareButtons from './ShareButtons.jsx';
 
 import styles from './EpisodeList.scss';
 
-const EpisodeListItem = ({ style, id, title, description, episodeImage, duration, currentTime, podcast, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
+const EpisodeListItem = ({ style, id, title, description, episodeImage, duration, currentTime, podcast, location = false, podcastTitle, podcastPath, isActiveEpisode, listened, hideListenedEpisodes, isPlaying, episode, episodeType, selectEpisodeAndPlay, date }) => {
 	const dispatch = useDispatch();
 	const [episodeTitle,setEpisodeTitle] = useState(title);
 	const [episodeDescription,setEpisodeDescription] = useState(description);
+	const [showLocation,setShowLocation] = useState(false);
+
+	console.log('Episode location: ');
+	console.log(location);
 
 	useEffect(() => {
 		setEpisodeTitle(DOMPurify.sanitize(title,{
@@ -70,6 +79,9 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 	if (!isActiveEpisode && hideListenedEpisodes && listened) {
 		episodeClass += ' ' + styles.hidden;
 	}
+	const onDismissLocation = () => {
+		setShowLocation(false);
+	};
 
 	const shareURL = 'https://web.podfriend.com/podcast/' + podcastPath + '/' + id;
 
@@ -172,6 +184,19 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 								<span>{Math.round((duration - currentTime) / 60)} of {totalMinutes} minutes left</span>
 							}
 						</span>
+						{ location !== false && location['#text'] &&
+							<>
+								<span className={styles.locationLine} onClick={(event) => { event.stopPropagation(); event.nativeEvent.stopImmediatePropagation(); setShowLocation(!showLocation); return false; }}>
+									<FaMapMarkerAlt size="24" /> {location['#text']}
+								</span>
+
+								{ showLocation !== false &&
+									<Modal shown={showLocation} onClose={onDismissLocation}>
+										<PodcastMap location={location} />
+									</Modal>
+								}
+							</>
+						}
 					</span>
 				</div>
 			</div>
@@ -187,6 +212,7 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 };
 function episodeShouldCache(prevEpisode,nextEpisode) {
 	if (nextEpisode.isActiveEpisode) { return false; }
+	if (nextEpisode.location != prevEpisode.location) { return false; }
 	if (nextEpisode.title != prevEpisode.title) { return false; }
 	if (nextEpisode.description != prevEpisode.description) { return false; }
 	if (nextEpisode.url != prevEpisode.url) { return false; }

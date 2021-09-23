@@ -32,19 +32,30 @@ class PodcastFeed {
 		if (!duration) {
 			return false;
 		}
-		var timePieces = duration.split(':');
-		
-		if (timePieces.length === 1) {
-			return timePieces[0];
+		try {
+			if (duration.split) {
+				var timePieces = duration.split(':');
+				
+				if (timePieces.length === 1) {
+					return timePieces[0];
+				}
+				if (timePieces.length === 2) {
+					timePieces = [
+						"00",
+						timePieces[0],
+						timePieces[1]
+					];
+				}
+				return (+timePieces[0]) * 60 * 60 + (+timePieces[1]) * 60 + (+timePieces[2]);
+			}
+			else {
+				return 0;
+			}
 		}
-		if (timePieces.length === 2) {
-			timePieces = [
-				"00",
-				timePieces[0],
-				timePieces[1]
-			];
+		catch (exception) {
+			console.log('Error in PodcastFeed:__convertDurationToSeconds');
+			console.log(exception);
 		}
-		return (+timePieces[0]) * 60 * 60 + (+timePieces[1]) * 60 + (+timePieces[2]); 
 	}
 	async parse() {
 		if (!this.feedUrl) {
@@ -180,6 +191,7 @@ class PodcastFeed {
 						enclosureUrl: episode.enclosure ? episode.enclosure.url : '',
 						duration: this.__convertDurationToSeconds(episode['itunes:duration']),
 						transcript: episode['podcast:transcript'],
+						location: episode['podcast:location'] ? episode['podcast:location'] : false,
 						transcriptUrl: episode['podcast:transcript'] ? Array.isArray(episode['podcast:transcript']) ? episode['podcast:transcript'][0]['url'] : episode['podcast:transcript']['url'] : false,
 						chaptersUrl: episode['podcast:chapters'] ? episode['podcast:chapters']['url'] : '',
 						chaptersType: episode['podcast:chapters'] ? episode['podcast:chapters']['type'] : '',

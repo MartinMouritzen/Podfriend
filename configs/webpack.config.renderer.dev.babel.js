@@ -20,7 +20,7 @@ CheckNodeEnv('development');
 
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
-const dll = path.join(__dirname, '..', 'dll');
+const dll = path.join(__dirname, '..', '/internals/dll');
 const manifest = path.resolve(dll, 'renderer.json');
 const requiredByDLLConfig = module.parent.filename.includes(
 	'webpack.config.renderer.dev.dll'
@@ -218,7 +218,7 @@ export default merge.smart(baseConfig, {
 		requiredByDLLConfig
 			? null
 			: new webpack.DllReferencePlugin({
-					context: path.join(__dirname, '..', 'dll'),
+					context: path.join(__dirname, '..', '/internals/dll'),
 					manifest: require(manifest),
 					sourceType: 'var'
 				}),
@@ -265,7 +265,7 @@ export default merge.smart(baseConfig, {
 		lazy: false,
 		hot: true,
 		headers: { 'Access-Control-Allow-Origin': '*' },
-		contentBase: path.join(__dirname, 'dist'),
+		contentBase: path.join(__dirname, '../release/dist'),
 		watchOptions: {
 			aggregateTimeout: 300,
 			ignored: /node_modules/,

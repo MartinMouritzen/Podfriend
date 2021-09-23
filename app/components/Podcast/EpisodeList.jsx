@@ -14,7 +14,7 @@ import EpisodeListItem from './EpisodeListItem.jsx';
 
 import styles from './EpisodeList.scss';
 
-const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true }) => {
+const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true, rssFeed = false }) => {
 	const dispatch = useDispatch();
 
 	/*
@@ -190,6 +190,18 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true 
 				</div>
 			}
 			{ showEpisodes.map((episode,index) => {
+				var location = false;
+				if (rssFeed && rssFeed.items && rssFeed.items.length) {
+					for(var i=0;i<rssFeed.items.length;i++) {
+						if (rssFeed.items[i].guid === episode.guid) {
+							location = rssFeed.items[i].location;
+						}
+					}
+				}
+
+				console.log('location: ');
+				console.log(location);
+
 				return (
 					<EpisodeListItem
 						id={episode.id}
@@ -207,6 +219,7 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true 
 						currentTime={episode.currentTime}
 						url={episode.url}
 						episode={episode}
+						location={location}
 						isPlaying={isPlaying}
 						isActiveEpisode={(activeEpisode && activeEpisode.url === episode.url)}
 						hideListenedEpisodes={hideListenedEpisodes}

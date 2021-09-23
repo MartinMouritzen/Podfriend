@@ -23,7 +23,7 @@ const devConfig = merge.smart(baseConfig, {
 		path.join(__dirname, '..','app/index.web.js')
 	],
 	output: {
-		path: path.join(__dirname, '..','app/web/dist'),
+		path: path.join(__dirname, '..','release/dist/web'),
 		publicPath: `./`,
 		filename: 'web.dev.js',
 		libraryTarget: 'umd'

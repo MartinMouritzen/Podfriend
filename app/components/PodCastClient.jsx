@@ -265,7 +265,7 @@ class PodcastClient extends Component {
 						<PageError>
 							<Suspense fallback={<div>Loading...</div>}>
 								<Switch>
-									<Route exact path="/" render={(props) => { return (<FeedPage {...props} />); }} />
+									<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
 									<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
 									<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
 									<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />

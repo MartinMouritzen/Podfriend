@@ -22,7 +22,7 @@ var configObject = merge.smart(baseConfig, {
 
   entry: path.join(__dirname, '..', 'app/index'),
   output: {
-    path: path.join(__dirname, '..', 'app/dist'),
+    path: path.join(__dirname, '..', 'release/dist'),
     publicPath: './dist/',
     filename: 'renderer.prod.js'
   },

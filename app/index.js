@@ -28,14 +28,6 @@ const audioController = new AudioController();
 audioController.startService();
 audioController.init();
 
-/*
-history.listen((location) => {
-	console.log('Location changed. Hooray!');
-	console.log(history);
-	console.log(location);
-});
-*/
-
 render(
 	<WindowFrame store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 	document.getElementById('root')
