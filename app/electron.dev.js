@@ -301,7 +301,7 @@ app.on('ready', async () => {
 	mainWindow.webContents.on('did-fail-load',(event) => {
 		console.log('Failed to load url!');
 		console.log(event);
-		mainWindow.loadURL(`file://${__dirname}/app.html`);
+		mainWindow.loadURL(`file://${__dirname}/web/index.electron.html`);
 	});
 
 	mainWindow.webContents.on('new-window',(e, url) => {
@@ -320,7 +320,7 @@ app.on('ready', async () => {
 	});
 	mainWindow.webContents.userAgent = 'Podfriend/1.0 ' + mainWindow.webContents.userAgent;
 
-	mainWindow.loadURL(`file://${__dirname}/app.html`);
+	mainWindow.loadURL(`file://${__dirname}/web/index.electron.html`);
 	// mainWindow.loadURL('https://www.whatismybrowser.com/detect/what-is-my-user-agent');
 	
 	quickViewWindow.loadURL(`file://${__dirname}/miniwindow.html`);

@@ -109,15 +109,31 @@ p {
 .mainArea {
 	flex: 2;
 	max-width: 100%;
-	height: 100%;
 	overflow-x: hidden;
 	overflow-y: hidden;
 	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
 	border-radius: 20px 0px 0px 0px;
 	
 	filter: blur(0px); /* hack for chrome to make backdrop-filter and scrolling work on childs */
+
+	/*
+	max-height: calc(100% - 90px);
+	@media only screen and (max-width: 570px) {
+		max-height: calc(100% - 60px);
+	}
+	*/
 }
 :global {
+	/*
+	.header-ios {
+		background: var(--ion-color-primary) !important;
+	}
+	*/
+	.ion-page {
+		background-color: #ff23aa;
+		flex: 1;
+		height: calc(100% - 44px);
+	}
 	.podfriendModal {
 		p {
 			a {
@@ -257,11 +273,11 @@ p {
 	.podcastPage {
 		overflow-y: auto;
 
-		height: calc(100% - 90px);
+		/* height: calc(100% - 90px);*/
 	}
 	@media only screen and (max-width: 570px) {
 		.podcastPage {
-			height: calc(100% - 60px);
+			/* height: calc(100% - 60px);*/
 		}
 	}
 	.contentPage, .landingPage {

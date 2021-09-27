@@ -25,9 +25,10 @@ const PodcastPaneUI = lazy(() => import('./Podcast/PodcastPaneUI.jsx'));
 import Player from './Player/Player.jsx';
 import PlayerUI from './Player/PlayerUI.jsx';
 
-import Welcome from './Welcome.jsx';
+import Welcome from 'podfriend-approot/pages/Welcome.jsx';
+// import Welcome from 'podfriend-approot/pages/IonicTest.jsx';
 
-import FeedPage from 'podfriend-approot/components/Pages/FeedPage.jsx';
+import FeedPage from 'podfriend-approot/pages/FeedPage.jsx';
 
 // import SettingsPage from '~/app/components/user/SettingsPage';
 const SettingsPage = lazy(() => import('~/app/components/user/SettingsPage'));
@@ -59,7 +60,7 @@ import 'react-spring-bottom-sheet/dist/style.css'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
-import {setupConfig} from '@ionic/react'
+import {setupConfig} from '@ionic/react';
 
 setupConfig({mode: 'ios'})
 

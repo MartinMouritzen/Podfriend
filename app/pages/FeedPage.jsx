@@ -23,8 +23,6 @@ const PageHeader = () => {
 };
 */
 const FeedPage = () => {
-
-
 	return (
 		<PodcastPage title="Inbox">
 			<div style={{ backgroundColor: '#FFFFFF', minHeight: '100%' }}>

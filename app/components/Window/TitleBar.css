@@ -75,11 +75,13 @@
 .navigationButton svg {
 	fill: #FFFFFF;
 }
-.navigationButton:hover {
-	background-color: #f6f6f6;
-}
-.navigationButton:hover svg {
-	fill: #999999;
+@media (any-hover: hover) {
+	.navigationButton:hover {
+		background-color: #f6f6f6;
+	}
+	.navigationButton:hover svg {
+		fill: #999999;
+	}
 }
 .navigationButtonDisabled svg {
 	fill: #016ace;
@@ -145,11 +147,13 @@
 	align-items: center;
 	justify-content: center;
 }
-.minimize:hover, .maximizeOrNormalize:hover, .close:hover {
-	background-color: #f6f6f6;
-}
-.minimize:hover svg, .maximizeOrNormalize:hover svg, .close:hover svg {
-	fill: #999999;
+@media (any-hover: hover) {
+	.minimize:hover, .maximizeOrNormalize:hover, .close:hover {
+		background-color: #f6f6f6;
+	}
+	.minimize:hover svg, .maximizeOrNormalize:hover svg, .close:hover svg {
+		fill: #999999;
+	}
 }
 .minimize {
 
@@ -166,11 +170,13 @@
 .navigationButtonForward {
 	
 }
-.close:hover {
-	background-color: #b13435;
-}
-.close:hover svg {
-	fill: #FFFFFF;
+@media (any-hover: hover) {
+	.close:hover {
+		background-color: #b13435;
+	}
+	.close:hover svg {
+		fill: #FFFFFF;
+	}
 }
 @media only screen and (max-width: 540px) {
 	.titleBar {

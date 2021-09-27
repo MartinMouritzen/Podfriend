@@ -20,7 +20,7 @@ var configObject = merge.smart(baseConfig, {
 
   target: 'electron-renderer',
 
-  entry: path.join(__dirname, '..', 'app/index'),
+  entry: path.join(__dirname, '..', 'app/index.electron.js'),
   output: {
     path: path.join(__dirname, '..', 'release/dist'),
     publicPath: './dist/',

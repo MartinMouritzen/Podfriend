@@ -10,6 +10,7 @@ import isElectron from 'is-electron';
 
 import { BrowserRouter as BrowserRouter } from 'react-router-dom';
 import { MemoryRouter as MemoryRouter } from 'react-router-dom';
+import { IonReactRouter } from '@ionic/react-router';
 
 import { Capacitor } from '@capacitor/core'
 
@@ -24,7 +25,9 @@ import TitleBar from '~/app/components/Window/TitleBar';
 
 import styles from '~/app/components/Window/WindowFrame.css';
 
-let Router = BrowserRouter;
+// let Router = BrowserRouter;
+console.log(IonReactRouter);
+let Router = IonReactRouter;
 
 // var platforms = getPlatforms();
 
@@ -64,7 +67,7 @@ class WebContainer extends React.Component {
 		return (
 			<Provider store={this.props.store}>
 				<PersistGate loading={null} persistor={this.props.persistor}>
-					<Router history={this.props.history}>
+					<Router>
 						<div className={styles.webContainer + ' appType_' + appType}>
 							<TitleBar appType={appType} isElectron={false} platform={this.props.platform} />
 							<PodCastClient appType={appType} store={this.props.store} audioController={this.props.audioController} />

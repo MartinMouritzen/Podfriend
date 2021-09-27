@@ -27,21 +27,21 @@
 		"postinstall": "yarn build-dll",
 		"prestart": "yarn build",
 		"rebuild-native-dependencies": "./node_modules/.bin/electron-rebuild",
-		"start": "cross-env NODE_ENV=production electron ./release/main.prod.js",
-		"start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
+		"start": "cross-env NODE_ENV=production electron ./release/electron.prod.js",
+		"start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/electron.dev.js",
 		"start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
 		"bundle-report": "webpack-bundle-analyzer --port 4200 compilation-stats.json"
 	},
-	"main": "./release/main.prod.js",
+	"main": "./release/electron.prod.js",
 	"build": {
 		"productName": "PodFriend",
 		"appId": "com.podfriend",
 		"files": [
 			"app/dist/",
 			"app/images/",
-			"app/app.html",
-			"release/main.prod.js",
-			"release/main.prod.js.map",
+			"app/web/index.electron.html",
+			"release/electron.prod.js",
+			"release/electron.prod.js.map",
 			"app/components/*.jsx",
 			"package.json"
 		],

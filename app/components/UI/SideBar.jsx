@@ -101,6 +101,11 @@ class SideBar extends Component {
 							<Link to="/" className={styles.mainNavigationButton}>
 								<FaHome size="20" /> Home
 							</Link>
+							{ true &&
+								<Link to="/history/" className={styles.mainNavigationButton}>
+									<FaRegLightbulb size="20" /> History
+								</Link>
+							}
 							<Link to="/podfrndr/" className={styles.mainNavigationButton}>
 								<FaRegLightbulb size="20" /> Podfrndr
 							</Link>
