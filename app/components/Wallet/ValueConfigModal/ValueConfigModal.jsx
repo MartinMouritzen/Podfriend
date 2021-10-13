@@ -7,7 +7,7 @@ import { IonList, IonListHeader, IonItem, IonLabel, IonInput, IonToggle, IonRadi
 import { setConfigOption } from 'podfriend-approot/redux/actions/settingsActions';
 import { updatePodcastConfig } from 'podfriend-approot/redux/actions/podcastActions';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 import styles from './ValueConfigModal.scss';
 
 import SplitRange from './SplitRange.jsx';

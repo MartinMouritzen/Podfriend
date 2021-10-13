@@ -4,32 +4,29 @@ import EpisodeList from './EpisodeList.jsx';
 
 import { useLocation } from 'react-router-dom';
 
-import styles from './PodCastPane.css';
+import Header from 'podfriend-approot/components/Header/Header.jsx';
 
-import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
-import PodcastImage from 'podfriend-approot/components/UI/common/PodcastImage.jsx';
+import Badge from '@material-ui/core/Badge';
+
+import { withStyles } from "@material-ui/core/styles";
+
+import styles from './PodCastPane.css';
 
 import PodcastHeader from './PodcastHeader.jsx';
 import PodcastExtras from './PodcastExtras.jsx';
 
-import {
-	IonPage,
-	IonHeader,
-	IonToolbar,
-	IonTitle,
-	IonButtons,
-	IonButton,
-	IonIcon,
-	IonContent,
-	IonBackButton,
-	IonMenuButton,
-	IonSearchbar,
-	IonSegment,
-	IonSegmentButton,
-	IonLabel,
-	IonReactRouter,
-	IonRouterOutlet
-} from '@ionic/react';
+
+
+const StyledBadge = withStyles(theme => ({
+	badge: {
+	  backgroundColor: '#0176e5',
+	  color: '#FFFFFF',
+	  borderRadius: '5px',
+	  position: 'static',
+	  transform: 'none',
+	  marginLeft: '10px'
+	}
+  }))(Badge);
 
 const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podcastLoading, podcastLoadingError, isSubscribed, subscribedPodcasts, subscribeToPodcast, unsubscribeToPodcast, isArchived, archivePodcast, unarchivePodcast, currentPodcastPlaying, onEpisodeSelect, rssFeed = false }) => {
 	const location = useLocation();
@@ -46,68 +43,46 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 	};
 
 	return (
-		<IonPage className='no-header-padding'>
-			<IonHeader>
-				<IonToolbar>
-					<IonButtons slot="start">
-						<IonBackButton defaultHref='/' />
-					</IonButtons>
-					<IonTitle>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-							<PodcastImage
-								alt={selectedPodcast.name + ' cover art'}
-								imageErrorText={selectedPodcast.name}
-								podcastPath={selectedPodcast.path}
-								width={120}
-								height={120}
-								src={selectedPodcast.artworkUrl600}
-								className={styles.titlePodcastCover}
-								draggable="false"
-								loadingComponent={() => { return ( <div className={styles.loadingCover}><img className={styles.loadingIndicator} src={LoadingRings} /></div> ) }}
-							/>
-							<div className={styles.podcastTitle}>
-								{selectedPodcast.name}
-							</div>
-						</div>
-					</IonTitle>
-				</IonToolbar>
-			</IonHeader>
-			<IonContent>
-				<IonHeader collapse="condense">
-					<IonToolbar>
-						<PodcastHeader
-						reviewCount={selectedPodcast.review_totalCount}
-						reviewScore={selectedPodcast.review_totalScore}
-						coverImage={selectedPodcast.artworkUrl600}
-						imageUrlHash={selectedPodcast.imageUrlHash}
-						categories={selectedPodcast.categories}
-						podcastGuid={selectedPodcast.guid}
-						path={selectedPodcast.path}
-						title={selectedPodcast.name}
-						author={selectedPodcast.author}
-						website={selectedPodcast.link}
-						description={description}
-						podcastLoading={podcastLoading}
-						podcastLoadingError={podcastLoadingError}
-
-						rssFeed={rssFeed}
-					/>
-					<PodcastExtras
-						isSubscribed={isSubscribed}
-						selectedPodcast={selectedPodcast}
-						subscribedPodcasts={subscribedPodcasts}
-						subscribeToPodcast={subscribeToPodcast}
-						unsubscribeToPodcast={unsubscribeToPodcast}
-						isArchived={isArchived}
-						podcastLoadingError={podcastLoading}
-						archivePodcast={archivePodcast}
-						unarchivePodcast={unarchivePodcast}
-
-						rssFeed={rssFeed}
-					/>
-					</IonToolbar>
-				</IonHeader>
+		
 			<div ref={podcastPane} className={styles.podcastPane}>
+				{/*
+				<Header>
+					<div>
+						Test of the awesome header
+					</div>
+				</Header>
+				*/}
+				<PodcastHeader
+					reviewCount={selectedPodcast.review_totalCount}
+					reviewScore={selectedPodcast.review_totalScore}
+					coverImage={selectedPodcast.artworkUrl600}
+					imageUrlHash={selectedPodcast.imageUrlHash}
+					categories={selectedPodcast.categories}
+					podcastGuid={selectedPodcast.guid}
+					path={selectedPodcast.path}
+					title={selectedPodcast.name}
+					author={selectedPodcast.author}
+					website={selectedPodcast.link}
+					description={description}
+					podcastLoading={podcastLoading}
+					podcastLoadingError={podcastLoadingError}
+
+					rssFeed={rssFeed}
+				/>
+				<PodcastExtras
+					isSubscribed={isSubscribed}
+					selectedPodcast={selectedPodcast}
+					subscribedPodcasts={subscribedPodcasts}
+					subscribeToPodcast={subscribeToPodcast}
+					unsubscribeToPodcast={unsubscribeToPodcast}
+					isArchived={isArchived}
+					podcastLoadingError={podcastLoading}
+					archivePodcast={archivePodcast}
+					unarchivePodcast={unarchivePodcast}
+
+					rssFeed={rssFeed}
+				/>
+
 				<div className={styles.podcastContent}>
 									
 					<EpisodeList podcastPane={podcastPane} currentPodcastPlaying={currentPodcastPlaying} onEpisodeSelect={onEpisodeSelect} podcastInfo={selectedPodcast} episodes={selectedPodcast.episodes} rssFeed={rssFeed} />
@@ -180,8 +155,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 					<div style={{ paddingLeft: '30px', marginBottom: '30px' }}>... Coming soon!</div>
 				*/}
 			</div>
-			</IonContent>
-		</IonPage>
+		
 	);
 }
 export default PodCastPaneUI;

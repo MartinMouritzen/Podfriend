@@ -1,11 +1,11 @@
 .homePage {
 	background-color: #0176e5;
 	
-	height: calc(100% - 90px);
+	/* height: calc(100% - 90px);*/
 }
 @media only screen and (max-width: 570px) {
 	.homePage {
-		height: calc(100% - 60px);
+		/* height: calc(100% - 60px); */
 	}
 }
 .logo {

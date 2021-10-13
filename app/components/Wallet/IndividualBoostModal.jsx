@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import Modal from 'podfriend-approot/components/Window/Modal.jsx';
+import Modal from 'podfriend-approot/components/AppUI/Modal.jsx';
 
 import { IonList, IonListHeader, IonItem, IonLabel, IonThumbnail, IonImg, IonInput, IonToggle, IonRadio, IonCheckbox, IonItemSliding, IonItemOption, IonItemOptions, IonContent } from '@ionic/react';
 

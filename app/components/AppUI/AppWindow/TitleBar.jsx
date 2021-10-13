@@ -11,7 +11,7 @@ import UserTitleBar from 'podfriend-approot/components/user/userTitleBar.jsx';
 
 import SVG from 'react-inlinesvg';
 
-import styles from './TitleBar.css';
+import styles from './TitleBar.scss';
 
 function mapStateToProps(state) {
 	return {
@@ -81,7 +81,7 @@ class TitleBar extends Component {
 	*/
 	render() {
 		return (
-			<div className={styles.titleBar}>
+			<div className={styles.titleBar + ' appTitleBar'}>
 				{ this.state.platform == 'darwin' &&
 					<div className={styles.macWindowControls}>
 						<div className={styles.macClose} onClick={this.props.onClose} />
@@ -95,19 +95,21 @@ class TitleBar extends Component {
 					</div>
 				}
 				{ this.state.platform != 'darwin' &&
-					<>
+					<div className={styles.logoAndTitle}>
 						<Link to={'/'} style={{ display: 'block', whiteSpace: 'nowrap' }}>
-							<SVG src={require('./../../images/logo/podfriend_logo.svg')} className={styles.logo} />
+							<SVG src={require('podfriend-approot/images/logo/podfriend_logo.svg')} className={styles.logo} />
 						</Link>
 						<Link to={'/'} className={styles.title}>
 							PodFriend
 						</Link>
-					</>
+					</div>
 				}
+				{/*
 				<div className={styles.navigationControls}>
 					<div className={(styles.navigationButtonBack + ' ') + (this.canHistoryGo(-1) ? styles.navigationButton : styles.navigationButtonDisabled)} onClick={() => { Events.emit('OnNavigateBackward',false); }}><FaArrowLeft /></div>
 					<div className={(styles.navigationButtonForward + ' ') + (this.canHistoryGo(1) ? styles.navigationButton : styles.navigationButtonDisabled)} onClick={() => { Events.emit('OnNavigateForward',false); }}><FaArrowRight /></div>
 				</div>
+				*/ }				
 				<div className={styles.search}>
 					<SearchField onSearch={this.props.onSearch} />
 				</div>

@@ -6,8 +6,6 @@ import { hot } from 'react-hot-loader/root';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import isElectron from 'is-electron';
-
 import { BrowserRouter as BrowserRouter } from 'react-router-dom';
 import { MemoryRouter as MemoryRouter } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
@@ -21,12 +19,12 @@ import { Capacitor } from '@capacitor/core'
 // import { ConnectedRouter } from 'react-router-redux';
 
 import PodCastClient from '~/app/components/PodCastClient';
-import TitleBar from '~/app/components/Window/TitleBar';
+import TitleBar from '~/app/components/AppUI/AppWindow/TitleBar';
 
-import styles from '~/app/components/Window/WindowFrame.css';
+import styles from '~/app/components/AppUI/AppWindow/AppWindow.scss';
 
 // let Router = BrowserRouter;
-console.log(IonReactRouter);
+// console.log(IonReactRouter);
 let Router = IonReactRouter;
 
 // var platforms = getPlatforms();
@@ -40,42 +38,18 @@ if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQuerySt
 /*
 *
 */
-class WebContainer extends React.Component {
-	/*
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			lastScrollDirection: false,
-			mainScrollPositionY: 0
-		};
-
-		this.onScroll = this.onScroll.bind(this);
-	}
-	onScroll(event) {
-		var mainArea = event.target;
-
-		var direction = mainArea.scrollTop > this.state.mainScrollPositionY ? 'down' : 'up';
-
-		this.setState({
-			lastScrollDirection: direction,
-			mainScrollPositionY: mainArea.scrollTop
-		});
-	}
-	*/
-	render() {
-		return (
-			<Provider store={this.props.store}>
-				<PersistGate loading={null} persistor={this.props.persistor}>
-					<Router>
-						<div className={styles.webContainer + ' appType_' + appType}>
-							<TitleBar appType={appType} isElectron={false} platform={this.props.platform} />
-							<PodCastClient appType={appType} store={this.props.store} audioController={this.props.audioController} />
-						</div>
-					</Router>
-				</PersistGate>
-			</Provider>
-		);
-	}
+const WebContainer = ({ store, history, persistor, audioController, platform}) => {
+	return (
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<Router>
+					<div className={styles.webContainer + ' appType_' + appType}>
+						<TitleBar appType={appType} isElectron={false} platform={platform} />
+						<PodCastClient appType={appType} store={store} audioController={audioController} />
+					</div>
+				</Router>
+			</PersistGate>
+		</Provider>
+	);
 }
 export default hot(WebContainer);

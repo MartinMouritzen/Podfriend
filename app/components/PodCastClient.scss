@@ -36,6 +36,7 @@
 
 
 	--primary-text-color: #000000;
+	--primary-header-text-color: #FFFFFF;
 	--secondary-text-color: #75757e;
 }
 
@@ -114,6 +115,8 @@ p {
 	box-shadow: -4px 3px 8px 1px rgba(0,0,0,0.35);
 	border-radius: 20px 0px 0px 0px;
 	
+	background-color: var(--primary-color);
+
 	filter: blur(0px); /* hack for chrome to make backdrop-filter and scrolling work on childs */
 
 	/*
@@ -123,6 +126,8 @@ p {
 	}
 	*/
 }
+
+
 :global {
 	/*
 	.header-ios {
@@ -130,9 +135,127 @@ p {
 	}
 	*/
 	.ion-page {
-		background-color: #ff23aa;
 		flex: 1;
-		height: calc(100% - 44px);
+
+		height: calc(100% - 90px);
+		@media only screen and (max-width: 899px) {
+			height: calc(100% - 134px);
+		}
+		@media only screen and (max-width: 570px) {
+			height: calc(100% - 104px);
+		}
+
+		ion-title {
+			--color: var(--primary-header-text-color);
+		}
+		ion-toolbar {
+			--background: var(--primary-color);
+
+			ion-back-button {
+				--color: var(--primary-header-text-color);
+				--padding-start: 8px;
+			}
+		}
+
+		&.no-header-padding {
+			ion-toolbar {
+				padding-top: 0px;
+				--padding-top: 0px;
+				--padding-start: 0px;
+				--padding-end: 0px;
+				--padding-bottom: 0px;
+			}
+		}
+
+		/*
+		height: calc(100% - 90px);
+
+		@media only screen and (max-width: 899px) {
+			height: calc(100% - 134px);
+		}
+
+		@media only screen and (max-width: 570px) {
+			height: calc(100% - 104px);
+		}
+		*/
+		/*
+		*::-webkit-scrollbar {
+			width: 12px;
+			background-color: var(--primary-color);
+		}
+		*::-webkit-scrollbar-thumb {
+			background: #02489d;
+			height: 20%;
+			border-radius: 15px;
+		}
+		*::-webkit-scrollbar-track {
+			background: transparent;
+			display: none;
+		}
+		*/
+	}
+	.ion-page.home {
+		background-color: var(--primary-color);
+		ion-content {
+			--background: var(--primary-color);
+		}
+		ion-header {
+			/* background-color: #174ea1 !important; */
+			background-color: --primary-color !important;
+			color: #FFFFFF;
+
+			@media (any-hover: hover) {
+				max-width: calc(100% - 17px);
+			}
+
+			ion-toolbar {
+				--background: var(--primary-color);
+				color: #FFFFFF;
+				--border-width: 0 !important;
+
+				--padding-bottom: 0px;
+			}
+			ion-searchbar {
+				--background: rgba(0,0,0,0.15);
+				--placeholder-color: rgba(255,255,255,0.60);
+				--icon-color: rgba(255,255,255,0.60);
+			}
+			ion-back-button {
+				color: #FFFFFF;
+			}
+			ion-title {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding-bottom: 5px;
+			}
+			ion-segment {
+				--background: var(--primary-color);
+
+				ion-segment-button {
+					--color: rgba(255,255,255,0.7);
+					--color-hover: rgba(255,255,255,0.9);
+					--border-width: 0;
+					--background: transparent;
+					--color-checked: #ffffff;
+					--indicator-height: 3px;
+					--background-hover-opacity: 0;
+					--ripple-color: transparent;
+
+					&::part(indicator-background) {
+						border-radius: 3px 3px 0px 0px;
+					}
+				}
+			}
+		}
+		@media only screen and (min-width: 900px) {
+			.titleToolbar {
+				display: none;
+			}
+			.searchToolbar {
+				display: none;
+			}
+		}
 	}
 	.podfriendModal {
 		p {
@@ -273,11 +396,11 @@ p {
 	.podcastPage {
 		overflow-y: auto;
 
-		/* height: calc(100% - 90px);*/
+		height: calc(100% - 90px);
 	}
 	@media only screen and (max-width: 570px) {
 		.podcastPage {
-			/* height: calc(100% - 60px);*/
+			height: calc(100% - 60px);
 		}
 	}
 	.contentPage, .landingPage {
@@ -330,118 +453,117 @@ p {
 	.fullWidth {
 		width: 100%;
 	}
-
-	button, .button {
-		background-color: var(--primary-color);
-		border: 0px;
-		border-bottom: 4px solid var(--primary-color-dark);
-		padding: 15px;
-		color: #FFFFFF;
-		font-size: 16px;
-		transition: background-color .2s;
-		border-radius: 10px;
-		text-align: center;
-		overflow: hidden;
-	}
-	.multiAction {
-		padding: 0px;
-		display: flex;
-
-		.buttonPrimaryAction {
+		.podfriendButton {
+			background-color: var(--primary-color);
+			border: 0px;
+			border-bottom: 4px solid var(--primary-color-dark);
 			padding: 15px;
-			flex: 1;
 			color: #FFFFFF;
+			font-size: 16px;
+			transition: background-color .2s;
+			border-radius: 10px;
+			text-align: center;
+			overflow: hidden;
 		}
-		.buttonSecondaryAction {
-			background-color: rgba(0,0,0,0.1);
+		.multiAction {
+			padding: 0px;
 			display: flex;
-			justify-content: center;
-			align-items: center;
 
-			padding-left: 10px;
-			padding-right: 10px;
+			.buttonPrimaryAction {
+				padding: 15px;
+				flex: 1;
+				color: #FFFFFF;
+			}
+			.buttonSecondaryAction {
+				background-color: rgba(0,0,0,0.1);
+				display: flex;
+				justify-content: center;
+				align-items: center;
 
-			svg {
-				margin-right: 0px;
+				padding-left: 10px;
+				padding-right: 10px;
 
-				max-width: 24px;
-				max-height: 24px;
+				svg {
+					margin-right: 0px;
+
+					max-width: 24px;
+					max-height: 24px;
+				}
 			}
 		}
-	}
-	button:active, .button:active {
-		background-color: var(--primary-color-light);
-		border-width: 0 !important;
-		margin-bottom: 4px;
-		transform: translate3d(0,4px,0) !important;
-	}
-	.boostButton, button.success, .button.success {
-		background-color: var(--success-color);
-		border-bottom: 4px solid var(--success-color-dark);
-	}
-	.boostButton:active, button.success:active, .button.success:active {
-		background-color: var(--success-color-light);
-	}
-	.secondaryButton {
-		background-color: var(--secondary-color);
-		border-bottom: 4px solid var(--secondary-color-dark);
-	}
-	.secondaryButton:active {
-		background-color: var(--secondary-color-light);
-	}
-	.dangerousButton {
-		background-color: var(--danger-color);
-		border-bottom: 4px solid var(--danger-color-dark);
-	}
-	.dangerousButton:active {
-		background-color: var(--danger-color-light);
-	}
-	.pendingAction {
-		opacity: 0.8;
-		pointer-events: none;
-
-		svg {
-			display: inline !important;
-		}
-	}
-	@media (any-hover: hover) {
-		button:hover, .button:hover, .button.active:hover {
+		.podfriendButton:active {
 			background-color: var(--primary-color-light);
-			
-			color: #FFFFFF;
+			border-width: 0 !important;
+			margin-bottom: 4px;
+			transform: translate3d(0,4px,0) !important;
 		}
-		button.nonActive:hover, .button.nonActive:hover {
-			background-color: #EEEEEE;
-			
-			color: #999999 !important;
+		.boostButton, .podfriendButton.success {
+			background-color: var(--success-color);
+			border-bottom: 4px solid var(--success-color-dark);
 		}
-		button:hover > span, .button:hover > span, button:hover > span > span {
-			color: #FFFFFF;
-		}
-		.boostButton:hover, button.success:hover, .button.success:hover {
+		.boostButton:active, .podfriendButton.success:active {
 			background-color: var(--success-color-light);
 		}
-		.secondaryButton:hover {
+		.secondaryButton {
+			background-color: var(--secondary-color);
+			border-bottom: 4px solid var(--secondary-color-dark);
+		}
+		.secondaryButton:active {
 			background-color: var(--secondary-color-light);
 		}
-		.dangerousButton:hover {
+		.dangerousButton {
+			background-color: var(--danger-color);
+			border-bottom: 4px solid var(--danger-color-dark);
+		}
+		.dangerousButton:active {
 			background-color: var(--danger-color-light);
 		}
-	}
-	button svg, .button svg {
-		max-height: 16px;
-		max-width: 16px;
-		fill: #FFFFFF;
-		margin-right: 10px;
-		transition: all 0.5s;
-		position: relative;
-		top: 2px;
-	}
-	button.active, .button.active {
-		background-color: var(--primary-color);
-		border-bottom: 4px solid var(--primary-color-dark);
-		color: #FFFFFF;
-	}
+		.pendingAction {
+			opacity: 0.8;
+			pointer-events: none;
+
+			svg {
+				display: inline !important;
+			}
+		}
+		@media (any-hover: hover) {
+			.podfriendButton:hover, .podfriendButton.active:hover {
+				background-color: var(--primary-color-light);
+				
+				color: #FFFFFF;
+			}
+			.podfriendButton.nonActive:hover {
+				background-color: #EEEEEE;
+				
+				color: #999999 !important;
+			}
+			.podfriendButton:hover > span, .podfriendButton:hover > span > span {
+				color: #FFFFFF;
+			}
+			.boostButton:hover, .podfriendButton.success:hover {
+				background-color: var(--success-color-light);
+			}
+			.secondaryButton:hover {
+				background-color: var(--secondary-color-light);
+			}
+			.dangerousButton:hover {
+				background-color: var(--danger-color-light);
+			}
+		}
+		.podfriendButton svg {
+			max-height: 16px;
+			max-width: 16px;
+			fill: #FFFFFF;
+			margin-right: 10px;
+			transition: all 0.5s;
+			position: relative;
+			top: 2px;
+		}
+		.podfriendButton.active {
+			background-color: var(--primary-color);
+			border-bottom: 4px solid var(--primary-color-dark);
+			color: #FFFFFF;
+		}
 
 	.podcastCover {
 		box-shadow: 0px 0px 39px -12px rgba(0,0,0,0.75);
@@ -883,136 +1005,7 @@ p {
 		}
 	}
 
-	/****
-	* Are we even using react-toggle anymore?
-	*************/
-	/*
-	.react-toggle {
-	  touch-action: pan-x;
-	
-	  display: inline-block;
-	  position: relative;
-	  cursor: pointer;
-	  background-color: transparent;
-	  border: 0;
-	  padding: 0;
-	
-	  -webkit-touch-callout: none;
-	  -webkit-user-select: none;
-	  -khtml-user-select: none;
-	  -moz-user-select: none;
-	  -ms-user-select: none;
-	  user-select: none;
-	
-	  -webkit-tap-highlight-color: rgba(0,0,0,0);
-	  -webkit-tap-highlight-color: transparent;
-	}
-	
-	.react-toggle-screenreader-only {
-	  border: 0;
-	  clip: rect(0 0 0 0);
-	  height: 1px;
-	  margin: -1px;
-	  overflow: hidden;
-	  padding: 0;
-	  position: absolute;
-	  width: 1px;
-	}
-	
-	.react-toggle--disabled {
-	  cursor: not-allowed;
-	  opacity: 0.5;
-	  -webkit-transition: opacity 0.25s;
-	  transition: opacity 0.25s;
-	}
-	
-	.react-toggle-track {
-	  width: 36px;
-	  height: 18px;
-	  padding: 0;
-	  border-radius: 30px;
-	  background-color: #ADADAD;
-	  -webkit-transition: all 0.2s ease;
-	  -moz-transition: all 0.2s ease;
-	  transition: all 0.2s ease;
-	}
-	
-	.react-toggle--checked .react-toggle-track {
-	  background-color: #4bcd0e;
-	}
-	
-	.react-toggle-track-check {
-	  position: absolute;
-	  width: 14px;
-	  height: 10px;
-	  top: 0px;
-	  bottom: 0px;
-	  margin-top: auto;
-	  margin-bottom: auto;
-	  line-height: 0;
-	  left: 8px;
-	  opacity: 0;
-	  -webkit-transition: opacity 0.25s ease;
-	  -moz-transition: opacity 0.25s ease;
-	  transition: opacity 0.25s ease;
-	}
-	
-	.react-toggle--checked .react-toggle-track-check {
-	  opacity: 1;
-	  -webkit-transition: opacity 0.25s ease;
-	  -moz-transition: opacity 0.25s ease;
-	  transition: opacity 0.25s ease;
-	}
-	
-	.react-toggle-track-x {
-	  position: absolute;
-	  width: 10px;
-	  height: 10px;
-	  top: 0px;
-	  bottom: 0px;
-	  margin-top: auto;
-	  margin-bottom: auto;
-	  line-height: 0;
-	  right: 10px;
-	  opacity: 1;
-	  -webkit-transition: opacity 0.25s ease;
-	  -moz-transition: opacity 0.25s ease;
-	  transition: opacity 0.25s ease;
-	}
-	
-	.react-toggle--checked .react-toggle-track-x {
-	  opacity: 0;
-	}
-	
-	.react-toggle-thumb {
-	  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-	  position: absolute;
-	  bottom: 0px;
-	  left: 0px;
-	  width: 18px;
-	  height: 18px;
-	  border: 1px solid #ADADAD;
-	  border-radius: 50%;
-	  background-color: #EEEEEE;
-	
-	  -webkit-box-sizing: border-box;
-	  -moz-box-sizing: border-box;
-	  box-sizing: border-box;
-	
-	  -webkit-transition: all 0.25s ease;
-	  -moz-transition: all 0.25s ease;
-	  transition: all 0.25s ease;
-	}
-	
-	.react-toggle--checked .react-toggle-thumb {
-	  left: 18px;
-	  border-color: #19AB27;
-	}
-	
-	.react-toggle:hover .react-toggle-thumb {
-	  background-color: #DDDDDD;
-	}
-	*/
+
 }
 @media only screen and (max-width: 899px) {
 	.mainArea {

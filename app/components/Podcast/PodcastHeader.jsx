@@ -21,7 +21,7 @@ import ReviewPane from 'podfriend-approot/components/Reviews/ReviewPane.jsx';
 import PodcastMap from './PodcastMap.jsx';
 import PodcastPersons from './PodcastPersons.jsx';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 const PodcastHeader = React.memo(({ coverImage, imageUrlHash = false, podcastGuid, path, title, author, website, description, reviewScore, reviewCount, podcastLoading, podcastLoadingError, categories = false, rssFeed = false }) => {
 	const [location,setLocation] = useState(false);

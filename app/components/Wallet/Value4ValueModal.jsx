@@ -109,10 +109,10 @@ const Value4ValueModal = () => {
 									If you regret your decision, you can always change your decision under &quot;settings&quot; by clicking your profile name.
 								</p>
 								<div style={{ marginBottom: '20px' }}>
-									<button className="success fullWidth" onClick={enableWallet}><FaCheckCircle style={{ fill: '#000000', opacity: '0.4'}} />Enable my wallet</button>
+									<button className="podfriendButton success fullWidth" onClick={enableWallet}><FaCheckCircle style={{ fill: '#000000', opacity: '0.4'}} />Enable my wallet</button>
 								</div>
 								<div>
-									<button className="fullWidth" onClick={disableWallet}><FaTimesCircle style={{ fill: '#000000', opacity: '0.4'}} />Do not enable anything</button>
+									<button className="podfriendButton fullWidth" onClick={disableWallet}><FaTimesCircle style={{ fill: '#000000', opacity: '0.4'}} />Do not enable anything</button>
 								</div>
 							</section>
 						}
@@ -121,13 +121,13 @@ const Value4ValueModal = () => {
 				footer={
 					<div className='informationFooter'>
 						{ section === 1 &&
-							<button style={{ width: '100%' }} onClick={() => { changeSection(2); }}>Hmmm, what does this mean for me?</button>
+							<button className="podfriendButton" style={{ width: '100%' }} onClick={() => { changeSection(2); }}>Hmmm, what does this mean for me?</button>
 						}
 						{ section === 2 &&
-							<button style={{ width: '100%' }} onClick={() => { changeSection(3); }}>Why should I bother?</button>
+							<button className="podfriendButton" style={{ width: '100%' }} onClick={() => { changeSection(3); }}>Why should I bother?</button>
 						}
 						{ section === 3 &&
-							<button style={{ width: '100%' }} onClick={() => { changeSection(4); }}>Sounds awesome! Let me decide!</button>
+							<button className="podfriendButton" style={{ width: '100%' }} onClick={() => { changeSection(4); }}>Sounds awesome! Let me decide!</button>
 						}
 					</div>
 				}

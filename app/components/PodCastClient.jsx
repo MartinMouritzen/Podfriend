@@ -19,16 +19,17 @@ const SearchPaneUI = lazy(() => import('./Search/SearchPaneUI.jsx'));
 
 // import PodCastPane from './Podcast/PodCastPane.jsx';
 // import PodcastPaneUI from './Podcast/PodcastPaneUI.jsx';
-const PodCastPane = lazy(() => import('./Podcast/PodCastPane.jsx'));
+const PodcastPane = lazy(() => import('./Podcast/PodCastPane.jsx'));
 const PodcastPaneUI = lazy(() => import('./Podcast/PodcastPaneUI.jsx'));
 
 import Player from './Player/Player.jsx';
 import PlayerUI from './Player/PlayerUI.jsx';
 
-import Welcome from 'podfriend-approot/pages/Welcome.jsx';
-// import Welcome from 'podfriend-approot/pages/IonicTest.jsx';
-
+// import Welcome from 'podfriend-approot/pages/Welcome.jsx';
+// import Welcome from 'podfriend-approot/pages/HeaderTest.jsx';
+import Welcome from 'podfriend-approot/pages/IonicTest.jsx';
 import FeedPage from 'podfriend-approot/pages/FeedPage.jsx';
+import PodcastHistory from 'podfriend-approot/pages/PodcastHistory.jsx';
 
 // import SettingsPage from '~/app/components/user/SettingsPage';
 const SettingsPage = lazy(() => import('~/app/components/user/SettingsPage'));
@@ -41,7 +42,7 @@ const ContactPage = lazy(() => import('podfriend-approot/components/Pages/Contac
 import BottomNavigation from 'podfriend-approot/components/Navigation/BottomNavigation';
 
 import Events from './../library/Events.js';
-import Modal from './Window/Modal';
+import Modal from './AppUI/Modal';
 import LoginForm from './Login/LoginForm';
 
 import FavoriteList from './Favorites/FavoriteList.jsx';
@@ -60,9 +61,12 @@ import 'react-spring-bottom-sheet/dist/style.css'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
-import {setupConfig} from '@ionic/react';
+import {setupConfig, IonApp, IonRouterOutlet} from '@ionic/react';
 
 setupConfig({mode: 'ios'})
+
+import IonicTest2 from 'podfriend-approot/pages/IonicTest2';
+import IonicTest3 from 'podfriend-approot/pages/IonicTest3';
 
 // import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
@@ -267,15 +271,18 @@ class PodcastClient extends Component {
 							<Suspense fallback={<div>Loading...</div>}>
 								<Switch>
 									<Route exact path="/" render={(props) => { return (<Welcome {...props} />); }} />
+
+									<Route path="/history/" render={(props) => { return (<PodcastHistory {...props} />); }} />
+
 									<Route path="/search/author/:author/:authorId?" render={(props) => { return (<SearchPane searchType="author" {...props} UI={SearchPaneUI} />); }} />
 									<Route path="/search/:query?" render={(props) => { return (<SearchPane searchType="podcast" {...props} UI={SearchPaneUI} />); }} />
 									<Route path="/podfrndr/" render={(props) => { return (<SwipeExplorer {...props} />); }} />
-									<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-									<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-									<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-									<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-									<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
-									<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodCastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/reviews/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/community/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/lists/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/creators-and-guests/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
+									<Route exact path="/podcast/:podcastName/extraContent/" render={(props) => { return (<PodcastPane {...props} scrollTo={this.scrollTo} UI={PodcastPaneUI} />); }} />
 									<Route exact path="/podcast/:podcastName/:episodeId" render={(props) => { return (<EpisodePane {...props} />); }} />
 									<Route exact path="/podcast/:podcastName/:episodeId/chapters/" render={(props) => { return (<EpisodePane {...props} />); }} />
 									<Route exact path="/podcast/:podcastName/:episodeId/chat/" render={(props) => { return (<EpisodePane {...props} />); }} />

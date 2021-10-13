@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import { Range } from 'react-range';
 
@@ -113,12 +113,12 @@ const AudioSpeedSettingModal = ({ onClose }) => {
 					</div>
 					{ speedButtons.map((speed) => {
 						return (
-							<button key={speed} className={styles.speedButton + ' ' + (Number.parseFloat(speed) === Number.parseFloat(audioSpeed) ? 'active' : 'nonActive')} onClick={() => { saveAudioSpeed(speed); }}>{speed}x</button>
+							<button key={speed} className={'podfriendButton ' + styles.speedButton + ' ' + (Number.parseFloat(speed) === Number.parseFloat(audioSpeed) ? 'active' : 'nonActive')} onClick={() => { saveAudioSpeed(speed); }}>{speed}x</button>
 						);
 					}) }
 				</div>
 				<div className={styles.closeButtonContainer}>
-					<button onClick={onClose}>Close</button>
+					<button className='podfriendButton' onClick={onClose}>Close</button>
 				</div>
 			</div>
 		</Modal>

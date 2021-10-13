@@ -199,8 +199,8 @@ const EpisodeList = ({ podcastPane, podcastInfo, episodes, showFilterBar = true,
 					}
 				}
 
-				console.log('location: ');
-				console.log(location);
+				// console.log('location: ');
+				// console.log(location);
 
 				return (
 					<EpisodeListItem

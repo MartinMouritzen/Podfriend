@@ -1,0 +1,10 @@
+.page {
+	background-color: #FFFFFF;
+
+	height: calc(100% - 90px);
+	
+
+	@media only screen and (max-width: 570px) {
+		height: calc(100% - 60px);
+	}
+}

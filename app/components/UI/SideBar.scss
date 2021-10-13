@@ -37,20 +37,25 @@
 	margin-right: 10px;
 	border-radius: 5px;
 	margin-bottom: 3px;
-	font-size: 14px;
+	font-size: 16px;
 	color: #FFFFFF;
 	transition: 0.3s all ease;
 
 	cursor: pointer;
 }
-.mainNavigationButton:hover {
+.mainNavigationButton:active {
 	background-color: rgba(255,255,255,0.2);
+}
+@media (any-hover: hover) {
+	.mainNavigationButton:hover {
+		background-color: rgba(255,255,255,0.2);
+	}
 }
 
 .category svg, .selectedCategory svg, .mainNavigationButton svg {
 	fill: #FFFFFF;
 	position: relative;
-	top: 3px;
+	top: 5px;
 	margin-right: 10px;
 	transition: fill 0.3s ease;
 }

@@ -11,7 +11,7 @@ var [ store, persistor, history ] = configureStore(storage,true);
 
 import Events from './library/Events.js';
 
-import WebContainer from './components/Window/WebContainer';
+import WebContainer from './components/AppUI/AppWindow/WebContainer';
 
 import ConfigFile from './podfriend.config.js';
 
@@ -57,9 +57,9 @@ render(
 defineCustomElements(window);
 
 if (module.hot) {
-	module.hot.accept('./components/Window/WebContainer',() => {
+	module.hot.accept('./components/AppUI/AppWindow/WebContainer',() => {
 		// eslint-disable-next-line global-require
-		const NextRoot = require('./components/Window/WebContainer').default;
+		const NextRoot = require('./components/AppUI/AppWindow/WebContainer').default;
 		render(
 			<NextRoot store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 			document.getElementById('root')

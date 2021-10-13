@@ -66,7 +66,7 @@ const PodcastExtras = React.memo(({isSubscribed, isArchived, selectedPodcast,sub
 					</div>
 				}
 				{ selectedPodcast.funding && selectedPodcast.funding.url &&
-					<button className={'button ' + styles.donateButton} onClick={goToFundingUrl}><DonateIcon /> Donate to podcast</button>
+					<button className={'podfriendButton ' + styles.donateButton} onClick={goToFundingUrl}><DonateIcon /> Donate to podcast</button>
 				}
 			</div>
 			<div className={styles.share}>

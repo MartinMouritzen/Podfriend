@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 

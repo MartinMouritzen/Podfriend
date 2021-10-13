@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import SVG from 'react-inlinesvg';
-
 import {
 	IonPage,
 	IonHeader,
@@ -18,24 +16,20 @@ import {
 	IonSegmentButton,
 	IonLabel,
 	IonReactRouter,
-	IonRouterOutlet
+	IonRouterOutlet,
+	Route
 } from '@ionic/react';
-
-import Welcome from 'podfriend-approot/pages/Welcome.jsx';
 
 /**
 *
 */
-const IonicTest = () => {
+const Welcome = () => {
 	return (
 		<IonPage className='home'>
 			<IonHeader>
 				<IonToolbar className='titleToolbar'>
 					<IonTitle>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-							<IonIcon src={require('podfriend-approot/images/logo/podfriend_logo.svg')} style={{ fill: '#000000', fontSize: 36, marginRight: 10 }} />
-							<span style={{ fontSize: 26 }}>Podfriend</span>
-						</div>
+						Test 1
 					</IonTitle>
 				</IonToolbar>
 			</IonHeader>
@@ -44,7 +38,6 @@ const IonicTest = () => {
 					<IonToolbar className='searchToolbar'>
 						<IonSearchbar placeholder='Search for a podcast' />
 					</IonToolbar>
-					{ /*
 					<IonToolbar>
 						<IonSegment mode='md' value="home">
 							<IonSegmentButton value="episodes">
@@ -58,27 +51,13 @@ const IonicTest = () => {
 							</IonSegmentButton>
 						</IonSegment>
 					</IonToolbar>
-					*/ }
 				</IonHeader>
-				<Welcome />
-				{/*
-				<div className={feedPageStyles.page}>
-					<div className={feedPageStyles.postColumn}>
-						<PostForm
-							
-						/>
-					</div>
-					<div style={{  width: '100%', maxWidth: '644px', display: 'flex', flexDirection: 'column' }}>
-
-					</div>
-					<div className={feedPageStyles.rightColumn}>
-
-					</div>
+				<div>
+					Hello test 1
 				</div>
-				*/ }
 			</IonContent>
 		</IonPage>
 	);
 }
 
-export default IonicTest;
+export default Welcome;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import styles from './InformationModal.scss';
 

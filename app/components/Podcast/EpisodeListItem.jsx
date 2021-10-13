@@ -33,7 +33,7 @@ import TimeUtil from 'podfriend-approot/library/TimeUtil.js';
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import PodcastMap from './PodcastMap.jsx';
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 // import ShareButtons from './ShareButtons.jsx';
 
@@ -45,8 +45,8 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 	const [episodeDescription,setEpisodeDescription] = useState(description);
 	const [showLocation,setShowLocation] = useState(false);
 
-	console.log('Episode location: ');
-	console.log(location);
+	// console.log('Episode location: ');
+	// console.log(location);
 
 	useEffect(() => {
 		setEpisodeTitle(DOMPurify.sanitize(title,{
@@ -201,7 +201,7 @@ const EpisodeListItem = ({ style, id, title, description, episodeImage, duration
 				</div>
 			</div>
 			<div className={styles.extraButtons}>
-				<button onClick={onShareEpisode} style={{ width: '150px', marginTop: '15px', marginLeft: '15px' }}><ShareIcon /> Share</button>
+				<button className='podfriendButton' onClick={onShareEpisode} style={{ width: '150px', marginTop: '15px', marginLeft: '15px' }}><ShareIcon /> Share</button>
 				{/*
 				<button onClick={onMarkAsListened} style={{ width: '150px', marginTop: '15px', marginLeft: '15px' }}>Mark as listened</button>
 				*/}

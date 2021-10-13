@@ -408,6 +408,10 @@ app.on('ready', async () => {
 		systemTray.setContextMenu(trayContextMenu);
 		systemTray.setToolTip('Podfriend');
 
+		systemTray.on('click',() => {
+			systemTray.popUpContextMenu();
+		});
+
 		systemTray.on('double-click',(event) => {
 			mainWindow.show();
 		});

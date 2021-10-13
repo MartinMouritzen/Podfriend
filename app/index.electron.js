@@ -7,7 +7,7 @@ var [ store, persistor, history ] = configureStore(true);
 
 import Events from './library/Events.js';
 
-import WindowFrame from './components/Window/WindowFrame';
+import WindowFrame from './components/AppUI/AppWindow/AppWindow.jsx';
 
 import ConfigFile from './podfriend.config.js';
 
@@ -34,9 +34,9 @@ render(
 );
 
 if (module.hot) {
-	module.hot.accept('./components/Window/WindowFrame',() => {
+	module.hot.accept('./components/AppUI/AppWindow/AppWindow',() => {
 		// eslint-disable-next-line global-require
-		const NextRoot = require('./components/Window/WindowFrame').default;
+		const NextRoot = require('./components/AppUI/AppWindow/AppWindow').default;
 		render(
 			<NextRoot store={store} persistor={persistor} history={history} platform={process.platform} audioController={audioController} />,
 			document.getElementById('root')

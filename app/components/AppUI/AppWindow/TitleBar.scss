@@ -1,3 +1,12 @@
+:global {
+	.appType_browser {
+		.appTitleBar {
+			@media (max-width: 899px) {
+				display: none !important;
+			}
+		}
+	}
+}
 /*
 .titleBar {
 	width: 100%;
@@ -35,10 +44,14 @@
 	/* background-color: rgba(217, 217, 217, 1); */
 	/* border-bottom: 1px solid #c0c0c0; */
 }
-.logo {
-	width: 24px;
-	height: 24px;
+.logoAndTitle {
 	margin-left: 7px;
+	flex: 1;
+	display: flex;
+}
+.logo {
+	width: 32px;
+	height: 32px;
 	margin-right: 7px;
 }
 .title {
@@ -49,6 +62,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	font-size: 18px;
 	
 }
 .navigationControls {
@@ -220,6 +234,12 @@
 	}
 }
 @media only screen and (max-width: 900px) {
+	.logo, .title {
+		display: none;
+	}
+	.search {
+		display: none;
+	}
 	@supports(padding-top:env(safe-area-inset-top)) {
 		.titleBar {
 			padding-top: env(safe-area-inset-top);

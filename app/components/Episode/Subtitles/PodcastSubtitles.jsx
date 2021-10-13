@@ -8,7 +8,7 @@ import DOMPurify from 'dompurify';
 
 import SubtitleSearchModal from 'podfriend-approot/components/Episode/Subtitles/SubtitleSearchModal.jsx';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import styles from './PodcastSubtitles.scss';
 

@@ -22,7 +22,7 @@ import Reward from 'react-rewards';
 
 import CreditCard from './CreditCard.jsx';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import styles from './WalletModal.scss';
 
@@ -189,7 +189,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 				{ value4ValueEnabled === false &&
 					<div style={{ maxWidth: 400 }}>
 						{ value4ValueOnboarded === true &&
-							<div className="button" onClick={restartOnboarding}>
+							<div className="podfriendButton" onClick={restartOnboarding}>
 								Turn on the &quot;Podcast Wallet&quot; tutorial
 							</div>
 						}
@@ -200,7 +200,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 							</div>
 						}
 						<hr />
-						<div className="button success" onClick={enableWallet}>
+						<div className="podfriendButton success" onClick={enableWallet}>
 							I want to turn the Podcast Wallet on
 						</div>
 					</div>
@@ -253,7 +253,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 								<p>
 									Once you have some Bitcoin in Stripe, BlueWallet or any other wallet or exchange that supports Lightning payment you can continue to the next step
 								</p>
-								<div className="button" onClick={showFundsAmount}>
+								<div className="podfriendButton" onClick={showFundsAmount}>
 									Ready? Decide on an amount to transfer
 								</div>
 							</div>
@@ -270,13 +270,13 @@ const WalletModal = ({ shown, onDismiss }) => {
 									<p>CoinDesk have graciously allowed us to show price data, but it is only an indicator and might divert from the real price.</p>
 								</div>
 								<div>
-									<div className="button" onClick={() => { getPaymentString(5000); }} style={{ marginBottom: 5 }}>
+									<div className="podfriendButton" onClick={() => { getPaymentString(5000); }} style={{ marginBottom: 5 }}>
 										{(5000).toLocaleString()} satoshis <BitcoinPrice amount="5000" priceData={priceData} priceStatus={priceStatus} />
 									</div>
-									<div className="button" onClick={() => { getPaymentString(10000); }} style={{ marginBottom: 5 }}>
+									<div className="podfriendButton" onClick={() => { getPaymentString(10000); }} style={{ marginBottom: 5 }}>
 										{(10000).toLocaleString()} satoshis <BitcoinPrice amount="10000" priceData={priceData} priceStatus={priceStatus} />
 									</div>
-									<div className="button" onClick={() => { getPaymentString(20000); }}>
+									<div className="podfriendButton" onClick={() => { getPaymentString(20000); }}>
 										{(20000).toLocaleString()} satoshis <BitcoinPrice amount="20000" priceData={priceData} priceStatus={priceStatus} />
 									</div>
 								</div>
@@ -308,7 +308,7 @@ const WalletModal = ({ shown, onDismiss }) => {
 												Bitcoin deposited!
 											</div>
 										</Reward>
-										<div className="button" onClick={onDismiss} style={{ marginTop: '30px' }}>
+										<div className="podfriendButton" onClick={onDismiss} style={{ marginTop: '30px' }}>
 											Return to Podfriend
 										</div>
 									</div>
@@ -371,15 +371,15 @@ const WalletModal = ({ shown, onDismiss }) => {
 						{ status === false &&
 							<div>
 								{ false &&
-									<div className="button secondaryButton" style={{ marginBottom: 10 }}>
+									<div className="podfriendButton secondaryButton" style={{ marginBottom: 10 }}>
 										See past payments
 									</div>
 								}
-								<div className="button" onClick={showAddFunds}>
+								<div className="podfriendButton" onClick={showAddFunds}>
 									Add funds to your Podcast Wallet
 								</div>
 								<hr />
-								<div className="button dangerousButton" onClick={disableWallet}>
+								<div className="podfriendButton dangerousButton" onClick={disableWallet}>
 									I want to turn off the Podcast Wallet
 								</div>
 

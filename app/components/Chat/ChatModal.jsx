@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Modal from 'podfriend-approot/components/Window/Modal';
+import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import ChatMessageInput from './ChatMessageInput.jsx';
 import ChatMessagePane from 'podfriend-approot/components/Chat/ChatMessagePane.jsx';

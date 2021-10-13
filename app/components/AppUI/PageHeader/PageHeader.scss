@@ -1,0 +1,29 @@
+.pageHeader {
+	/*
+	width: 100%;
+	@media (any-hover: hover) {
+		width: calc(100% - 17px);
+	}
+	*/
+	background-color: #ff23aa;
+	flex: none;
+
+	transition: all 0.2s;
+
+	.pageHeaderTitle {
+		background-color: #0176e7;
+		padding: 10px;
+
+		.pageHeaderTitleInner {
+			text-align: center;
+			color: #FFFFFF;
+			font-size: 36px;
+			font-weight: normal;
+			margin: 0px;
+			padding: 0px;
+		}
+	}
+	.waveContainer {
+		
+	}
+}

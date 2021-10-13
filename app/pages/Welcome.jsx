@@ -142,10 +142,10 @@ const CurrentlyPlaying = () => {
 					<div className='sectionBodyContainer' style={{ marginBottom: '15px' }}>
 						<div className='sectionBody' dangerouslySetInnerHTML={{__html: description }} />
 						{ hasEpisode !== false && isPlaying &&
-							<div className={'button ' + styles.playButton} onClick={() => { dispatch(audioPaused()); }}><PauseIcon /> Pause episode</div>
+							<div className={'podfriendButton ' + styles.playButton} onClick={() => { dispatch(audioPaused()); }}><PauseIcon /> Pause episode</div>
 						}
 						{ hasEpisode !== false && !isPlaying &&
-							<div className={'button ' + styles.playButton} onClick={() => { dispatch(audioPlayRequested()); }}><PlayIcon /> Continue episode</div>
+							<div className={'podfriendButton ' + styles.playButton} onClick={() => { dispatch(audioPlayRequested()); }}><PlayIcon /> Continue episode</div>
 						}
 					</div>
 				</div>
@@ -161,7 +161,7 @@ const Welcome = () => {
 	const activePodcast = useSelector(state => state.podcast.activePodcast);
 
 	return (
-		<div className={'podcastPage ' + styles.homePage}>
+		<>
 			{ false && 
 				<div>
 					<Warning
@@ -205,7 +205,7 @@ const Welcome = () => {
 
 			<TrendingPodcasts subTitle='Trending' title='News Podcasts' limit={14} categoryId={55} />
 
-		</div>
+		</>
 	);
 }
 

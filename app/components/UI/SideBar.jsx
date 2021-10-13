@@ -92,6 +92,8 @@ class SideBar extends Component {
 	*
 	*/
 	render() {
+		const iconSize = 22;
+
 		return (
 			<div className={styles.sideBar} onClick={this.onFocusClick}>
 				<div className={styles.panes}>
@@ -99,39 +101,39 @@ class SideBar extends Component {
 						<div className={styles.categoryList}>
 
 							<Link to="/" className={styles.mainNavigationButton}>
-								<FaHome size="20" /> Home
+								<FaHome size={iconSize} /> Home
 							</Link>
 							{ true &&
 								<Link to="/history/" className={styles.mainNavigationButton}>
-									<FaRegLightbulb size="20" /> History
+									<FaRegLightbulb size={iconSize} /> History
 								</Link>
 							}
 							<Link to="/podfrndr/" className={styles.mainNavigationButton}>
-								<FaRegLightbulb size="20" /> Podfrndr
+								<FaRegLightbulb size={iconSize} /> Podfrndr
 							</Link>
 							{ this.props.isLoggedIn === false &&
 								<div className={styles.mainNavigationButton} onClick={this.props.initiateLogin}>
-									<FaUser size="20" /> Log in
+									<FaUser size={iconSize} /> Log in
 								</div>
 							}
 							{ false && this.props.isLoggedIn === true &&
 								<div className={styles.mainNavigationButton}>
-									<FaUser size="20" /> Account
+									<FaUser size={iconSize} /> Account
 								</div>
 							}
 							{ false && 
 								<Link to="/podcasters/" className={styles.mainNavigationButton}>
-									<FaPodcast size="20" /> For Podcasters
+									<FaPodcast size={iconSize} /> For Podcasters
 								</Link>
 							}
 							{ true && 
 								<Link to="/contact/" className={styles.mainNavigationButton}>
-									<FaRegEnvelope size="20" /> Contact us
+									<FaRegEnvelope size={iconSize} /> Contact us
 								</Link>
 							}
 							{ false && 
 								<Link to="/contribute/" className={styles.mainNavigationButton}>
-									<FaHandsHelping size="20" /> Support Podfriend
+									<FaHandsHelping size={iconSize} /> Support Podfriend
 								</Link>
 							}
 							<hr />
@@ -141,7 +143,7 @@ class SideBar extends Component {
 
 							<div className={styles.mainNavigationButton}>
 								<Link to="/favorites/">
-									<FaPodcast size="20" /> Favorites
+									<FaPodcast size={iconSize} /> Favorites
 								</Link>
 							</div>
 							
@@ -151,10 +153,10 @@ class SideBar extends Component {
 							/>
 
 							<div className={styles.mainNavigationButton}>
-								<FaFolder size="20" /> Uncategorized
+								<FaFolder size={iconSize} /> Uncategorized
 							</div>
 							<div className={styles.mainNavigationButton}>
-								<FaRegClock size="20" /> Recent podcasts
+								<FaRegClock size={iconSize} /> Recent podcasts
 							</div>
 
 							
