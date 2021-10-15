@@ -181,7 +181,7 @@ const EpisodePane = () => {
 
 	return (
 		<IonPage className='sectionPage'>
-			<IonHeader translucent="true">
+			<IonHeader>
 				<IonToolbar>
 					<IonButtons slot="start">
 						<IonBackButton defaultHref='/' />
@@ -191,7 +191,7 @@ const EpisodePane = () => {
 					</IonTitle>
 				</IonToolbar>
 			</IonHeader>
-			<IonContent fullscreen="true">
+			<IonContent>
 				<IonHeader collapse="condense">
 					<IonToolbar>
 						<IonTitle size="large">

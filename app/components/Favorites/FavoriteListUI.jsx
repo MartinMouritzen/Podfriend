@@ -45,7 +45,7 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 	return (
 		<IonPage className='sectionPage'>
 			{ showResponsiveList &&
-				<IonHeader translucent="true">
+				<IonHeader>
 					<IonToolbar>
 						<IonButtons slot="start">
 							<IonBackButton defaultHref='/' />
@@ -56,7 +56,7 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 					</IonToolbar>
 				</IonHeader>
 			}
-			<IonContent fullscreen="true">
+			<IonContent>
 				{ showResponsiveList &&
 					<IonHeader collapse="condense">
 						<IonToolbar>

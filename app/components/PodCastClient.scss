@@ -226,7 +226,7 @@ p {
 		}
 		*/
 	}
-	#root .ion-page.sectionPage {
+	#root .ion-page.sectionPage, #root .ion-page.home {
 		@supports(padding-top:env(safe-area-inset-top)) {
 			padding-top: env(safe-area-inset-top);
 
