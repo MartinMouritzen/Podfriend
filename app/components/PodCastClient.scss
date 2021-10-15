@@ -226,6 +226,9 @@ p {
 	}
 	#root .ion-page.home {
 		background-color: var(--primary-color);
+
+		padding-top: 0px;
+
 		ion-content {
 			--background: var(--primary-color);
 		}

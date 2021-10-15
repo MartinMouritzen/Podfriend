@@ -97,7 +97,7 @@ const IonicTest = () => {
 					</IonTitle>
 				</IonToolbar>
 			</IonHeader>
-			<IonContent className="ion-padding" fullscreen>
+			<IonContent className="ion-padding">
 				<IonHeader>
 					<IonToolbar className='searchToolbar'>
 						<form onSubmit={onSearch}>
