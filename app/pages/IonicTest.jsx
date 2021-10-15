@@ -83,7 +83,9 @@ const IonicTest = () => {
 						}
 						{ isLoggedIn &&
 							<IonButton onClick={showMenu}>
-								{profileData.username}
+								<span style={{ maxWidth: 60, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+									{profileData.username}
+								</span>
 							</IonButton>
 						}
 					</IonButtons>

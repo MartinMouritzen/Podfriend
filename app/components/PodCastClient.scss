@@ -158,6 +158,10 @@ p {
 			height: calc(100% - 104px);
 		}
 
+		@supports(padding-top:env(safe-area-inset-top)) {
+			padding-top: env(safe-area-inset-top);
+		}
+
 		ion-title {
 			--color: var(--primary-header-text-color);
 		}
