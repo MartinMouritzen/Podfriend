@@ -18,6 +18,9 @@ import { Capacitor } from '@capacitor/core'
 
 // import { ConnectedRouter } from 'react-router-redux';
 
+import { StatusBar } from '@ionic-native/status-bar/';
+
+
 import PodCastClient from '~/app/components/PodCastClient';
 import TitleBar from '~/app/components/AppUI/AppWindow/TitleBar';
 
@@ -35,6 +38,9 @@ if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQuerySt
 	appType = 'standalone';
 	// Router = MemoryRouter;
 }
+
+StatusBar.backgroundColorByHexString('#ffffff');
+
 /*
 *
 */
