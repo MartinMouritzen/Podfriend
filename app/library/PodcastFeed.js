@@ -61,7 +61,7 @@ class PodcastFeed {
 		if (!this.feedUrl) {
 			return;
 		}
-		console.log('parsing feed: ' + this.feedUrl);
+		// console.log('parsing feed: ' + this.feedUrl);
 
 		var response = false;
 		try {
@@ -86,7 +86,7 @@ class PodcastFeed {
 		try {
 			var podcast = xml.rss.channel;
 
-			console.log(podcast);
+			// console.log(podcast);
 			
 			var rssFeed = new RSSFeed();
 
