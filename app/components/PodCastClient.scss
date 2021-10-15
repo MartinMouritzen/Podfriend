@@ -226,7 +226,7 @@ p {
 		}
 		*/
 	}
-	#root .ion-page.sectionPage, #root .ion-page.home {
+	#root .ion-page.sectionPage {
 		@supports(padding-top:env(safe-area-inset-top)) {
 			padding-top: env(safe-area-inset-top);
 
@@ -238,8 +238,6 @@ p {
 
 	#root .ion-page.home {
 		background-color: var(--primary-color);
-
-		padding-top: 0px;
 
 		ion-content {
 			--background: var(--primary-color);
