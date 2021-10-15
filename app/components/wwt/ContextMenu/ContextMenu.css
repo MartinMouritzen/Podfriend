@@ -50,6 +50,7 @@
 	color: #FFFFFF;
 }
 .contextMenuItem a {
+	color: #333333 !important;
 	text-decoration: none;
 	display: flex;
 	align-items: center;

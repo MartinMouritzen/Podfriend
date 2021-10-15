@@ -134,7 +134,20 @@ p {
 		background: var(--ion-color-primary) !important;
 	}
 	*/
-	.ion-page {
+	ion-modal .ion-page {
+		height: 100%;
+
+		ion-item {
+			a {
+				text-decoration: none;
+				color: #000000;
+			}
+			svg {
+				margin-right: 10px;
+			}
+		}
+	}
+	#root .ion-page {
 		flex: 1;
 
 		height: calc(100% - 90px);
@@ -148,9 +161,22 @@ p {
 		ion-title {
 			--color: var(--primary-header-text-color);
 		}
+		ion-title.title-large {
+			text-overflow: unset;
+			white-space: unset;
+		}
 		ion-toolbar {
 			--background: var(--primary-color);
+			background-color: var(--primary-color);
 
+			color: #FFFFFF;
+			--border-width: 0 !important;
+
+			--padding-bottom: 0px;
+
+			ion-button {
+				--color: var(--primary-header-text-color);
+			}
 			ion-back-button {
 				--color: var(--primary-header-text-color);
 				--padding-start: 8px;
@@ -194,7 +220,7 @@ p {
 		}
 		*/
 	}
-	.ion-page.home {
+	#root .ion-page.home {
 		background-color: var(--primary-color);
 		ion-content {
 			--background: var(--primary-color);
@@ -208,16 +234,12 @@ p {
 				max-width: calc(100% - 17px);
 			}
 
-			ion-toolbar {
-				--background: var(--primary-color);
-				color: #FFFFFF;
-				--border-width: 0 !important;
-
-				--padding-bottom: 0px;
-			}
 			ion-searchbar {
 				--background: rgba(0,0,0,0.15);
 				--placeholder-color: rgba(255,255,255,0.60);
+				--color: #FFFFFF;
+				--cancel-button-color: #FFFFFF;
+				--clear-button-color: #FFFFFF;
 				--icon-color: rgba(255,255,255,0.60);
 			}
 			ion-back-button {

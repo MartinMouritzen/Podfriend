@@ -15,7 +15,7 @@ import LoadingRings from 'podfriend-approot/images/design/loading-rings.svg';
 import { viewPodcast, playEpisode } from "podfriend-approot/redux/actions/podcastActions";
 import { showFullPlayer } from "podfriend-approot/redux/actions/uiActions";
 
-import { FaPlay, FaPause, FaArrowLeft } from "react-icons/fa";
+import { FaPlay, FaPause, FaMicrophone } from "react-icons/fa";
 
 import { Tabs, Tab } from 'podfriend-approot/components/wwt/Tabs/Tabs.jsx';
 
@@ -25,6 +25,25 @@ import PodcastSubtitles from './Subtitles/PodcastSubtitles.jsx';
 // import EpisodePlayerControls from './EpisodePlayerControls.jsx';
 
 import DOMPurify from 'dompurify';
+
+import {
+	IonPage,
+	IonHeader,
+	IonToolbar,
+	IonTitle,
+	IonButtons,
+	IonButton,
+	IonIcon,
+	IonContent,
+	IonBackButton,
+	IonMenuButton,
+	IonSearchbar,
+	IonSegment,
+	IonSegmentButton,
+	IonLabel,
+	IonReactRouter,
+	IonRouterOutlet
+} from '@ionic/react';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -161,82 +180,106 @@ const EpisodePane = () => {
 	};
 
 	return (
-		<div className={styles.episodePane}>
-			<div className={styles.blueFiller}>
-				<div style={{ height: '80px', overflow: 'hidden' }} >
-					<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
-						<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
-					</svg>
-				</div>
-			</div>
-			<div className={styles.podcastCoverContainer}>
-				<Link className={styles.podcastTitle} to={'/podcast/' + podcastName} onClick={goToPodcast}>
-					<FaArrowLeft style={{ fill: '#FFFFFF', position: 'relative', top: 2, marginRight: 5 }}  /> { episode ? 'Back to ' + episode.feedTitle : 'Back to podcast' }
-				</Link>
-				<div className={styles.coverHolder}>
-					{ chapters &&
-						<EpisodeChapters chapters={chapters} progress={isActiveEpisode ? activeEpisode.currentTime : 0} />
-					}
+		<IonPage>
+			<IonHeader translucent="true">
+				<IonToolbar>
+					<IonButtons slot="start">
+						<IonBackButton defaultHref='/' />
+					</IonButtons>
+					<IonTitle>
+						{episode.title}
+					</IonTitle>
+				</IonToolbar>
+			</IonHeader>
+			<IonContent fullscreen="true">
+				<IonHeader collapse="condense">
+					<IonToolbar>
+						<IonTitle size="large">
+							{episode.title}
+						</IonTitle>
+					</IonToolbar>
+				</IonHeader>
+				<div className={styles.episodePane}>
+					<div className={styles.blueFiller}>
+						<div style={{ height: '80px', overflow: 'hidden' }} >
+							<svg viewBox="0 0 500 150" preserveAspectRatio="none" style={{ height: '150px', width: '100%', backgroundColor: '#0176e5' }}>
+								<path d="M-0.90,34.83 C167.27,-67.79 269.41,126.60 500.78,16.08 L503.61,86.15 L-0.33,87.14 Z" style={{ stroke: 'none', fill: '#FFFFFF' }} />
+							</svg>
+						</div>
+					</div>
+					<div className={styles.podcastCoverContainer}>
+						<div className={styles.coverHolder}>
+							{ chapters &&
+								<EpisodeChapters chapters={chapters} progress={isActiveEpisode ? activeEpisode.currentTime : 0} />
+							}
 
-					<Link to={'/podcast/' + podcastName} onClick={goToPodcast}>
-						<PodcastImage
-							podcastPath={podcastName}
-							imageErrorText={episode.title}
-							width={600}
-							height={600}
-							src={episode.image ? episode.image : episode.feedImage}
-							fallBackImage={episode.feedImage}
-							className={styles.podcastCover}
-							draggable="false"
-							loadingComponent={() => { return ( <div className={styles.loadingCover}><img src={LoadingRings} /></div> ) }}
-						/>
-						</Link>
-				</div>
-			</div>
-			<div className={styles.episodeInfo}>
-			{ episode !== false && isActiveEpisode &&
-					<PodcastSubtitles episode={episode} progress={activeEpisode.currentTime} tempPodcast={selectedPodcast} />
-				}
-				<div className={styles.episodeTitle}>
-					{episode.title}
-				</div>
+							<Link to={'/podcast/' + podcastName} onClick={goToPodcast}>
+								<PodcastImage
+									podcastPath={podcastName}
+									imageErrorText={episode.title}
+									width={600}
+									height={600}
+									src={episode.image ? episode.image : episode.feedImage}
+									fallBackImage={episode.feedImage}
+									className={styles.podcastCover}
+									draggable="false"
+									loadingComponent={() => { return ( <div className={styles.loadingCover}><img src={LoadingRings} /></div> ) }}
+								/>
+								</Link>
+						</div>
+					</div>
+					<div className={styles.episodeInfo}>
+					{ episode !== false && isActiveEpisode &&
+							<PodcastSubtitles episode={episode} progress={activeEpisode.currentTime} tempPodcast={selectedPodcast} />
+						}
+						<div className={styles.episodeTitle}>
+							{episode.title}
+						</div>
 
-				{ selectedPodcast !== false && episode !== false && 
-					<>
-						{ !isActiveEpisode &&
-							<div onClick={onEpisodePlay} className={'button ' + styles.playButton}>
-									<FaPlay /> Play this episode
+						<div style={{ paddingLeft: 20, paddingRight: 20 }}>
+							{ selectedPodcast !== false && episode !== false && 
+								<>
+									{ !isActiveEpisode &&
+										<div onClick={onEpisodePlay} className='podfriendButton'>
+												<FaPlay /> Play this episode
+										</div>
+									}
+									{ isActiveEpisode &&
+										<div onClick={onEpisodePlay} className='podfriendButton'>
+												<FaPlay /> Resume this episode
+										</div>
+									}
+								</>
+							}
+							<div onClick={goToPodcast} className={'podfriendButton secondaryButton'} style={{ marginTop: 10, marginBottom: 20 }}>
+								<FaMicrophone style={{ fill: '#FFFFFF', position: 'relative', top: 2, marginRight: 5 }}  /> { episode ? 'Go to ' + episode.feedTitle : 'Go to podcast' }
 							</div>
-						}
-						{ isActiveEpisode &&
-							<div onClick={onEpisodePlay} className={'button ' + styles.playButton}>
-									<FaPlay /> Resume this episode
-							</div>
-						}
-					</>
-				}
-				<Tabs>
-					<Tab title="Description" active link={'/podcast/' + podcastName + '/' + episode.id }>
-						<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} /> 
-					</Tab>
-					{/*
-					<Tab title="Chat" active link={'/podcast/' + selectedPodcast.path + '/' + episode.id + '/chat/' }>
-						<ChatPane roomId={episodeId} />
-					</Tab>
-					*/}
-					{ chaptersLoading === true &&
-						<Tab title={'Loading Chapters'} active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
-							Loading Chapters
-						</Tab>
-					}
-					{ chapters !== false &&
-						<Tab title="Chapters" active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
-							<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
-						</Tab>
-					}
-				</Tabs>
-			</div>
-		</div>
+						</div>
+
+						<Tabs>
+							<Tab title="Description" active link={'/podcast/' + podcastName + '/' + episode.id }>
+								<div className={styles.description} dangerouslySetInnerHTML={{__html:description}} /> 
+							</Tab>
+							{/*
+							<Tab title="Chat" active link={'/podcast/' + selectedPodcast.path + '/' + episode.id + '/chat/' }>
+								<ChatPane roomId={episodeId} />
+							</Tab>
+							*/}
+							{ chaptersLoading === true &&
+								<Tab title={'Loading Chapters'} active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
+									Loading Chapters
+								</Tab>
+							}
+							{ chapters !== false &&
+								<Tab title="Chapters" active link={'/podcast/' + podcastName + '/' + episode.id + '/chapters/' }>
+									<EpisodeChapterList chapters={chapters} currentChapter={currentChapter} />
+								</Tab>
+							}
+						</Tabs>
+					</div>
+				</div>
+			</IonContent>
+		</IonPage>
 	);
 };
 

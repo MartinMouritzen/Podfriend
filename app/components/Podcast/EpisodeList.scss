@@ -1,21 +1,22 @@
-ion-item {
-	--padding-start: 0px;
-	--padding-end: 0px;
-	--inner-padding-end: 0px;
-}
-ion-item-options {
-	background-color: #ff23aa;
-}
-ion-item-option {
-	color: #FFFFFF;
-	background-color: #ffcc00;
+.episodeList {
+	flex: 1;
+	background-color: #FFFFFF;
+
+	ion-item {
+		--padding-start: 0px;
+		--padding-end: 0px;
+		--inner-padding-end: 0px;
+	}
+	ion-item-options {
+		background-color: #ff23aa;
+	}
+	ion-item-option {
+		color: #FFFFFF;
+		background-color: #ffcc00;
+	}
 }
 .episodeListLoading {
 	padding: 10px;
-	background-color: #FFFFFF;
-}
-.episodeList {
-	flex: 1;
 	background-color: #FFFFFF;
 }
 .episodeList .episode label {

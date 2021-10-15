@@ -37,7 +37,7 @@ const WalletBalance = () => {
 							Podcast wallet balance:
 						</div>
 						<div className={styles.walletBalance}>
-							{walletBalance === false ? 'Loading' : (walletBalance).toLocaleString()}
+							{walletBalance === false && typeof walletBalance !== 'undefined' ? 'Loading' : (walletBalance).toLocaleString()}
 						</div>
 					</div>
 				}

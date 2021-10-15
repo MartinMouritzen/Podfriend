@@ -103,7 +103,7 @@ const BottomNavigation = () => {
 					{ walletBalance === false &&
 						<>Loading</>
 					}
-					{ walletBalance !== false &&
+					{ walletBalance !== false && typeof walletBalance !== 'undefined' &&
 						<>
 							{(walletBalance).toLocaleString()}
 						</>

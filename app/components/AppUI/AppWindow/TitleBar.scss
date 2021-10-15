@@ -1,5 +1,5 @@
 :global {
-	.appType_browser {
+	.appType_browser, .appType_standalone {
 		.appTitleBar {
 			@media (max-width: 899px) {
 				display: none !important;

@@ -23,9 +23,22 @@ import {
 
 const PodcastHistory = ({}) => {
 	return (
-		<div>
-			test1
-		</div>
+		<IonPage>
+			<IonHeader>
+				<IonToolbar>
+					<IonTitle>
+						History
+					</IonTitle>
+				</IonToolbar>
+			</IonHeader>
+			<IonContent className="ion-padding" fullscreen>
+				<IonHeader collapse='condense'>
+					<IonToolbar>
+					<IonTitle size='large'>Default Title</IonTitle>
+					</IonToolbar>
+				</IonHeader>
+			</IonContent>
+		</IonPage>
 	);
 };
 

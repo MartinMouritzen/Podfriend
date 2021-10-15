@@ -78,11 +78,13 @@ const AppWindow = ({ store, history, persistor, audioController, platform}) => {
 		}
 	}
 
+	const appType = 'desktop';
+
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
 				<Router history={history}>
-					<div className={maximized ? styles.windowFrameMaximized : styles.windowFrame }>
+					<div className={maximized ? styles.windowFrameMaximized : styles.windowFrame  + ' appType_' + appType}>
 						<TitleBar isElectron={isAppElectron} maximized={maximized} onMinimize={onMinimize} onMaximizeOrNormalize={onMaximizeOrNormalize} onClose={onClose} platform={platform} />
 						<PodCastClient onEpisodeChange={onEpisodeChange} store={store} audioController={audioController} />
 					</div>

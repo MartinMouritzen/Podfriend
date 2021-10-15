@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import SVG from 'react-inlinesvg';
 
@@ -21,19 +21,75 @@ import {
 	IonRouterOutlet
 } from '@ionic/react';
 
+import { useDispatch, useSelector } from 'react-redux';
+
+import { initiateLogin } from "~/app/redux/actions/uiActions";
+
+import Events from 'podfriend-approot/library/Events.js';
+
 import Welcome from 'podfriend-approot/pages/Welcome.jsx';
+
+import UserTitleBar from 'podfriend-approot/components/user/userTitleBar.jsx';
+
+import MainMenu from 'podfriend-approot/components/Navigation/MainMenu.jsx';
 
 /**
 *
 */
 const IonicTest = () => {
+	const dispatch = useDispatch();
+
+	const page = useRef(null);
+
+	const searchElement = useRef(null);
+	const [searchText, setSearchText] = useState('');
+	const [menuVisible, setMenuVisible] = useState(false);
+
+	const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+	const profileData = useSelector((state) => state.user.profileData);
+
+	const onSearch = (event) => {
+		Events.emit('OnSearch',searchElement.current.value);
+		event.preventDefault();
+		return false;
+	};
+
+	const onSearchTextChange = (event) => {
+		console.log(event.detail.value);
+		setSearchText(event.detail.value);
+	};
+
+	const showMenu = () => {
+		console.log('showmenu');
+		setMenuVisible(true);
+	};
+	const hideMenu = () => {
+		console.log('hideMenu');
+		setMenuVisible(false);
+	};
+
 	return (
-		<IonPage className='home'>
+		<IonPage className='home' id="main" ref={page}>
+			{ menuVisible &&
+				<MainMenu showMenu={menuVisible} onDismiss={hideMenu} presentingElement={page ? page.current : null} />
+			}
 			<IonHeader>
 				<IonToolbar className='titleToolbar'>
+					<IonButtons slot="end">
+						{ !isLoggedIn &&
+							<IonButton onClick={() => { dispatch(initiateLogin()); }}>
+								<IonIcon src={require('podfriend-approot/images/design/titlebar/userProfile.svg')} />
+							</IonButton>
+						}
+						{ isLoggedIn &&
+							<IonButton onClick={showMenu}>
+								{profileData.username}
+							</IonButton>
+						}
+					</IonButtons>
 					<IonTitle>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-							<IonIcon src={require('podfriend-approot/images/logo/podfriend_logo.svg')} style={{ fill: '#000000', fontSize: 36, marginRight: 10 }} />
+						<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '6px' }}>
+							<IonIcon src={require('podfriend-approot/images/logo/podfriend_logo.svg')} style={{ fill: '#000000', fontSize: 32, marginRight: 10 }} />
 							<span style={{ fontSize: 26 }}>Podfriend</span>
 						</div>
 					</IonTitle>
@@ -42,40 +98,12 @@ const IonicTest = () => {
 			<IonContent className="ion-padding" fullscreen>
 				<IonHeader>
 					<IonToolbar className='searchToolbar'>
-						<IonSearchbar placeholder='Search for a podcast' />
+						<form onSubmit={onSearch}>
+							<IonSearchbar placeholder='Search for a podcast' value={searchText} onIonChange={onSearchTextChange} inputMode='search' ref={searchElement} />
+						</form>
 					</IonToolbar>
-					{ /*
-					<IonToolbar>
-						<IonSegment mode='md' value="home">
-							<IonSegmentButton value="episodes">
-								<IonLabel>Episodes</IonLabel>
-							</IonSegmentButton>
-							<IonSegmentButton value="home">
-								<IonLabel>Home</IonLabel>
-							</IonSegmentButton>
-							<IonSegmentButton value="groups">
-								<IonLabel>Groups</IonLabel>
-							</IonSegmentButton>
-						</IonSegment>
-					</IonToolbar>
-					*/ }
 				</IonHeader>
 				<Welcome />
-				{/*
-				<div className={feedPageStyles.page}>
-					<div className={feedPageStyles.postColumn}>
-						<PostForm
-							
-						/>
-					</div>
-					<div style={{  width: '100%', maxWidth: '644px', display: 'flex', flexDirection: 'column' }}>
-
-					</div>
-					<div className={feedPageStyles.rightColumn}>
-
-					</div>
-				</div>
-				*/ }
 			</IonContent>
 		</IonPage>
 	);

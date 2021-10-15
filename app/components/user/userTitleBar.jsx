@@ -40,6 +40,10 @@ class UserTitleBar extends Component {
 	constructor(props) {
 		super(props);
 		this.usernameRef = React.createRef();
+		this.invertMenu = this.invertMenu.bind(this);
+	}
+	invertMenu() {
+
 	}
 	/**
 	*
@@ -57,13 +61,9 @@ class UserTitleBar extends Component {
 						<div className={styles.username} onClick={this.invertMenu} ref={this.usernameRef}>
 							{this.props.profileData.username}
 						</div>
+
 						<ContextMenu element={this.usernameRef} showTrigger="click" position="bottom">
-							{/*
-							<ContextMenuItem><Link to='/account/'><FaUser />Account</Link></ContextMenuItem>
-							<ContextMenuItem><Link to='/feedback/'><FaComment />Give feedback</Link></ContextMenuItem>
-							
-							<ContextMenuItem><Link to='/settings/'><FaCog />Settings</Link></ContextMenuItem>
-							*/}
+
 							<ContextMenuItem onClick={this.props.showWalletModal}><FaWallet />Podcast Wallet</ContextMenuItem>
 							<ContextMenuItem><Link to='/contact/'><FaRegEnvelope />Contact us</Link></ContextMenuItem>
 							<ContextMenuItem onClick={this.props.userLogout}><FaLock />Log out</ContextMenuItem>
@@ -74,6 +74,14 @@ class UserTitleBar extends Component {
 		);
 	}
 }
+
+							{/*
+							<ContextMenuItem><Link to='/account/'><FaUser />Account</Link></ContextMenuItem>
+							<ContextMenuItem><Link to='/feedback/'><FaComment />Give feedback</Link></ContextMenuItem>
+							
+							<ContextMenuItem><Link to='/settings/'><FaCog />Settings</Link></ContextMenuItem>
+							*/}
+
 const connectedUserTitleBar = withRouter(connect(
 	mapStateToProps,
 	mapDispatchToProps
