@@ -201,7 +201,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 
 	const removeSeasonInfoFromString = (string) => {
 		// This function should also see if it can grab season and episode data, so that if it's not defined in rss we can show it still
-		console.log('String 1: ' + string);
+		// console.log('String 1: ' + string);
 		const regex = /([Ss])([0-9]{1,2}) /i;
 		string = string.replace(regex,'');
 
@@ -217,7 +217,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 			string = string.substring(2);
 		}
 
-		console.log('String 2: ' + string);
+		// console.log('String 2: ' + string);
 
 		return string;
 	};
