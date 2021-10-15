@@ -40,6 +40,7 @@ if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQuerySt
 }
 
 StatusBar.backgroundColorByHexString('#ffffff');
+console.log(StatusBar);
 
 /*
 *
