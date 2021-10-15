@@ -37,7 +37,7 @@ const SearchPaneUI = ({ query, useSearchType, searching, searchResults, searchEr
 	};
 
 	return (
-		<IonPage>
+		<IonPage className='sectionPage'>
 			<IonHeader translucent="true">
 				<IonToolbar>
 					<IonButtons slot="start">

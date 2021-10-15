@@ -46,7 +46,7 @@ const PodCastPaneUI = ({ showEpisode = false, selectedPodcast, description, podc
 	};
 
 	return (
-		<IonPage className='no-header-padding'>
+		<IonPage className='no-header-padding sectionPage'>
 			<IonHeader>
 				<IonToolbar>
 					<IonButtons slot="start">

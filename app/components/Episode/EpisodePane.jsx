@@ -180,7 +180,7 @@ const EpisodePane = () => {
 	};
 
 	return (
-		<IonPage>
+		<IonPage className='sectionPage'>
 			<IonHeader translucent="true">
 				<IonToolbar>
 					<IonButtons slot="start">

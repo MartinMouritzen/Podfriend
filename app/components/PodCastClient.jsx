@@ -263,6 +263,7 @@ class PodcastClient extends Component {
 	*/
 	render() {
 		return (
+			<IonApp>
 			<div className={[styles.podCastClient,'themeLight'].join(' ')} onScroll={this.onScroll}>
 				<div className={styles.top}>
 					<SideBar />
@@ -318,6 +319,7 @@ class PodcastClient extends Component {
 					<ShareModal onClose={this.props.hideShareWindow} />
 				}
 			</div>
+			</IonApp>
 		);
 	}
 	/**

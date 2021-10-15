@@ -69,7 +69,7 @@ const IonicTest = () => {
 	};
 
 	return (
-		<IonPage className='home' id="main" ref={page}>
+		<IonPage className='home sectionPage' id="main" ref={page}>
 			{ menuVisible &&
 				<MainMenu showMenu={menuVisible} onDismiss={hideMenu} presentingElement={page ? page.current : null} />
 			}

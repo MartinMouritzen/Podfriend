@@ -43,7 +43,7 @@ const FavoriteListUI = React.memo(({ showResponsiveList, subscribedPodcasts, sho
 	},[isCheckingPodcasts]);
 
 	return (
-		<IonPage>
+		<IonPage className='sectionPage'>
 			{ showResponsiveList &&
 				<IonHeader translucent="true">
 					<IonToolbar>
