@@ -33,7 +33,7 @@ let appType = 'browser';
 const mediaQueryStandAlone = '(display-mode: standalone)';
 if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQueryStandAlone).matches) {
 	appType = 'standalone';
-	Router = MemoryRouter;
+	// Router = MemoryRouter;
 }
 /*
 *
