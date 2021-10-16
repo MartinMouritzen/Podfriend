@@ -1,13 +1,13 @@
 {
-  "appId": "com.podfriend",
-  "appName": "podfriend",
-  "bundledWebRuntime": false,
-  "npmClient": "yarn",
-  "webDir": "release/web",
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    }
-  },
-  "cordova": {}
+	"appId": "com.podfriend",
+	"appName": "podfriend",
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "release/web",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		}
+	},
+	"cordova": {}
 }

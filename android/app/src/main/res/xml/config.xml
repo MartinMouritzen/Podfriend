@@ -26,10 +26,5 @@
     <param name="android-package" value="com.homerours.musiccontrols.MusicControls"/>
   </feature>
 
-  <feature name="StatusBar">
-    <param name="android-package" value="org.apache.cordova.statusbar.StatusBar"/>
-    <param name="onload" value="true"/>
-  </feature>
-
   
 </widget>
