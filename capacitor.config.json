@@ -6,7 +6,6 @@
   "webDir": "release/web",
   "plugins": {
     "SplashScreen": {
-		"launchShowDuration": 0,
 		"launchAutoHide": false,
 		"backgroundColor": "#0176e5",
 		"androidSplashResourceName": "splash",
