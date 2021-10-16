@@ -548,6 +548,8 @@
 		position: absolute;
 		opacity: 0;
 		top: 65px;
+
+		min-height: 100%;
 	}
 	.segmentPlaying {
 		flex-direction: column;

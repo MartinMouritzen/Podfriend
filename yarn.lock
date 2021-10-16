@@ -1127,6 +1127,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.4.6.tgz#b46912d7feb3e416a91e20bdba3c7a9a82048cd0"
   integrity sha512-/IMmgVUgQgMm1Yv5CaWhZ9UTkVh5GFDX1vFZOB0bMu5v5jkolO/9SLyjbqogDNE2EIl9GuH6RSqZaOh2Xu2Ebg==
 
+"@capacitor/status-bar@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@capacitor/status-bar/-/status-bar-1.0.5.tgz#a3b2a00944b70ab8ef167a5ff33e3f90c021bb28"
+  integrity sha512-SZuxjaN5Nr8FKUVlkVH3l0X2JWey0yVMfMhyE3RG7ryUSAesgs3bvkAEXSfjphsHOpt4A/rEeCJb2ZbeCBwroA==
+
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/@develar/schema-utils/-/schema-utils-2.6.5.tgz#3ece22c5838402419a6e0425f85742b961d9b6c6"
@@ -1277,20 +1282,6 @@
   version "5.32.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/music-controls/-/music-controls-5.32.1.tgz#66114bc8931a6624ca8961df9f5a65ee9dff97ef"
   integrity sha512-N9pqNl52nHIb8Qz0O6lez8k+xa/aFPjauQ4Jqqq1wFU6KnTkg8x4ZSDdgzJmamSp8s/xz4WAafmxis/aOwBm1w==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/splash-screen@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.36.0.tgz#70852eaa34aa3bbe283313f82d9d974f755ec7d6"
-  integrity sha512-BfNknY1rrGE8JRnCdKfL5wz8yFLhpPU5FRr8/LA3L+EncvPvcb9LGidePoeH3gVLMkolm2DI2a/rCelNrJ1Sxw==
-  dependencies:
-    "@types/cordova" latest
-
-"@ionic-native/status-bar@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.36.0.tgz#d28b92c5b435f95c0a837af6c03b309f6e0e3830"
-  integrity sha512-OXC1z+4Iba4lo1dc2+0h4Gvpud3z0XQmEbw0ny9UflCuSkLqBxvmiNRU7CRQwPnT1KaGVXkaSokdwxO8H9IlNg==
   dependencies:
     "@types/cordova" latest
 
@@ -4351,16 +4342,6 @@ cordova-plugin-music-controls2@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/cordova-plugin-music-controls2/-/cordova-plugin-music-controls2-3.0.5.tgz#20066d08101428713d77643d03a763e20aa396ac"
   integrity sha512-vg6flAXsTwveXZ27V/IxJ5pK8GDoR2HZ7Stjwx+FyJQAsyAmuqThGs9j8vPKuCrhABpXNW/Oqpq2VnNSybitcA==
-
-cordova-plugin-splashscreen@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-6.0.0.tgz#674718f87894cd75615da2b55905eb4cc719cf01"
-  integrity sha512-pm4ZtJKQY4bCGXVeIInbGrXilryTevYSKgfvoQJpW9UClOWKAxSsYf2/4G2u1vcn492svOSL42OSa2MhujBWEQ==
-
-cordova-plugin-statusbar@^2.4.3:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.3.tgz#cc557aef66c27484e0f7f045004040d03321f82d"
-  integrity sha512-ThmXzl6QIKWFXf4wWw7Q/zpB+VKkz3VM958+5A0sXD4jmR++u7KnGttLksXshVwWr6lvGwUebLYtIyXwS4Ovcg==
 
 cordova-res@^0.15.3:
   version "0.15.3"

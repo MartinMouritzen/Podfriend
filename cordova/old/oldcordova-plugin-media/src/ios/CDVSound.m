@@ -242,8 +242,6 @@ BOOL keepAvAudioSessionAlwaysActive = NO;
 {
     NSString* mediaId = [command argumentAtIndex:0];
     NSString* resourcePath = [command argumentAtIndex:1];
-    NSError* __autoreleasing playerError = nil;
-    NSString* jsString = nil;
 
     CDVAudioFile* audioFile = [self audioFileForResource:resourcePath withId:mediaId doValidation:YES forRecording:NO suppressValidationErrors:YES];
 
@@ -273,36 +271,6 @@ BOOL keepAvAudioSessionAlwaysActive = NO;
                 avPlayer.automaticallyWaitsToMinimizeStalling = NO;
             }
         }
-
-        // add periodic observer to get currenttime (and maybe duration)
-        // https://stackoverflow.com/questions/55128416/why-currenttime-and-duration-of-avaudioplayer-are-nil
-        
-        // NSLog(@"Before duration check");
-		// if ([resourceUrl isFileURL]) {
-            // audioFile.player = [[CDVAudioPlayer alloc] initWithContentsOfURL:resourceUrl error:&playerError];
-            // double duration = audioFile.player.duration;
-
-           
-           // NSLog(@"Inside duration check");
-
-        // }
-
-    // get the URL of the sound file to be played
-        AVURLAsset* audioAsset = [AVURLAsset URLAssetWithURL:resourceUrl options:nil];
-        CMTime audioDuration = audioAsset.duration;
-        float duration = CMTimeGetSeconds(audioDuration);
-
-        jsString = [NSString stringWithFormat:@"%@(\"%@\",%d,%.3f);", @"cordova.require('cordova-plugin-media.Media').onStatus", mediaId, MEDIA_DURATION, duration];
-        [self.commandDelegate evalJs:jsString];
-/*
-        if (audioFile.player.currentItem && audioFile.player.currentItem.asset) {
-            CMTime duration = audioFile.player.currentItem.asset.duration;
-            float seconds = CMTimeGetSeconds(duration);
-            NSLog(@"duration: %.2f", seconds);
-        }
-        */
-
-        [audioFile.player prepareToPlay];
 
         self.currMediaId = mediaId;
 
