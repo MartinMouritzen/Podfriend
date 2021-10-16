@@ -103,6 +103,9 @@ class SideBar extends Component {
 							<Link to="/" className={styles.mainNavigationButton}>
 								<FaHome size={iconSize} /> Home
 							</Link>
+							<Link to="/favorites/" className={styles.mainNavigationButton}>
+								<FaRegLightbulb size={iconSize} /> Your podcasts
+							</Link>
 							<Link to="/history/" className={styles.mainNavigationButton}>
 								<FaRegLightbulb size={iconSize} /> History
 							</Link>

@@ -223,6 +223,10 @@ class NativeMobileAudioController extends AudioController {
 		if (!this.media || !this.hasLoaded()) { console.log('test123: ' + this.hasLoaded() + ', ' + this.media); return; }
 		console.log('NativeMobileAudioController:play');
 
+		// Test to see if it fixes ios that forgets position
+		this.__refreshCurrentPosition();
+
+
 		this.media.play({
 			playAudioWhenScreenIsLocked : true
 		});
