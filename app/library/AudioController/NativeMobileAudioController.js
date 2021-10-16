@@ -255,7 +255,7 @@ class NativeMobileAudioController extends AudioController {
 	isLoading() {
 		return this.__audioIsLoading;
 	}
-	setEpisode(podcast,episode) {
+	setEpisode(podcast,episode,currentTime) {
 		console.log('NativeMobileAudioController:setEpisode');
 
 		return new Promise((resolve,reject) => {
@@ -284,7 +284,7 @@ class NativeMobileAudioController extends AudioController {
 			this.__loadCheckId = false;
 			this.loadPromise = false;
 
-			this.currentPosition = 0; // should this be false? (as well as the original value in the class)
+			this.currentPosition = currentTime;
 
 			this.player.onBuffering();
 

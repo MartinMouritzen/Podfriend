@@ -111,7 +111,7 @@ class Player extends Component {
 	*/
 	componentDidMount() {
 		if (this.props.activePodcast && this.props.activeEpisode && this.props.activeEpisode.guid !== undefined) {
-			this.props.audioController.setEpisode(this.props.activePodcast,this.props.activeEpisode);
+			this.props.audioController.setEpisode(this.props.activePodcast,this.props.activeEpisode,this.props.activeEpisode.currentTime);
 		}
 		if (this.props.activeEpisode && this.props.activeEpisode.currentTime && this.props.activeEpisode.guid !== undefined) {
 			this.props.audioController.setCurrentTime(this.props.activeEpisode.currentTime);
