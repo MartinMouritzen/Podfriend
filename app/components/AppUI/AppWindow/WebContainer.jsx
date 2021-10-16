@@ -23,6 +23,10 @@ import TitleBar from '~/app/components/AppUI/AppWindow/TitleBar';
 
 import styles from '~/app/components/AppUI/AppWindow/AppWindow.scss';
 
+import { StatusBar, Style } from '@capacitor/status-bar';
+
+StatusBar.hide();
+
 // let Router = BrowserRouter;
 // console.log(IonReactRouter);
 let Router = IonReactRouter;
