@@ -6,9 +6,8 @@
   "webDir": "release/web",
   "plugins": {
     "SplashScreen": {
-		"launchShowDuration": 3000,
-		"launchAutoHide": true,
-		"backgroundColor": "#ffffffff",
+		"launchAutoHide": false,
+		"backgroundColor": "#0176e5",
 		"androidSplashResourceName": "splash",
 		"androidScaleType": "CENTER_CROP",
 		"showSpinner": true,
@@ -18,7 +17,7 @@
 		"splashFullScreen": true,
 		"splashImmersive": true,
 		"layoutName": "launch_screen",
-		"useDialog": true
+		"useDialog": false
     }
   },
   "cordova": {}

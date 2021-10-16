@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Provider } from 'react-redux';
 
@@ -26,9 +26,13 @@ import styles from '~/app/components/AppUI/AppWindow/AppWindow.scss';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 
-
-StatusBar.setStyle({ style: Style.Dark });
-SplashScreen.hide();
+try {
+	StatusBar.setStyle({ style: Style.Dark });
+}
+catch(exception) {
+	console.log('StatusBar exception');
+	console.log(exception);
+}
 
 // let Router = BrowserRouter;
 // console.log(IonReactRouter);
@@ -47,6 +51,16 @@ if (Capacitor.isNative || navigator.standalone || window.matchMedia(mediaQuerySt
 *
 */
 const WebContainer = ({ store, history, persistor, audioController, platform}) => {
+	useEffect(() => {
+		try {
+			SplashScreen.hide();
+		}
+		catch (exception) {
+			console.log('SplashScreen exception');
+			console.log(exception);
+		}
+	},[]);
+
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
