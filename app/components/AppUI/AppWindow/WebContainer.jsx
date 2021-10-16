@@ -24,8 +24,7 @@ import TitleBar from '~/app/components/AppUI/AppWindow/TitleBar';
 import styles from '~/app/components/AppUI/AppWindow/AppWindow.scss';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
-console.log(StatusBar);
-StatusBar.hide();
+StatusBar.setStyle({ style: Style.Dark });
 
 // let Router = BrowserRouter;
 // console.log(IonReactRouter);
