@@ -1132,6 +1132,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-3.2.5.tgz#2d988aa08caa3c72de3c20471fc084f0fdf26a40"
   integrity sha512-z3GU07Dz3SJIfdxk4JaLXDZcWWb4LcvjMz7RzOmN13WOWETWWWUnJJdG14QJewjvXPEBZ/XY7MohClWsgjToEw==
 
+"@capacitor/splash-screen@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@capacitor/splash-screen/-/splash-screen-1.1.5.tgz#3c67870656d3db53b7e0c732ad4eafaf142d3a7e"
+  integrity sha512-8hllDeHZkefb3R7sIWR0oRDXG/8FCXaHlh2OndeKxubeiRQhhTZk88vFIfPMphylxOsrWS3ExTZbbl3x6HdqGQ==
+
 "@capacitor/status-bar@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@capacitor/status-bar/-/status-bar-1.0.5.tgz#a3b2a00944b70ab8ef167a5ff33e3f90c021bb28"
