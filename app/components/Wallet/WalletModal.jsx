@@ -29,6 +29,8 @@ import { mapSourcePosition } from 'source-map-support';
 
 let invoiceTimeoutId = false;
 
+const availableAmounts = [5000,10000,20000,50000,100000,200000,300000];
+
 const WalletModal = ({ shown, onDismiss }) => {
 	const [status,setStatus] = useState(false);
 	const [priceStatus,setPriceStatus] = useState(false);
@@ -173,8 +175,6 @@ const WalletModal = ({ shown, onDismiss }) => {
 	const onHideCopySuccessMessage = () => {
 		setShowCopySuccessMessage(false);
 	};
-
-	const availableAmounts = [5000,10000,20000,100000,200000,300000];
 
 	return (
 		<Modal

@@ -13,9 +13,9 @@ import styles from './ValueConfigModal.scss';
 import SplitRange from './SplitRange.jsx';
 
 const SATOSHIS_BOOST_MIN = 100;
-const SATOSHIS_BOOST_MAX = 5000;
+const SATOSHIS_BOOST_MAX = 1000000;
 const SATOSHIS_STREAM_MIN = 0;
-const SATOSHIS_STREAM_MAX = 500;
+const SATOSHIS_STREAM_MAX = 5000;
 
 const ValueConfigModal = ({ shown, onDismiss }) => {
 	const dispatch = useDispatch();

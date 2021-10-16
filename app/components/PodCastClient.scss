@@ -154,6 +154,8 @@ p {
 	#root .ion-page {
 		flex: 1;
 
+		background-color: var(--primary-color);
+
 		height: calc(100% - 90px);
 		@media only screen and (max-width: 899px) {
 			height: calc(100% - 134px);
@@ -162,6 +164,9 @@ p {
 			height: calc(100% - 104px);
 		}
 
+		ion-content {
+			--background: var(--primary-color);
+		}
 		ion-title {
 			--color: var(--primary-header-text-color);
 		}

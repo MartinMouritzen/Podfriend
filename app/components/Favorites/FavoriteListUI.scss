@@ -5,8 +5,7 @@
 }
 .favoriteList {
 	background-color: #f5f9fb;
-	height: 100%;
-	overflow: auto;
+	min-height: 100%;
 }
 .favoriteList:after {
 	content: "";
