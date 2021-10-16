@@ -25,6 +25,7 @@ import CreditCard from './CreditCard.jsx';
 import Modal from 'podfriend-approot/components/AppUI/Modal';
 
 import styles from './WalletModal.scss';
+import { mapSourcePosition } from 'source-map-support';
 
 let invoiceTimeoutId = false;
 
@@ -173,6 +174,8 @@ const WalletModal = ({ shown, onDismiss }) => {
 		setShowCopySuccessMessage(false);
 	};
 
+	const availableAmounts = [5000,10000,20000,100000,200000,300000];
+
 	return (
 		<Modal
 			shown={shown}
@@ -270,15 +273,15 @@ const WalletModal = ({ shown, onDismiss }) => {
 									<p>CoinDesk have graciously allowed us to show price data, but it is only an indicator and might divert from the real price.</p>
 								</div>
 								<div>
-									<div className="podfriendButton" onClick={() => { getPaymentString(5000); }} style={{ marginBottom: 5 }}>
-										{(5000).toLocaleString()} satoshis <BitcoinPrice amount="5000" priceData={priceData} priceStatus={priceStatus} />
-									</div>
-									<div className="podfriendButton" onClick={() => { getPaymentString(10000); }} style={{ marginBottom: 5 }}>
-										{(10000).toLocaleString()} satoshis <BitcoinPrice amount="10000" priceData={priceData} priceStatus={priceStatus} />
-									</div>
-									<div className="podfriendButton" onClick={() => { getPaymentString(20000); }}>
-										{(20000).toLocaleString()} satoshis <BitcoinPrice amount="20000" priceData={priceData} priceStatus={priceStatus} />
-									</div>
+									{
+										availableAmounts.map((number) => {
+											return (
+												<div className="podfriendButton" onClick={() => { getPaymentString(number); }} style={{ marginBottom: 5 }}>
+													{(number).toLocaleString()} satoshis <BitcoinPrice amount={number} priceData={priceData} priceStatus={priceStatus} />
+												</div>
+											);
+										})
+									}
 								</div>
 							</div>
 
