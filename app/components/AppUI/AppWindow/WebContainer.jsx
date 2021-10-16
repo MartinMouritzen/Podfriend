@@ -24,7 +24,7 @@ import TitleBar from '~/app/components/AppUI/AppWindow/TitleBar';
 import styles from '~/app/components/AppUI/AppWindow/AppWindow.scss';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
-
+console.log(StatusBar);
 StatusBar.hide();
 
 // let Router = BrowserRouter;

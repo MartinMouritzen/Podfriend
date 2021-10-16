@@ -245,8 +245,8 @@
 	},
 	"dependencies": {
 		"@capacitor/android": "2.4.6",
-		"@capacitor/cli": "^2.4.6",
-		"@capacitor/core": "^2.4.6",
+		"@capacitor/cli": "^3.2.5",
+		"@capacitor/core": "^3.2.5",
 		"@capacitor/ios": "2.4.6",
 		"@capacitor/status-bar": "^1.0.5",
 		"@fortawesome/fontawesome-free": "^5.5.0",
