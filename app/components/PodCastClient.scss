@@ -153,10 +153,8 @@ p {
 	}
 	#root .ion-page {
 		flex: 1;
-
-		background-color: var(--primary-color);
-
-		height: calc(100% - 90px);
+		
+		height: calc(100% - 135px);
 		@media only screen and (max-width: 899px) {
 			height: calc(100% - 134px);
 		}
@@ -243,6 +241,8 @@ p {
 
 	#root .ion-page.home {
 		background-color: var(--primary-color);
+
+		height: calc(100% - 90px);
 
 		ion-content {
 			--background: var(--primary-color);

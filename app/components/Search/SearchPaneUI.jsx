@@ -73,7 +73,7 @@ const SearchPaneUI = ({ query, useSearchType, searching, searchResults, searchEr
 					</IonToolbar>
 				</IonHeader>
 				<div className={styles.searchPane}>
-					<p>{query}</p>
+					<p>Searching for &quot;{query}&quot;</p>
 					<Tabs
 						value={searchType}
 						onChange={handleTabChange}

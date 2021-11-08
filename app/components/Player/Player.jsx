@@ -299,6 +299,8 @@ class Player extends Component {
 		if (this.props.isLoggedIn) {
 			// Sync episode time
 
+			console.log('before episode sync');
+
 			if (this.props.isPlaying === true) {
 				this.props.synchronizeEpisodeState();
 

@@ -178,7 +178,7 @@ class RSSFeed {
 	*/
 	supportsComments() {
 		for (var i=0;i<this.items.length;i++) {
-			if (this.items[i].commentURL) {
+			if (this.items[i].commentObject) {
 				return true;
 			}
 		}

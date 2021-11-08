@@ -10,8 +10,6 @@
 	*/
 
 	background-color: #0176e5;
-
-	position: relative;
 }
 /*
 @media only screen and (max-width: 570px) {
@@ -58,7 +56,7 @@
 }
 .podcastContent {
 	background-color: #FFFFFF;
-	min-height: calc(100% - 300px);
+	/* min-height: calc(100% - 300px); */
 }
 
 @media only screen and (min-width: 1500px) {

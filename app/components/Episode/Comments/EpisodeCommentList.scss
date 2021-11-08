@@ -1,8 +1,13 @@
 .commentList {
 	min-height: 100vh;
 
+	.originalComment {
+		padding-bottom: 30px;
+	}
+
 	.writeCommentContainer {
 		margin-top: 30px;
+		padding-bottom: 30px;
 
 		textarea {
 			display: block;
@@ -32,11 +37,14 @@
 .comment {
 	display: flex;
 
+	padding: 6px;
+
 	.avatar {
-		width: 30px;
-		height: 30px;
+		width: 50px;
+		height: 50px;
 		border-radius: 50%;
 		margin-right: 10px;
+		border: 1px solid #CCCCCC;
 	}
 	.username {
 		font-weight: bold;

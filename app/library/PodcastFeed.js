@@ -196,7 +196,7 @@ class PodcastFeed {
 						chaptersUrl: episode['podcast:chapters'] ? episode['podcast:chapters']['url'] : '',
 						chaptersType: episode['podcast:chapters'] ? episode['podcast:chapters']['type'] : '',
 						alternateEnclosures: Array.isArray(episode['podcast:alternateEnclosure']) ? episode['podcast:alternateEnclosure'] : [ episode['podcast:alternateEnclosure'] ],
-						commentURL: episode['podcast:comments'] ? episode['podcast:comments'] : false
+						commentObject: episode['podcast:socialInteract'] ? episode['podcast:socialInteract'] : false
 					});
 				});
 				rssFeed.items = episodes;

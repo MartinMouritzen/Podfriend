@@ -34,7 +34,7 @@ const PodcastHistory = ({}) => {
 			<IonContent className="ion-padding" fullscreen>
 				<IonHeader collapse='condense'>
 					<IonToolbar>
-					<IonTitle size='large'>Default Title</IonTitle>
+					<IonTitle size='large'>Your history</IonTitle>
 					</IonToolbar>
 				</IonHeader>
 			</IonContent>

@@ -120,6 +120,9 @@ const IndividualBoostModal = ({ shown, onClose }) => {
 				setBoostPending(false);
 				rewardElement.current.rewardMe();
 				dispatch(synchronizeWallet());
+				setTimeout(() => {
+					onClose();
+				},1000);
 			}
 			else {
 				setBoostPending(false);
@@ -150,7 +153,7 @@ const IndividualBoostModal = ({ shown, onClose }) => {
 						lifeTime: 800
 					}}
 				>
-					<div className={'button boostButton'}>
+					<div className={'podfriendButton boostButton'}>
 						{ boostPending === false &&
 							<div className="buttonPrimaryAction" onClick={onBoost}>
 								<FaRocket style={{ fill: '#FFFFFF', opacity: '0.8'}} /> BOOST {formatAmount(boostValue)}

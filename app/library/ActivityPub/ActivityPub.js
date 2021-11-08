@@ -5,23 +5,34 @@ class ActivityPub {
 	static async __fetchAndReturn(uri) {
 		var response;
 		const headers = {
-			'Accept': 'application/json'
+			'Accept': 'application/activity+json'
 		};
 
 		try {
+			console.log('Fetching comment URI: ' + uri);
 			response = await fetch(uri,{
 				headers: headers
 			});
 		}
 		catch (exception) {
-			response = await fetch('https://www.podfriend.com/tmp/rssproxy.php?rssUrl=' + encodeURI(uri),{
-				headers: headers
-			});
+			console.log('Failed fetch. Trying proxy: ' + 'https://api.podfriend.com/proxy.php?rssUrl=' + encodeURI(uri));
+
+			try {
+				response = await fetch('https://api.podfriend.com/proxy.php?rssUrl=' + encodeURI(uri),{
+					headers: headers
+				});
+				console.log(response);
+				// Fails here... CORS?
+			}
+			catch (exception2) {
+				console.log('Proxy failed');
+				console.log(exception2);
+			}
 		}
 		const commentResponse = await response.json();
 
-		// console.log('test1');
-		// console.log(commentResponse);
+		console.log('test1');
+		console.log(commentResponse);
 
 		return commentResponse;
 	}
@@ -31,7 +42,6 @@ class ActivityPub {
 	static async getUserForComment(uri) {
 		// console.log('Getting user for: ' + uri);
 		const rawUserInfo = await ActivityPub.__fetchAndReturn(uri);
-		console.log(rawUserInfo);
 		return {
 			avatar: rawUserInfo.icon.url,
 			username: rawUserInfo.preferredUsername
@@ -44,23 +54,31 @@ class ActivityPub {
 	* 
 	*/
 	static async getComments(commentInfoResponse,pageNumber = 0) {
-		if (commentInfoResponse.first) {
-			const commentResponse = await ActivityPub.__fetchAndReturn(commentInfoResponse.first);
+		if (commentInfoResponse.replies) {
+			console.log('Getting commentResponse');
+			const commentResponse = await ActivityPub.__fetchAndReturn(commentInfoResponse.replies.first.next);
+			console.log(commentResponse);
 
-			if (commentResponse.orderedItems) {
+			if (commentResponse.first.items) {
 				console.log('commentResponse.orderedItems');
 				var comments = [];
 				// var commentAuthorPromises = [];
-				for (var i=0;i<commentResponse.orderedItems.length;i++) {
-					// var authorPromise = ActivityPub.getUserForComment(commentResponse.orderedItems[i].attributedTo);
-					var authorInfo = await ActivityPub.getUserForComment(commentResponse.orderedItems[i].attributedTo);
-					// commentAuthorPromises.push(authorPromise);
+				for (var i=0;i<commentResponse.first.items.length;i++) {
+					if (commentResponse.first.items[i].attributedTo) {
+						// var authorPromise = ActivityPub.getUserForComment(commentResponse.orderedItems[i].attributedTo);
+						var authorInfo = await ActivityPub.getUserForComment(commentResponse.first.items[i].attributedTo);
+						// commentAuthorPromises.push(authorPromise);
 
-					comments.push({
-						content: commentResponse.orderedItems[i].content,
-						from: authorInfo
-					});
+						console.log(authorInfo);
+
+						comments.push({
+							content: commentResponse.first.items[i].content,
+							from: authorInfo
+						});
+					}
 				}
+				console.log('Comments!');
+				console.log(comments);
 				return comments;
 
 				/*

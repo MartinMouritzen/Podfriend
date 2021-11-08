@@ -123,6 +123,8 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 	},[audioElement]);
 
 	useEffect(() => {
+		console.log('checking if the feed supports comments');
+		console.log(rssFeed);
 		if (rssFeed && rssFeed.supportsComments()) {
 			setSupportsComments(true);
 		}
@@ -246,6 +248,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 		setErrorText(false);
 		setErrorRetries(0);
 		setSubtitleFileURL(false);
+		setSegmentVisible('playing');
 		if (activeEpisode.type === 'video/mpeg'
 			|| activeEpisode.type === 'video/ogg'
 			|| activeEpisode.type === 'video/webm'
@@ -820,7 +823,7 @@ const PlayerUI = ({ audioController, activePodcast, activeEpisode, title, progre
 						</div>
 						<div style={{ width: '100%', maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
 							<div style={{ paddingLeft: 10, paddingRight: 10 }}>
-								<EpisodeCommentList rootType='episode' commentURL={rssFeedCurrentEpisode.commentURL} />
+								<EpisodeCommentList rootType='episode' commentObject={rssFeedCurrentEpisode.commentObject} />
 							</div>
 						</div>
 					</div>

@@ -27,17 +27,20 @@ const EpisodeComment = ({ from, content }) => {
 		</div>
 	);
 };
-const EpisodeCommentList = ({ commentURL }) => {
+const EpisodeCommentList = ({ commentObject }) => {
 	const [commentInfo,setCommentInfo] = useState(false);
-	const [comments,setComments] = useState([]);
+	const [comments,setComments] = useState(false);
 
 	useEffect(() => {
-		const retrieveCommentInformation = (commentURL) => {
+		const retrieveCommentInformation = (commentObject) => {
 			console.log('RSS has Comment URL: ');
-			console.log(commentURL);
+			console.log(commentObject);
 
-			ActivityPub.getCommentInformation(commentURL.uri)
+			console.log('Fetching comments from: ' + commentObject['#text']);
+
+			ActivityPub.getCommentInformation(commentObject['#text'])
 			.then((commentResponse) => {
+				console.log(commentResponse);
 				setCommentInfo(commentResponse);
 			})
 			.catch((error) => {
@@ -46,10 +49,10 @@ const EpisodeCommentList = ({ commentURL }) => {
 			});
 		};
 
-		if (commentURL) {
-			retrieveCommentInformation(commentURL);
+		if (commentObject) {
+			retrieveCommentInformation(commentObject);
 		}
-	},[commentURL]);
+	},[commentObject]);
 
 	useEffect(() => {
 		if (commentInfo) {
@@ -69,19 +72,29 @@ const EpisodeCommentList = ({ commentURL }) => {
 
 	return (
 		<div className={styles.commentList}>
+			{ commentInfo !== false && 
+				<div className={styles.originalComment}>
+					<div dangerouslySetInnerHTML={{ __html: commentInfo.content}} />
+					{ commentInfo.attachment && 
+						<img src={commentInfo.attachment[0].url} style={{ maxWidth: 600 }}/>
+					}
+				</div>
+			}
+
 			{ Array.isArray(comments) === false && 
 				<div>
 					No comments yet for this episode.
 				</div>
 			}
 			{ Array.isArray(comments) && comments.map((comment,index) => {
-				console.log('comment: ');
-				console.log(comment);
 				return <EpisodeComment key={index} from={comment.from} content={comment.content} />;
 			})}
 			<div className={styles.writeCommentContainer}>
+				The ability to comment is coming. For now participate in this dialogue here: <a href={commentObject['#text']} target="_blank">{commentObject['#text']}</a>
+				{/*
 				<textarea className={styles.writeComment} placeholder="How do you feel about this episode?"></textarea>
 				<button>Post comment</button>
+				*/}
 			</div>
 		</div>
 	);
