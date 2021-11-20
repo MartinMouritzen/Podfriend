@@ -69,13 +69,14 @@ const EpisodeCommentList = ({ commentObject }) => {
 		}
 	},[commentInfo]);
 
+	
 
 	return (
 		<div className={styles.commentList}>
 			{ commentInfo !== false && 
 				<div className={styles.originalComment}>
 					<div dangerouslySetInnerHTML={{ __html: commentInfo.content}} />
-					{ commentInfo.attachment && 
+					{ commentInfo.attachment && commentInfo.attachment[0] && commentInfo.attachment[0].url &&
 						<img src={commentInfo.attachment[0].url} style={{ maxWidth: 600 }}/>
 					}
 				</div>

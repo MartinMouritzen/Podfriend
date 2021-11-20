@@ -60,7 +60,8 @@ class ActivityPub {
 			console.log(commentResponse);
 
 			if (commentResponse.first.items) {
-				console.log('commentResponse.orderedItems');
+				console.log('commentResponse.first.items');
+				console.log(commentResponse.first.items);
 				var comments = [];
 				// var commentAuthorPromises = [];
 				for (var i=0;i<commentResponse.first.items.length;i++) {

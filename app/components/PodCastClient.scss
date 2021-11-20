@@ -517,6 +517,16 @@ p {
 				padding: 15px;
 				flex: 1;
 				color: #FFFFFF;
+
+				display: flex;
+
+				justify-content: center;
+				align-items: center;
+
+				svg {
+					max-width: 24px;
+					max-height: 24px;
+				}
 			}
 			.buttonSecondaryAction {
 				background-color: rgba(0,0,0,0.1);

@@ -194,12 +194,12 @@ const OpenPlayerUI = ({ activePodcast, activeEpisode, description, showNotes, ch
 										<>
 											{ walletBalance >= boostAmount &&
 												<div className="buttonPrimaryAction" onClick={onBoostClick} {...longPressEvent}>
-													<FaRocket style={{ fill: '#FFFFFF', opacity: '0.8'}} /> BOOST {formatAmount(boostAmount)}
+													<FaRocket style={{ fill: '#FFFFFF', opacity: '0.8', marginRight: 6 }} /> BOOST {formatAmount(boostAmount)}
 												</div>
 											}
 											{ walletBalance < boostAmount &&
 												<div className="buttonPrimaryAction" onClick={onShowWalletModal}>
-													<FaRegTimesCircle style={{ fill: '#FFFFFF', opacity: '0.8'}} /> FILL ME UP
+													<FaRegTimesCircle style={{ fill: '#FFFFFF', opacity: '0.8', marginRight: 6 }} /> FILL ME UP
 												</div>
 											}
 										</>
