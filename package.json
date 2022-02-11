@@ -286,7 +286,7 @@
 		"loudness": "^0.3.0",
 		"node-fetch": "^2.6.0",
 		"node-machine-id": "^1.1.12",
-		"node-sass": "4.14.1",
+		"node-sass": "7.0.0",
 		"opmlparser": "^0.8.0",
 		"parse-srt": "^1.0.0-alpha",
 		"query-string": "^6.8.2",
